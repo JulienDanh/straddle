@@ -1,0 +1,10 @@
+/target
+Cargo.lock
+
+__pycache__/
+*.pyc
+*.so
+*.egg-info/
+*.whl
+
+docs/python/
