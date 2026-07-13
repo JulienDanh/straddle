@@ -10,5 +10,5 @@ name = "postflop_solver"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-postflop-solver = { path = "/Users/nsyt/postflop-solver" }
+postflop-solver = { git = "https://github.com/JulienDanh/postflop-solver" }
 pyo3 = { version = "0.22", features = ["abi3-py38"] }

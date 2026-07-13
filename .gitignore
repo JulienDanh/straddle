@@ -1,4 +1,4 @@
-/target
+**/target
 Cargo.lock
 
 __pycache__/
@@ -7,4 +7,5 @@ __pycache__/
 *.egg-info/
 *.whl
 
-docs/python/
+**/docs/python/
+.pytest_cache/

@@ -19,7 +19,6 @@ s = Solver(
 mem, _ = s.memory_usage()
 print(f"Memory: {mem / 1e9:.2f} GB")
 
-s.allocate_memory()
 s.solve(iterations=1000, verbose=True)
 print(f"Exploitability: {s.exploitability():.2f}")
 

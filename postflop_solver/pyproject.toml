@@ -9,6 +9,9 @@ description = "Python bindings for an open-source Texas hold'em postflop solver"
 license = { text = "AGPL-3.0-or-later" }
 requires-python = ">=3.8"
 
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
 [tool.maturin]
 features = ["pyo3/extension-module"]
 python-source = "python"

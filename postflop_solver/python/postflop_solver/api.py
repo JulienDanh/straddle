@@ -138,19 +138,7 @@ class Solver:
             add_allin_threshold=add_allin_threshold,
             force_allin_threshold=force_allin_threshold,
             merging_threshold=merging_threshold,
-        )
-        self._cache_dirty = True
-
-    # -- solving -------------------------------------------------------
-
-    def allocate_memory(self, compress: bool = False) -> None:
-        """Allocate memory for the game tree. Must be called before solve().
-
-        Args:
-            compress: If True, use 16-bit integer compression (halves memory,
-                slight precision loss). If False, use 32-bit floats.
-        """
-        self._g.allocate_memory(compress)
+         )
 
     def solve(
         self,
@@ -171,6 +159,7 @@ class Solver:
         """
         if target_exploitability is None:
             target_exploitability = self._g.starting_pot() * 0.005
+        self._g.allocate_memory(compress=False)
         return self._g.solve(iterations, target_exploitability, verbose)
 
     def solve_step(self, iteration: int) -> None:
@@ -217,12 +206,10 @@ class Solver:
                 raise ValueError(f"Action '{action}' not found in {actions}")
             action = idx
         self._g.play(action)
-        self._cache_dirty = True
 
     def back_to_root(self) -> None:
         """Navigate back to the root node, resetting all state."""
         self._g.back_to_root()
-        self._cache_dirty = True
 
     def available_actions(self) -> list[str]:
         """Return the list of available actions at the current node.
@@ -273,9 +260,7 @@ class Solver:
     # -- queries (auto-cache) -----------------------------------------
 
     def _ensure_cache(self) -> None:
-        if self._cache_dirty:
-            self._g.cache_normalized_weights()
-            self._cache_dirty = False
+        self._g.cache_normalized_weights()
 
     def strategy(self, player: Optional[str] = None) -> dict[str, dict[str, float]]:
         """Return the strategy at the current node.
@@ -425,8 +410,7 @@ class Solver:
     def unlock_strategy(self) -> None:
         """Remove the node lock from the current node.
 
-        Must navigate to the locked node (same path used for locking) after
-        allocate_memory() before calling this.
+        Must navigate to the locked node (same path used for locking) before calling this.
         """
         self._g.unlock_current_strategy()
 
@@ -449,15 +433,14 @@ class Solver:
 
         Args:
             path: File path to load from.
-            max_memory: Maximum memory allowed (bytes), or None for no limit.
+             max_memory: Maximum memory allowed (bytes), or None for no limit.
 
-        Returns:
-            A Solver instance loaded from the file.
-        """
+         Returns:
+             A Solver instance loaded from the file.
+         """
         raw = _Game.load(path, max_memory)
         s = Solver.__new__(Solver)
         s._g = raw
-        s._cache_dirty = True
         return s
 
     # -- misc ----------------------------------------------------------
