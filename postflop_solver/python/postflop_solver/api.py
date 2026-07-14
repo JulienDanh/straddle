@@ -476,13 +476,7 @@ def _int_to_card_str(idx: int) -> str:
 
 def _match_action(query: str, actions: list[str]) -> Optional[int]:
     q = query.strip().lower()
-    for i, a in enumerate(actions):
-        if a.lower() == q:
-            return i
-    for i, a in enumerate(actions):
-        if q in a.lower():
-            return i
-    return None
+    return next((i for i, a in enumerate(actions) if q == a.lower() or q in a.lower()), None)
 
 
 def _player_idx(player: Optional[str], solver: "Solver") -> int:
