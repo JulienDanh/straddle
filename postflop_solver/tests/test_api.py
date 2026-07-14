@@ -1,7 +1,18 @@
 import pytest
 
 from postflop_solver import Solver
-from postflop_solver.api import _int_to_card_str, _match_action, _player_idx
+from postflop_solver.api import _int_to_card_str, _match_action
+
+
+def _player_idx(player, solver):
+    if player is None:
+        return solver._g.current_player()
+    p = player.strip().lower()
+    if p in ("oop", "0"):
+        return 0
+    if p in ("ip", "1"):
+        return 1
+    raise ValueError(f"Player must be 'oop' or 'ip', got '{player}'")
 
 _OOP_RANGE = "66+,A8s+,AJo+"
 _IP_RANGE = "QQ-22,ATo+"

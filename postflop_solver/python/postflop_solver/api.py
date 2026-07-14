@@ -23,8 +23,7 @@ from typing import Optional
 
 from ._core import PostFlopGame as _Game, compute_average_py as _avg
 
-_OOP = 0
-_IP = 1
+
 
 
 class Solver:
@@ -226,7 +225,7 @@ class Solver:
             "oop" or "ip".
         """
         p = self._g.current_player()
-        return "oop" if p == _OOP else "ip"
+        return "oop" if p == 0 else "ip"
 
     def current_board(self) -> str:
         """Return the current board as a string (e.g. "Td9d6hQc")."""
@@ -273,7 +272,7 @@ class Solver:
             Example: {"AhKh": {"Check": 0.3, "Bet(120)": 0.7, ...}, ...}
         """
         self._ensure_cache()
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         hands = self._g.private_cards(p)
         actions = self.available_actions()
         raw = self._g.strategy()
@@ -294,7 +293,7 @@ class Solver:
             Dict mapping hand string to equity. Example: {"AhKh": 0.73, ...}
         """
         self._ensure_cache()
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         hands = self._g.private_cards(p)
         vals = self._g.equity(p)
         return dict(zip(hands, vals))
@@ -309,7 +308,7 @@ class Solver:
             Dict mapping hand string to EV. Example: {"AhKh": 45.2, ...}
         """
         self._ensure_cache()
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         hands = self._g.private_cards(p)
         vals = self._g.expected_values(p)
         return dict(zip(hands, vals))
@@ -324,7 +323,7 @@ class Solver:
             Average equity (0-1).
         """
         self._ensure_cache()
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         return _avg(self._g.equity(p), self._g.normalized_weights(p))
 
     def average_ev(self, player: Optional[str] = None) -> float:
@@ -337,7 +336,7 @@ class Solver:
             Average EV in chips.
         """
         self._ensure_cache()
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         return _avg(self._g.expected_values(p), self._g.normalized_weights(p))
 
     def range_percentages(self, player: Optional[str] = None) -> dict[str, float]:
@@ -350,7 +349,7 @@ class Solver:
             Dict mapping hand string to percentage (0-100).
         """
         self._ensure_cache()
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         hands = self._g.private_cards(p)
         w = self._g.normalized_weights(p)
         total = sum(w)
@@ -365,7 +364,7 @@ class Solver:
         Returns:
             List of hand strings like ["5c4c", "Ac4c", ...].
         """
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         return self._g.private_cards(p)
 
     def num_hands(self, player: Optional[str] = None) -> int:
@@ -374,7 +373,7 @@ class Solver:
         Args:
             player: "oop", "ip", or None for current player.
         """
-        p = _player_idx(player, self)
+        p = 0 if player is None else 0 if player.strip().lower() in ("oop", "0") else 1 if player.strip().lower() in ("ip", "1") else (_raise(ValueError(f"Player must be 'oop' or 'ip', got '{player}'")))
         return self._g.num_private_hands(p)
 
     # -- node locking --------------------------------------------------
@@ -477,12 +476,5 @@ def _match_action(query: str, actions: list[str]) -> Optional[int]:
     return next((i for i, a in enumerate(actions) if q == a.lower() or q in a.lower()), None)
 
 
-def _player_idx(player: Optional[str], solver: "Solver") -> int:
-    if player is None:
-        return solver._g.current_player()
-    p = player.strip().lower()
-    if p in ("oop", "0"):
-        return _OOP
-    if p in ("ip", "1"):
-        return _IP
-    raise ValueError(f"Player must be 'oop' or 'ip', got '{player}'")
+def _raise(exc):
+    raise exc
