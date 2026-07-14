@@ -16,6 +16,8 @@ import {
   unlockStrategy,
   solve,
   createSSE,
+  saveSolver,
+  loadSolver,
 } from "../api";
 import { HandGrid, actionColor, getActionShortLabel } from "./HandGrid";
 import PlayingCard, { CardPlaceholder, getStreetLabel } from "./PlayingCard";
@@ -236,6 +238,31 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
     }
   };
 
+  const handleSave = async () => {
+    setIsLoading(true);
+    try {
+      await saveSolver(id);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLoad = async () => {
+    setIsLoading(true);
+    try {
+      const solverId = window.prompt("Enter solver ID to load:");
+      if (!solverId) return;
+      const result = await loadSolver(solverId);
+      onExit();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleFillCurrent = () => {
     if (strategy) {
       setLockInput(JSON.stringify(strategy, null, 2));
@@ -299,13 +326,19 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
           <span>Pot:</span>
           <span className="pot-value">N/A</span>
         </div>
-        <div className="top-bar-right">
-          {solver.is_solved && <span className="badge solved">Solved</span>}
-          <span className={`badge ${nodeType}`}>{solver.node_type}</span>
-          <button className="exit-btn" onClick={onExit} disabled={isLoading}>
-            Exit
-          </button>
-        </div>
+         <div className="top-bar-right">
+           {solver.is_solved && <span className="badge solved">Solved</span>}
+           <span className={`badge ${nodeType}`}>{solver.node_type}</span>
+           <button className="exit-btn" onClick={handleLoad} disabled={isLoading}>
+             Load
+           </button>
+           <button className="exit-btn" onClick={handleSave} disabled={isLoading}>
+             Save
+           </button>
+           <button className="exit-btn" onClick={onExit} disabled={isLoading}>
+             Exit
+           </button>
+         </div>
       </div>
 
       <div className="action-path">
