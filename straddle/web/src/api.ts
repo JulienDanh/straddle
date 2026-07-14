@@ -1,9 +1,16 @@
-const API_BASE = "";
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "";
 
 async function fetchJson(endpoint: string, options?: RequestInit): Promise<any> {
   const response = await fetch(`${API_BASE}${endpoint}`, options);
   if (!response.ok) {
-    throw new Error(await response.text());
+    let errorText = await response.text();
+    try {
+      const errorData = JSON.parse(errorText);
+      errorText = errorData.detail || errorText;
+    } catch {
+      // Not JSON, use raw text
+    }
+    throw new Error(errorText);
   }
   return response.json();
 }
@@ -23,7 +30,14 @@ export async function createSolver(params: {
     body: JSON.stringify(params),
   });
   if (!response.ok) {
-    throw new Error(await response.text());
+    let errorText = await response.text();
+    try {
+      const errorData = JSON.parse(errorText);
+      errorText = errorData.detail || errorText;
+    } catch {
+      // Not JSON, use raw text
+    }
+    throw new Error(errorText);
   }
   return (await response.json()).id;
 }
@@ -110,6 +124,18 @@ export async function unlockStrategy(id: string): Promise<void> {
   await fetch(`/api/solvers/${id}/lock`, { method: "DELETE" });
 }
 
+export async function saveSolver(id: string): Promise<{ success: boolean }> {
+  return fetchJson(`/api/solvers/${id}/save`, { method: "POST" });
+}
+
+export async function loadSolver(id: string): Promise<{ id: string }> {
+  return fetchJson(`/api/solvers/load`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id }),
+  });
+}
+
 export function createSSE(
   id: string,
   callbacks: {
@@ -130,7 +156,12 @@ export function createSSE(
   });
   
   eventSource.addEventListener("error", (event: MessageEvent) => {
-    callbacks.onError?.(JSON.parse(event.data));
+    try {
+      const errorData = JSON.parse(event.data);
+      callbacks.onError?.(errorData);
+    } catch {
+      callbacks.onError?.({ detail: "Unknown error" });
+    }
     eventSource.close();
   });
   
