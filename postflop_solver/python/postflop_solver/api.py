@@ -469,9 +469,7 @@ class Solver:
 # -- helpers -----------------------------------------------------------
 
 def _int_to_card_str(idx: int) -> str:
-    ranks = "23456789TJQKA"
-    suits = "cdhs"
-    return f"{ranks[idx // 4]}{suits[idx % 4]}"
+    return f"{'23456789TJQKA'[idx // 4]}{'cdhs'[idx % 4]}"
 
 
 def _match_action(query: str, actions: list[str]) -> Optional[int]:
