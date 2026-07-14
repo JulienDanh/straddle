@@ -26,6 +26,7 @@ We track work in the [Straddle GitHub project](https://github.com/users/JulienDa
 ## Git Rules for Agents
 
 1. **Never push directly to `main`**. Always use a feature branch and PR.
+2. **Test trivial changes**: Use small, non-breaking changes to validate Git workflows. // ponytail: demo only, remove after merge
 2. **Agents are allowed to merge PRs** after ensuring:
    - All checks pass (lint, tests, etc.).
    - No merge conflicts exist.
