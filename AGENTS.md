@@ -23,3 +23,13 @@ We track work in the [Straddle GitHub project](https://github.com/users/JulienDa
 - **Issue → pull request.** Solve issues on a feature branch and open a PR — **never push straight to `main`**. Reference the issue with `Closes #N` in the PR body so it auto-closes on merge.
 - **Keep the board honest.** Move an issue to "In Progress" when you start it and let it move to "Done" when the PR merges.
 
+## Git Rules for Agents
+
+1. **Never push directly to `main`**. Always use a feature branch and PR.
+2. **Agents are allowed to merge PRs** after ensuring:
+   - All checks pass (lint, tests, etc.).
+   - No merge conflicts exist.
+   - The PR has been reviewed (if required by repo settings).
+3. **Delete branches after merge** to keep the repo clean.
+4. **Use `--force` only when necessary** (e.g., rebasing). Avoid force-pushing to shared branches.
+5. **Always pull latest `main`** before creating a new branch or merging a PR.

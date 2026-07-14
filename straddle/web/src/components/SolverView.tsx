@@ -273,6 +273,31 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
     setPlayer(newPlayer);
   };
 
+  const actionStats = useMemo(() => {
+    if (!strategy) return [];
+
+    const stats: { action: string; total: number; color: string }[] = [];
+    const totals: Record<string, number> = {};
+
+    for (const handActions of Object.values(strategy) as Record<string, number>[]) {
+      for (const [action, freq] of Object.entries(handActions)) {
+        totals[action] = (totals[action] || 0) + freq;
+      }
+    }
+
+    const availableActions = Object.keys(strategy).flatMap(h => Object.keys(strategy[h]));
+
+    for (const [action, total] of Object.entries(totals)) {
+      stats.push({
+        action,
+        total,
+        color: actionColor(action, availableActions),
+      });
+    }
+
+    return stats.sort((a, b) => b.total - a.total);
+  }, [strategy]);
+
   if (!solver) {
     return <div className="loading">Loading...</div>;
   }
@@ -281,31 +306,6 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
   const nodeType = solver.node_type === "terminal" ? "terminal" : solver.node_type === "decision" ? "decision" : "chance";
   const actionPathItems: string[] = history?.path || [];
   const isRoot = actionPathItems.length === 0;
-
-  const actionStats = useMemo(() => {
-    if (!strategy) return [];
-    
-    const stats: { action: string; total: number; color: string }[] = [];
-    const totals: Record<string, number> = {};
-    
-    for (const handActions of Object.values(strategy) as Record<string, number>[]) {
-      for (const [action, freq] of Object.entries(handActions)) {
-        totals[action] = (totals[action] || 0) + freq;
-      }
-    }
-    
-    const availableActions = Object.keys(strategy).flatMap(h => Object.keys(strategy[h]));
-    
-    for (const [action, total] of Object.entries(totals)) {
-      stats.push({
-        action,
-        total,
-        color: actionColor(action, availableActions),
-      });
-    }
-    
-    return stats.sort((a, b) => b.total - a.total);
-  }, [strategy]);
 
   return (
     <div className="solver-view">
