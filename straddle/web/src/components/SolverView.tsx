@@ -269,10 +269,6 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
     }
   };
 
-  const handlePlayerChange = (newPlayer: "oop" | "ip") => {
-    setPlayer(newPlayer);
-  };
-
   const actionStats = useMemo(() => {
     if (!strategy) return [];
 
@@ -307,6 +303,34 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
   const actionPathItems: string[] = history?.path || [];
   const isRoot = actionPathItems.length === 0;
 
+<<<<<<< HEAD
+=======
+  const actionStats = useMemo(() => {
+    if (!strategy) return [];
+    
+    const stats: { action: string; total: number; color: string }[] = [];
+    const totals: Record<string, number> = {};
+    
+    for (const handActions of Object.values(strategy) as Record<string, number>[]) {
+      for (const [action, freq] of Object.entries(handActions)) {
+        totals[action] = (totals[action] || 0) + freq;
+      }
+    }
+    
+    const availableActions = Object.keys(strategy).flatMap(h => Object.keys(strategy[h]));
+    
+    for (const [action, total] of Object.entries(totals)) {
+      stats.push({
+        action,
+        total,
+        color: actionColor(action, availableActions),
+      });
+    }
+    
+    return stats.sort((a, b) => b.total - a.total);
+  }, [strategy]);
+
+>>>>>>> origin/main
   return (
     <div className="solver-view">
       {error && <div className="error">{error}</div>}
