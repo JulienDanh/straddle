@@ -9,7 +9,6 @@ authors = [
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.139.0",
-    "httpx2>=2.6.0",
     "uvicorn[standard]>=0.51.0",
 ]
 
@@ -24,6 +23,7 @@ build-backend = "uv_build"
 dev = [
     "pytest>=9.1.1",
     "ruff>=0.15.21",
+    "httpx2>=2.6.0",
 ]
 
 [tool.ruff]
