@@ -38,15 +38,41 @@ const PlayingCardMini = ({ card }: { card: string }) => {
   );
 };
 
-const parseBoardInput = (input: string): string[] => {
+const parseBoardInput = (input: string): { cards: string[]; error: string | null } => {
   const cleaned = input.replace(/\s+/g, "");
   const cards = [];
-  for (let i = 0; i < cleaned.length; i += 2) {
-    if (i + 1 < cleaned.length) {
-      cards.push(cleaned.slice(i, i + 2));
-    }
+  const seen = new Set();
+  const validRanks = "23456789TJQKA";
+  const validSuits = "cdhs";
+
+  if (cleaned.length % 2 !== 0) {
+    return { cards: [], error: "Invalid input: Must be pairs of rank and suit (e.g., Td9d6h)." };
   }
-  return cards.slice(0, 5);
+
+  for (let i = 0; i < cleaned.length; i += 2) {
+    if (i + 1 >= cleaned.length) break;
+    const card = cleaned.slice(i, i + 2);
+    const rank = card[0].toUpperCase();
+    const suit = card[1].toLowerCase();
+
+    if (!validRanks.includes(rank)) {
+      return { cards: [], error: `Invalid rank: '${card[0]}'. Must be one of 2-9, T, J, Q, K, A.` };
+    }
+    if (!validSuits.includes(suit)) {
+      return { cards: [], error: `Invalid suit: '${card[1]}'. Must be one of c, d, h, s.` };
+    }
+    if (seen.has(card)) {
+      return { cards: [], error: `Duplicate card: '${card}'.` };
+    }
+    seen.add(card);
+    cards.push(card);
+  }
+
+  if (cards.length > 5) {
+    return { cards: cards.slice(0, 5), error: "Too many cards: Maximum 5 cards allowed." };
+  }
+
+  return { cards, error: null };
 };
 
 export const ConfigForm = ({ onCreated }: { onCreated: (id: string) => void }) => {
@@ -60,11 +86,15 @@ export const ConfigForm = ({ onCreated }: { onCreated: (id: string) => void }) =
   const [error, setError] = useState<string | null>(null);
   const [isCreating, setIsCreating] = useState(false);
 
-  const boardCards = useMemo(() => parseBoardInput(board), [board]);
+  const { cards: boardCards, error: boardError } = useMemo(() => parseBoardInput(board), [board]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    if (boardError) {
+      setError(boardError);
+      return;
+    }
     setIsCreating(true);
     try {
       const id = await createSolver({

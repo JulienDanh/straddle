@@ -4,7 +4,7 @@ import asyncio
 import json
 import threading
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from postflop_solver import Solver
 from pydantic import BaseModel
 from starlette.responses import StreamingResponse
@@ -79,7 +79,8 @@ async def delete_solver(sid: str) -> None:
 
 
 @router.post("/{sid}/solve")
-async def solve(sid: str, req: SolveRequest) -> dict:
+@router.app.state.limiter.limit("10/minute")
+async def solve(request: Request, sid: str, req: SolveRequest) -> dict:
     session = _get(sid)
     threading.Thread(target=sessions.run_solve, args=(session, req.iterations), daemon=True).start()
     return {"status": "solving"}

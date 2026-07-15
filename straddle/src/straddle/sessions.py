@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import threading
+import time
 from dataclasses import dataclass, field
 from typing import Callable
 
@@ -11,8 +12,29 @@ _SUITS = "cdhs"
 
 # ponytail: in-memory store; a dict guarded by one lock. Fine for a single-process
 # dev server. Add Redis/DB if we ever need persistence or horizontal scaling.
-_sessions: dict[str, Session] = {}
+_sessions: dict[str, tuple[Session, float]] = {}
 _lock = threading.Lock()
+
+
+def _cleanup_stale_sessions() -> None:
+    """Remove sessions older than 1 hour (3600 seconds)."""
+    now = time.time()
+    with _lock:
+        stale = [sid for sid, (_, timestamp) in _sessions.items() if now - timestamp > 3600]
+        for sid in stale:
+            _sessions.pop(sid, None)
+
+
+def _start_cleanup_thread() -> None:
+    """Start a background thread to clean up stale sessions every 5 minutes."""
+
+    def cleanup_loop() -> None:
+        while True:
+            time.sleep(300)  # 5 minutes
+            _cleanup_stale_sessions()
+
+    thread = threading.Thread(target=cleanup_loop, daemon=True)
+    thread.start()
 
 
 @dataclass
@@ -44,15 +66,16 @@ def register(session: Session) -> str:
 
     sid = uuid.uuid4().hex
     with _lock:
-        _sessions[sid] = session
+        _sessions[sid] = (session, time.time())
     return sid
 
 
 def get(sid: str) -> Session:
     with _lock:
-        session = _sessions.get(sid)
-    if session is None:
-        raise NotFoundError(sid)
+        session_tuple = _sessions.get(sid)
+        if session_tuple is None:
+            raise NotFoundError(sid)
+        session, _ = session_tuple
     return session
 
 
@@ -157,3 +180,6 @@ def run_solve(session: Session, iterations: int) -> None:
         session.task = {"status": "error", "exploitability": 0.0}
     finally:
         session.solving = False
+
+
+_start_cleanup_thread()

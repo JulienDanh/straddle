@@ -191,9 +191,11 @@ export const HandGrid = ({
                   )}
                 </>
               );
-            } else {
-              content = <span className="hand-label">{combo}</span>;
-            }
+         } else if (view === "strategy" && cellData?.actions) {
+           content = <div className="empty-strategy">No strategy data</div>;
+         } else {
+           content = <span className="hand-label">{combo}</span>;
+         }
           } else if (view === "equity") {
             const avgEquity = average(cellData.values);
             const color = getColorForEquity(avgEquity);

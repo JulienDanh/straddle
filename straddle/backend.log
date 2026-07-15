@@ -1,0 +1,11 @@
+INFO:     Will watch for changes in these directories: ['/Users/nsyt/straddle/straddle']
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [86415] using WatchFiles
+INFO:     Started server process [86449]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [86449]
+INFO:     Stopping reloader process [86415]
