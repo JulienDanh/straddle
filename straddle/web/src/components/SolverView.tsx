@@ -200,32 +200,46 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
     }
   };
 
+  const eventSourceRef = React.useRef<{ close: () => void } | null>(null);
+
   const handleSolve = async () => {
     setProgress([]);
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
     try {
       await solve(id, { iterations });
       const eventSource = createSSE(id, {
         onProgress: (data) => setProgress((prev) => [...prev, data]),
-        onDone: () => {
-          fetchSolver();
-          fetchData();
+        onDone: async () => {
+          await fetchSolver();
+          await fetchData();
         },
         onError: (error) => {
           setError(error.detail);
         },
       });
-      return () => eventSource.close();
+      eventSourceRef.current = eventSource;
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     }
   };
 
+  React.useEffect(() => {
+    return () => {
+      if (eventSourceRef.current) {
+        eventSourceRef.current.close();
+      }
+    };
+  }, []);
+
   const handleLock = async () => {
     try {
-      await lockStrategy(id, { strategy: JSON.parse(lockInput) });
+      const strategy = JSON.parse(lockInput);
+      await lockStrategy(id, { strategy });
       setIsLocked(true);
     } catch (err) {
-      setError(err instanceof Error ? err.message : String(err));
+      setError(err instanceof Error ? `Invalid JSON: ${err.message}` : "Invalid JSON");
     }
   };
 
@@ -242,6 +256,7 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
     setIsLoading(true);
     try {
       await saveSolver(id);
+      setError("Solver saved successfully!");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -252,9 +267,9 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
   const handleLoad = async () => {
     setIsLoading(true);
     try {
-      const solverId = window.prompt("Enter solver ID to load:");
-      if (!solverId) return;
-      const result = await loadSolver(solverId);
+      const path = window.prompt("Enter file path to load:");
+      if (!path) return;
+      const result = await loadSolver(path);
       onExit();
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
@@ -302,35 +317,6 @@ export default function SolverView({ id, onExit }: { id: string; onExit: () => v
   const nodeType = solver.node_type === "terminal" ? "terminal" : solver.node_type === "decision" ? "decision" : "chance";
   const actionPathItems: string[] = history?.path || [];
   const isRoot = actionPathItems.length === 0;
-
-<<<<<<< HEAD
-=======
-  const actionStats = useMemo(() => {
-    if (!strategy) return [];
-    
-    const stats: { action: string; total: number; color: string }[] = [];
-    const totals: Record<string, number> = {};
-    
-    for (const handActions of Object.values(strategy) as Record<string, number>[]) {
-      for (const [action, freq] of Object.entries(handActions)) {
-        totals[action] = (totals[action] || 0) + freq;
-      }
-    }
-    
-    const availableActions = Object.keys(strategy).flatMap(h => Object.keys(strategy[h]));
-    
-    for (const [action, total] of Object.entries(totals)) {
-      stats.push({
-        action,
-        total,
-        color: actionColor(action, availableActions),
-      });
-    }
-    
-    return stats.sort((a, b) => b.total - a.total);
-  }, [strategy]);
-
->>>>>>> origin/main
   return (
     <div className="solver-view">
       {error && <div className="error">{error}</div>}

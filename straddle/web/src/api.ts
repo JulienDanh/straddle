@@ -128,11 +128,11 @@ export async function saveSolver(id: string): Promise<{ success: boolean }> {
   return fetchJson(`/api/solvers/${id}/save`, { method: "POST" });
 }
 
-export async function loadSolver(id: string): Promise<{ id: string }> {
+export async function loadSolver(path: string): Promise<{ id: string }> {
   return fetchJson(`/api/solvers/load`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id }),
+    body: JSON.stringify({ path }),
   });
 }
 
