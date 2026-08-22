@@ -1,0 +1,156 @@
+name: "BBZ System 12: Defending 3-Bets OOP"
+description: >-
+  Hero raised first in, called a 3-bet, and is out of position on the flop.
+  High boards (T-high+, especially A/K-high) strongly favor the 3-bettor —
+  fold a lot, well above MDF: fold weak pairs (77/88/99), backdoor flush
+  draws, and thin ace-high. Low boards (9-high and below) favor the caller
+  — defend robustly with pairs, gutshots, three-straights, backdoor flush
+  draws, and high cards; tighten a bit on paired / disconnected / deuce-
+  present low boards. Derived from the BBZ Simple "System 12: Defending
+  3-Bets OOP" lesson. NOTE: the engine cannot express "facing a c-bet" or
+  villain bet sizing, so these rules encode the defense decisions per board
+  bucket; MDF nuance and exact villain-sizing thresholds are omitted.
+rules:
+  # --- High boards: fold a lot (especially A/K-high) ---
+  # NOTE: the transcript folds "weak pairs" (77/88/99) on A/K-high boards.
+  # The hand classifier labels pocket pairs below the board's high card as
+  # `overpair` (a known quirk), so on A-high boards `hand: overpair` captures
+  # exactly the pocket underpairs we want to fold. On K-high boards `overpair`
+  # would also include AA (a keep), so the K-high weak-pair fold is omitted.
+
+  - name: "fold pocket underpairs on A-high disconnected"
+    conditions:
+      street: flop
+      pot: 3bet
+      board:
+        - A-high
+        - disconnected
+      hand: overpair
+    action:
+      type: fold
+
+  - name: "fold backdoor flush draws on A-high"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: A-high
+      hand: backdoor-flush-draw
+    action:
+      type: fold
+
+  - name: "fold backdoor flush draws on K-high"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: K-high
+      hand: backdoor-flush-draw
+    action:
+      type: fold
+
+  - name: "fold undercard high-card on A-high disconnected"
+    conditions:
+      street: flop
+      pot: 3bet
+      board:
+        - A-high
+        - disconnected
+      hand: high-card
+    action:
+      type: fold
+
+  # --- Low boards: defend robustly ---
+
+  - name: "call two-pair+ on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: two-pair
+    action:
+      type: call
+
+  - name: "call sets on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: set
+    action:
+      type: call
+
+  - name: "call trips on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: trips
+    action:
+      type: call
+
+  - name: "call pairs on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: pair
+    action:
+      type: call
+
+  - name: "call gutshots on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: gutshot
+    action:
+      type: call
+
+  - name: "call three-to-a-straight on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: three-straight
+    action:
+      type: call
+
+  - name: "call backdoor flush draws on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: backdoor-flush-draw
+    action:
+      type: call
+
+  - name: "call ace-high on low boards"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      hand: a-high
+    action:
+      type: call
+
+  # --- Low-board risk factors: tighten on paired / disconnected / deuce ---
+
+  - name: "fold on disconnected low boards without draws"
+    conditions:
+      street: flop
+      pot: 3bet
+      board:
+        - low
+        - disconnected
+      hand: high-card
+    action:
+      type: fold
+
+  - name: "fold on deuce-present low boards without draws"
+    conditions:
+      street: flop
+      pot: 3bet
+      board: low
+      board_rank: 2
+      hand: high-card
+    action:
+      type: fold

@@ -1,0 +1,332 @@
+/* === Poker Table library styles ===========================================
+   All classes are prefixed `pt-` so they coexist with app styles without
+   collisions. Imported once from the barrel (src/table/index.ts).
+   ========================================================================== */
+
+.pt-table__wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.pt-table {
+  position: relative;
+  width: 100%;
+  max-width: 580px;
+  aspect-ratio: 16 / 10;
+  background: radial-gradient(ellipse at center, #1e7a3e 0%, #15502a 70%, #0d3520 100%);
+  border-radius: 50%;
+  border: 8px solid #3d2817;
+  box-shadow:
+    0 0 0 4px #5a3d27,
+    0 0 0 8px #3d2817,
+    0 8px 30px rgba(0, 0, 0, 0.6),
+    inset 0 0 40px rgba(0, 0, 0, 0.3);
+}
+
+.pt-table__felt-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.08);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+}
+
+.pt-table__center {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  z-index: 1;
+}
+
+.pt-table__overlay {
+  position: absolute;
+  bottom: 24%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+
+/* --- Seats -------------------------------------------------------------- */
+
+.pt-seat {
+  position: absolute;
+  z-index: 2;
+}
+
+.pt-seat__inner {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.pt-seat--folded {
+  opacity: 0.35;
+  filter: grayscale(0.6);
+}
+
+/* Empty filler seat: an open chair filling the ring to a fixed table size. */
+.pt-seat--empty .pt-seat__inner {
+  gap: 0.15rem;
+}
+
+.pt-seat--empty .pt-seat__badge {
+  background: transparent;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  font-size: 0.7rem;
+  opacity: 0.4;
+}
+
+.pt-seat--empty .pt-seat__label {
+  font-weight: 600;
+}
+
+.pt-seat__chair {
+  font-size: 1.1rem;
+  opacity: 0.25;
+  line-height: 1;
+}
+
+.pt-seat--active .pt-seat__badge {
+  border-color: #f0a020;
+  box-shadow: 0 0 0 2px rgba(240, 160, 32, 0.35);
+}
+
+.pt-seat__badge {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pt-seat__label {
+  font-weight: 700;
+}
+
+.pt-seat--hero .pt-seat__label {
+  color: #f0a020;
+  font-weight: 800;
+}
+
+.pt-seat__position {
+  color: #f0a020;
+  font-weight: 800;
+  font-size: 0.72rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 0.4rem;
+  margin-left: 0.1rem;
+}
+
+.pt-seat__stack {
+  opacity: 0.7;
+  font-size: 0.75rem;
+}
+
+/* --- Bet chip ----------------------------------------------------------- */
+
+.pt-bet {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.5);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #f0a020;
+}
+
+.pt-bet__chip {
+  font-size: 0.8rem;
+}
+
+/* --- Dealer button ------------------------------------------------------ */
+
+.pt-dealer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #1a1a2e;
+  font-size: 0.65rem;
+  font-weight: 900;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* --- Pot ---------------------------------------------------------------- */
+
+.pt-pot {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #f0a020;
+}
+
+.pt-pot__chip {
+  font-size: 0.9rem;
+}
+
+.pt-pot__type {
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 0.4rem;
+  margin-left: 0.1rem;
+  font-size: 0.7rem;
+  text-transform: lowercase;
+  opacity: 0.8;
+}
+
+/* --- Card row ----------------------------------------------------------- */
+
+.pt-card-row {
+  display: flex;
+  gap: 0.3rem;
+}
+
+/* --- Playing cards ------------------------------------------------------ */
+/*
+   Realistic CSS card: two corner blocks (rank + pip) and a large center
+   suit. The bottom-right corner is rotated 180° so the card reads right
+   from either side. Size scales with --pt-card-w / --pt-card-h.
+*/
+
+.pt-card {
+  --pt-card-w: 2.4rem;
+  --pt-card-h: 3.2rem;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--pt-card-w);
+  height: var(--pt-card-h);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  border-radius: 6px;
+  background: #fafafa;
+  border: 1px solid #d4d4d4;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  line-height: 1;
+  user-select: none;
+}
+
+.pt-card--small {
+  --pt-card-w: 1.8rem;
+  --pt-card-h: 2.4rem;
+}
+
+.pt-card--red {
+  color: #dc2626;
+}
+
+.pt-card--black {
+  color: #1a1a2e;
+}
+
+.pt-card__corner {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.pt-card__corner--tl {
+  top: 0.12rem;
+  left: 0.14rem;
+  font-size: 0.62rem;
+}
+
+.pt-card__corner--br {
+  bottom: 0.12rem;
+  right: 0.14rem;
+  transform: rotate(180deg);
+  font-size: 0.62rem;
+}
+
+.pt-card--small .pt-card__corner--tl,
+.pt-card--small .pt-card__corner--br {
+  font-size: 0.5rem;
+}
+
+.pt-card__rank {
+  display: block;
+}
+
+.pt-card__pip {
+  display: block;
+  font-size: 0.85em;
+}
+
+.pt-card__center {
+  font-size: 1.5rem;
+  opacity: 0.9;
+}
+
+.pt-card--small .pt-card__center {
+  font-size: 1.05rem;
+}
+
+/* Empty slot: dashed outline, faint placeholder. */
+.pt-card--empty {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+}
+
+.pt-card--empty::after {
+  content: '?';
+  position: absolute;
+  color: rgba(255, 255, 255, 0.2);
+  font-size: 1rem;
+  font-weight: 800;
+}
+
+/* Card back: diagonal stripe pattern for face-down cards. */
+.pt-card--back {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      #2b3a67 0,
+      #2b3a67 0.25rem,
+      #3b4d80 0.25rem,
+      #3b4d80 0.5rem
+    );
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.pt-card--back::after {
+  content: '';
+  position: absolute;
+  inset: 0.2rem;
+  border-radius: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}

@@ -1,0 +1,108 @@
+name: "BBZ System 3: BB vs SB Limp Stab"
+description: >-
+  Blind vs blind in a limped pot: the SB limps, BB checks preflop, SB stabs
+  the flop. Defend ~75% of range. Never fold gutshots; defend three-to-a-
+  straight hands; defend backdoor flush draws (except the stone-cold worst);
+  defend high cards down from ace-high. Fold double-unders to the
+  strategically relevant board card when they lack draws. Derived from the
+  BBZ Simple "System 3: BB vs SB Limp Stab" lesson. NOTE: the engine cannot
+  express "facing a stab" (prior action) or "double-unders to card X" (rank
+  vs board-card comparison), so these rules encode the defense qualifiers
+  the engine CAN express — gutshots, three-straights, backdoor flush draws,
+  and high-card rank — as calls, with a final fallback fold.
+rules:
+  # --- Never fold draws / connectors ---
+
+  - name: "call gutshots"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: gutshot
+    action:
+      type: call
+
+  - name: "call three-to-a-straight"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: three-straight
+    action:
+      type: call
+
+  - name: "call backdoor flush draws"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: backdoor-flush-draw
+    action:
+      type: call
+
+  # --- High-card defending: ace-high first, then queen-high, jack-high ---
+
+  - name: "call ace-high"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: a-high
+    action:
+      type: call
+
+  - name: "call king-high"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: k-high
+    action:
+      type: call
+
+  - name: "call queen-high"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: q-high
+    action:
+      type: call
+
+  # --- Any pair defends ---
+  - name: "call any pair"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: pair
+    action:
+      type: call
+
+  # --- Fallback: the worst hands (double-unders to the relevant card with
+  # no draws) fold. The engine can't classify "double-unders to card X", so
+  # this is a coarse fallback for the remaining unqualified high-card hands.
+  - name: "fold the worst unqualified hands"
+    conditions:
+      street: flop
+      position: BB
+      villain_position: SB
+      pot: limped
+      players: heads-up
+      hand: high-card
+    action:
+      type: fold

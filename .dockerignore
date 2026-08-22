@@ -1,0 +1,6 @@
+.git/
+.claude/
+**/.venv/
+**/node_modules/
+**/dist/
+**/__pycache__/
