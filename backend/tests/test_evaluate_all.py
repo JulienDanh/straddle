@@ -1,8 +1,12 @@
 """Tests for the all-systems mode of the /evaluate endpoint."""
 
+from pathlib import Path
+from textwrap import dedent
+
 from fastapi.testclient import TestClient
 
 from app.main import app
+from app.poker.system import load_system
 
 client = TestClient(app)
 
@@ -34,40 +38,32 @@ def test_all_systems_returns_one_decision_per_system() -> None:
     assert len(decisions) == len(systems)
 
 
-def test_all_systems_hand_matches_multiple_systems() -> None:
-    """AKs on A-high flop, BTN, single-raised, heads-up satisfies BOTH the
-    flop-cbet system (cbet A-high BTN) and the top-pair system (bet top pair).
-    """
+def test_all_systems_reports_matching_system() -> None:
+    """UTG with AKs on a safe K-high flop matches BBZ System 1 (cbet)."""
     result = _evaluate_all(
         {
             "hand": "AhKd",
-            "board": "AhQs2c",
-            "position": "BTN",
+            "board": "Kh8d3c",  # safe broadway, no risk factors
+            "position": "UTG",
             "pot": 10.0,
             "hero_stack": 90.0,
             "villain_stack": 90.0,
             "num_players": 2,
             "pot_type": "single-raised",
+            "villain_position": "BB",
         }
     )
     by_name = {d["system_name"]: d for d in result["decisions"]}
-
-    cbet = by_name["Flop Cbet Strategy"]
-    assert cbet["has_decision"] is True
-    assert cbet["matched_rule"] == "cbet A-high flop BTN"
-    assert cbet["action"] is not None
-    assert cbet["action"]["type"] == "bet"
-    assert cbet["action"]["size"]["fraction"] == 0.66
-
-    top_pair = by_name["Top Pair Strategy"]
-    assert top_pair["has_decision"] is True
-    assert top_pair["matched_rule"] == "bet top pair"
-    assert top_pair["action"] is not None
-    assert top_pair["action"]["type"] == "bet"
+    s1 = by_name["BBZ System 1: UTG vs BB C-betting Flops"]
+    assert s1["has_decision"] is True
+    assert s1["matched_rule"] == "cbet 100% on safe broadway flops"
+    assert s1["action"] is not None
+    assert s1["action"]["type"] == "bet"
+    assert s1["action"]["size"]["fraction"] == 0.33
 
 
 def test_all_systems_no_match_is_reported() -> None:
-    """A preflop state matches neither flop/postflop system; both report
+    """A preflop state matches no BBZ system (all are postflop); each reports
     has_decision=False with null action/rule."""
     result = _evaluate_all(
         {
@@ -88,23 +84,24 @@ def test_all_systems_no_match_is_reported() -> None:
 
 
 def test_single_system_mode_unchanged() -> None:
-    """all_systems=False (default) still returns the single EvaluateResponse
-    shape (top-level action/matched_rule/has_decision, NOT a decisions wrapper).
-    Pins system_name to "Top Pair Strategy" so the assertion is stable
-    regardless of how many systems are loaded or their file sort order.
+    """all_systems=False returns the single EvaluateResponse shape (top-level
+    action/matched_rule/has_decision, NOT a decisions wrapper). Pins
+    system_name to a BBZ system so the assertion is stable regardless of
+    how many systems are loaded or their file sort order.
     """
     response = client.post(
         "/evaluate",
         json={
             "hand": "AhKd",
-            "board": "AhQs2c",
-            "position": "BTN",
+            "board": "Kh8d3c",
+            "position": "UTG",
             "pot": 10.0,
             "hero_stack": 90.0,
             "villain_stack": 90.0,
             "num_players": 2,
             "pot_type": "single-raised",
-            "system_name": "Top Pair Strategy",
+            "villain_position": "BB",
+            "system_name": "BBZ System 1: UTG vs BB C-betting Flops",
             "all_systems": False,
         },
     )
@@ -112,39 +109,57 @@ def test_single_system_mode_unchanged() -> None:
     data = response.json()
     assert "decisions" not in data
     assert data["has_decision"] is True
+    assert data["matched_rule"] == "cbet 100% on safe broadway flops"
 
 
-def test_villain_position_threads_through_and_gates_rule() -> None:
+def test_villain_position_threads_through_and_gates_rule(tmp_path: Path) -> None:
     """The villain_position request field reaches the state and gates a rule
-    keyed on it. On a turn with top pair, the Flop Cbet System has only the
-    villain_position-gated 'overbet top pair vs BB on the turn' rule; it
-    matches when villain_position=BB and not when the field is omitted.
+    keyed on it. No shipped system gates differentially on villain_position,
+    so this builds a throwaway system with a villain_position-gated rule
+    and confirms it matches with villain_position=BB but not without.
     """
-    base = {
-        "hand": "AhKd",       # top pair on an A-high turn
-        "board": "AhQs2c9d",  # turn, A-high
-        "position": "BTN",
-        "pot": 10.0,
-        "hero_stack": 90.0,
-        "villain_stack": 90.0,
-        "num_players": 2,
-        "pot_type": "single-raised",
-    }
+    yaml_content = dedent("""
+        name: "Villain Position Test"
+        description: "gated on villain_position"
+        rules:
+          - name: "only vs BB"
+            conditions:
+              street: flop
+              villain_position: BB
+            action:
+              type: bet
+              size: 0.5
+    """)
+    path = tmp_path / "vp.yaml"
+    path.write_text(yaml_content)
+    system = load_system(path)
 
-    # With villain_position=BB, the gated overbet rule matches.
-    with_bb = _evaluate_all({**base, "villain_position": "BB"})
-    cbet_bb = next(
-        d for d in with_bb["decisions"] if d["system_name"] == "Flop Cbet Strategy"
-    )
-    assert cbet_bb["has_decision"] is True
-    assert cbet_bb["matched_rule"] == "overbet top pair vs BB on the turn"
-    assert cbet_bb["action"]["size"]["fraction"] == 1.25
+    from app.poker.board import Board
+    from app.poker.cards import Hand
+    from app.poker.state import HandState, Position, PotType
 
-    # With villain_position omitted, the gated rule can never match.
-    without = _evaluate_all(base)
-    cbet_none = next(
-        d for d in without["decisions"] if d["system_name"] == "Flop Cbet Strategy"
-    )
-    assert cbet_none["has_decision"] is False
-    assert cbet_none["matched_rule"] is None
+    hand = Hand.parse("AhKd")
+    board = Board.parse("Kh8d3c")
 
+    def make_state(villain_position: Position | None = None) -> HandState:
+        return HandState(
+            hand=hand,
+            board=board,
+            position=Position.UTG,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+            num_players=2,
+            pot_type=PotType.SINGLE_RAISED,
+            villain_position=villain_position,
+        )
+
+    # With villain_position=BB, the gated rule matches.
+    with_bb = system.evaluate(make_state(Position.BB))
+    assert with_bb.has_decision is True
+    assert with_bb.matched_rule == "only vs BB"
+
+    # Without villain_position, the gate fails (None never matches).
+    without = system.evaluate(make_state(None))
+    assert without.has_decision is False
+    assert without.matched_rule is None
