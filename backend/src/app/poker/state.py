@@ -57,6 +57,9 @@ class HandState(BaseModel):
     num_players: int = Field(default=2, ge=2, le=6)
     action_history: list[ActionRecord] = Field(default_factory=list)
     pot_type: PotType | None = None
+    # The direct opponent's position. Optional: None means the villain's seat
+    # is unspecified. Always explicit (never auto-derived from hero's position).
+    villain_position: Position | None = None
 
     @property
     def street(self):

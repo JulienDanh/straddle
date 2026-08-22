@@ -49,6 +49,7 @@ class TestPredicateRegistry:
         reg = default_registry()
         assert "street" in reg
         assert "position" in reg
+        assert "villain_position" in reg
         assert "pot" in reg
         assert "board" in reg
         assert "hand" in reg
@@ -117,6 +118,48 @@ class TestPositionPredicate:
             villain_stack=100.0,
         )
         assert not evaluate_conditions({"position": "UTG"}, state)
+
+
+# --- villain_position predicate ----------------------------------------------
+
+class TestVillainPositionPredicate:
+    def test_match(self, aks_hand: Hand, preflop_board: Board) -> None:
+        state = HandState(
+            hand=aks_hand,
+            board=preflop_board,
+            position=Position.BTN,
+            pot=0.0,
+            hero_stack=100.0,
+            villain_stack=100.0,
+            villain_position=Position.BB,
+        )
+        assert evaluate_conditions({"villain_position": "BB"}, state)
+
+    def test_no_match(self, aks_hand: Hand, preflop_board: Board) -> None:
+        state = HandState(
+            hand=aks_hand,
+            board=preflop_board,
+            position=Position.BTN,
+            pot=0.0,
+            hero_stack=100.0,
+            villain_stack=100.0,
+            villain_position=Position.BB,
+        )
+        assert not evaluate_conditions({"villain_position": "CO"}, state)
+
+    def test_none_villain_position_never_matches(
+        self, aks_hand: Hand, preflop_board: Board
+    ) -> None:
+        # An unspecified villain position must not satisfy a condition.
+        state = HandState(
+            hand=aks_hand,
+            board=preflop_board,
+            position=Position.BTN,
+            pot=0.0,
+            hero_stack=100.0,
+            villain_stack=100.0,
+        )
+        assert not evaluate_conditions({"villain_position": "BB"}, state)
 
 
 # --- pot predicate -----------------------------------------------------------
@@ -532,3 +575,126 @@ class TestEvaluateConditions:
             "pot": "single-raised",
         }
         assert not evaluate_conditions(conditions, state)
+
+
+# --- New predicate keys: board thresholds, rank-contains, connectivity ---
+
+class TestBoardHighThresholds:
+    def _state(self, board: str) -> HandState:
+        return HandState(
+            hand=Hand.parse("AhKd"),
+            board=Board.parse(board),
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+
+    def test_broadway_matches(self) -> None:
+        assert evaluate_conditions({"board": "broadway"}, self._state("AhQs2c"))
+        assert evaluate_conditions({"board": "broadway"}, self._state("Td9d2c"))
+
+    def test_broadway_no_match(self) -> None:
+        assert not evaluate_conditions({"board": "broadway"}, self._state("9d8c2s"))
+
+    def test_comparison_ge_t(self) -> None:
+        assert evaluate_conditions({"board": ">=T"}, self._state("AhQs2c"))
+        assert evaluate_conditions({"board": ">=T"}, self._state("Td9d2c"))
+        assert not evaluate_conditions({"board": ">=T"}, self._state("9d8c2s"))
+
+    def test_comparison_le_k(self) -> None:
+        assert evaluate_conditions({"board": "<=K"}, self._state("KdQs2c"))
+        assert not evaluate_conditions({"board": "<=K"}, self._state("AhQs2c"))
+
+
+class TestBoardRankPredicate:
+    def _state(self, board: str) -> HandState:
+        return HandState(
+            hand=Hand.parse("AhKd"),
+            board=Board.parse(board),
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+
+    def test_contains_rank(self) -> None:
+        assert evaluate_conditions({"board_rank": "2"}, self._state("AhKd2s"))
+        assert evaluate_conditions({"board_rank": 2}, self._state("AhKd2s"))
+        assert evaluate_conditions({"board_rank": "A"}, self._state("AhKd2s"))
+        assert not evaluate_conditions({"board_rank": "Q"}, self._state("AhKd2s"))
+
+    def test_preflop_no_rank(self) -> None:
+        state = HandState(
+            hand=Hand.parse("AhKd"),
+            board=Board.parse(""),
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+        assert not evaluate_conditions({"board_rank": "A"}, state)
+
+
+class TestConnectivityPredicates:
+    def _state(self, board: str) -> HandState:
+        return HandState(
+            hand=Hand.parse("AhKd"),
+            board=Board.parse(board),
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+
+    def test_straights_possible(self) -> None:
+        assert evaluate_conditions({"board": "straights-possible"}, self._state("7d8c9s"))
+        assert evaluate_conditions({"board": "connected"}, self._state("Ah2d3s"))
+        assert not evaluate_conditions({"board": "straights-possible"}, self._state("Kd8c3s"))
+
+    def test_disconnected(self) -> None:
+        assert evaluate_conditions({"board": "disconnected"}, self._state("Kd8c2s"))
+        assert not evaluate_conditions({"board": "disconnected"}, self._state("7d8c2s"))
+
+
+class TestNewHandPredicates:
+    def _state(self, hand: str, board: str) -> HandState:
+        return HandState(
+            hand=Hand.parse(hand),
+            board=Board.parse(board),
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+
+    def test_three_straight(self) -> None:
+        assert evaluate_conditions({"hand": "three-straight"}, self._state("9d8c", "Kh7s7d"))
+        assert not evaluate_conditions({"hand": "three-straight"}, self._state("7d2c", "Kh8s4d"))
+
+    def test_ace_high(self) -> None:
+        assert evaluate_conditions({"hand": "a-high"}, self._state("AhKd", "7s5c2d"))
+        assert evaluate_conditions({"hand": "k-high"}, self._state("KhQd", "7s5c2d"))
+        assert not evaluate_conditions({"hand": "a-high"}, self._state("KhQd", "7s5c2d"))
+
+    def test_backdoor_flush_draw(self) -> None:
+        # As2s on a Q-8-3-rainbow-ish flop: 2 hole spades + 1 board spade = 3
+        # spades on the flop → backdoor flush draw (count == 3, flop only).
+        state = HandState(
+            hand=Hand.parse("As2s"),
+            board=Board.parse("Qs8d3c"),
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+        assert evaluate_conditions({"hand": "backdoor-flush-draw"}, state)
+
+
+class TestRegistryHasNewKeys:
+    def test_default_registry_has_new_keys(self) -> None:
+        reg = default_registry()
+        assert "board_rank" in reg
+        # The board/hand string values (broadway, straights-possible,
+        # disconnected, backdoor-flush-draw, three-straight, a-high) are
+        # matched through the existing board/hand predicates, not new keys.

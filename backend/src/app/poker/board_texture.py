@@ -102,6 +102,63 @@ class BoardTexture:
         """True if there are 2+ of the same suit (potential flush draw)."""
         return any(count >= 2 for count in self.suit_counts.values())
 
+    @property
+    def is_broadway(self) -> bool:
+        """True if the board's high card is T or above (T/J/Q/K/A-high)."""
+        return self._high_card != BoardHighCard.LOW
+
+    @property
+    def is_low(self) -> bool:
+        """True if the board's high card is 9 or below."""
+        return self._high_card == BoardHighCard.LOW
+
+    def contains_rank(self, rank: Rank) -> bool:
+        """True if the board has a card of the given rank."""
+        return rank in self.ranks
+
+    @property
+    def straights_possible(self) -> bool:
+        """True if the board's ranks are connected enough to make a straight.
+
+        A straight is considered possible when the board contains at least
+        three distinct ranks within a 5-rank window — i.e. a hand could
+        complete a straight with two hole cards. Boards with a single gap
+        (e.g. 8-6-4) still qualify; totally disconnected boards (e.g.
+        A-K-2, K-8-3) do not. Ace plays both high (T-J-Q-K-A) and low
+        (A-2-3-4-5).
+        """
+        values = sorted({r.value for r in self.ranks})
+        # Ace also plays as 1 for the wheel.
+        if Rank.ACE.value in values:
+            values = sorted(set(values) | {1})
+        if len(values) < 3:
+            return False
+        for window_start in range(1, 11):  # A-low windows through T-A
+            window = set(range(window_start, window_start + 5))
+            present = len(window & set(values))
+            if present >= 3:
+                return True
+        return False
+
+    @property
+    def is_disconnected(self) -> bool:
+        """True if no two board ranks are consecutive (a 'dry' board).
+
+        The inverse of straight connectivity: a board with no touching ranks
+        cannot make a straight with two hole cards within a single window.
+        Note this is stricter than `not straights_possible` — a board like
+        8-6-4 is not consecutive but can still make a straight (gaps fill),
+        so it is NOT disconnected. Only truly scattered boards (e.g. K-8-2)
+        qualify.
+        """
+        values = sorted({r.value for r in self.ranks})
+        if len(values) < 2:
+            return False
+        for i in range(1, len(values)):
+            if values[i] == values[i - 1] + 1:
+                return False
+        return True
+
 
 class BoardAnalyzer:
     """Analyzes a Board to produce a BoardTexture."""

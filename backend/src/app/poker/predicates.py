@@ -49,6 +49,16 @@ def _position_predicate(state: HandState, value: Any) -> bool:
     return state.position == expected
 
 
+def _villain_position_predicate(state: HandState, value: Any) -> bool:
+    # Conservative: an unspecified villain position never matches a condition
+    # that asks for one (avoids accidentally satisfying "villain is BB" when we
+    # don't actually know the villain's seat).
+    if state.villain_position is None:
+        return False
+    expected = Position(value)
+    return state.villain_position == expected
+
+
 def _pot_predicate(state: HandState, value: Any) -> bool:
     if state.pot_type is None:
         return False
@@ -104,7 +114,75 @@ def _check_board_property(texture: Any, value: str) -> bool:
     if v == "low":
         return texture.high_card == BoardHighCard.LOW
 
+    # Broadway threshold: board high card is T or above.
+    if v in ("broadway", "t-high-plus", "t-high+"):
+        return texture.is_broadway
+    # High-card comparison: ">=T", ">=K", ">9", etc.
+    comp = _parse_high_card_comparison(v)
+    if comp is not None:
+        return comp(texture)
+
+    # Connectivity.
+    if v in ("straights-possible", "straight-possible", "connected"):
+        return texture.straights_possible
+    if v in ("disconnected", "dry", "is-disconnected"):
+        return texture.is_disconnected
+
     return False
+
+
+_HIGH_CARD_ORDER = [
+    BoardHighCard.LOW,
+    BoardHighCard.TEN_HIGH,
+    BoardHighCard.JACK_HIGH,
+    BoardHighCard.QUEEN_HIGH,
+    BoardHighCard.KING_HIGH,
+    BoardHighCard.ACE_HIGH,
+]
+
+
+def _rank_to_high_card(label: str) -> BoardHighCard | None:
+    """Map a single rank label to its BoardHighCard bucket, if any."""
+    label = label.lower()
+    mapping = {
+        "a": BoardHighCard.ACE_HIGH,
+        "k": BoardHighCard.KING_HIGH,
+        "q": BoardHighCard.QUEEN_HIGH,
+        "j": BoardHighCard.JACK_HIGH,
+        "t": BoardHighCard.TEN_HIGH,
+        "9": BoardHighCard.LOW,
+    }
+    return mapping.get(label)
+
+
+def _parse_high_card_comparison(v: str) -> Any | None:
+    """Parse a '>=T' / '>9' / '<=K' style board-high comparison.
+
+    Returns a callable (texture -> bool) or None if the string is not such a
+    comparison.
+    """
+    import re
+
+    m = re.match(r"^(>=|<=|>|<)\s*([akqtj9])$", v)
+    if m is None:
+        return None
+    op, rank_label = m.groups()
+    target = _rank_to_high_card(rank_label)
+    if target is None:
+        return None
+    target_idx = _HIGH_CARD_ORDER.index(target)
+
+    def compare(texture: Any) -> bool:
+        idx = _HIGH_CARD_ORDER.index(texture.high_card)
+        if op == ">=":
+            return idx >= target_idx
+        if op == "<=":
+            return idx <= target_idx
+        if op == ">":
+            return idx > target_idx
+        return idx < target_idx  # "<"
+
+    return compare
 
 
 def _hand_predicate(state: HandState, value: Any) -> bool:
@@ -114,6 +192,27 @@ def _hand_predicate(state: HandState, value: Any) -> bool:
     if isinstance(value, list):
         return all(_check_hand_property(classification, v) for v in value)
     return False
+
+
+def _board_rank_predicate(state: HandState, value: Any) -> bool:
+    """True if the board contains a card of the given rank.
+
+    Accepts a rank label (e.g. "2", "3", "A", "K") or an int 2-14. Preflop
+    boards have no cards, so the predicate is False there.
+    """
+    if state.board.is_preflop:
+        return False
+    texture = BoardAnalyzer.analyze(state.board)
+    if isinstance(value, int) and not isinstance(value, bool):
+        from app.poker.cards import Rank
+
+        rank = Rank(value)
+        return texture.contains_rank(rank)
+    label = str(value).strip()
+    from app.poker.cards import Rank
+
+    rank = Rank.from_label(label)
+    return texture.contains_rank(rank)
 
 
 def _check_hand_property(classification: Any, value: str) -> bool:
@@ -138,6 +237,24 @@ def _check_hand_property(classification: Any, value: str) -> bool:
         return classification.has_gutshot
     if v in ("oesd", "open-ended-straight-draw", "has-oesd"):
         return classification.has_oesd
+    if v in ("backdoor-flush-draw", "bdfd", "has-backdoor-flush-draw"):
+        from app.poker.hand_classification import DrawCategory
+
+        return DrawCategory.BACKDOOR_FLUSH_DRAW in classification.draws
+    if v in ("three-straight", "three-to-a-straight", "has-three-straight"):
+        return classification.has_three_straight
+
+    # High-card rank: "ace-high", "king-high", "queen-high", etc. Only
+    # meaningful when the made hand is HIGH_CARD (no pair).
+    if classification.made_hand.value.lower() == "high-card":
+        from app.poker.cards import Rank
+
+        for rank in Rank:
+            if v == f"{rank.label.lower()}-high":
+                return (
+                    classification.high_card_rank is not None
+                    and classification.high_card_rank == rank
+                )
 
     return False
 
@@ -184,8 +301,10 @@ def _default_registry() -> PredicateRegistry:
     registry = PredicateRegistry()
     registry.register("street", _street_predicate)
     registry.register("position", _position_predicate)
+    registry.register("villain_position", _villain_position_predicate)
     registry.register("pot", _pot_predicate)
     registry.register("board", _board_predicate)
+    registry.register("board_rank", _board_rank_predicate)
     registry.register("hand", _hand_predicate)
     registry.register("players", _players_predicate)
     registry.register("spr", _spr_predicate)

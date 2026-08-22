@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from app.poker.board import Board
-from app.poker.cards import Hand
+from app.poker.cards import Hand, Rank
 from app.poker.hand_classification import (
     DrawCategory,
     HandClassifier,
@@ -154,3 +154,64 @@ class TestHandClassificationProperties:
         board = Board.parse("Qs8c2s")
         c = HandClassifier.classify(hand, board)
         assert c.has_gutshot is False
+
+
+class TestHighCardRank:
+    """The high_card_rank property reports hero's high card for high-card hands."""
+
+    def test_preflop_high_card_rank(self) -> None:
+        hand = Hand.parse("AhKd")
+        c = HandClassifier.classify(hand, Board.parse(""))
+        assert c.made_hand.value == "high-card"
+        assert c.high_card_rank == Rank.ACE
+
+    def test_postflop_high_card_rank(self) -> None:
+        hand = Hand.parse("KhQd")
+        c = HandClassifier.classify(hand, Board.parse("7s5c2d"))
+        assert c.made_hand.value == "high-card"
+        assert c.high_card_rank == Rank.KING
+
+    def test_pair_has_no_high_card_rank(self) -> None:
+        hand = Hand.parse("AhKd")
+        c = HandClassifier.classify(hand, Board.parse("Ac7d2s"))
+        assert c.made_hand.value != "high-card"
+        assert c.high_card_rank is None
+
+
+class TestThreeStraight:
+    """The has_three_straight property detects a 3-to-a-straight connector."""
+
+    def test_three_straight_present(self) -> None:
+        # 9-8 on a K-7-7 board: 7-8-9 three-straight.
+        hand = Hand.parse("9d8c")
+        board = Board.parse("Kh7s7d")
+        c = HandClassifier.classify(hand, board)
+        assert c.has_three_straight
+
+    def test_wheel_three_straight(self) -> None:
+        # A-2 on a 3-high board: A-2-3 (ace plays low).
+        hand = Hand.parse("Ah2d")
+        board = Board.parse("3s7c8d")
+        c = HandClassifier.classify(hand, board)
+        assert c.has_three_straight
+
+    def test_high_three_straight(self) -> None:
+        # Q-K on an A board: Q-K-A.
+        hand = Hand.parse("QdKc")
+        board = Board.parse("Ah7s2d")
+        c = HandClassifier.classify(hand, board)
+        assert c.has_three_straight
+
+    def test_no_three_straight(self) -> None:
+        # 7-2 on a K-8-4 board: no three consecutive with a board card.
+        hand = Hand.parse("7d2c")
+        board = Board.parse("Kh8s4d")
+        c = HandClassifier.classify(hand, board)
+        assert not c.has_three_straight
+
+    def test_pair_not_three_straight(self) -> None:
+        # Pocket pair can't form a three-straight.
+        hand = Hand.parse("AhAd")
+        board = Board.parse("KhQs2d")
+        c = HandClassifier.classify(hand, board)
+        assert not c.has_three_straight

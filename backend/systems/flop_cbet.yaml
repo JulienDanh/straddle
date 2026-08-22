@@ -44,3 +44,13 @@ rules:
     action:
       type: raise
       size: all-in
+
+  - name: "overbet top pair vs BB on the turn"
+    conditions:
+      street: turn
+      hand: top-pair
+      villain_position: BB
+      pot: single-raised
+    action:
+      type: bet
+      size: 1.25

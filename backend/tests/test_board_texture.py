@@ -127,3 +127,55 @@ class TestBoardAnalyzer:
         board = Board.parse("")
         with pytest.raises(ValueError):
             BoardAnalyzer.analyze(board)
+
+
+class TestNewTextureProperties:
+    """Tests for the broadway / low / rank-contains / connectivity additions."""
+
+    def test_broadway(self) -> None:
+        for cards in ("AhKd2s", "KdQs2c", "QsJc2d", "JcTd2s", "Td9d2c"):
+            assert BoardAnalyzer.analyze(Board.parse(cards)).is_broadway
+
+    def test_not_broadway(self) -> None:
+        for cards in ("9d8c2s", "7d5c2s", "5d4c2s"):
+            assert not BoardAnalyzer.analyze(Board.parse(cards)).is_broadway
+
+    def test_is_low(self) -> None:
+        assert BoardAnalyzer.analyze(Board.parse("9d8c2s")).is_low
+        assert not BoardAnalyzer.analyze(Board.parse("Td9d2c")).is_low
+
+    def test_contains_rank(self) -> None:
+        texture = BoardAnalyzer.analyze(Board.parse("AhKd2s"))
+        assert texture.contains_rank(Rank.ACE)
+        assert texture.contains_rank(Rank.KING)
+        assert texture.contains_rank(Rank.DEUCE)
+        assert not texture.contains_rank(Rank.QUEEN)
+
+    @pytest.mark.parametrize(
+        "cards,expected",
+        [
+            ("7d8c9s", True),    # three consecutive
+            ("8d9cTs", True),    # three consecutive, T-high
+            ("6d5c3s", True),    # 3-4-5-6 window covered by 3,5,6
+            ("Ah2d3s", True),    # wheel A-2-3
+            ("AdKcQs", True),    # Q-K-A high straight
+            ("Kd8c3s", False),   # scattered, no 3-in-a-window
+            ("AhKd2s", False),   # A, K, 2 — only 2 in any window
+        ],
+    )
+    def test_straights_possible(self, cards: str, expected: bool) -> None:
+        assert BoardAnalyzer.analyze(Board.parse(cards)).straights_possible is expected
+
+    @pytest.mark.parametrize(
+        "cards,expected",
+        [
+            ("Kd8c2s", True),     # no touching ranks
+            ("AhTd2s", True),     # A, T, 2 — A(14) and T(10) not adjacent, T and 2 not adjacent
+            ("8d5c2s", True),     # scattered
+            ("7d8c2s", False),    # 7-8 touching
+            ("9d8c2s", False),    # 8-9 touching
+            ("TdJc2s", False),    # T-J touching
+        ],
+    )
+    def test_is_disconnected(self, cards: str, expected: bool) -> None:
+        assert BoardAnalyzer.analyze(Board.parse(cards)).is_disconnected is expected

@@ -1,17 +1,22 @@
 """FastAPI application entry point."""
 
 from pathlib import Path
+from typing import Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 
 from app.models import (
     ActionResponse,
     BoardTextureResponse,
     ClassifyResponse,
+    EvaluateAllResponse,
     EvaluateRequest,
     EvaluateResponse,
     HealthResponse,
+    RuleResponse,
     SizingResponse,
+    SystemDecision,
+    SystemDetailResponse,
     SystemSummary,
 )
 from app.poker.board import Board
@@ -55,6 +60,23 @@ def list_systems() -> list[SystemSummary]:
     ]
 
 
+@app.get("/systems/{system_name}", response_model=SystemDetailResponse)
+def get_system(system_name: str) -> SystemDetailResponse:
+    """Return one system with its full rule list, for rule visualization."""
+    systems = _load_systems()
+    for s in systems:
+        if s.name == system_name:
+            return SystemDetailResponse(
+                name=s.name,
+                description=s.description,
+                rules=[
+                    RuleResponse(name=r.name, conditions=r.conditions, action=r.action)
+                    for r in s.rules
+                ],
+            )
+    raise HTTPException(status_code=404, detail=f"Unknown system: {system_name}")
+
+
 @app.get("/classify", response_model=ClassifyResponse)
 def classify(hand: str, board: str) -> ClassifyResponse:
     """Classify a hand + board combination."""
@@ -88,15 +110,37 @@ def classify(hand: str, board: str) -> ClassifyResponse:
     )
 
 
-@app.post("/evaluate", response_model=EvaluateResponse)
-def evaluate(request: EvaluateRequest) -> EvaluateResponse:
-    """Evaluate a hand state against a rule system."""
+def _action_response(action: Any) -> ActionResponse | None:
+    """Convert a poker Action into a JSON-serializable ActionResponse."""
+    sizing_response: SizingResponse | None = None
+    if action.size is not None:
+        sizing_response = SizingResponse(
+            type=action.size.type.value,
+            fraction=action.size.fraction,
+            absolute=action.size.absolute,
+            is_all_in=action.size.is_all_in,
+        )
+    return ActionResponse(type=action.type.value, size=sizing_response)
+
+
+@app.post("/evaluate")
+def evaluate(request: EvaluateRequest) -> Any:
+    """Evaluate a hand state against one or all rule systems.
+
+    With all_systems=False (default) a single EvaluateResponse is returned
+    for the chosen system (or the first system). With all_systems=True an
+    EvaluateAllResponse is returned with one SystemDecision per loaded
+    system in load order.
+    """
     parsed_hand = Hand.parse(request.hand)
     parsed_board = Board.parse(request.board)
     position = Position(request.position)
     pot_type: PotType | None = None
     if request.pot_type is not None:
         pot_type = PotType(request.pot_type)
+    villain_position: Position | None = None
+    if request.villain_position is not None:
+        villain_position = Position(request.villain_position)
 
     state = HandState(
         hand=parsed_hand,
@@ -107,9 +151,24 @@ def evaluate(request: EvaluateRequest) -> EvaluateResponse:
         villain_stack=request.villain_stack,
         num_players=request.num_players,
         pot_type=pot_type,
+        villain_position=villain_position,
     )
 
     systems = _load_systems()
+
+    if request.all_systems:
+        decisions = [
+            SystemDecision(
+                system_name=s.name,
+                action=_action_response(d.action) if d.action is not None else None,
+                matched_rule=d.matched_rule,
+                has_decision=d.has_decision,
+            )
+            for s in systems
+            for d in [s.evaluate(state)]
+        ]
+        return EvaluateAllResponse(decisions=decisions)
+
     if not systems:
         return EvaluateResponse(action=None, matched_rule=None, has_decision=False)
 
@@ -121,20 +180,7 @@ def evaluate(request: EvaluateRequest) -> EvaluateResponse:
                 break
 
     decision = system.evaluate(state)
-    action_response: ActionResponse | None = None
-    if decision.action is not None:
-        sizing_response: SizingResponse | None = None
-        if decision.action.size is not None:
-            sizing_response = SizingResponse(
-                type=decision.action.size.type.value,
-                fraction=decision.action.size.fraction,
-                absolute=decision.action.size.absolute,
-                is_all_in=decision.action.size.is_all_in,
-            )
-        action_response = ActionResponse(
-            type=decision.action.type.value,
-            size=sizing_response,
-        )
+    action_response = _action_response(decision.action) if decision.action is not None else None
 
     return EvaluateResponse(
         action=action_response,

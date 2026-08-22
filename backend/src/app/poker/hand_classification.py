@@ -46,12 +46,16 @@ class HandClassification:
         is_top_pair: bool = False,
         is_overpair: bool = False,
         pair_rank: Rank | None = None,
+        high_card_rank: Rank | None = None,
+        has_three_straight: bool = False,
     ) -> None:
         self._made_hand = made_hand
         self._draws = draws
         self._is_top_pair = is_top_pair
         self._is_overpair = is_overpair
         self._pair_rank = pair_rank
+        self._high_card_rank = high_card_rank
+        self._has_three_straight = has_three_straight
 
     @property
     def made_hand(self) -> MadeHandCategory:
@@ -74,6 +78,15 @@ class HandClassification:
         return self._pair_rank
 
     @property
+    def high_card_rank(self) -> Rank | None:
+        """When the made hand is HIGH_CARD, the rank of hero's higher hole card.
+
+        None for non-high-card hands. Used by the high-card defending
+        strategy (defend ace-high, then queen-high, then jack-high, ...).
+        """
+        return self._high_card_rank
+
+    @property
     def has_flush_draw(self) -> bool:
         return DrawCategory.FLUSH_DRAW in self._draws
 
@@ -84,6 +97,16 @@ class HandClassification:
     @property
     def has_oesd(self) -> bool:
         return DrawCategory.OPEN_ENDED_STRAIGHT_DRAW in self._draws
+
+    @property
+    def has_three_straight(self) -> bool:
+        """True if two hole cards plus one board card form three consecutive ranks.
+
+        Distinct from an OESD (which is four to a straight): this is the
+        "3-to-a-straight" connector that the BBZ defending systems treat as a
+        defending qualifier (e.g. 9-8 on a K-7-7 board).
+        """
+        return self._has_three_straight
 
 
 class HandClassifier:
@@ -99,7 +122,9 @@ class HandClassifier:
         if board.is_preflop:
             if hand.is_pair:
                 return HandClassification(MadeHandCategory.PAIR, [])
-            return HandClassification(MadeHandCategory.HIGH_CARD, [])
+            return HandClassification(
+                MadeHandCategory.HIGH_CARD, [], high_card_rank=hand.high_rank
+            )
 
         hole_cards = list(hand.cards)
         board_cards = list(board)
@@ -137,12 +162,17 @@ class HandClassifier:
                     elif rank in hole_rank_counts:
                         pair_rank = rank
 
+        high_card_rank = hand.high_rank if made_hand == MadeHandCategory.HIGH_CARD else None
+        has_three_straight = _has_three_straight(hole_cards, board_cards)
+
         return HandClassification(
             made_hand=made_hand,
             draws=draws,
             is_top_pair=is_top_pair,
             is_overpair=is_overpair,
             pair_rank=pair_rank,
+            high_card_rank=high_card_rank,
+            has_three_straight=has_three_straight,
         )
 
 
@@ -355,3 +385,30 @@ def _max_consecutive(values: Sequence[int]) -> int:
         else:
             current = 1
     return max_run
+
+
+def _has_three_straight(hole_cards: list[Card], board_cards: list[Card]) -> bool:
+    """True if both hole cards plus one board card form three consecutive ranks.
+
+    A "3-to-a-straight": the two hole cards are distinct ranks, and together
+    with one board card they form a 3-card run (e.g. 9-8 on a K-7-7 board →
+    7-8-9). Ace plays both high (Q-K-A) and low (A-2-3).
+    """
+    h1, h2 = hole_cards[0].rank, hole_cards[1].rank
+    if h1 == h2:
+        return False
+    hole_vals = {h1.value, h2.value}
+    # Ace also plays as 1 for the wheel.
+    hole_vals_low = hole_vals | ({1} if 14 in hole_vals else set())
+    board_vals = {c.rank.value for c in board_cards}
+    board_vals_low = board_vals | ({1} if 14 in board_vals else set())
+    # A 3-straight needs three consecutive ranks where exactly the two hole
+    # cards + one board card are present across a 3-window.
+    for window_start in range(1, 13):  # A-2-3 through Q-K-A
+        window = set(range(window_start, window_start + 3))
+        # Which window ranks come from hole vs board.
+        from_hole = window & hole_vals_low
+        from_board = window & board_vals_low
+        if len(from_hole) == 2 and len(from_board) >= 1 and (from_hole | from_board) == window:
+            return True
+    return False

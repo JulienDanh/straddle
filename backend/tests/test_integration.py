@@ -24,7 +24,7 @@ def flop_cbet_system() -> object:
 class TestFlopCbetSystem:
     def test_loads(self, flop_cbet_system) -> None:
         assert flop_cbet_system.name == "Flop Cbet Strategy"
-        assert len(flop_cbet_system.rules) == 4
+        assert len(flop_cbet_system.rules) == 5
 
     def test_cbet_ace_high_btn(
         self, flop_cbet_system, aks_hand: Hand, ace_high_flop: Board

@@ -21,6 +21,10 @@ class EvaluateRequest(BaseModel):
     num_players: int = 2
     pot_type: str | None = "single-raised"
     system_name: str | None = None
+    villain_position: str | None = None
+    # When true, evaluate against every loaded system and return an
+    # EvaluateAllResponse (a decision per system); system_name is ignored.
+    all_systems: bool = False
 
 
 class SizingResponse(BaseModel):
@@ -40,11 +44,29 @@ class ActionResponse(BaseModel):
 
 
 class EvaluateResponse(BaseModel):
-    """Response for the /evaluate endpoint."""
+    """Response for the /evaluate endpoint (single-system mode)."""
 
     action: ActionResponse | None = None
     matched_rule: str | None = None
     has_decision: bool
+
+
+class SystemDecision(BaseModel):
+    """One system's verdict on a hand state."""
+
+    system_name: str
+    action: ActionResponse | None = None
+    matched_rule: str | None = None
+    has_decision: bool
+
+
+class EvaluateAllResponse(BaseModel):
+    """Response for the /evaluate endpoint when all_systems=True.
+
+    One decision per loaded system, in load order (alphabetical by file).
+    """
+
+    decisions: list[SystemDecision]
 
 
 class BoardTextureResponse(BaseModel):
@@ -74,3 +96,19 @@ class SystemSummary(BaseModel):
     name: str
     description: str
     rule_count: int
+
+
+class RuleResponse(BaseModel):
+    """A single rule in a system, for visualization."""
+
+    name: str
+    conditions: dict[str, object]
+    action: dict[str, object]
+
+
+class SystemDetailResponse(BaseModel):
+    """A system with its full rule list, for rule visualization."""
+
+    name: str
+    description: str
+    rules: list[RuleResponse]

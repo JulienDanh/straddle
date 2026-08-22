@@ -214,3 +214,26 @@ class TestHandState:
             villain_stack=90.0,
         )
         assert state.action_history == []
+
+    def test_villain_position_default_none(self, aks_hand: Hand, ace_high_flop: Board) -> None:
+        state = HandState(
+            hand=aks_hand,
+            board=ace_high_flop,
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+        )
+        assert state.villain_position is None
+
+    def test_villain_position_set(self, aks_hand: Hand, ace_high_flop: Board) -> None:
+        state = HandState(
+            hand=aks_hand,
+            board=ace_high_flop,
+            position=Position.BTN,
+            pot=10.0,
+            hero_stack=90.0,
+            villain_stack=90.0,
+            villain_position=Position.BB,
+        )
+        assert state.villain_position == Position.BB
