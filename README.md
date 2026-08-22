@@ -59,3 +59,22 @@ pnpm run build
 ```
 
 Output is written to `frontend/dist/`.
+
+## Docker
+
+### Dev (hot reload)
+
+```sh
+make start      # docker compose up -d (hot reload in containers)
+make stop       # docker compose down
+```
+
+The frontend runs Vite with HMR at <http://localhost:5173> and the backend runs uvicorn with `--reload` at <http://localhost:8000>. Source directories are volume-mounted, so code changes reload instantly without rebuilding images.
+
+### Production
+
+```sh
+make prod       # docker compose -f docker-compose.prod.yml up -d
+```
+
+The frontend is served as static files by nginx at <http://localhost:8080>, which proxies `/api/*` to the backend at <http://localhost:8000>.

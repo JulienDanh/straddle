@@ -1,0 +1,9 @@
+name: "Top Pair Strategy"
+description: "Always bet with top pair"
+rules:
+  - name: "bet top pair"
+    conditions:
+      hand: top-pair
+    action:
+      type: bet
+      size: 0.66
