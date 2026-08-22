@@ -1,0 +1,70 @@
+name: "BBZ System 1: UTG vs BB C-betting Flops"
+description: >-
+  After raising UTG and the BB calls and checks, c-bet the flop. On broadway
+  (T-high+) boards with no straights possible and none of the risk factors,
+  c-bet 100% of the range at ~33% pot. Slow down (introduce checks) when
+  straights are possible and on A-high monotone boards. On low (9-high and
+  below) boards, build a checking strategy (~70% bet / 30% check). Derived
+  from the BBZ Simple "System 1: UTG vs BB Call — C-betting Flops" lesson.
+  NOTE: the high-low-low paired risk factor is omitted — the engine cannot
+  distinguish the low card being paired from the high card being paired.
+rules:
+  # --- Risk factors first (most specific), so they win over the broadway default ---
+
+  - name: "check A-high monotone (risk factor)"
+    conditions:
+      street: flop
+      position: UTG
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board:
+        - A-high
+        - monotone
+    action:
+      type: check
+
+  - name: "slow down when straights possible on broadway"
+    conditions:
+      street: flop
+      position: UTG
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board:
+        - broadway
+        - straights-possible
+    action:
+      type: check
+
+  # NOTE: "high-low-low paired" (low card paired, e.g. K-3-3) is a risk factor
+  # the transcript emphasizes, but the engine's `paired` key is boolean and
+  # cannot tell K-3-3 (slow down) from K-K-3 (c-bet 100%). Omitted to avoid a
+  # wrong check on K-K-3.
+
+  # --- Default: broadway, no risk factors → c-bet ~33% pot ---
+  - name: "cbet 100% on safe broadway flops"
+    conditions:
+      street: flop
+      position: UTG
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: broadway
+    action:
+      type: bet
+      size: 0.33
+
+  # --- Low boards: introduce a checking strategy (~70/30 bet/check) ---
+  # The engine cannot express frequency, so the low-board bucket is encoded
+  # as a check (the deviation from 100% bet that defines the bucket).
+  - name: "mix on low boards (check the middle)"
+    conditions:
+      street: flop
+      position: UTG
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: low
+    action:
+      type: check

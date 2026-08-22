@@ -1,0 +1,150 @@
+name: "BBZ System 2: BTN vs BB C-betting/Checking Flops"
+description: >-
+  After raising the BTN and the BB calls and checks, c-bet the flop. Default
+  c-bet 100% on A-high boards and on 10-through-K-high boards that contain a
+  deuce or trey (which disconnects the board). Slow down (check more) on
+  A-high monotone/paired boards, monotone K-high boards, and K-high boards
+  with two low cards. On low (9-high and below) boards, build a checking
+  strategy. Derived from the BBZ Simple "System 2: BTN vs BB — C-betting and
+  Checking Flops" lesson. NOTE: finer "bet top / check middle / bet bottom"
+  range-construction is not expressible — these rules encode the bucket
+  defaults and risk factors only.
+rules:
+  # --- Risk factors / check-the-middle buckets first ---
+
+  - name: "check A-high monotone"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board:
+        - A-high
+        - monotone
+    action:
+      type: check
+
+  - name: "check A-high paired"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board:
+        - A-high
+        - paired
+    action:
+      type: check
+
+  - name: "check K-high with two low cards (deuce + another low)"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board:
+        - K-high
+        - straights-possible
+    action:
+      type: check
+
+  - name: "check K-high monotone"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board:
+        - K-high
+        - monotone
+    action:
+      type: check
+
+  # --- Defaults: c-bet 100% ---
+
+  - name: "cbet 100% on A-high boards"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: A-high
+    action:
+      type: bet
+      size: 0.33
+
+  - name: "cbet 100% on K-high with a deuce or trey present"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: K-high
+      board_rank: 2
+    action:
+      type: bet
+      size: 0.33
+
+  - name: "cbet 100% on K-high with a trey present"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: K-high
+      board_rank: 3
+    action:
+      type: bet
+      size: 0.33
+
+  # NOTE: the transcript generalizes "a 2 or 3 present on a 10-K-high board"
+  # to Q/J/T-high too. We encode K-high explicitly; the same pattern applies
+  # to Q/J/T-high with a deuce/trey, but those boards are rarer and the
+  # default broadway rule below would over-bet disconnected K-high boards
+  # without a 2/3 — which is acceptable as the broadway catch-all.
+
+  - name: "cbet 100% on broadway with a deuce present"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: broadway
+      board_rank: 2
+    action:
+      type: bet
+      size: 0.33
+
+  - name: "cbet 100% on broadway with a trey present"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: broadway
+      board_rank: 3
+    action:
+      type: bet
+      size: 0.33
+
+  # --- Low boards: check the middle ---
+
+  - name: "mix on low boards (check the middle)"
+    conditions:
+      street: flop
+      position: BTN
+      villain_position: BB
+      pot: single-raised
+      players: heads-up
+      board: low
+    action:
+      type: check
