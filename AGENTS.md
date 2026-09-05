@@ -1,6 +1,6 @@
 # AGENTS.md — Building Learning Content from Source Transcripts
 
-This repo contains poker training transcripts (`transcripts/simple_system/*.txt`) converted into
+This repo contains poker training transcripts (`transcripts/Simple Poker Systems/*.txt` and `transcripts/Bubble Mastery/*.txt`) converted into
 a React + Vite study guide (`poker-app/`). Follow these principles when extending or revising content.
 
 ## Source material handling
@@ -100,7 +100,7 @@ summary comes first, then the detail, then the practice.
 - **Styles:** `poker-app/src/styles/global.css` — all CSS in one file, ported
   from the original vanilla version.
 - **Deploy:** GitHub Actions builds `poker-app/` and deploys `dist/` to Pages.
-  Base path is `/nl-systems/` (set in `vite.config.ts`).
+  Base path is `/straddle/` (set in `vite.config.ts`).
 - **Develop locally:** `cd poker-app && npm run dev`.
 
 ## What to avoid
