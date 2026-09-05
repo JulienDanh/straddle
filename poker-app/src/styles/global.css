@@ -882,20 +882,17 @@ footer {
   user-select: none;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
   line-height: 1.15;
 }
 .rv-cell-hand {
   font-size: 9px;
+  display: block;
 }
 .rv-cell-freq {
   font-size: 8px;
   opacity: 0.85;
   font-weight: 600;
+  display: block;
 }
 .rv-cell.locked {
   outline: 2px solid var(--accent2);
