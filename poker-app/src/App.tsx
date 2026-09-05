@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Sidebar } from './components/Sidebar'
 import { PrimerPage } from './pages/Primer'
 import { S1Page } from './pages/S1'
@@ -71,11 +71,26 @@ const PAGES: Record<PageId, React.FC> = {
   rangeviewer: RangeViewerPage,
 }
 
+const VALID_PAGES = new Set(Object.keys(PAGES))
+
+function pageFromHash(): PageId {
+  const hash = window.location.hash.replace(/^#/, '')
+  return (VALID_PAGES.has(hash) ? hash : 's1') as PageId
+}
+
 function App() {
-  const [page, setPage] = useState<PageId>('s1')
+  const [page, setPage] = useState<PageId>(pageFromHash)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  // Sync hash → state on back/forward
+  useEffect(() => {
+    const onHashChange = () => setPage(pageFromHash())
+    window.addEventListener('hashchange', onHashChange)
+    return () => window.removeEventListener('hashchange', onHashChange)
+  }, [])
+
   const navigate = (p: string) => {
+    window.location.hash = p
     setPage(p as PageId)
     setSidebarOpen(false)
     window.scrollTo(0, 0)
