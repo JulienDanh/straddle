@@ -22,6 +22,21 @@ const SYSTEMS = [
   { id: 's12', label: 'Defending 3-Bets OOP', num: '12' },
 ]
 
+const BUBBLE = [
+  { id: 'bmprimer', label: 'ICM & FGS Foundations', num: '·' },
+  { id: 'bm1', label: 'ICM vs ChipEV Preflop', num: '1' },
+  { id: 'bm2', label: 'Opening Into Covered', num: '2' },
+  { id: 'bm3', label: 'Opening Into Covering', num: '3' },
+  { id: 'bm4', label: 'Blind vs Blind', num: '4' },
+  { id: 'bm5', label: 'Blinds Facing Open', num: '5' },
+  { id: 'bm6', label: 'Dealing With 3-Bets', num: '6' },
+  { id: 'bm7', label: 'Identifying Bubble Impact', num: '7' },
+  { id: 'bm8', label: 'BTN Covers BB (Postflop)', num: '8' },
+  { id: 'bm9', label: 'BB Covers BTN (Postflop)', num: '9' },
+  { id: 'bm10', label: 'UTG Covers BB (Postflop)', num: '10' },
+  { id: 'bm11', label: 'Polar Opens · Split Range', num: '11' },
+]
+
 export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
   return (
     <aside className={`sidebar ${open ? 'open' : ''}`}>
@@ -58,6 +73,18 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         >
           <span className="num">·</span> Cross-System Principles
         </div>
+      </div>
+      <div className="nav-group">
+        <div className="nav-label">Bubble Mastery</div>
+        {BUBBLE.map((s) => (
+          <div
+            key={s.id}
+            className={`nav-item ${activePage === s.id ? 'active' : ''}`}
+            onClick={() => onNavigate(s.id)}
+          >
+            <span className="num">{s.num}</span> {s.label}
+          </div>
+        ))}
       </div>
     </aside>
   )

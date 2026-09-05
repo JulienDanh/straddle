@@ -15,13 +15,28 @@ import { S10Page } from './pages/S10'
 import { S11Page } from './pages/S11'
 import { S12Page } from './pages/S12'
 import { ConclusionPage } from './pages/Conclusion'
+import { BMPrimerPage } from './pages/BMPrimer'
+import { BM1Page } from './pages/BM1'
+import { BM2Page } from './pages/BM2'
+import { BM3Page } from './pages/BM3'
+import { BM4Page } from './pages/BM4'
+import { BM5Page } from './pages/BM5'
+import { BM6Page } from './pages/BM6'
+import { BM7Page } from './pages/BM7'
+import { BM8Page } from './pages/BM8'
+import { BM9Page } from './pages/BM9'
+import { BM10Page } from './pages/BM10'
+import { BM11Page } from './pages/BM11'
 
 type PageId = 'primer' | 's1' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's9' | 's10' | 's11' | 's12' | 'conclusion'
+  | 'bmprimer' | 'bm1' | 'bm2' | 'bm3' | 'bm4' | 'bm5' | 'bm6' | 'bm7' | 'bm8' | 'bm9' | 'bm10' | 'bm11'
 
 const PAGES: Record<PageId, React.FC> = {
   primer: PrimerPage, s1: S1Page, s2: S2Page, s3: S3Page, s4: S4Page,
   s5: S5Page, s6: S6Page, s7: S7Page, s8: S8Page, s9: S9Page,
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage,
+  bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
+  bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
 }
 
 function App() {
@@ -44,7 +59,7 @@ function App() {
         <div className="header-bar">
           <button className="menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>≡</button>
           <div className="crumbs" dangerouslySetInnerHTML={{ __html: navTitles[page] || '' }} />
-          <span className="pill">React + Vite · 12 systems</span>
+          <span className="pill">React + Vite · 12 systems + Bubble Mastery</span>
         </div>
         <PageComponent />
         <footer>No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
