@@ -59,10 +59,6 @@ function cellStyle(spot: Spot, hand: string): React.CSSProperties {
 const GROUP_LABELS: Record<string, string> = {
   'rfi': 'RFI',
   'lfi': 'LFI',
-  'general': 'vs Open',
-  '3bet': 'vs 3-Bet',
-  'all-in': 'vs All-in',
-  'iso': 'vs ISO',
 }
 
 function posName(hero: string): string {
@@ -174,7 +170,7 @@ export function RangeViewerPage() {
     }
     // Sort: by position order (BB, SB, BTN, CO, HJ, LJ, MP, UTG), then by group
     const posOrder = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
-    const groupOrder = ['rfi', 'lfi', 'general', '3bet', 'all-in', 'iso']
+    const groupOrder = ['rfi', 'lfi']
     spots.sort((a, b) => {
       const pa = posOrder.indexOf(a.pos)
       const pb = posOrder.indexOf(b.pos)
@@ -253,7 +249,7 @@ export function RangeViewerPage() {
         <input
           className="rv-filter"
           type="text"
-          placeholder="Filter: e.g. BTN RFI, vs 3bet, UTG..."
+          placeholder="Filter: e.g. BTN, UTG, SB..."
           value={filterText}
           onChange={(e) => setFilterText(e.target.value)}
         />
