@@ -97,15 +97,35 @@ function normalizeSpotName(name: string): string {
   return name.replace(/\s+\d+(\.\d+)?%$/, '').trim()
 }
 
+// Determine the hero position for a spot.
+// RFI/LFI spots: the opener is named in the spot (e.g. "UTG RFI" → UTG, "SB LFI" → SB,
+// "BB vs SB LFI" → BB is the defender, hero is BB).
+// Defense spots ("vs X RFI"): hero is the row's hero (the defender).
+function spotHero(spotName: string, rowHero: string): string {
+  const name = normalizeSpotName(spotName)
+  // RFI: "UTG RFI" → UTG is the opener
+  if (name.endsWith(' RFI') || name.endsWith(' LFI')) {
+    const opener = name.split(' ')[0]
+    if (opener && opener !== 'vs') return opener === 'BU' ? 'BTN' : opener
+  }
+  // "BB vs SB LFI" → BB is the hero (defender)
+  if (name.includes(' vs ')) {
+    const defender = name.split(' vs ')[0].trim()
+    if (defender) return defender === 'BU' ? 'BTN' : defender
+  }
+  // Fallback: use the row's hero
+  return rowHero
+}
+
 // ---- Parse a raw solution file into spots grouped by position ----
 function parseSolution(raw: RawSolution, manifest: ManifestEntry): ParsedSolution {
   const columns = raw.columns
-  const positions: Position[] = []
+  // Group spots by the correct hero position (extracted from spot name)
+  const posMap = new Map<string, Position>()
 
   for (let rowIdx = 1; rowIdx <= columns.length; rowIdx++) {
-    const hero = columns[rowIdx - 1]
+    const rowHero = posName(columns[rowIdx - 1])
     const cells = raw.table[String(rowIdx)] || []
-    const spots: Spot[] = []
     const seenNodeIds = new Set<number>()
 
     for (const cg of cells) {
@@ -128,16 +148,25 @@ function parseSolution(raw: RawSolution, manifest: ManifestEntry): ParsedSolutio
         }
 
         const actions = (node.percentages || []).map((p) => p.action)
-        spots.push({
-          name: normalizeSpotName(cell.name),
+        const spotName = normalizeSpotName(cell.name)
+        const hero = spotHero(cell.name, rowHero)
+
+        if (!posMap.has(hero)) posMap.set(hero, { hero, spots: [] })
+        posMap.get(hero)!.spots.push({
+          name: spotName,
           group: cell.group,
           actions,
           hands,
         })
       }
     }
-    if (spots.length > 0) positions.push({ hero, spots })
   }
+
+  // Sort positions by table order
+  const posOrder = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
+  const positions = Array.from(posMap.values()).sort(
+    (a, b) => posOrder.indexOf(a.hero) - posOrder.indexOf(b.hero)
+  )
 
   return {
     id: manifest.id,
