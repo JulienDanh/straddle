@@ -1251,3 +1251,19 @@ footer {
   color: var(--muted);
   white-space: nowrap;
 }
+
+/* ---- Range Viewer: solution group ---- */
+.rv-sol-group {
+  margin-bottom: 14px;
+}
+.rv-sol-group:last-child {
+  margin-bottom: 0;
+}
+.rv-sol-group-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+  padding-left: 2px;
+}

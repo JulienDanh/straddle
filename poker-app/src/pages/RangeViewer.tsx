@@ -311,22 +311,34 @@ export function RangeViewerPage() {
             </div>
           </Section>
 
-          {/* Solution flip row */}
+          {/* Solution flip row — grouped by product */}
           {matchingSolutions.length > 0 && (
             <Section title={`${activeSpotKeyParsed?.label ?? ''} · ${matchingSolutions.length} solutions`}>
-              <div className="rv-cmp-sol-row">
-                {matchingSolutions.map(({ solution }) => (
-                  <button
-                    key={solution.id}
-                    className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
-                    onClick={() => { setActiveSolutionId(solution.id); setLockedHand(null) }}
-                  >
-                    <span className="rv-cmp-sol-product">{solution.product}</span>
-                    <span className="rv-cmp-sol-depth">{solution.depth}</span>
-                    <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
-                  </button>
-                ))}
-              </div>
+              {(() => {
+                const groups: Record<string, typeof matchingSolutions> = {}
+                for (const m of matchingSolutions) {
+                  const g = m.solution.product
+                  if (!groups[g]) groups[g] = []
+                  groups[g].push(m)
+                }
+                return Object.entries(groups).map(([product, items]) => (
+                  <div key={product} className="rv-sol-group">
+                    <div className="rv-sol-group-label">{product}</div>
+                    <div className="rv-cmp-sol-row">
+                      {items.map(({ solution }) => (
+                        <button
+                          key={solution.id}
+                          className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
+                          onClick={() => { setActiveSolutionId(solution.id); setLockedHand(null) }}
+                        >
+                          <span className="rv-cmp-sol-depth">{solution.depth}</span>
+                          <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))
+              })()}
             </Section>
           )}
 
