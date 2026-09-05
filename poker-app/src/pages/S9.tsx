@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Three inputs for wide defending?","Weak own range + Weak opponent range + Small bet = defend very wide."],["Bottom pair + BDFD?","Call. BDFD > good kicker almost always."],["Super gut shot (gut + BDFD)?","Call — turns combo draws on suit cards."],["Naked gut shot (double unders)?","Fold — no direct equity vs value range."],["CR criteria (properties)?","Direct equity, BD straight, BD flush, opponent missed, small bet, high card of suit."],["Bet sizing sensitivity?","Scale up → fold more pairs. Q-J without ♦: call vs 30% → fold vs 83%."],["Rainbow vs two-tone?","Rainbow = messier (fewer BDFDs). Two-tone = cleaner (flush draws supplement)."],["Blind vs blind?","Ranges too wide — never fold pairs (even pocket 4s with BDFD)."]]
+const quizzes: QuizQuestion[] = [{q:"Bottom pair + BDFD vs c-bet?",o:["Fold — too weak","Call — BDFD > good kicker almost always","Check-raise","Fold vs any size"],a:1,why:"BDFD makes weak pairs playable. BDFD is more relevant than kicker."},{q:"Super gut shot (gut shot + BDFD)?",o:["Fold","Call — turns combo draws on suit cards","Check-raise always","Mix"],a:1,why:"Gut shot + BDFD handles heat well. Turns into combo draw on suit cards."},{q:"Naked gut shot (double unders, no BDFD)?",o:["Call — gut shot is valuable","Fold — no direct equity vs value range","Check-raise","Mix"],a:1,why:"Without BDFD or overcard, naked gut shots lack equity. Fold."},{q:"Three inputs for wide defending?",o:["Strong range + tight opponent + large bet","Weak own range + weak opponent range + small bet","Deep + passive + small bet","Short + aggressive + large bet"],a:1,why:"When both ranges are weak and the bet is small, defend very wide."},{q:"Bet sizing sensitivity?",o:["Larger bets → defend more","Larger bets → fold more pairs. Q-J without ♦: call vs 30% → fold vs 83%","No effect","Only affects bluffs"],a:1,why:"As bets scale up, fold more pairs. BDFDs and draws survive longer than naked pairs."}]
 
 const examples: HandExample[] = [
   { tag: "Pure CR", tagVariant: "default", board: <>T<S>♠</S> 5<H>♥</H> 2<C>♣</C></>, holeCards: <>J<S>♠</S>6<S>♠</S> (vs CO, ½ pot)</>, desc: "T-high · rainbow · J♠6♠ · vs CO", verdict: "agree", verdictText: "System agrees", system: "BDFD + BD straight + overcard to T → pure check-raise.", solver: "Pure CR. Agrees." },
@@ -50,8 +52,8 @@ export function S9Page() {
         </table>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s9']} />
-      <QuizSection questions={quizzes['s9']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

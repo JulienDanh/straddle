@@ -1,6 +1,8 @@
 import { Section, Callout, Code, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["SB cold-call threshold facing open?","~20bb. Below: ~0% cold calls, raise/fold only."],["SB cold calls wider when BB is short — why?","BB handcuffed (can't squeeze/lead). SB 'almost in the BB' — realizes more equity."],["Covered by wide opener — re-steal or call?","Re-steal. Win outright more often AND avoid losing postflop ~50%+ of time."],["3-bet sizing in high ICM from blinds?","Size up — deny equity to speculative calls, lower SPR for narrow value."],["3-bet value threshold covered vs EP?","Kings+, AQ (Queens mix). Much narrower than chip model."],["BB covers opener and SB — SB cold calls?","Shrinks. BB can squeeze/lead post. SB plays closer to raise/fold."],["BB defends wider vs tight UTG open when covering — why?","Can donk-lead low/mid boards that miss UTG's tight range. More equity realization."],["First hands trimmed from BB ICM defense?","Dominated offsuit gappers/connectors, weakest suited, weakest Ax offsuit."]]
+const quizzes: QuizQuestion[] = [{q:"SB 17bb facing BTN open, covered. Cold-call freq?",o:["~15% — suited connectors","~0% — raise/fold only","~25%","~5%"],a:1,why:"Below ~20bb, SB has ~0% cold-call range. Raise/fold only."},{q:"BB 14bb, covered, BTN opens wide, A5s. Action?",o:["Call — suited, playable","Re-steal shove — win outright, avoid postflop losses","Fold","Min-3-bet"],a:1,why:"Re-steal wins outright more often; Ax blocker powerful. Calling loses ~50%+ postflop."},{q:"BB 45bb covers UTG 15bb (3x). Defense width?",o:["Very tight — premiums only","Call everything suited, fold dominated offsuit","3-bet bluff any two","Limp behind"],a:1,why:"Cover by heaps → defend wide but trim dominated offsuit. King-X offsuit ~0 EV."},{q:"3-bet sizing in high ICM from blinds?",o:["Smaller than chip","Size up — deny equity, lower SPR for narrow value","Same","Min-raise"],a:1,why:"Larger 3-bets deny equity to speculative calls and lower SPR."},{q:"3-bet value threshold covered vs EP?",o:["AK, QQ, JJ","Kings+, AQ (Queens mix)","Any pair","Looser"],a:1,why:"Much narrower than chip model under ICM risk premium."},{q:"SB cold calls wider when BB is short — why?",o:["BB overcalls","BB handcuffed — can't squeeze/lead; SB 'almost in the BB'","SB has fold equity","No reason"],a:1,why:"BTN opens 70%+; BB can't squeeze or lead post → SB realizes more equity."}]
 
 const examples: HandExample[] = [
   { tag: "SB short — raise/fold", tagVariant: "fold", board: <>SB 17bb · BTN covers · vs BTN open</>, desc: "Short SB defense", verdict: "agree", verdictText: "System agrees", system: "~0% cold calls. Raise/fold only.", solver: "Below ~20bb, SB has essentially zero cold-call range." },
@@ -72,8 +74,8 @@ export function BM5Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm5']} />
-      <QuizSection questions={quizzes['bm5']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

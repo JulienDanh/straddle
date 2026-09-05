@@ -1,5 +1,8 @@
 import { Section, Callout, Code, DecisionMatrix, FlashcardsSection, QuizSection } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
+import type { QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["ChipEV vs ICM fundamental?","Chips scale linearly ($2=$2). ICM: doubling your stack less than doubles your equity."],["Three ICM pitfalls?","No skill edge, no future hands, no incoming blinds/position. Breaks down at large fields."],["What does FGS add?","Future Game Simulation — simulates N future hands, capturing blind cycles and forced all-ins."],["Why no FGS multi-table?","Computational complexity — game tree compounds exponentially per future hand."],["4.5bb UTG, posts BB next — ICM vs FGS?","FGS wider (~25% vs 18%). Fold equity now beats paying BB+ante (~112bb/100)."],["1.5bb UTG, forced all-in next — ICM vs FGS?","FGS tighter (~25% vs 49%). No fold equity; doubling doesn't help; fold and let others bust."],["15bb HJ, shorter stack present — shove or min-raise?","Min-raise only. Open shoving JTs loses ~$35 in tournament equity. FGS eliminates shoves."],["Which hands gain value in ICM opens vs ChipEV?","Ace-X blockers (A2s, A9o). Opponents 3-bet/fold, not cold call — blocking matters more than playability."],["How does cold calling change as stacks shorten under ICM?","Fades aggressively — calling 2bb off 20bb risks too large a % of stack near the bubble."],["3-bet bluff range: ChipEV vs ICM?","ChipEV: board-coverage (suited connectors). ICM: blocker-heavy (Ace-X suited, King-X suited)."],["3-bet value threshold under ICM?","Tightens — Queens often flat, AKo barely 3-bets, Kings+ default."],["1000-player vs 200-player bubble — which more extreme?","1000-player (2/152 = 1.3% bust) is more extreme than 200-player (3/33 = 9.1%). Use 1000 for direct-bubble study."]]
+const quizzes: QuizQuestion[] = [{q:"4.5bb UTG on bubble, post BB next, fold equity now. ICM says 18%. FGS?",o:["Shove tighter — preserve stack","Shove wider (~25%) — blind cost + fold equity","Min-raise","Limp"],a:1,why:"Posting BB+ante next hand (~112bb/100) + fold equity now → FGS widens."},{q:"1.5bb UTG, forced all-in next. ICM says 49%. FGS?",o:["Shove wider — desperate","Shove tighter (~25%) — no fold equity, fold and let others bust","Same as ICM","Min-raise"],a:1,why:"No fold equity; doubling leaves same spot. Folding has value — others may bust."},{q:"15bb HJ, shorter stack present, AJo. Action?",o:["Open shove — standard","Min-raise — shoving loses ~$18 in equity","Fold","Limp"],a:1,why:"FGS eliminates open shoves for 15bb with shorter stack. Min-raise 4-5x better."},{q:"Which hand opens MORE in ICM than ChipEV?",o:["76s","T9s","A2s","55"],a:2,why:"Blockers gain value — A2s blocks Ace-X 3-bet bluffs. Speculative hands lose value."},{q:"BTN 40bb, 98o = 0.00bb in ICM sim. Blinds overfold. Action?",o:["Fold — zero EV","Open — overfolders make zero-EV hands positive","Open shove","Limp"],a:1,why:"Zero-EV assumes Nash. Overfolding opponents make fringe opens positive."},{q:"1000-player vs 200-player bubble — which more extreme?",o:["200 — fewer left","1000 — 2/152 bust rate applies more pressure","Equivalent","200 — more top-heavy"],a:1,why:"2/152 = 1.3% vs 3/33 = 9.1%. 1000-player applies more pressure per player."}]
 
 export function BMPrimerPage() {
   return (
@@ -66,8 +69,8 @@ export function BMPrimerPage() {
         <p>The 1000-player near-bubble ≈ direct bubble of a smaller field. Use the 1000-player model for direct-bubble study.</p>
       </Section>
 
-      <FlashcardsSection cards={flashcards['bmprimer']} />
-      <QuizSection questions={quizzes['bmprimer']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

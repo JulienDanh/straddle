@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Fold target vs SB stab?","~25% (1bb into ~3.7bb). Defend ~75%. Focus on the 25% you fold."],["Which cards NOT relevant?","Ace and deuce. Everything has over/under. Ignore them."],["Three defending mechanisms?","1) High-card defending. 2) Three to a straight. 3) Backdoor flush draw."],["Double overs / over-under / double unders?","Double overs = easy play. Over-under = sensitive. Double unders = fold unless gut shots."],["BDFD always enough?","No. Worst hands (42s on K77) still fold even with BDFD. Identify worst first."],["Key card height heuristic?","High key card (8) → rarely fold double-overs. Low key card (5) → fold more."],["Paired board — which card?","The unpaired high card. Can't have equity vs trips."],["Preflop asymmetry BvB?","SB has folding range; BB doesn't. 2x/3x favor BB. BB capped (no AK/AQ/overpairs)."]]
+const quizzes: QuizQuestion[] = [{q:"Fold target vs SB limp stab?",o:["~50%","~25% (1 into ~3.7)","~10%","~75%"],a:1,why:"1bb into ~3.7bb pot. 1/4 = 25%. Defend ~75%."},{q:"Which cards are NOT strategically relevant?",o:["King and 5","Ace and deuce","Ace and king","Deuce and 3"],a:1,why:"Everything has overcards to deuce / undercards to ace. No over-unders to either."},{q:"K77 paired. Which card do you build around?",o:["The 7 (paired)","The king (unpaired)","Both","Neither"],a:1,why:"Can't have equity vs trips. Evaluate around unpaired high card."},{q:"A42 two-tone. Worst hands contain which card?",o:["A 3","A 7","A deuce","A 5"],a:1,why:"3x and 5x have gutshots. 6x has backdoor straights. 7 is most disconnected."},{q:"K62 two-tone. 73 with spade. Action?",o:["Play — BDFD","Fold — worst hand, BDFD not enough","Check-raise","Call — gutshot"],a:1,why:"73 is worst hand (over-under to 6). Even with BDFD, it folds. 75 (3-straight) pure."},{q:"Key card: low (5) vs high (8). Double-overs?",o:["Same — always play","Low: fold more (plenty below). High: rarely fold (rare).","Always fold","Always play"],a:1,why:"Low key card = more double-unders below → double-overs less valuable."}]
 
 const examples: HandExample[] = [
   { tag: "Fold", tagVariant: "fold", board: <>K<S>♠</S> 7<H>♥</H> 7<H>♥</H></>, holeCards: <>63o</>, desc: "K-high · paired · two-tone", verdict: "agree", verdictText: "System agrees", system: "Paired → evaluate king. 63o: no high card, no 3-straight, no BDFD. Pure fold.", solver: "~25% fold. A-high pure, Q-high ~pure, J-high starts folding. 98/86/65 (3-straight) pure. BDFD plays but worst (42s, 52s) fold." },
@@ -58,8 +60,8 @@ export function S3Page() {
         <Callout>SB has a folding range; BB does not. 2x/3x favor BB. BB checking = capped (no AK/AQ/overpairs). SB has advantage on Broadway boards; BB on low boards.</Callout>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s3']} />
-      <QuizSection questions={quizzes['s3']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

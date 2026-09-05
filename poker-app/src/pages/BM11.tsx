@@ -1,6 +1,8 @@
 import { Section, Callout, Code, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Default c-bet freq on monotone, 12bb polar?","Range check (65-82%+). BTN lacks flushes — open-shoves suited pre."],["BTN range vs 53bb BB vs 16bb BB?","Tighter (every tier shifts up). But BB defends wider (less ICM risk for deep stack)."],["Sizing on two-tone vs rainbow?","Two-tone adds flop jam (~2x pot) to deny FD equity and stop check-shoves."],["A77 vs A99 — which checks more?","A99 — higher paired card = more BB 9x combos (J9, T9). More coverage = more checking."],["Standard vs dry ace-high c-bet size?","Quarter pot (~25%) standard; ~40% on dry ace-high (AQ4) to deny gutshots."],["J-5-4 dry vs 53bb BB — bet or check?","Range bet. Tighter range = more top pair/overpair, less air."],["6-6-2 rainbow vs 6-6-5 — strategy?","6-6-2: range bet (BB underrepresented, no draws). 6-6-5: check ~40% (draws flip it)."],["J-10-7 two-tone — which overpair jams most?","Queens jam most, Kings less, Aces pure check. Nut traps; weaker protects."],["BB under-leads monotone (<20%) — exploit?","Check back range. No betting range needed."],["Worst Axo shove vs 53bb BB?","A8o (vs A4o at 16bb). Value-jam threshold moves up as covering stack deepens."],["BB small-3-bet AJ offsuit in high ICM — why?","BTN can't cold-call wide; small 3-bet folds more of BTN's range."],["Q10 — the universal flop shove?","Yes. Q10 jams across many textures at 10-12bb post polar open. One combo to remember."]]
+const quizzes: QuizQuestion[] = [{q:"BTN 12bb polar, BB 16bb, K♠5♠4♥ (two-tone). vs K5-4 rainbow?",o:["Range bet — same as rainbow","Check slightly more + add flop jams","Check less","Pure check"],a:1,why:"Two-tone increases checking (~57%) and introduces flop jams to stop check-shoves with bare FDs."},{q:"BTN 12bb vs BB 53bb, J♣5♦4♠ (dry). BB checks. BTN?",o:["Check ~50% (same as 16bb)","Range bet — tighter range = more value, less air","Pure check","Small bet sets only"],a:1,why:"Tighter preflop range has more top pair/overpair/set, less air → range-bet dry board."},{q:"Flop A♥9♥9♦ (two-tone, paired), 12bb vs 16bb. Key risk?",o:["BTN has too much air","BB has 9x coverage + will check-raise; BTN lacks 9x","Range-bet — BTN has aces","Jam any ace"],a:1,why:"Mid-pair boards with draws invite BB aggression; BTN lacks 9x → check back, don't over-c-bet."},{q:"6♦6♠2♣ (rainbow, low paired, dry), 12bb vs 16bb. Strategy?",o:["Check back — BB has trips","Range bet — BB underrepresented on the deuce","67% check","Small bet only"],a:1,why:"BB has few 6x/2x, underrepresented. Range bet. Contrast 6-6-5 (draws) which checks ~40%."},{q:"Q♠7♥4♦ (monotone), BB under-leads (<20%). Exploit?",o:["Range bet to deny flush equity","Check back range — no betting range needed","Jam all air","Small bet FDs"],a:1,why:"If BB under-leads monotone, BTN checks back range. Monotone heavily checked in ICM regardless."},{q:"BTN 12bb vs 53bb BB. Preflop adjustment vs 16bb?",o:["Open wider — BB has more chips","Open tighter; BB defends wider","Same range","Open tighter; BB defends tighter"],a:1,why:"Every tier shifts up (tighter), but deep BB has less ICM risk → defends wider, 3-bets blocker-heavy."}]
 
 const examples: HandExample[] = [
   { tag: "Monotone — range check", tagVariant: "risk", board: <>7<H>♥</H> 6<H>♥</H> 5<H>♥</H></>, holeCards: <>BTN 12bb polar · BB 16bb</>, desc: "Monotone, BTN lacks flushes", verdict: "agree", verdictText: "System agrees", system: "Check back (hearts mandatory). BTN open-shoves suited pre → lacks flushes.", solver: "Range check (65-82%+). BB can have any flush." },
@@ -94,8 +96,8 @@ export function BM11Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm11']} />
-      <QuizSection questions={quizzes['bm11']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

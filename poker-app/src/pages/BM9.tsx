@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Biggest postflop shift when BB covers BTN?","BB donk-leads low/paired boards near-range — doesn't exist in chip-EV or when BTN covers."],["Stack ratio threshold for BB leads?","Covering BTN by ~1.5-2x+ their stack."],["5-5-4 covering vs covered?","Near-range lead when covering; no leads when covered (BB lacks 5x)."],["J-J-2 covering — flop strategy?","Heavy check-raise, minimal check-call. Near check-raise-or-fold."],["River raise sizing when covered?","Non-all-in. Leave equity behind for times called and lose. Never jam when avoidable."],["9-6-3 rainbow, covered BTN with tens — sizing?","Jam ~118% pot for protection. Bet-calling lets BB CR draws and stack you."],["BTN still range-bets which boards when covered?","Ace-Broadway-Broadway: A-K-Q, A-K-J, A-K-T, A-Q-T, A-J-T."],["A-Q-2 rainbow covered — sizing?","Polar ~105% overbet + check (no small bet). Folds out gutters (5-4, 4-3)."],["What kills the front-load overbet?","Open-ended straight draws (can't fold out) and flush draws (don't want bet-call stacks-in)."],["Monotone covered — c-bet freq?","~50% check. Range bet when covering; passive when covered."],["BB under-leads low boards — exploit?","BTN checks back range (pure). No betting range needed."],["Blocker suit on river calls?","Matters enormously with narrow ranges. Call flush suit, fold off-suit (~17bb EV swing)."]]
+const quizzes: QuizQuestion[] = [{q:"BB covers BTN 2:1, flop 5♠5♥4♦. BB checks. You're BTN.",o:["Range c-bet small","Check back near-range — stacks reversed, actions reversed","C-bet 75%","Check only air"],a:1,why:"BB has the low cards and leads near-range when covering. If BB checks (under-leads), check back range."},{q:"BTN covered, A♣Q♠2♦ rainbow, A♦J♦. Best line?",o:["Small c-bet 33%","Check back","Overbet ~105% — fold out gutters","Check-raise"],a:2,why:"A-Q-2 with no open-ender/no FD = front-load overbet: fold out 5-4/4-3, clean turns."},{q:"Same A♣Q♠2♦ but two-tone with FD. What changes?",o:["Overbet bigger","Overbet off — don't want bet-call vs drawing stacks-in","Switch to range-bet","Check range"],a:1,why:"Flush draw kills the front-load. Revert to small/check."},{q:"J♣J♦2♠, BB covers 2:1, BTN c-bets, 99. Action?",o:["Check-call","Check-raise — heavy CR board when covering","Donk-jam","Check-fold"],a:1,why:"J-J-2 is check-raise-heavy when covering. Check-calls appear more on J-J-9 two-tone."},{q:"Covered BTN, J♠9♠ flush, river 25% block, want to raise. Sizing?",o:["Jam all-in","Raise to ~50% of remaining, non-all-in","Min-raise","Just call"],a:1,why:"River polar → raise non-all-in to preserve tournament equity. Never jam when avoidable."},{q:"Covered BTN, 9♠6♥3♦ rainbow, T♦T♣. BB checks. Action?",o:["Check back","Small c-bet, fold to raise","Jam ~118% — protection > induction","C-bet 75%, call jam"],a:2,why:"Jam tens to deny draws; bet-calling lets BB check-raise draws and stack you."}]
 
 const examples: HandExample[] = [
   { tag: "BB leads low (covering)", tagVariant: "default", board: <>5<S>♠</S> 5<H>♥</H> 4<D>♦</D></>, holeCards: <>BB covers BTN ~2x</>, desc: "Low paired board, BB covering", verdict: "agree", verdictText: "System agrees", system: "Lead near-range when covering (~85%). Stacks reversed, actions reversed.", solver: "Near-range lead. When BTN covers instead → no leads (BB lacks 5x)." },
@@ -90,8 +92,8 @@ export function BM9Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm9']} />
-      <QuizSection questions={quizzes['bm9']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

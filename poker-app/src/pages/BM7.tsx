@@ -1,5 +1,8 @@
 import { Section, Callout, DecisionMatrix, FlashcardsSection, QuizSection } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
+import type { QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Quick ICM pressure gauge?","Players to bust ÷ total players left, as % of field."],["1 to bust out of 8 vs 1 of 16 — which tighter?","1/8 = 12.5% → tighter. 1/16 = 6.25% → looser. Absolute number meaningless without %."],["Short stack other table, posting BB next, you cover?","Tighter opens. Nearly locked to cash — risk premium spikes."],["Short-stack vs chip-leader range precision?","1-2% error costs short stack 10-20% of stack; chip leader 1-2%. Study short ranges."],["What can't multi-table ICM sim capture?","Other-table stack positions, who posts next, blind increases, someone already busting."],["Player busts on other table, you cover them?","Drop high-ICM ranges immediately — you're now ITM."]]
+const quizzes: QuizQuestion[] = [{q:"14-pay, 16 left, 2 to bust. UTG 25bb, 4bb stack other table with full orbit before BB. vs default?",o:["Much wider","Slightly wider — 2/16 lower pressure + full orbit","Tighter","Same"],a:1,why:"2 to bust / 16 = lower %; threatened stack has full orbit. Both push looser."},{q:"BTN 50bb, BB 20bb, A♣Q♦5♠, A9. Facing c-bet?",o:["Check-raise all-in","Check-call — ace-high lockdown, no protection needed","Donk-lead","Check-fold"],a:1,why:"Top pair ~88-90% on A-K-x/A-Q-x; board locked down → pure check-call."},{q:"Q♥8♣3♦, KQ. BTN c-bets. Action?",o:["Check-call","Check-raise all-in — ~85% eq, K/A turn can outdraw","Donk-lead","Check-fold"],a:1,why:"Q/J-high top pair ≥83-85% gets check-raised; outdraw cards exist. Ace-high same equity doesn't."},{q:"BTN 50bb covers BB 20bb. Flop 8♥5♦3♣. C-bet?",o:["Check ~33% like chip","Range bet — BB too tight to connect, rarely check-raises","Check all","Bet value only"],a:1,why:"Low boards become range-bets when covering: BB defense too tight, XR ~11%."},{q:"A♣K♣8♦ (monotone). BTN covering. Strategy?",o:["Range bet — all A-side monotone","Check back some — connects OOP's flatting range (K-8, A-8)","Check ~60%","Bet flush draws only"],a:1,why:"A-K-8♣ connects with OOP — distinguish from A-5-2♣ which BTN range-bets."},{q:"K♣K♦9♥. BTN covering. C-bet?",o:["Range bet","Check back some — 9 connects BB (unlike K-K-4)","Check all","Bet kings only"],a:1,why:"K-K-9/K-K-8 get check-back (mid card gives BB pairs). K-K-4 ~95% range bet."}]
 
 export function BM7Page() {
   return (
@@ -68,8 +71,8 @@ export function BM7Page() {
         <p>You must reason about these yourself. The sim gives you a baseline; FGS + table logic gives you the directional shifts at the margins.</p>
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm7']} />
-      <QuizSection questions={quizzes['bm7']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

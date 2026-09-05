@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["MDF formula?","Fold% = Risk / (Pot + Risk). But villain bluffs have real equity → actual fold% is LOWER."],["How much defend vs CR?","Most of range (65–80%+). Focus on the small folding range."],["Organize around which card?","Highest unpaired card. Two overs = pure call. Double unders = fold candidates."],["Defend priority for trash?","1) Direct equity (A-high). 2) BDFD (high card). 3) 3-straight. 4) BD straight. 5) Blockers."],["Paired board (K55)?","Organize around unpaired card. Ace + BDFD = pure call."],["Blocker suits on two-tone?","Avoid suit villain bluffs with — blocks their bluff frequency."],["Naked BDFD (no straight, no high)?","Worst defendable — may fold (T9 with only BDFD)."],["HUD exploit risk?","If fold-to-CR too high, regulars exploit you."]]
+const quizzes: QuizQuestion[] = [{q:"MDF formula for fold %?",o:["Pot / Risk","Risk / (Pot + Risk)","Risk / Pot","Pot / (Pot + Risk)"],a:1,why:"Makes zero-equity bluffs indifferent. But villain bluffs have real equity → actual fold% LOWER."},{q:"How much defend vs check-raise?",o:["~25%","Most of range (65–80%+)","Exactly MDF","50%"],a:1,why:"Focus on identifying the small folding range (worst hands)."},{q:"K55 two-tone. How do you organize?",o:["Around the 5","Around the king (unpaired)","Fold everything","Call everything"],a:1,why:"Can't use paired card for overcard logic. Organize around unpaired card. Ace + BDFD = pure call."},{q:"T9o on K55 two-tone, ~4.5bb raise. Action?",o:["Pure call","Pure fold (close, −0.06bb)","Check-raise","Mix"],a:1,why:"MDF ~43%, actual ~34%. T9 pure fold. QJ with ♦ = pure call; 76s = mix."},{q:"Defend priority for trash?",o:["BDFD first","1) Direct equity (A-high). 2) BDFD. 3) 3-straight. 4) BD straight. 5) Blockers.","Kicker first","None — fold all"],a:1,why:"Overcards to top pair first (ace-high), then BDFD (high card of suit), then 3-straight."}]
 
 const examples: HandExample[] = [
   { tag: "Defend trash", tagVariant: "call", board: <>J<S>♠</S> 3<H>♥</H> 3<H>♥</H></>, desc: "J-high · paired · two-tone · min-raise", verdict: "agree", verdictText: "System agrees", system: "MDF ~38%, actual ~18%. Defend trash like 54♥. Only pure garbage (84♠, T6♥) folds.", solver: "Folds only 18%. Calls K-T, K-9, Q-9, 54♥." },
@@ -45,8 +47,8 @@ export function S7Page() {
         </table>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s7']} />
-      <QuizSection questions={quizzes['s7']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

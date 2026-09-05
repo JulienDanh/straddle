@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Covered BB on bubble — donk lead freq?","Almost never. BTN's wider range connects better; BB's tight range connects worse."],["BB check-raise sizing on low boards?","All-in (check-shove). Small raises let IP draw out — catastrophic under ICM."],["Top pair on A-K-x / A-Q-x as covered BB?","Pure check-call. ~88-90% equity, board lockdown — no protection needed."],["Top pair on Q-high — check-raise?","Yes if ≥83-85% equity. K/A turn can outdraw; ace-high can't."],["A-A-8 vs A-8-8 — which gets check-raise range?","A-8-8 (high-low-low). BB has the pair. A-A-8 (high-high-low): pure check-call, no pair."],["Turn FD on board — check-call or raise?","Call if you unblock IP's bluffs; raise if you block them (more likely vs value you beat)."],["Adding click-raise for IP does what?","Drops BB check-raise sharply. Non-all-in check-raises 'really suck in ICM'."],["BTN covers BB — default c-bet strategy?","Range bet. BB check-raises far less; BTN has more board coverage. Risk factors neutralized."],["Two reasons BTN range-bets more when covering?","1) BB rarely check-raises. 2) BTN ~70% vs BB ~20-30% defense — ranges nearly flipped."],["Which monotone boards need check-back?","Those connecting OOP: A-K-8♣, A-9-8♣, K-J-3♣, K-9-8♣, Q-8-3♣, J-10-8♣."],["K-K-9 vs K-K-4 — which checks back?","K-K-9 (9 connects BB). K-K-4 ~95% range bet."],["When is 'always range-bet' approximately correct?","When you cover BB by more than ~2x their stack."]]
+const quizzes: QuizQuestion[] = [{q:"Covered BB on bubble — donk lead freq?",o:["Often — take initiative","Almost never — BTN's wider range connects better","~50%","Always"],a:1,why:"Leads are very muted; BTN connects better, BB's tight range connects worse."},{q:"BB check-raise sizing on low boards under ICM?",o:["Small raise","All-in (check-shove) — maximize protection","Check-call","Min-raise"],a:1,why:"Small raises let IP draw out — catastrophic under ICM. Shove to deny equity."},{q:"A-A-8 vs A-8-8 as covered BB — which gets check-raise range?",o:["A-A-8","A-8-8 — BB has the pair","Both","Neither"],a:1,why:"High-low-low (A-8-8): BB has 8x → raise. High-high-low (A-A-8): no pair → check-call."},{q:"Turn FD on board — check-call or raise with made hand?",o:["Always call","Call if unblock IP's bluffs; raise if block them","Always raise","Fold"],a:1,why:"Unblock bluffs → call (face bluffs you beat). Block bluffs → raise (face value you stack)."},{q:"BTN covers BB — default c-bet strategy?",o:["Check more like chip","Range bet — BB rarely check-raises, BTN has coverage","Bet value only","Check all"],a:1,why:"BB XR far less; BTN ~70% vs BB ~20-30% defense. Risk factors neutralized."},{q:"When is 'always range-bet' approximately correct?",o:["Always","When you cover BB by more than ~2x their stack","Never","Only ace-high"],a:1,why:"Covering by 2x+ → BB can't fight back → range-bet almost all boards."}]
 
 const examples: HandExample[] = [
   { tag: "Ace-high lockdown", tagVariant: "default", board: <>A<H>♥</H> K<D>♦</D> 5<C>♣</C></>, holeCards: <>BB 20bb · BTN 50bb</>, desc: "Top pair on ace-high", verdict: "agree", verdictText: "System agrees", system: "Pure check-call. ~88-90% equity, board lockdown — no protection needed.", solver: "No check-raise value range → pure check-call top pair." },
@@ -94,8 +96,8 @@ export function BM8Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm8']} />
-      <QuizSection questions={quizzes['bm8']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

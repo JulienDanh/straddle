@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Sidebar } from './components/Sidebar'
-import { navTitles } from './data/content'
 import { PrimerPage } from './pages/Primer'
 import { S1Page } from './pages/S1'
 import { S2Page } from './pages/S2'
@@ -27,6 +26,35 @@ import { BM8Page } from './pages/BM8'
 import { BM9Page } from './pages/BM9'
 import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
+
+const navTitles: Record<string, string> = {
+  primer: 'No-Limit Systems &rsaquo; <b>Preflop Primer</b>',
+  s1: 'No-Limit Systems &rsaquo; <b>System 1 &middot; UTG vs BB C-bet</b>',
+  s2: 'No-Limit Systems &rsaquo; <b>System 2 &middot; BTN vs BB C-bet</b>',
+  s3: 'No-Limit Systems &rsaquo; <b>System 3 &middot; BB vs SB Limp Stab</b>',
+  s4: 'No-Limit Systems &rsaquo; <b>System 4 &middot; River Bluffing</b>',
+  s5: 'No-Limit Systems &rsaquo; <b>System 5 &middot; Barreling Med Hands</b>',
+  s6: 'No-Limit Systems &rsaquo; <b>System 6 &middot; Check-Raising Top Pair</b>',
+  s7: 'No-Limit Systems &rsaquo; <b>System 7 &middot; C-bet Folding Flops</b>',
+  s8: 'No-Limit Systems &rsaquo; <b>System 8 &middot; Bet Sizing IP</b>',
+  s9: 'No-Limit Systems &rsaquo; <b>System 9 &middot; Defending Flops</b>',
+  s10: 'No-Limit Systems &rsaquo; <b>System 10 &middot; River Value Betting</b>',
+  s11: 'No-Limit Systems &rsaquo; <b>System 11 &middot; Hero Calling</b>',
+  s12: 'No-Limit Systems &rsaquo; <b>System 12 &middot; Defending 3-Bets OOP</b>',
+  conclusion: 'No-Limit Systems &rsaquo; <b>Cross-System Principles</b>',
+  bmprimer: 'Bubble Mastery &rsaquo; <b>ICM & FGS Foundations</b>',
+  bm1: 'Bubble Mastery &rsaquo; <b>ICM vs ChipEV Preflop</b>',
+  bm2: 'Bubble Mastery &rsaquo; <b>Opening Into Covered Stacks</b>',
+  bm3: 'Bubble Mastery &rsaquo; <b>Opening Into Covering Stacks</b>',
+  bm4: 'Bubble Mastery &rsaquo; <b>Blind vs Blind</b>',
+  bm5: 'Bubble Mastery &rsaquo; <b>Blinds Facing Open</b>',
+  bm6: 'Bubble Mastery &rsaquo; <b>Dealing With 3-Bets</b>',
+  bm7: 'Bubble Mastery &rsaquo; <b>Identifying Bubble Impact</b>',
+  bm8: 'Bubble Mastery &rsaquo; <b>BTN Covers BB (Postflop)</b>',
+  bm9: 'Bubble Mastery &rsaquo; <b>BB Covers BTN (Postflop)</b>',
+  bm10: 'Bubble Mastery &rsaquo; <b>UTG Covers BB (Postflop)</b>',
+  bm11: 'Bubble Mastery &rsaquo; <b>Polar Opens &middot; Split Range</b>',
+}
 
 type PageId = 'primer' | 's1' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's9' | 's10' | 's11' | 's12' | 'conclusion'
   | 'bmprimer' | 'bm1' | 'bm2' | 'bm3' | 'bm4' | 'bm5' | 'bm6' | 'bm7' | 'bm8' | 'bm9' | 'bm10' | 'bm11'

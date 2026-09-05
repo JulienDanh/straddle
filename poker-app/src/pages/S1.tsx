@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, Code, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Two flop buckets?","1) T-high+ → c-bet 100%. 2) 9-high & below → ~70/30 bet/check."],["Clean T-high+, what %?","100% — every hand. Small size (~25–40%)."],["Why does UTG c-bet so much?","Overpair asymmetry: UTG's linear RFI has far more strong pairs."],["Shorter or deeper → bet more?","Shorter. Overpair asymmetry amplified shallow. Most do the opposite."],["Primary risk factor?","Straights possible. 1 → still bet. 3 → slow down heavily."],["Secondary risk factors?","Ace-monotone · AK2/3/4 · deeper stacks · high-low-low (paired low under high)."],["KK3 rainbow a risk factor?","No. High-high-low is fine → c-bet 100%. Only paired low under high (K33) counts."],["On risk board, which CHECK?","Medium-strength: underpairs, medium aces, AK/AT/KQ."],["On risk board, which BET?","Very strong (sets, flushes, 2pair) AND very weak (trash)."],["A95 monotone — QJo no-heart?","Bet. It's trash. QJo with heart (draw) → check."],["Bucket 2 default?","~70/30. Strong+weak bet, medium checks. Can't go 100%."],["Default c-bet size?","1/4 to 1/3 pot (~25–40%)."]]
+const quizzes: QuizQuestion[] = [{q:"T-high+ disconnected, no straights. UTG RFI, BB checks. Best line?",o:["C-bet 100%","Check medium, bet rest","Check everything","C-bet only strong pairs"],a:0,why:"Clean T-high+ → 100% c-bet, every hand. No risk factor."},{q:"K♥K♦3♣ (high-high-low). Strategy?",o:["Slow down","C-bet 100%","Check 50%","Check medium"],a:1,why:"High-HIGH-low is NOT a risk factor. Only paired low under high. Bet 100%."},{q:"A♥9♥5♥ (ace-monotone). QJo no heart. Action?",o:["Check — risk board","Bet — it's trash","Check-raise","Fold pre"],a:1,why:"Risk factor (slow down), but QJo no-heart is trash → bets. Only medium hands check."},{q:"J♣6♦6♠ (high-low-low). How often does solver check?",o:["~0%","~50%","~100%","Never — bet 100%"],a:1,why:"High-low-low with paired low → ~50% checks."},{q:"Stacks 20bb. Clean T-high+ board. You should...",o:["C-bet less","C-bet more — overpair asymmetry amplified","Never c-bet","Check-raise"],a:1,why:"Shallow amplifies overpair advantage → bet MORE. 'Bet less when short' is a leak."},{q:"T55 rainbow. T-high+ AND high-low-low. What applies?",o:["T-high+ wins → bet 100%","High-low-low wins → mix","Both → check all","Neither"],a:1,why:"Paired-low risk factor overrides T-high+. Mix: bet A5s/5x/TT/JJ, check 99–66/AK/AQ."}]
 
 const examples: HandExample[] = [
   { tag: "Bucket 1 · clean", tagVariant: "default", board: <>J<S>♠</S> 8<D>♦</D> 4<C>♣</C></>, desc: "J-high · disconnected · no straights", verdict: "agree", verdictText: "System agrees", system: "T-high+ clean → c-bet 100%. Hero checked — mistake.", solver: "~100% c-bet to 40%. Agrees." },
@@ -66,8 +68,8 @@ export function S1Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['s1']} />
-      <QuizSection questions={quizzes['s1']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

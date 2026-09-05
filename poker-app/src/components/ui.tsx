@@ -141,4 +141,10 @@ export function QuizSection({ questions }: { questions: QuizQuestion[] }) {
 
 // Inline imports to avoid circular deps — these come from Sidebar.tsx
 import { Flashcards as FlashcardsGrid, Quiz as QuizComponent } from './Sidebar'
-import type { QuizQuestion } from '../data/content'
+
+export interface QuizQuestion {
+  q: string
+  o: string[]
+  a: number
+  why: string
+}

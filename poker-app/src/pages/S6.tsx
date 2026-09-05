@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Stack inflection for CR top pair?","35bb. Above → nuts-oriented. At/below → aggressive top-pair CR. Shorter = more CR."],["Top pair vs two pair/sets?","Top pair = CR. Two pair/sets = trap (check-call). SPR short enough to shove river."],["CR hierarchy on Q73?","KQ/QJ/QT pure CR. Q9 heavy. Q8 medium. Q7-Q4 taper. Q2 pure call."],["Backdoor FD effect?","Prefers check-call (Q9♥ calls more than Q9o). Realize the flush draw."],["Low vs high boards for CR?","Low: kicker matters less, draw factors more. More chaotic."],["Two low cards touching (Q75)?","3-straight top pairs (Q5,Q6,Q2) may CR MORE than non-straight (Q7,Q8)."],["Opponent c-betting 100%?","CR all top pairs — their range too weak to defend."],["CR sizing?","Small (~3x the c-bet). Short stacks = 2-street game."]]
+const quizzes: QuizQuestion[] = [{q:"Stack-depth inflection for CR top pair?",o:["50bb","35bb","20bb","100bb"],a:1,why:"Above 35bb → nuts-oriented. At/below → aggressive top-pair CR. Shorter = more CR."},{q:"Top pair vs two pair at short (25bb)?",o:["Both CR","Top pair = CR; two pair/sets = trap (check-call)","Both check-call","Both fold"],a:1,why:"SPR short enough to shove river without raising. Top pair CR; two pair/sets trap."},{q:"Q73, Q9 offsuit vs Q9♥ (backdoor FD)?",o:["Both CR equally","Q9o CR; Q9♥ check-call (realize flush draw)","Both check-call","Q9♥ CR more"],a:1,why:"Backdoor FD prefers check-call to realize the draw. Offsuit CRs."},{q:"K84, 13bb, K7o. Action?",o:["Check-call — too strong to fold","Check-raise — too short to call","Fold","CR only with KQ"],a:1,why:"13bb = too short to call. KQ pure CR; K7–K2 pure CR (offsuit). BDFD → check-call."},{q:"Low boards vs high boards for CR?",o:["Same — kicker determines everything","Low: kicker less, draw factors more. More chaotic.","Low: always CR","High: always check"],a:1,why:"Opponent can't make top pair with low suited connectors. Secondary factors dominate."}]
 
 const examples: HandExample[] = [
   { tag: "Pure CR", tagVariant: "default", board: <>Q<S>♠</S> 7<H>♥</H> 3<H>♥</H></>, desc: "Q-high · two-tone · 25bb", verdict: "agree", verdictText: "System agrees", system: "All top pairs KQ–Q9 → pure CR. Q8 heavy mix.", solver: "Pure CR KQ–Q9. Clean taper to Q4, Q2 pure call. Student check-called — mistake." },
@@ -50,8 +52,8 @@ export function S6Page() {
       </Section>
       <Section title="Sizing"><p>CR to <strong>small size</strong> (~3x the c-bet). Short stacks = 2-street game. No need for large CR sizes.</p></Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s6']} />
-      <QuizSection questions={quizzes['s6']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

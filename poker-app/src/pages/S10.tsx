@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Central thesis?","Absolute strength irrelevant. Relative strength (vs opponent's range) determines value."],["Inflection points weakening villain?","Checks turn/river, no raising, small bets → subtract strong hands."],["Can't CR but called by worse?","Bet. Don't let opponent polarize by checking."],["Opponent checked turn, medium hand?","Block bet small (25–33%) — forces them to defend 75%+."],["Opponent capped?","Bet large / overbet. Large vs capped ranges."],["Short SPR (<2x pot)?","Prefer jamming. Checking loses optionality."],["What does checking do?","Converts strong hands to bluff catchers. IP auto-polarizes (bets better, checks worse)."],["Multi-way IP checked flop?","Extremely capped (no sets, no TPTK). Largely ignore them."]]
+const quizzes: QuizQuestion[] = [{q:"Central thesis of river value betting?",o:["Absolute strength determines value","Relative strength (vs opponent's range) determines value","Bet only the nuts","Always check strong hands"],a:1,why:"Absolute strength irrelevant. When villain's range weakens, medium hands become relative nuts."},{q:"Villain checked turn, no raising. Your medium hand?",o:["Check — let them bet","Block bet small (25–33%) — forces them to defend 75%+","Check-raise","Fold"],a:1,why:"Lack of raising = villain range weak. Your medium hand likely best. Bet small to extract."},{q:"What does checking do to strong hands?",o:["Preserves value","Converts them to bluff catchers — IP auto-polarizes","Improves them","No effect"],a:1,why:"IP bets hands that beat you and checks hands you beat. You lose value."},{q:"Short SPR (<2x pot) with strong hand?",o:["Check — let them bluff","Prefer jamming — checking loses optionality","Check-raise","Small bet"],a:1,why:"Short SPR: jamming gets value now. Checking loses the optionality of getting stacks in."},{q:"AK on K4x → 2♠ (4-straight). BB checked to you?",o:["Check — scary card","Jam (pure) — checking costs ~270bb/100","Small bet","Check-raise"],a:1,why:"Pure jam. Opponent must call ~45% of range. Checking is a massive EV loss."}]
 
 const examples: HandExample[] = [
   { tag: "Triple barrel", tagVariant: "default", board: <>Q<S>♠</S>7<S>♠</S>4<S>♠</S> → J<S>♠</S>T<S>♠</S> → blank</>, holeCards: <>AQ · EP 4-way</>, desc: "Q-high · monotone · AQ · EP 4-way", verdict: "agree", verdictText: "System agrees", system: "BB called flop+turn, no raise → lack of raising = bet for value.", solver: "Triple barrel confirmed." },
@@ -45,8 +47,8 @@ export function S10Page() {
         <ul><li><strong>River cards that reintroduce strength:</strong> fills straights/flushes → re-uncaps villain → smaller sizing.</li><li><strong>Multi-way:</strong> IP checking back flop in multi-way = extremely capped (no sets, no TPTK). Largely ignore them.</li><li><strong>Donk bets:</strong> strip from solver — most players miss them in metagame.</li></ul>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s10']} />
-      <QuizSection questions={quizzes['s10']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

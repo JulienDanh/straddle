@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { QuizQuestion } from '../data/content'
+import type { QuizQuestion } from './ui'
 
 interface SidebarProps {
   activePage: string

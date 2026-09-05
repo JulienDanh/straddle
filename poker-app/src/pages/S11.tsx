@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Three keys to hero calling?","1) Range awareness. 2) Unblock bluffs. 3) Block value."],["When to focus on which key?","Wide value range → unblock bluffs (#2). Narrow → block value (#3)."],["Good vs bad bluff catcher?","Good: blocks value (King), unblocks bluffs (4,3,2). Bad: blocks bluffs (8,9,T)."],["Why does 4-x unblock bluffs?","BTN opens suited 5+ and offsuit 8+. 4-x wasn't opened → doesn't block bluffs."],["Opponent's required bluff frequency?","= your pot odds. Need 25% → they must bluff 25% of betting range."],["No natural bluffs?","Fold even if MDF says call. No draws missed, opponent won't bluff Ax."],["CR opportunity?","If opponent bets too small IP, CR second pair can fold better + call worse."],["Toy game lesson?","Not all bluff catchers equal. 87s (blocks 77, unblocks JTs) worth ~27% pot; 88 worth 0."]]
+const quizzes: QuizQuestion[] = [{q:"Three keys to hero calling?",o:["1) Pot odds 2) Hand strength 3) Position","1) Range awareness 2) Unblock bluffs 3) Block value","1) MDF 2) Blockers 3) Sizing","1) Strength 2) Pot odds 3) Bluff freq"],a:1,why:"Know your combos, don't block opponent's bluffs, block their value."},{q:"Good vs bad bluff catcher (vs BTN opener)?",o:["Good: 8-x (blocks bluffs). Bad: 4-x.","Good: 4-x/3-x (unblocks bluffs). Bad: 8-x/9-x (blocks bluffs).","Both equal","Good: any pair. Bad: ace-high."],a:1,why:"BTN opens suited 5+ and offsuit 8+. 4-x/3-x unblock bluffs. 8-x/9-x block bluffs."},{q:"When to focus on block value vs unblock bluffs?",o:["Always block value","Wide value → unblock bluffs. Narrow → block value.","Always unblock bluffs","Never focus on blockers"],a:1,why:"Wide = hard to block specific hands → focus on not blocking bluffs. Narrow = block specific value."},{q:"No natural bluffs available?",o:["Call — MDF says so","Fold even if MDF says call","Check-raise","Call — must be bluffing"],a:1,why:"If you can't identify where bluffs come from, MDF is irrelevant. Fold."},{q:"Toy game: 22237, SPR 1x. 88 vs 87s vs pot jam?",o:["Both worth 0","88 = worth 0; 87s = ~27% pot (blocks 77, unblocks JTs)","Both same","87s worse"],a:1,why:"Not all bluff catchers equal. 87s blocks value (77) and unblocks bluffs (JTs). 88 blocks nothing useful."}]
 
 const examples: HandExample[] = [
   { tag: "CR", tagVariant: "default", board: <>Q<S>♠</S> T<C>♣</C> 2<H>♥</H> → A<D>♦</D> → blank</>, holeCards: <>A<H>♥</H>3<H>♥</H> (second pair) · IP bet 1/3</>, desc: "Q-high · A♥3♥ · CR opportunity", verdict: "agree", verdictText: "System agrees", system: "Range dense with KQ/QJ (12 combos) vs A-3/4/5♥ (3 combos). CR to ~25bb.", solver: "May fold better (A-x hearts) and call worse (KQ, QJ)." },
@@ -50,8 +52,8 @@ export function S11Page() {
         <p>Modest CR (to ~25bb) can get hands you beat to call (KQ, QJ) and hands that beat you to fold (A-3/4/5<H>♥</H>).</p>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s11']} />
-      <QuizSection questions={quizzes['s11']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

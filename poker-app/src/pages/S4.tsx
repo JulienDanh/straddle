@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Two-system approach?","System 1: bottom of range up (weakest first, prioritize LOW card). System 2: blocking effects. Prioritize System 1."],["Why prioritize low card?","Low cards have good blocking effects vs linear ranges. Low EV when checking."],["When is System 2 easy?","Board 3-flushes → one-club bias (blocks flushes + hero calls)."],["When is System 1 forced?","Wide ranges (no obvious suit), or three Broadway + EP (no offsuit air)."],["Busted straight + flush draw?","Terrible bluff — blocks both folding regions. Prefer one or the other."],["High vs low card of suit?","High card (K♥) worse to hold when bluffing (blocks more folds). Low card less damaging."],["Value bets require bluffs?","Yes (in common scenarios). Bluffs need value to carry them."],["The realism constraint?","Can't always have ideal bluff (hearts bet flop/turn → no hearts left). Bluff with what you have."]]
+const quizzes: QuizQuestion[] = [{q:"System 1 for river bluffs?",o:["Bluff strongest first","Bluff from bottom up (weakest first, prioritize LOW card)","Bluff middle","Best blockers only"],a:1,why:"Weakest hands have lowest EV when checking → lowest opportunity cost."},{q:"Board 3-flushes on river. Which system is easy?",o:["System 1","System 2 (one-club bias)","Neither","Both equally"],a:1,why:"One club blocks flushes AND hero calls. Obvious blocking effect."},{q:"Three Broadway, EP open. Why is System 1 forced?",o:["No offsuit air exists (linear range)","System 2 is wrong","Solvers don't work","Too deep"],a:0,why:"Linear EP range has no offsuit air. Only suited hands can bluff — scarce."},{q:"QJ♥ on river (busted straight + flush). Good bluff?",o:["Yes — double draw","No — blocks both folding regions","Only if shallow","Only vs passive"],a:1,why:"Blocking both busted straight AND flush draws is terrible."},{q:"Hearts bet flop+turn. On river, bluff with heart?",o:["Yes — hearts best","Rarely — you lost them on earlier streets","Always","Never"],a:1,why:"Realism constraint: if hearts bet earlier, you won't have them on river. Bluff with what you have."}]
 
 const examples: HandExample[] = [
   { tag: "System 1+2 blend", tagVariant: "default", board: <>A<S>♠</S> K<H>♥</H> 4<H>♥</H></>, holeCards: <>86o (6<H>♥</H>)</>, desc: "A-high · two-tone", verdict: "agree", verdictText: "System agrees", system: "Opp check-calls with hearts/clubs → avoid those. 6♥ is low-card heart (less damaging). Near bottom → pure bluff.", solver: "86o avoids clubs → pure bluff. High-card heart versions check; low-card heart can bet." },
@@ -53,8 +55,8 @@ export function S4Page() {
         <p>If you identify value bets, you <em>must</em> have bluffs (in common scenarios). Bluffs need value to carry them.</p>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s4']} />
-      <QuizSection questions={quizzes['s4']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

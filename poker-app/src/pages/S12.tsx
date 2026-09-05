@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Two board buckets?","T-high+ → tight (fold 50%+). 9-high & below → resilient (~25%)."],["A-high or K-high?","Extreme caution. Highest fold %. Most over-defended."],["Why fold on high boards?","3-bettor ahead preflop. High boards favor them. Fold far more than MDF."],["Why defend on low boards?","Low boards favor caller (3-bettor misses). Defend near MDF."],["Low board risk factors?","Paired (minor), disconnected (significant — want straights), deuce present (favors 3-bettor)."],["Mistake on A/K-high?","Over-defending weak pairs (77/88/99) and BDFDs — all folds."],["Mistake on low boards?","Over-folding high card hands. K-J with BDFD, A-T 3-straight are calls."],["vs jam on low disconnected?","Often a call — neither range hits."]]
+const quizzes: QuizQuestion[] = [{q:"Two board buckets for defending 3-bets OOP?",o:["T-high+ → tight (fold 50%+); 9-high & below → resilient (~25%)","All same","Always fold","Always call"],a:0,why:"3-bettor ahead preflop. High → fold 50%+. Low → defend near MDF."},{q:"A-high or K-high boards vs 3-bet c-bet?",o:["Defend wide","Extreme caution — highest fold %, most over-defended","Call any pair","Check-raise"],a:1,why:"A/K-high most favor the 3-bettor's linear range. Fold 77/88/99, BDFDs — all folds."},{q:"K72 rainbow, AJs vs 20% c-bet?",o:["Call — ace high","Pure fold (worth 0). A-T with BDFD also = 0","Check-raise","Mix"],a:1,why:"K-high vs 3-bettor. AJs has no pair, no draw, blocks nothing. Pure fold."},{q:"984, 55 vs 33% c-bet?",o:["Fold — medium pair","Pure call (worth 100+ bb/100). Also defend AQo, KQs with BDFD.","Mix","Fold — too weak"],a:1,why:"Low board favors caller. 55 is a pair vs a board the 3-bettor misses. Pure call."},{q:"963 two-tone, 44♣ vs jam?",o:["Fold — too risky","Call — neither range hits board","Check-raise","Fold — disconnected"],a:1,why:"Low disconnected board: neither 3-bettor nor caller hits. 44 is a pair. Pure call."}]
 
 const examples: HandExample[] = [
   { tag: "Fold (high board)", tagVariant: "fold", board: <>K<S>♠</S> 7<H>♥</H> 2<C>♣</C></>, desc: "K-high · rainbow · AJs · 20%", verdict: "agree", verdictText: "System agrees", system: "Pure fold. A-T with BDFD also = 0. Even A-Q mixing fold.", solver: "Pure fold (worth 0). Confirms." },
@@ -47,8 +49,8 @@ export function S12Page() {
         <ul><li>vs small c-bet (20–33%) on high boards: fold 50%+ (not the 17–25% MDF suggests).</li><li>vs small c-bet on low boards: defend near MDF; call pairs, gut shots, BDFDs, 3-straight/flush.</li><li>vs jam on low disconnected board: often a call (neither range hits).</li></ul>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s12']} />
-      <QuizSection questions={quizzes['s12']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

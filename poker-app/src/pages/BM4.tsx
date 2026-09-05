@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["SB covers short BB on bubble — limp or shove?","Shove/raise, no limps. BB overfolds ~85%; limping gives free equity."],["Limping reappears for covered SB at?","~18bb effective. Below: pure shove/fold."],["Open-shove selection covered in ICM?","Shift up — drop A2s/A3s, shove AJo+ threshold, mid pairs over low pairs."],["Close stacks BvB (14 vs 16bb)?","Wider VPID. Game of chicken — BB can't defend wide (losing hurts them)."],["40+bb covered SB — limp-shove?","Disappears. Limp-call pairs; BB can't pile vs uncapped trapping range."],["BB fold freq vs SB cover (short)?","~78-90% (vs ~37% chip model)."],["Covering SB at 22bb — shove or limp?","Depends on other-table ICM pressure. More pressure = more shoving."],["Covered deep (37+bb) — BB ISO?","~49.5% (vs 42% chips). SB overfolds to ISO; limp-shoves less."]]
+const quizzes: QuizQuestion[] = [{q:"SB 11bb covers BB on bubble. Limp or shove?",o:["Limp — see cheap flop","Shove/raise — BB overfolds ~85%, limping gives free equity","Min-raise all","Limp-fold"],a:1,why:"BB overfolds ~85%. Limping gives free equity realization to hands that'd fold to shove."},{q:"Limping reappears for covered SB at what depth?",o:["10bb","18bb","25bb","30bb"],a:1,why:"~18bb effective — deep enough that BB can't easily leverage against a limp."},{q:"SB 14bb vs BB 16bb. VPID vs BB 45bb?",o:["Tighter","Wider — game of chicken, BB can't defend wide","Same","Always fold"],a:1,why:"Close stacks: losing hurts BB more → BB defends tighter → SB wider."},{q:"Covered SB 37+bb. Limp-shove pairs?",o:["Yes","Disappears — limp-call; BB can't pile vs uncapped traps","More","Never limp"],a:1,why:"SB uncapped with traps at depth; BB can't pile. Limp-call instead."},{q:"Covering SB at 22bb — shove or limp?",o:["Always shove","Depends on other-table ICM pressure","Always limp","Fold"],a:1,why:"More other-table pressure = more shoving; less = more limping."},{q:"BB fold freq vs SB cover (short) vs chip model?",o:["~37% both","~78-90% (ICM) vs ~37% (chip)","~50%","Same"],a:1,why:"ICM pressure roughly doubles BB fold frequency."}]
 
 const examples: HandExample[] = [
   { tag: "Covering short — shove", tagVariant: "default", board: <>SB 11bb · BB 12bb · SB covers</>, desc: "Covering a short BB", verdict: "agree", verdictText: "System agrees", system: "Pure shove/raise, no limps. BB overfolds ~85%.", solver: "BB folds ~85% (vs ~37% chip). Limping = free equity to folders." },
@@ -70,8 +72,8 @@ export function BM4Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm4']} />
-      <QuizSection questions={quizzes['bm4']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

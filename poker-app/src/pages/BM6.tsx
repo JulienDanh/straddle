@@ -1,6 +1,8 @@
 import { Section, Callout, Code, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Cold call vs 3-bet — what determines it?","Your stack relationship to the 3-bettor. Cover them (50v25) = call; covered (25v50) = raise/fold."],["How does BB stack affect UTG open width?","UTG opens wider when BB short/covered; tighter when BB has big covering stack."],["SB cold call vs UTG when BB very short (10bb)?","Narrow value range — protected. UTG's tight range + short BB = can't squeeze."],["Raise to 7.9bb leaving 0.1 behind?","Leak. Raise to ~5bb to fold to jam+call behind (caller shows QQ+). Or shove."],["Zero-EV fringe hands on bubble?","Let FGS + tendencies decide. Short stack elsewhere = lean fold."],["3-bet sizing by depth?","~6-6.5bb mid; ~8-8.5bb at 45+bb. Matching range to size matters more than number."],["UTG+1 3-bet vs UTG deep (50bb)?","Jax+, AQ. Tens ~0 EV. Very thin bluffs only."],["Over-exploiting on bubble?","Doubly costly — stolen equity spreads to ALL players, not just exploiter."]]
+const quizzes: QuizQuestion[] = [{q:"UTG 50bb, BTN 51bb 3-bets. Your defense?",o:["Pure raise/fold — no cold calls","Mix of cold calls and 4-bets — you cover the 3-bettor","Fold all but Aces","Shove all pairs"],a:1,why:"Cover the 3-bettor (50v51 'chicken') → cold call ~24%. Covered (25v50) → raise/fold."},{q:"CO 32bb covers UTG 17bb, BB short. Cold call width?",o:["Very tight — UTG too strong","Wider than chips — you cover and BB is short (protected)","No cold calls","Only pairs"],a:1,why:"Covering + short BB = protected. 54s, 65s, A4s become calls."},{q:"Raise to 7.9bb leaving 0.1 behind. Better?",o:["Standard — 0.1 doesn't matter","Raise to ~5bb — fold to jam+call behind (caller shows QQ+)","Shove always","Min-raise"],a:1,why:"Leaving 0.1bb is a leak. Raise to ~5bb allows a fold to jam+call behind."},{q:"SB 17bb vs UTG open, BB 10bb. Cold-call range?",o:["None — always raise/fold","Narrow value range — protected (UTG tight, BB can't squeeze)","Call everything suited","Only Ax"],a:1,why:"UTG's tight range + short BB = SB protected. Cold call KQs, A9s, mid pairs."},{q:"3-bet sizing at 45+bb deep in ICM?",o:["~5bb","~8-8.5bb","Min-raise","~3bb"],a:1,why:"Size up at depth: ~8-8.5bb. But matching range to size matters more than number."},{q:"Over-exploiting on the bubble is doubly costly because?",o:["Opponents adjust faster","Stolen equity spreads to ALL players, not just exploiter","Solvers can't model it","It's not"],a:1,why:"In ICM, equity stolen from you spreads to all players — over-exploitation is doubly costly."}]
 
 const examples: HandExample[] = [
   { tag: "Cover the 3-bettor — call", tagVariant: "default", board: <>UTG 50bb · BTN 51bb 3-bets</>, desc: "You cover the 3-bettor", verdict: "agree", verdictText: "System agrees", system: "Cold call ~24% of range. You cover them (50v51 'chicken').", solver: "Contrast: UTG at 25bb vs 50bb 3-bet → ~0% calls (raise/fold)." },
@@ -70,8 +72,8 @@ export function BM6Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm6']} />
-      <QuizSection questions={quizzes['bm6']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

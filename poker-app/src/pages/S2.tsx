@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Three flop buckets?","1) Ace-high → 100%. 2) T–K high + deuce/3 → 100%. 3) 9-high & below → 60/40."],["Ace-high risk factors?","Stack depth (deeper→check), monotone, paired."],["T–K + deuce/3 risk factors?","Two low cards (biggest), monotone. Paired less concerning."],["When BTN misses low boards?","Bet top, bet bottom (selective), check middle. Can't bet all bluffs."],["Two-suit awareness?","BB calls with TWO suits. Block the non-flush-draw suit too (no equity risk)."],["K83 two-tone, KJ with which suits?","Heart+diamond (both on-board) = pure bet. Spades+clubs (both off) = pure check."],["AJJ strategy?","Paired ace-high → not 100%. Check KK/QQ/medium. Bet Jx + trash."],["K92 strategy?","K-high + deuce → c-bet 100%. 86–90% solver; simplify to 100%."]]
+const quizzes: QuizQuestion[] = [{q:"Three flop buckets for BTN vs BB?",o:["Ace-high → 100%; T–K+deuce/3 → 100%; 9-high & below → 60/40","Same as System 1","Only two buckets","All 100%"],a:0,why:"BTN has three buckets. Ace-high and T–K with deuce/3 get 100%; 9-high and below get 60/40."},{q:"AJJ (paired ace-high). Strategy?",o:["C-bet 100%","Not 100% — check KK/QQ/medium, bet Jx + trash","Check everything","Bet only Jx"],a:1,why:"Paired ace-high is a risk factor. Bet strong + weak; check medium."},{q:"K63 (K-high + deuce, but two low cards). Strategy?",o:["100% — deuce present","Not 100% — second low card causes problems","Check everything","Bet only sets"],a:1,why:"Two low cards is the biggest risk factor for T–K high. K92 is fine; K63 is not."},{q:"543 two-tone. BTN misses (no 8+). Ace-high is...",o:["A bluff (bet)","Medium strength (check)","Strong (value bet)","Fold"],a:1,why:"Ace-high beats trash but loses to all pairs → medium → check. Bet strong + weak."},{q:"K83 two-tone, KJ with spades+clubs (both off). Action?",o:["Bet — backdoor potential","Pure check — blocks nothing useful","Check-raise","Fold"],a:1,why:"Both off-board suits = pure check. KJ with heart+diamond (both on-board) = pure bet."},{q:"BTN vs BB, 25bb, AKQ flop. Strategy?",o:["Check — straights possible","C-bet 100% — shallow stack","Check-raise","Fold pre"],a:1,why:"Shallow stack on ace-high → bet 100%. Stack depth is key; shallow = more betting."}]
 
 const examples: HandExample[] = [
   { tag: "Ace-high · shallow", tagVariant: "default", board: <>A<S>♠</S> K<D>♦</D> 3<C>♣</C></>, desc: "A-high · 25bb", verdict: "agree", verdictText: "System agrees", system: "Shallow → bet 100%. Hero checked — mistake.", solver: "100% c-bet. Agrees." },
@@ -48,8 +50,8 @@ export function S2Page() {
         <Callout variant="warn"><strong>K83 two-tone (hearts+diamonds):</strong> KJ with heart+diamond = pure bet. KJ with spades+clubs (both off) = pure check. KJ with a heart blocks BB's heart-based continuing range with no equity risk.</Callout>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s2']} />
-      <QuizSection questions={quizzes['s2']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

@@ -1,6 +1,8 @@
 import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Covering table from EP — how much wider?","Roughly 2x+ baseline. UTG ~16.5% → ~35% when covering."],["Heavy open shoves when covering — when?","When blinds are sub-20-25bb. Commonly missed by regs — a major leak."],["Covered by one, cover rest of table — still wide?","Yes. ~80% the covering player folds; you pressure the stacks you cover."],["Same 12bb BTN stack — BB 53bb vs BB 16bb?","20% vs 28%. BB's depth, not just yours, drives your range."],["Covered 12bb BTN — open shove hand shift?","Stronger. AQ not AJ. Offsuit Ax shove terribly. Drop A2s/A3s."],["Covered by massive stack on BTN — cap?","No wider than ~35%. Trim thinnest suited/high-low and lowest pairs."],["Very short BB (sub-5bb) — composition?","High-card dense, Ax-heavy. Drop speculative hands for raw equity."],["Low pairs when covered and short — open or fold?","Often fold. They block blind pair-folds, hurting fold equity."],["Deeper (30-40bb) covered — how tight?","Don't over-tighten. ~35%. BB must risk a lot to pressure you."],["Limping threshold SB covered?","~18bb effective. Below that, no limps — pure shove/fold."],["BB fold freq when SB covers (short)?","~78-90% (vs ~37% chip model). Limping gives free equity — shove/raise."],["Open-shove hand shift in ICM when covered?","Shift up. Drop A2s/A3s; AJo becomes threshold. Bluffs shift up too."]]
+const quizzes: QuizQuestion[] = [{q:"SB 11bb, BB 12bb on bubble. SB strategy?",o:["Limp most, raise premiums","Shove/raise, no limps","Min-raise all, fold to jams","Limp-fold"],a:1,why:"BB overfolds ~85%. Limping gives free equity to hands that fold to a shove."},{q:"SB covered, 10bb vs 45bb. Strategy?",o:["Limp wide","No limps; tight shove/fold (~33% VPID)","Min-raise all","Limp-shove"],a:1,why:"Below ~18bb covered, no limps. FGS: folding has value (others may bust)."},{q:"Open-shove selection when covered in ICM?",o:["Wider, weaker hands","Shift up — drop A2s/A3s, AJo threshold","Same as chip","Only premiums"],a:1,why:"Bluffs shift up with value. A2s/A3s drop; AJo becomes threshold."},{q:"SB 14bb vs BB 16bb (close). VPID vs BB 45bb?",o:["Tighter — closer stacks risk more","Wider — game of chicken, BB can't defend wide","Same","Always fold"],a:1,why:"Losing hurts BB's equity more when close → BB defends tighter → SB wider."},{q:"40+bb covered SB — limp-shove pairs?",o:["Yes, standard","Disappears — limp-call; BB can't pile vs uncapped traps","More limp-shoves","Never limp"],a:1,why:"SB is uncapped with traps; BB can't pile. Limp-call instead."},{q:"BB fold freq vs SB cover (short) vs chip model?",o:["~37% both","~78-90% (ICM) vs ~37% (chip)","~50%","Same"],a:1,why:"ICM pressure doubles BB fold frequency vs chip model."}]
 
 const examples: HandExample[] = [
   { tag: "Covering 2x+", tagVariant: "default", board: <>BTN 125bb · avg 50bb · BB 36/68bb</>, desc: "Covering deep blinds", verdict: "agree", verdictText: "System agrees", system: "Open ~75%, more of everything vs 53% baseline.", solver: "~75% VPID." },
@@ -74,8 +76,8 @@ export function BM3Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm3']} />
-      <QuizSection questions={quizzes['bm3']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

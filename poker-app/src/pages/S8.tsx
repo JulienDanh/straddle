@@ -1,6 +1,8 @@
 import { Section, Callout, Tag, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["IP sizing default?","Bet LARGER on average. IP can polarize (check uncaps on next card)."],["Villain capped (low nut ratio)?","Overbet / pot (geometric to get stacks in)."],["Villain has nuts possible?","~70% pot — large but not overbet."],["< 50% pot IP?","Almost NEVER correct. Risk of CR not worth the small reward."],["Geometric betting?","~pot on both streets to get stacks in (equal fractions)."],["Turn check-back inflection?","If you checked turn, villain's river check = weakness → bet big, not small."],["Quads risk?","~48 combos (similar to ~45 flush on 3-flush). Don't assume villain can't have quads."],["Merge bet?","Pot with medium-strong (Queens) folds better + called by worse."]]
+const quizzes: QuizQuestion[] = [{q:"IP vs OOP sizing?",o:["IP bets smaller","IP bets LARGER (can polarize, check uncaps)","Same","IP always overbets"],a:1,why:"IP checks → range uncaps on turn. OOP checks → IP punishes. IP polarizes more → bets larger."},{q:"Villain capped (low nut ratio). IP sizing?",o:["Small — get called","Overbet / pot (geometric to get stacks in)","Check","30% pot"],a:1,why:"Bigger bets vs capped ranges: fold% rises slower than bet size → more profit."},{q:"Betting < 50% pot IP is...",o:["Standard","Almost NEVER correct","Required for thin value","Only for bluffs"],a:1,why:"Small bets don't justify the risk of being check-raised off equity."},{q:"You checked turn. Villain checks river. Your pair is likely...",o:["Behind — check","Best — bet big, not small","A bluff","Irrelevant"],a:1,why:"Villain's check after your turn check-back = weakness. Your pair beats almost everything."},{q:"K-K-x → K river (quads possible). You have J-10.?",o:["Bet pot for value","Check — J-x splits all jacks, loses to K-x/quads","Bet small","Check-raise"],a:1,why:"J-x can't value bet. Would bet Queens (merge) to ~¾ pot. Quarter-pot never chosen."}]
 
 const examples: HandExample[] = [
   { tag: "River too small", tagVariant: "risk", board: <>QJx → J<D>♦</D> → blank</>, holeCards: <>QJ (Q<D>♦</D>) · 80bb</>, desc: "Q-high · QJ (Q♦) · 80bb", verdict: "agree", verdictText: "System agrees", system: "Turn check (medium). River: check or bet pot. 40% is 'disastrously thin' — loses ~160–200bb/100.", solver: "No small bet exists. AJ with A♦ is minimum river barrel (pure). Queens bets pot (merge). Quarter-pot never chosen." },
@@ -50,8 +52,8 @@ export function S8Page() {
         </table>
       </Section>
       <Section title="Hand Examples">{examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}</Section>
-      <FlashcardsSection cards={flashcards['s8']} />
-      <QuizSection questions={quizzes['s8']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }

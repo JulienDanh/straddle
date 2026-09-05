@@ -1,6 +1,8 @@
 import { Section, Callout, Code, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import { flashcards, quizzes } from '../data/content'
-import type { HandExample } from '../components/ui'
+import type { HandExample, QuizQuestion } from '../components/ui'
+
+const flashcards: [string, string][] = [["Check-shove vs UTG — profitable?","No. UTG folds only ~60%; need >75%. UTG's range too strong (sets, overpairs, TPTK)."],["River polar sizing on bubble?","~13.5bb leaving 1-3bb behind. Never shove. 1-3bb worth ~$200 in $100 tourney."],["K84 short stack ICM — check-raise threshold?","KQ only. KJ/KT/K9 and below = pure check-call. ICM threshold much stronger."],["Short vs deep BB — flush % in range?","Short: 17.8% (tight range suited-heavy). Deep: 12.5%. Short leads more on flush turns."],["A♠ vs 4♠ turn — which better for BB?","A♠ (removes IP's suited aces). BB leads 40% on A♠, 26% on 4♠."],["AJ vs AT river after ace pairs — strategy?","AJ checks (blocks KJ bluff-catcher). AT value-bets (doesn't block KJ)."],["UTG covers BB by 2x+ — c-bet freq?","~90%+. Range bet almost all boards. BB's tight defense lacks coverage."],["Stacks close (66v58bb) — c-bet freq?","~50% on mid connected. Game of chicken. Stack gap > coverage fact."],["854/752/A44 vs short BB — bet or check?","Range bet. BB's tight ICM range folds offsuit connectors — can't connect. (Check in chip.)"],["AK7 vs 40bb+ BB — strategy?","Big-bet/check split. Check QQ/JJ/TT/weak Ax; bet large (67-80%) with strong hands."]]
+const quizzes: QuizQuestion[] = [{q:"BB 17bb covered by UTG 31bb, K♣J♦ on K♠8♣4♥. Action?",o:["Check-raise for value","Check-call — ICM threshold is KQ only","Check-shove","Check-fold"],a:1,why:"ICM check-raise threshold: KQ+. KJ and below pure check-call. Check-shove needs >75% fold, UTG folds ~60%."},{q:"BB 17bb, nuts on river, polar sizing?",o:["Shove all-in","~13.5bb leaving 1-3bb behind — never shove","40% pot","Check-raise"],a:1,why:"1-3bb worth ~$200 in $100 tourney. Shoving when called+lose = zero equity."},{q:"9♦4♠4♣, BB 17bb covered. Strategy?",o:["Check-raise aggressively","Mostly check-call — tight range lacks 9x/4x coverage","Check-shove","Donk bet"],a:1,why:"Range composition overrides board texture. At 17bb, BB barely has 9x/4x."},{q:"Q♣J♦2♠ → A♠ turn, BB 17bb, A♥J♠. Lead freq?",o:["Rarely — flushes rare","~40% — flushes 17.8% of tight suited-heavy range","Always","Never"],a:1,why:"Tight range is suited-heavy → 17.8% flushes on A♠ (vs 12.5% deep). Leads 40% on A♠, 26% on 4♠."},{q:"UTG 29bb covers BB 17bb, 9♠7♥7♦. C-bet?",o:["Check — 977 connects BB","Range bet — BB's tight defense lacks 7x; cover by 2x+","Check 50%","Bet small polar"],a:1,why:"BB defense at 17bb doesn't even call 7x suited. ICM pressure lets you range-bet."},{q:"UTG 66bb vs BB 58bb (close), 7♠6♦4♣. C-bet?",o:["Range bet — you cover","~50% check — close stacks = game of chicken","Check all","Overbet"],a:1,why:"Stack gap > coverage. Close stacks → check ~50% on mid connected. BB may lead."}]
 
 const examples: HandExample[] = [
   { tag: "Check-shove mistake", tagVariant: "fold", board: <>K-high · 9<H>♥</H> 7<H>♥</H></>, holeCards: <>9<H>♥</H> 7<H>♥</H> · BB 17bb covered by UTG</>, desc: "Check-shove vs UTG", verdict: "mistake", verdictText: "System: mistake", system: "No check-shove vs UTG. Small check-raise or check-call only.", solver: "IP folds only ~60%; need >75% for check-jam. UTG range too strong." },
@@ -85,8 +87,8 @@ export function BM10Page() {
         {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
       </Section>
 
-      <FlashcardsSection cards={flashcards['bm10']} />
-      <QuizSection questions={quizzes['bm10']} />
+      <FlashcardsSection cards={flashcards} />
+      <QuizSection questions={quizzes} />
     </>
   )
 }
