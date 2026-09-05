@@ -1073,3 +1073,114 @@ footer {
   font-size: 12px;
   color: var(--txt);
 }
+
+/* ---- Range Viewer: compare mode ---- */
+.rv-mode-toggle {
+  display: flex;
+  gap: 6px;
+}
+.rv-mode-btn {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rv-mode-btn:hover {
+  border-color: var(--accent);
+  color: var(--txt);
+}
+.rv-mode-btn.active {
+  background: var(--accent);
+  color: #0c1117;
+  border-color: var(--accent);
+}
+.rv-mode-hint {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+.rv-cmp-pos-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rv-cmp-chip {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rv-cmp-chip:hover {
+  border-color: var(--accent);
+  color: var(--txt);
+}
+.rv-cmp-chip.active {
+  background: var(--accent);
+  color: #0c1117;
+  border-color: var(--accent);
+}
+
+.rv-cmp-spot-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rv-cmp-sol-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rv-cmp-sol-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.12s;
+  min-width: 140px;
+  -webkit-tap-highlight-color: transparent;
+}
+.rv-cmp-sol-btn:hover {
+  border-color: var(--accent);
+  color: var(--txt);
+}
+.rv-cmp-sol-btn.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.rv-cmp-sol-product {
+  font-size: 9px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent2);
+}
+.rv-cmp-sol-depth {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--txt);
+}
+.rv-cmp-sol-btn.active .rv-cmp-sol-depth {
+  color: var(--accent);
+}
+.rv-cmp-sol-label {
+  font-size: 10px;
+  color: var(--muted);
+}
