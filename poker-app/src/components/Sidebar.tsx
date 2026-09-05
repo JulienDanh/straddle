@@ -153,6 +153,15 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
           </div>
         )
       })}
+      <div className="nav-group tools-group">
+        <div className="nav-label">Tools</div>
+        <div
+          className={`nav-item ${activePage === 'rangeviewer' ? 'active' : ''}`}
+          onClick={() => handleNavigate('rangeviewer')}
+        >
+          <span className="num">·</span> Range Viewer
+        </div>
+      </div>
     </aside>
   )
 }
