@@ -844,13 +844,17 @@ footer {
   -webkit-overflow-scrolling: touch;
 }
 .rv-grid {
+  width: auto;
   border-collapse: collapse;
   margin: 0 auto;
+  font-size: 10px;
+  table-layout: fixed;
 }
 .rv-grid th,
 .rv-grid td {
   border: 1px solid var(--line);
   text-align: center;
+  vertical-align: middle;
   font-size: 10px;
   padding: 0;
   width: 38px;
@@ -876,11 +880,14 @@ footer {
   color: var(--muted);
   font-family: monospace;
   user-select: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
-.rv-cell.in-range {
-  background: var(--accent);
-  color: #0c1117;
-  font-weight: 700;
+.rv-cell.locked {
+  outline: 2px solid var(--accent2);
+  outline-offset: -2px;
+  z-index: 1;
+  position: relative;
 }
 .rv-legend {
   display: flex;
@@ -917,12 +924,7 @@ footer {
   }
 }
 
-/* ---- Range Viewer: hand detail + locked cell ---- */
-.rv-cell.locked {
-  outline: 2px solid var(--accent2);
-  outline-offset: -2px;
-  z-index: 1;
-}
+/* ---- Range Viewer: hand detail ---- */
 .rv-hand-detail h3 {
   font-size: 18px;
   margin-bottom: 4px;
