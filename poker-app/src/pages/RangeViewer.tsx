@@ -1,154 +1,80 @@
 import { useState, useMemo } from 'react'
 import { Section, Callout } from '../components/ui'
+import rangesData from '../data/ranges.json'
 
 // ---- Hand grid helpers ----
 const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const
-type Rank = typeof RANKS[number]
-
-// 169 canonical hands in order: AA, AKs, AQs, ... KK, KQs, ... 22
-function handLabel(r1: Rank, r2: Rank): string {
-  if (r1 === r2) return `${r1}${r2}`
-  // higher rank first; 's' if suited, 'o' if offsuit
-  const [hi, lo] = r1 < r2 ? [r2, r1] : [r1, r2]
-  return `${hi}${lo}`
-}
 
 // Build the 13x13 grid cells (row = first rank, col = second rank)
 // Upper triangle (col > row) = suited, diagonal = pairs, lower = offsuit
-function buildGrid(): { row: Rank; col: Rank; hand: string; suited: boolean; pair: boolean }[][] {
-  return RANKS.map((row) =>
-    RANKS.map((col) => {
-      const suited = col > row
-      const pair = col === row
-      return { row, col, hand: handLabel(row, col), suited, pair }
+function buildGrid(): { hand: string }[][] {
+  return RANKS.map((row, ri) =>
+    RANKS.map((col, ci) => {
+      if (row === col) return { hand: `${row}${col}` }
+      const idx1 = RANKS.indexOf(row), idx2 = RANKS.indexOf(col)
+      const [hi, lo] = idx1 < idx2 ? [row, col] : [col, row]
+      const hand = ci > ri ? `${hi}${lo}s` : `${hi}${lo}o`
+      return { hand }
     })
   )
 }
 
 const GRID = buildGrid()
 
-// ---- Placeholder range data ----
-// Each scenario defines a set of hands (by canonical label) that are "in range".
-// This is placeholder data — replace with real ranges later.
+// ---- Types ----
 interface RangeScenario {
   id: string
   label: string
   category: string
   description: string
-  // Hands included in the range, as canonical labels (e.g. "AA", "AKs", "T9o")
-  hands: Set<string>
+  position: string
+  spot: string
+  actions: string[]
+  hands: Record<string, number[]>
 }
 
-function hands(...labels: string[]): Set<string> {
-  return new Set(labels)
+const SCENARIOS: RangeScenario[] = (rangesData as { scenarios: RangeScenario[] }).scenarios
+
+// Cell color: intensity based on the raise frequency (sum of non-fold action freqs)
+function raiseFreq(scenario: RangeScenario, hand: string): number {
+  const freqs = scenario.hands[hand]
+  if (!freqs) return 0
+  return freqs.slice(1).reduce((s, f) => s + f, 0)
 }
 
-// Helper: all suited hands with high card X and kicker >= Y
-function suitedFrom(high: Rank, kickers: Rank[]): string[] {
-  return kickers.map((k) => `${high}${k}s`)
-}
-function offsuitFrom(high: Rank, kickers: Rank[]): string[] {
-  return kickers.map((k) => `${high}${k}o`)
-}
-function pairsFrom(top: Rank): string[] {
-  const idx = RANKS.indexOf(top)
-  return RANKS.slice(idx).map((r) => `${r}${r}`)
-}
-const SCENARIOS: RangeScenario[] = [
-  {
-    id: 'rfi-utg-20bb',
-    label: 'RFI · UTG · 20bb',
-    category: 'Preflop RFI',
-    description: 'Raise-first-in from UTG at 20bb effective. Linear range; blockers over playability.',
-    hands: hands(
-      ...pairsFrom('2'),
-      ...suitedFrom('A', ['K', 'Q', 'J', 'T', '9', '8', '7', '5', '4']),
-      'A2s', 'A3s',
-      ...offsuitFrom('A', ['K', 'Q', 'J', 'T']),
-      'A9o', 'A8o',
-      ...suitedFrom('K', ['Q', 'J', 'T', '9', '8']),
-      ...offsuitFrom('K', ['Q', 'J']),
-      ...suitedFrom('Q', ['J', 'T', '9']),
-      'QJo',
-      ...suitedFrom('J', ['T', '9', '8']),
-      'JTo',
-      ...suitedFrom('T', ['9', '8']),
-      'T9o',
-      '98s',
-    ),
-  },
-  {
-    id: 'rfi-btn-20bb',
-    label: 'RFI · BTN · 20bb',
-    category: 'Preflop RFI',
-    description: 'Raise-first-in from the button at 20bb. Wide; suited connectors and one-gappers.',
-    hands: hands(
-      ...pairsFrom('2'),
-      ...suitedFrom('A', ['K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']),
-      ...offsuitFrom('A', ['K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']),
-      ...suitedFrom('K', ['Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']),
-      ...offsuitFrom('K', ['Q', 'J', 'T', '9', '8', '7', '6', '5']),
-      ...suitedFrom('Q', ['J', 'T', '9', '8', '7', '6', '5', '4', '3', '2']),
-      ...offsuitFrom('Q', ['J', 'T', '9', '8', '7']),
-      ...suitedFrom('J', ['T', '9', '8', '7', '6', '5', '4', '3', '2']),
-      ...offsuitFrom('J', ['T', '9', '8']),
-      ...suitedFrom('T', ['9', '8', '7', '6', '5', '4', '3', '2']),
-      ...offsuitFrom('T', ['9', '8', '7']),
-      ...suitedFrom('9', ['8', '7', '6', '5', '4', '3', '2']),
-      '98o', 'T8o',
-      ...suitedFrom('8', ['7', '6', '5', '4', '3', '2']),
-      ...suitedFrom('7', ['6', '5', '4', '3', '2']),
-      ...suitedFrom('6', ['5', '4', '3', '2']),
-      ...suitedFrom('5', ['4', '3', '2']),
-      ...suitedFrom('4', ['3', '2']),
-      ...suitedFrom('3', ['2']),
-    ),
-  },
-  {
-    id: 'bubble-shove-15bb-hj',
-    label: 'Bubble Shove · HJ · 15bb',
-    category: 'Bubble Preflop',
-    description: 'Open-jam from HJ at 15bb on the direct bubble. Min-raise dominant; this is the shove-only subset.',
-    hands: hands(
-      ...pairsFrom('7'),
-      'AJs', 'AQo', 'ATs', 'A9s', 'A8s', 'A7s', 'A6s', 'A5s', 'A4s', 'A3s', 'A2s',
-      'AJo', 'ATo', 'A9o',
-      'KQs', 'KJs', 'KTs',
-      'KJo', 'KQo',
-      'QJs', 'QTs',
-      'QJo',
-      'JTs',
-    ),
-  },
-  {
-    id: 'placeholder',
-    label: 'More ranges coming',
-    category: 'Placeholder',
-    description: 'This is a scaffold. Add real range data to src/pages/RangeViewer.tsx (SCENARIOS array).',
-    hands: hands(),
-  },
-]
-
-// ---- Cell color logic ----
-function cellClass(inRange: boolean): string {
-  return inRange ? 'rv-cell in-range' : 'rv-cell'
+function cellStyle(scenario: RangeScenario, hand: string): React.CSSProperties {
+  const freq = raiseFreq(scenario, hand)
+  if (freq <= 0) return {}
+  const opacity = 0.15 + (freq / 100) * 0.85
+  return {
+    background: `rgba(95, 208, 168, ${opacity.toFixed(3)})`,
+    color: freq > 50 ? '#0c1117' : '#d8e2ee',
+    fontWeight: freq > 50 ? 700 : 400,
+  }
 }
 
 export function RangeViewerPage() {
-  const categories = useMemo(() => {
-    const cats = Array.from(new Set(SCENARIOS.map((s) => s.category)))
-    return cats
-  }, [])
+  const categories = useMemo(
+    () => Array.from(new Set(SCENARIOS.map((s) => s.category))),
+    []
+  )
 
   const [activeId, setActiveId] = useState(SCENARIOS[0].id)
   const active = SCENARIOS.find((s) => s.id === activeId) ?? SCENARIOS[0]
-  const inRangeCount = active.hands.size
+
+  const [lockedHand, setLockedHand] = useState<string | null>(null)
+  const lockedFreqs = lockedHand ? active.hands[lockedHand] : null
+
+  const inRangeCount = useMemo(
+    () => Object.entries(active.hands).filter(([, freqs]) => freqs.slice(1).reduce((s, f) => s + f, 0) > 0).length,
+    [active]
+  )
 
   return (
     <>
       <Section title="Range Viewer">
-        <p>Interactive preflop range grid. Select a scenario to highlight the hands in range. Placeholder data — replace with real ranges in <code>src/pages/RangeViewer.tsx</code>.</p>
-        <Callout variant="warn"><strong>Scaffold.</strong> Ranges shown are illustrative placeholders, not solver-verified. Add real range data to the <code>SCENARIOS</code> array.</Callout>
+        <p>Interactive preflop range grid with real solver data. Select a scenario to see action frequencies for all 169 hands. Click a hand to lock its detail.</p>
+        <Callout><strong>Real data.</strong> Ranges extracted from BBZ solver solutions. {SCENARIOS.length} scenarios across ChipEV and ICM (bubble).</Callout>
       </Section>
 
       <Section title="Scenarios">
@@ -160,7 +86,7 @@ export function RangeViewerPage() {
                 <button
                   key={s.id}
                   className={`rv-scenario-btn ${s.id === activeId ? 'active' : ''}`}
-                  onClick={() => setActiveId(s.id)}
+                  onClick={() => { setActiveId(s.id); setLockedHand(null) }}
                 >
                   {s.label}
                 </button>
@@ -171,7 +97,7 @@ export function RangeViewerPage() {
         <div className="rv-active-desc">
           <h3>{active.label}</h3>
           <p className="muted">{active.description}</p>
-          <p className="rv-count">{inRangeCount} combos in range</p>
+          <p className="rv-count">{active.spot} · {inRangeCount} hands in range</p>
         </div>
       </Section>
 
@@ -189,12 +115,15 @@ export function RangeViewerPage() {
                 <tr key={ri}>
                   <th className="rv-rowhead">{RANKS[ri]}</th>
                   {rowCells.map((cell, ci) => {
-                    const inRange = active.hands.has(cell.hand)
+                    const freq = raiseFreq(active, cell.hand)
+                    const isLocked = lockedHand === cell.hand
                     return (
                       <td
                         key={ci}
-                        className={cellClass(inRange)}
+                        className={`rv-cell ${freq > 0 ? 'in-range' : ''} ${isLocked ? 'locked' : ''}`}
+                        style={cellStyle(active, cell.hand)}
                         title={cell.hand}
+                        onClick={() => setLockedHand(isLocked ? null : cell.hand)}
                       >
                         {cell.hand}
                       </td>
@@ -206,10 +135,40 @@ export function RangeViewerPage() {
           </table>
         </div>
         <div className="rv-legend">
-          <span className="rv-legend-item"><span className="rv-swatch in-range" /> In range</span>
-          <span className="rv-legend-item"><span className="rv-swatch" /> Out of range</span>
+          <span className="rv-legend-item">
+            <span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.15)' }} /> 0%
+          </span>
+          <span className="rv-legend-item">
+            <span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.5)' }} /> 50%
+          </span>
+          <span className="rv-legend-item">
+            <span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 1)' }} /> 100%
+          </span>
         </div>
       </Section>
+
+      {lockedHand && lockedFreqs && (
+        <Section title={`Hand Detail · ${lockedHand}`}>
+          <div className="rv-hand-detail">
+            <h3>{lockedHand}</h3>
+            <p className="muted">{active.label} · {active.spot}</p>
+            <div className="rv-actions">
+              {active.actions.map((action, i) => (
+                <div key={i} className="rv-action-row">
+                  <span className="rv-action-label">{action}</span>
+                  <div className="rv-action-bar">
+                    <div
+                      className="rv-action-fill"
+                      style={{ width: `${lockedFreqs[i] || 0}%` }}
+                    />
+                  </div>
+                  <span className="rv-action-pct">{(lockedFreqs[i] || 0).toFixed(1)}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+      )}
     </>
   )
 }
