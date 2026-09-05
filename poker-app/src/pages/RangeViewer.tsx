@@ -368,7 +368,8 @@ export function RangeViewerPage() {
                               title={cell.hand}
                               onClick={() => setLockedHand(isLocked ? null : cell.hand)}
                             >
-                              {cell.hand}
+                              <span className="rv-cell-hand">{cell.hand}</span>
+                              {freq > 0 && <span className="rv-cell-freq">{freq.toFixed(0)}</span>}
                             </td>
                           )
                         })}
@@ -376,11 +377,6 @@ export function RangeViewerPage() {
                     ))}
                   </tbody>
                 </table>
-                <div className="rv-legend">
-                  <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.15)' }} /> 0%</span>
-                  <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.5)' }} /> 50%</span>
-                  <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 1)' }} /> 100%</span>
-                </div>
               </div>
             </Section>
           )}
