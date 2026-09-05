@@ -378,21 +378,30 @@ export function RangeViewerPage() {
             </div>
           </Section>
 
-          {/* Solution flip row — grouped by product */}
+          {/* Solution flip row — grouped by category, sorted by bb */}
           {matchingSolutions.length > 0 && (
             <Section title={`${activeSpotKeyParsed?.label ?? ''} · ${matchingSolutions.length} solutions`}>
               {(() => {
+                const depthVal = (d: string) => parseInt(d) || 0
+                const catOrder: Record<string, number> = {
+                  'ChipEV': 0, 'ICM 83% left': 1, 'ICM 40% left': 2,
+                  'ICM ITM Bubble': 3, 'ICM Bubble': 4,
+                }
                 const groups: Record<string, typeof matchingSolutions> = {}
                 for (const m of matchingSolutions) {
                   const g = m.solution.category || m.solution.product
                   if (!groups[g]) groups[g] = []
                   groups[g].push(m)
                 }
-                return Object.entries(groups).map(([product, items]) => (
-                  <div key={product} className="rv-sol-group">
-                    <div className="rv-sol-group-label">{product}</div>
+                return Object.entries(groups)
+                  .sort(([a], [b]) => (catOrder[a] ?? 99) - (catOrder[b] ?? 99))
+                  .map(([category, items]) => (
+                  <div key={category} className="rv-sol-group">
+                    <div className="rv-sol-group-label">{category}</div>
                     <div className="rv-cmp-sol-row">
-                      {items.map(({ solution }) => (
+                      {items
+                        .sort((a, b) => depthVal(a.solution.depth) - depthVal(b.solution.depth))
+                        .map(({ solution }) => (
                         <button
                           key={solution.id}
                           className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
