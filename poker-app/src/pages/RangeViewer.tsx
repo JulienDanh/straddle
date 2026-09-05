@@ -191,6 +191,7 @@ export function RangeViewerPage() {
   const [error, setError] = useState<string | null>(null)
 
   const [activeSpotKey, setActiveSpotKey] = useState('')
+  const [activePos, setActivePos] = useState('')
   const [activeSolutionId, setActiveSolutionId] = useState('')
   const [lockedHand, setLockedHand] = useState<string | null>(null)
   const [filterText, setFilterText] = useState('')
@@ -225,15 +226,27 @@ export function RangeViewerPage() {
   // All spot keys across all solutions
   const allSpots = useMemo(() => buildSpotKeys(Array.from(solutions.values())), [solutions])
 
+  // Available positions (sorted by table order)
+  const availablePositions = useMemo(() => {
+    const posOrder = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
+    const seen = new Set(allSpots.map((s) => s.pos))
+    return posOrder.filter((p) => seen.has(p))
+  }, [allSpots])
+
+  // Spots filtered by selected position
   const filteredSpots = useMemo(() => {
-    if (!filterText.trim()) return allSpots
-    const q = filterText.toLowerCase()
-    return allSpots.filter((s) =>
-      s.label.toLowerCase().includes(q) ||
-      s.pos.toLowerCase().includes(q) ||
-      s.spotName.toLowerCase().includes(q)
-    )
-  }, [allSpots, filterText])
+    let spots = allSpots
+    if (activePos) spots = spots.filter((s) => s.pos === activePos)
+    if (filterText.trim()) {
+      const q = filterText.toLowerCase()
+      spots = spots.filter((s) =>
+        s.label.toLowerCase().includes(q) ||
+        s.pos.toLowerCase().includes(q) ||
+        s.spotName.toLowerCase().includes(q)
+      )
+    }
+    return spots
+  }, [allSpots, activePos, filterText])
 
   // Solutions that have the selected spot
   const matchingSolutions = useMemo(() => {
@@ -254,11 +267,19 @@ export function RangeViewerPage() {
 
   // Auto-select defaults
   useEffect(() => {
-    if (allSpots.length > 0 && !activeSpotKey) {
-      const firstRfi = allSpots.find((s) => s.group === 'rfi') ?? allSpots[0]
+    if (availablePositions.length > 0 && !activePos) {
+      // Default to UTG (first RFI spot)
+      const utg = availablePositions.indexOf('UTG') >= 0 ? 'UTG' : availablePositions[0]
+      setActivePos(utg)
+    }
+  }, [availablePositions, activePos])
+
+  useEffect(() => {
+    if (filteredSpots.length > 0 && !filteredSpots.some((s) => `${s.pos}||${s.spotName}` === activeSpotKey)) {
+      const firstRfi = filteredSpots.find((s) => s.group === 'rfi') ?? filteredSpots[0]
       setActiveSpotKey(`${firstRfi.pos}||${firstRfi.spotName}`)
     }
-  }, [allSpots, activeSpotKey])
+  }, [filteredSpots, activeSpotKey])
 
   useEffect(() => {
     if (matchingSolutions.length > 0 && !matchingSolutions.some((m) => m.solution.id === activeSolutionId)) {
@@ -284,12 +305,27 @@ export function RangeViewerPage() {
 
       {!isLoading && (
         <>
+          {/* Position selector */}
+          <Section title="Position">
+            <div className="rv-cmp-pos-row">
+              {availablePositions.map((pos) => (
+                <button
+                  key={pos}
+                  className={`rv-cmp-chip ${pos === activePos ? 'active' : ''}`}
+                  onClick={() => { setActivePos(pos); setLockedHand(null) }}
+                >
+                  {pos}
+                </button>
+              ))}
+            </div>
+          </Section>
+
           {/* Spot selector */}
-          <Section title="Spot">
+          <Section title={`Spot${activePos ? ' · ' + activePos : ''}`}>
             <input
               className="rv-filter"
               type="text"
-              placeholder="Filter: e.g. BTN, UTG, vs 3bet..."
+              placeholder="Filter spots..."
               value={filterText}
               onChange={(e) => setFilterText(e.target.value)}
             />
@@ -302,7 +338,6 @@ export function RangeViewerPage() {
                     className={`rv-spot-pick ${key === activeSpotKey ? 'active' : ''}`}
                     onClick={() => { setActiveSpotKey(key); setLockedHand(null) }}
                   >
-                    <span className="rv-spot-pick-pos">{s.pos}</span>
                     <span className="rv-spot-pick-group">{GROUP_LABELS[s.group] || s.group}</span>
                     <span className="rv-spot-pick-name">{s.spotName}</span>
                   </button>
