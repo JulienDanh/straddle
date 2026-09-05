@@ -1,0 +1,9 @@
+[
+  { "id": "chipev-10bb", "label": "ChipEV · 10bb", "product": "ChipEV", "depth": "10bb", "file": "cev_solution_915_8max_AVG10_Equal.json" },
+  { "id": "chipev-20bb", "label": "ChipEV · 20bb", "product": "ChipEV", "depth": "20bb", "file": "cev_solution_143_8max_AVG20_Equal.json" },
+  { "id": "chipev-40bb", "label": "ChipEV · 40bb", "product": "ChipEV", "depth": "40bb", "file": "cev_solution_270_8max_AVG40_Equal.json" },
+  { "id": "icm-20bb-ft", "label": "ICM · 20bb Bubble", "product": "ICM", "depth": "20bb", "file": "cev_solution_905_FT_8max_AVG20_Equal.json" },
+  { "id": "icm-25bb-ft", "label": "ICM · 25bb Bubble", "product": "ICM", "depth": "25bb", "file": "cev_solution_906_FT_8max_AVG25_Equal.json" },
+  { "id": "icm-20bb-40pct", "label": "ICM · 20bb (40% left)", "product": "ICM", "depth": "20bb", "file": "cev_solution_3_40%_8max_AVG20_Equal_450.json" },
+  { "id": "icm-20bb-83pct", "label": "ICM · 20bb (83% left)", "product": "ICM", "depth": "20bb", "file": "cev_solution_15_83%_8max_AVG20_Equal_450.json" }
+]

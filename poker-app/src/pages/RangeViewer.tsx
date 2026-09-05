@@ -1,7 +1,32 @@
 import { useState, useEffect, useMemo } from 'react'
 import { Section, Callout } from '../components/ui'
 
-// ---- Types ----
+// ---- Types for raw solution files ----
+interface RawCell {
+  name: string
+  group: string
+  nodeId: number
+}
+interface RawNode {
+  ranges: Record<string, { freq: number[] }>[]
+  percentages: { action: string }[]
+}
+interface RawSolution {
+  columns: string[]
+  table: Record<string, (RawCell | RawCell[])[]>
+  nodes: Record<string, RawNode>
+}
+
+// ---- Manifest ----
+interface ManifestEntry {
+  id: string
+  label: string
+  product: string
+  depth: string
+  file: string
+}
+
+// ---- Parsed spot ----
 interface Spot {
   name: string
   group: string
@@ -12,7 +37,7 @@ interface Position {
   hero: string
   spots: Spot[]
 }
-interface Solution {
+interface ParsedSolution {
   id: string
   label: string
   product: string
@@ -20,24 +45,18 @@ interface Solution {
   columns: string[]
   positions: Position[]
 }
-interface SolutionsData {
-  solutions: Solution[]
-}
 
-// ---- Hand grid helpers ----
+// ---- Grid helpers ----
 const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const
 
-function buildGrid(): { hand: string }[][] {
-  return RANKS.map((row, ri) =>
-    RANKS.map((col, ci) => {
-      if (row === col) return { hand: `${row}${col}` }
-      const idx1 = RANKS.indexOf(row), idx2 = RANKS.indexOf(col)
-      const [hi, lo] = idx1 < idx2 ? [row, col] : [col, row]
-      return { hand: ci > ri ? `${hi}${lo}s` : `${hi}${lo}o` }
-    })
-  )
-}
-const GRID = buildGrid()
+const HAND_GRID: { hand: string }[][] = RANKS.map((row, ri) =>
+  RANKS.map((col, ci) => {
+    if (row === col) return { hand: `${row}${col}` }
+    const idx1 = RANKS.indexOf(row), idx2 = RANKS.indexOf(col)
+    const [hi, lo] = idx1 < idx2 ? [row, col] : [col, row]
+    return { hand: ci > ri ? `${hi}${lo}s` : `${hi}${lo}o` }
+  })
+)
 
 function raiseFreq(spot: Spot, hand: string): number {
   const freqs = spot.hands[hand]
@@ -59,263 +78,316 @@ function cellStyle(spot: Spot, hand: string): React.CSSProperties {
 const GROUP_LABELS: Record<string, string> = {
   'rfi': 'RFI',
   'lfi': 'LFI',
+  'general': 'vs Open',
+  '3bet': 'vs 3-Bet',
+  'all-in': 'vs All-in',
+  'iso': 'vs ISO',
 }
 
 function posName(hero: string): string {
-  return hero.split('|')[0]
+  const name = hero.split('|')[0]
+  return name === 'BU' ? 'BTN' : name
 }
 
-// Normalize position names to display
-function normalizePos(name: string): string {
-  if (name === 'BU') return 'BTN'
-  return name
+// ---- Parse a raw solution file into spots grouped by position ----
+function parseSolution(raw: RawSolution, manifest: ManifestEntry): ParsedSolution {
+  const columns = raw.columns
+  const positions: Position[] = []
+
+  for (let rowIdx = 1; rowIdx <= columns.length; rowIdx++) {
+    const hero = columns[rowIdx - 1]
+    const cells = raw.table[String(rowIdx)] || []
+    const spots: Spot[] = []
+    const seenNodeIds = new Set<number>()
+
+    for (const cg of cells) {
+      const items = Array.isArray(cg) ? cg : [cg]
+      for (const cell of items) {
+        if (typeof cell.nodeId !== 'number') continue
+        if (seenNodeIds.has(cell.nodeId)) continue
+        seenNodeIds.add(cell.nodeId)
+        const node = raw.nodes[String(cell.nodeId)]
+        if (!node) continue
+
+        const hands: Record<string, number[]> = {}
+        for (let ri = 0; ri < (node.ranges || []).length; ri++) {
+          for (let ci = 0; ci < Object.keys(node.ranges[ri] || {}).length; ci++) {
+            const key = Object.keys(node.ranges[ri])[ci]
+            const val = node.ranges[ri][key]
+            const hand = HAND_GRID[ri][ci].hand
+            hands[hand] = (val?.freq || []).map(Number)
+          }
+        }
+
+        const actions = (node.percentages || []).map((p) => p.action)
+        spots.push({
+          name: cell.name,
+          group: cell.group,
+          actions,
+          hands,
+        })
+      }
+    }
+    if (spots.length > 0) positions.push({ hero, spots })
+  }
+
+  return {
+    id: manifest.id,
+    label: manifest.label,
+    product: manifest.product,
+    depth: manifest.depth,
+    columns,
+    positions,
+  }
 }
 
-// ---- Spot key: position + spot name (the unique identifier) ----
+// ---- Build unique spot keys across all loaded solutions ----
 interface SpotKey {
-  pos: string       // normalized position: "BTN", "UTG", etc.
-  spotName: string  // raw spot name: "BU RFI 40.81%", "vs UTG RFI", etc.
+  pos: string
+  spotName: string
   group: string
-  label: string     // display label: "BTN · RFI"
+  label: string
 }
 
-// ---- Grid component ----
-function RangeGrid({ spot, lockedHand, setLockedHand }: { spot: Spot; lockedHand: string | null; setLockedHand: (h: string | null) => void }) {
-  return (
-    <div className="rv-grid-wrap">
-      <table className="rv-grid">
-        <thead>
-          <tr>
-            <th></th>
-            {RANKS.map((r) => <th key={r}>{r}</th>)}
-          </tr>
-        </thead>
-        <tbody>
-          {GRID.map((rowCells, ri) => (
-            <tr key={ri}>
-              <th className="rv-rowhead">{RANKS[ri]}</th>
-              {rowCells.map((cell, ci) => {
-                const freq = raiseFreq(spot, cell.hand)
-                const isLocked = lockedHand === cell.hand
-                return (
-                  <td
-                    key={ci}
-                    className={`rv-cell ${freq > 0 ? 'in-range' : ''} ${isLocked ? 'locked' : ''}`}
-                    style={cellStyle(spot, cell.hand)}
-                    title={cell.hand}
-                    onClick={() => setLockedHand(isLocked ? null : cell.hand)}
-                  >
-                    {cell.hand}
-                  </td>
-                )
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div className="rv-legend">
-        <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.15)' }} /> 0%</span>
-        <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.5)' }} /> 50%</span>
-        <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 1)' }} /> 100%</span>
-      </div>
-    </div>
-  )
+function buildSpotKeys(solutions: ParsedSolution[]): SpotKey[] {
+  const seen = new Set<string>()
+  const spots: SpotKey[] = []
+  for (const sol of solutions) {
+    for (const pos of sol.positions) {
+      const pn = posName(pos.hero)
+      for (const spot of pos.spots) {
+        const key = `${pn}||${spot.name}`
+        if (!seen.has(key)) {
+          seen.add(key)
+          const gl = GROUP_LABELS[spot.group] || spot.group
+          spots.push({ pos: pn, spotName: spot.name, group: spot.group, label: `${pn} · ${gl}` })
+        }
+      }
+    }
+  }
+  const posOrder = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
+  const groupOrder = ['rfi', 'lfi', 'general', '3bet', 'all-in', 'iso']
+  spots.sort((a, b) => {
+    const pa = posOrder.indexOf(a.pos), pb = posOrder.indexOf(b.pos)
+    if (pa !== pb) return pa - pb
+    const ga = groupOrder.indexOf(a.group), gb = groupOrder.indexOf(b.group)
+    if (ga !== gb) return ga - gb
+    return a.spotName.localeCompare(b.spotName)
+  })
+  return spots
 }
 
 export function RangeViewerPage() {
-  const [data, setData] = useState<SolutionsData | null>(null)
+  const [manifest, setManifest] = useState<ManifestEntry[]>([])
+  const [solutions, setSolutions] = useState<Map<string, ParsedSolution>>(new Map())
+  const [loadingCount, setLoadingCount] = useState(0)
+  const [totalCount, setTotalCount] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
-  // The selected spot key: "pos||spotName"
-  const [activeSpotKey, setActiveSpotKey] = useState<string>('')
-  // The selected solution to display
-  const [activeSolutionId, setActiveSolutionId] = useState<string>('')
+  const [activeSpotKey, setActiveSpotKey] = useState('')
+  const [activeSolutionId, setActiveSolutionId] = useState('')
   const [lockedHand, setLockedHand] = useState<string | null>(null)
   const [filterText, setFilterText] = useState('')
 
+  // Load manifest, then fetch all raw solution files in parallel
   useEffect(() => {
-    fetch(`${import.meta.env.BASE_URL}solutions.json`)
+    const base = import.meta.env.BASE_URL
+    fetch(`${base}data/manifest.json`)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
       })
-      .then((d: SolutionsData) => setData(d))
+      .then(async (entries: ManifestEntry[]) => {
+        setManifest(entries)
+        setTotalCount(entries.length)
+        const map = new Map<string, ParsedSolution>()
+        let loaded = 0
+        await Promise.all(entries.map(async (entry) => {
+          const res = await fetch(`${base}data/${entry.file}`)
+          if (!res.ok) throw new Error(`Failed to load ${entry.file}`)
+          const raw: RawSolution = await res.json()
+          const parsed = parseSolution(raw, entry)
+          map.set(entry.id, parsed)
+          loaded++
+          setLoadingCount(loaded)
+        }))
+        setSolutions(map)
+      })
       .catch((e) => setError(e.message))
   }, [])
 
-  // ---- Build the master list of unique spots across all solutions ----
-  // Key: "pos||spotName", deduplicated
-  const allSpots = useMemo(() => {
-    if (!data) return [] as SpotKey[]
-    const seen = new Set<string>()
-    const spots: SpotKey[] = []
-    for (const sol of data.solutions) {
-      for (const pos of sol.positions) {
-        const pn = normalizePos(posName(pos.hero))
-        for (const spot of pos.spots) {
-          const key = `${pn}||${spot.name}`
-          if (!seen.has(key)) {
-            seen.add(key)
-            // Build a clean label: "POS · GroupLabel" or "POS · spotName"
-            const groupLabel = GROUP_LABELS[spot.group] || spot.group
-            spots.push({
-              pos: pn,
-              spotName: spot.name,
-              group: spot.group,
-              label: `${pn} · ${groupLabel}`,
-            })
-          }
-        }
-      }
-    }
-    // Sort: by position order (BB, SB, BTN, CO, HJ, LJ, MP, UTG), then by group
-    const posOrder = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
-    const groupOrder = ['rfi', 'lfi']
-    spots.sort((a, b) => {
-      const pa = posOrder.indexOf(a.pos)
-      const pb = posOrder.indexOf(b.pos)
-      if (pa !== pb) return pa - pb
-      const ga = groupOrder.indexOf(a.group)
-      const gb = groupOrder.indexOf(b.group)
-      if (ga !== gb) return ga - gb
-      return a.spotName.localeCompare(b.spotName)
-    })
-    return spots
-  }, [data])
+  // All spot keys across all solutions
+  const allSpots = useMemo(() => buildSpotKeys(Array.from(solutions.values())), [solutions])
 
-  // ---- Filter spots by text ----
   const filteredSpots = useMemo(() => {
     if (!filterText.trim()) return allSpots
     const q = filterText.toLowerCase()
     return allSpots.filter((s) =>
       s.label.toLowerCase().includes(q) ||
       s.pos.toLowerCase().includes(q) ||
-      s.spotName.toLowerCase().includes(q) ||
-      (GROUP_LABELS[s.group] || s.group).toLowerCase().includes(q)
+      s.spotName.toLowerCase().includes(q)
     )
   }, [allSpots, filterText])
 
-  // ---- For the selected spot, find all solutions that have it ----
+  // Solutions that have the selected spot
   const matchingSolutions = useMemo(() => {
-    if (!data || !activeSpotKey) return [] as { solution: Solution; spot: Spot }[]
+    if (!activeSpotKey || solutions.size === 0) return [] as { solution: ParsedSolution; spot: Spot }[]
     const [pos, spotName] = activeSpotKey.split('||')
-    const matches: { solution: Solution; spot: Spot }[] = []
-    for (const sol of data.solutions) {
+    const matches: { solution: ParsedSolution; spot: Spot }[] = []
+    for (const sol of Array.from(solutions.values())) {
       for (const p of sol.positions) {
-        if (normalizePos(posName(p.hero)) !== pos) continue
+        if (posName(p.hero) !== pos) continue
         const spot = p.spots.find((s) => s.name === spotName)
-        if (spot) {
-          matches.push({ solution: sol, spot })
-          break
-        }
+        if (spot) { matches.push({ solution: sol, spot }); break }
       }
     }
     return matches
-  }, [data, activeSpotKey])
+  }, [solutions, activeSpotKey])
 
-  // ---- The active spot being displayed ----
   const activeEntry = matchingSolutions.find((m) => m.solution.id === activeSolutionId) ?? matchingSolutions[0] ?? null
 
-  // Auto-select first spot when data loads
+  // Auto-select defaults
   useEffect(() => {
     if (allSpots.length > 0 && !activeSpotKey) {
-      // Default to first RFI spot
       const firstRfi = allSpots.find((s) => s.group === 'rfi') ?? allSpots[0]
       setActiveSpotKey(`${firstRfi.pos}||${firstRfi.spotName}`)
     }
   }, [allSpots, activeSpotKey])
 
-  // Auto-select first solution when spot changes
   useEffect(() => {
     if (matchingSolutions.length > 0 && !matchingSolutions.some((m) => m.solution.id === activeSolutionId)) {
       setActiveSolutionId(matchingSolutions[0].solution.id)
     }
   }, [matchingSolutions, activeSolutionId])
 
-  if (error) return <Section title="Range Viewer"><p className="muted">Error loading: {error}</p></Section>
-  if (!data) return <Section title="Range Viewer"><p className="muted">Loading solutions...</p></Section>
-
+  const isLoading = solutions.size < manifest.length || manifest.length === 0
   const activeSpotKeyParsed = activeSpotKey ? allSpots.find((s) => `${s.pos}||${s.spotName}` === activeSpotKey) : null
+
+  if (error) return <Section title="Range Viewer"><p className="muted">Error: {error}</p></Section>
 
   return (
     <>
       <Section title="Range Viewer">
         <p>Pick a spot, then flip through solutions to compare ranges across stack depths and ICM stages.</p>
-        <Callout><strong>{data.solutions.length} solutions</strong> · {allSpots.length} unique spots. Data lazy-loaded from <code>solutions.json</code>.</Callout>
+        {isLoading && totalCount > 0 ? (
+          <Callout variant="warn"><strong>Loading solutions... {loadingCount}/{totalCount}</strong></Callout>
+        ) : (
+          <Callout><strong>{solutions.size} solutions loaded</strong> · {allSpots.length} unique spots. Raw solver files parsed client-side.</Callout>
+        )}
       </Section>
 
-      {/* Spot selector with filter */}
-      <Section title="Spot">
-        <input
-          className="rv-filter"
-          type="text"
-          placeholder="Filter: e.g. BTN, UTG, SB..."
-          value={filterText}
-          onChange={(e) => setFilterText(e.target.value)}
-        />
-        <div className="rv-spot-grid">
-          {filteredSpots.map((s) => {
-            const key = `${s.pos}||${s.spotName}`
-            return (
-              <button
-                key={key}
-                className={`rv-spot-pick ${key === activeSpotKey ? 'active' : ''}`}
-                onClick={() => { setActiveSpotKey(key); setLockedHand(null) }}
-              >
-                <span className="rv-spot-pick-pos">{s.pos}</span>
-                <span className="rv-spot-pick-group">{GROUP_LABELS[s.group] || s.group}</span>
-                <span className="rv-spot-pick-name">{s.spotName}</span>
-              </button>
-            )
-          })}
-        </div>
-      </Section>
-
-      {/* Solution flip row */}
-      {matchingSolutions.length > 0 && (
-        <Section title={`${activeSpotKeyParsed?.label ?? ''} · ${matchingSolutions.length} solutions`}>
-          <div className="rv-cmp-sol-row">
-            {matchingSolutions.map(({ solution }) => (
-              <button
-                key={solution.id}
-                className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
-                onClick={() => { setActiveSolutionId(solution.id); setLockedHand(null) }}
-              >
-                <span className="rv-cmp-sol-product">{solution.product}</span>
-                <span className="rv-cmp-sol-depth">{solution.depth}</span>
-                <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
-              </button>
-            ))}
-          </div>
-        </Section>
-      )}
-
-      {/* Grid */}
-      {activeEntry && (
-        <Section title={`${activeEntry.spot.name} · ${activeSpotKeyParsed?.pos} · ${activeEntry.solution.label}`}>
-          <RangeGrid spot={activeEntry.spot} lockedHand={lockedHand} setLockedHand={setLockedHand} />
-        </Section>
-      )}
-
-      {/* Hand detail */}
-      {lockedHand && activeEntry && (
-        <Section title={`Hand Detail · ${lockedHand}`}>
-          <div className="rv-hand-detail">
-            <h3>{lockedHand}</h3>
-            <p className="muted">{activeEntry.spot.name} · {activeSpotKeyParsed?.pos} · {activeEntry.solution.label}</p>
-            <div className="rv-actions">
-              {activeEntry.spot.actions.map((action, i) => (
-                <div key={i} className="rv-action-row">
-                  <span className="rv-action-label">{action}</span>
-                  <div className="rv-action-bar">
-                    <div className="rv-action-fill" style={{ width: `${activeEntry.spot.hands[lockedHand][i] || 0}%` }} />
-                  </div>
-                  <span className="rv-action-pct">{(activeEntry.spot.hands[lockedHand][i] || 0).toFixed(1)}%</span>
-                </div>
-              ))}
+      {!isLoading && (
+        <>
+          {/* Spot selector */}
+          <Section title="Spot">
+            <input
+              className="rv-filter"
+              type="text"
+              placeholder="Filter: e.g. BTN, UTG, vs 3bet..."
+              value={filterText}
+              onChange={(e) => setFilterText(e.target.value)}
+            />
+            <div className="rv-spot-grid">
+              {filteredSpots.map((s) => {
+                const key = `${s.pos}||${s.spotName}`
+                return (
+                  <button
+                    key={key}
+                    className={`rv-spot-pick ${key === activeSpotKey ? 'active' : ''}`}
+                    onClick={() => { setActiveSpotKey(key); setLockedHand(null) }}
+                  >
+                    <span className="rv-spot-pick-pos">{s.pos}</span>
+                    <span className="rv-spot-pick-group">{GROUP_LABELS[s.group] || s.group}</span>
+                    <span className="rv-spot-pick-name">{s.spotName}</span>
+                  </button>
+                )
+              })}
             </div>
-          </div>
-        </Section>
+          </Section>
+
+          {/* Solution flip row */}
+          {matchingSolutions.length > 0 && (
+            <Section title={`${activeSpotKeyParsed?.label ?? ''} · ${matchingSolutions.length} solutions`}>
+              <div className="rv-cmp-sol-row">
+                {matchingSolutions.map(({ solution }) => (
+                  <button
+                    key={solution.id}
+                    className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
+                    onClick={() => { setActiveSolutionId(solution.id); setLockedHand(null) }}
+                  >
+                    <span className="rv-cmp-sol-product">{solution.product}</span>
+                    <span className="rv-cmp-sol-depth">{solution.depth}</span>
+                    <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
+                  </button>
+                ))}
+              </div>
+            </Section>
+          )}
+
+          {/* Grid */}
+          {activeEntry && (
+            <Section title={`${activeEntry.spot.name} · ${activeSpotKeyParsed?.pos} · ${activeEntry.solution.label}`}>
+              <div className="rv-grid-wrap">
+                <table className="rv-grid">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      {RANKS.map((r) => <th key={r}>{r}</th>)}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {HAND_GRID.map((rowCells, ri) => (
+                      <tr key={ri}>
+                        <th className="rv-rowhead">{RANKS[ri]}</th>
+                        {rowCells.map((cell, ci) => {
+                          const freq = raiseFreq(activeEntry.spot, cell.hand)
+                          const isLocked = lockedHand === cell.hand
+                          return (
+                            <td
+                              key={ci}
+                              className={`rv-cell ${freq > 0 ? 'in-range' : ''} ${isLocked ? 'locked' : ''}`}
+                              style={cellStyle(activeEntry.spot, cell.hand)}
+                              title={cell.hand}
+                              onClick={() => setLockedHand(isLocked ? null : cell.hand)}
+                            >
+                              {cell.hand}
+                            </td>
+                          )
+                        })}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                <div className="rv-legend">
+                  <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.15)' }} /> 0%</span>
+                  <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 0.5)' }} /> 50%</span>
+                  <span className="rv-legend-item"><span className="rv-swatch" style={{ background: 'rgba(95, 208, 168, 1)' }} /> 100%</span>
+                </div>
+              </div>
+            </Section>
+          )}
+
+          {/* Hand detail */}
+          {lockedHand && activeEntry && (
+            <Section title={`Hand Detail · ${lockedHand}`}>
+              <div className="rv-hand-detail">
+                <h3>{lockedHand}</h3>
+                <p className="muted">{activeEntry.spot.name} · {activeSpotKeyParsed?.pos} · {activeEntry.solution.label}</p>
+                <div className="rv-actions">
+                  {activeEntry.spot.actions.map((action, i) => (
+                    <div key={i} className="rv-action-row">
+                      <span className="rv-action-label">{action}</span>
+                      <div className="rv-action-bar">
+                        <div className="rv-action-fill" style={{ width: `${activeEntry.spot.hands[lockedHand]?.[i] || 0}%` }} />
+                      </div>
+                      <span className="rv-action-pct">{(activeEntry.spot.hands[lockedHand]?.[i] || 0).toFixed(1)}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Section>
+          )}
+        </>
       )}
     </>
   )
