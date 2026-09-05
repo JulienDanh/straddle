@@ -57,20 +57,33 @@ function cellStyle(spot: Spot, hand: string): React.CSSProperties {
 }
 
 const GROUP_LABELS: Record<string, string> = {
-  'rfi': 'RFI (Open)',
-  'lfi': 'LFI (Limp)',
+  'rfi': 'RFI',
+  'lfi': 'LFI',
   'general': 'vs Open',
   '3bet': 'vs 3-Bet',
   'all-in': 'vs All-in',
   'iso': 'vs ISO',
 }
 
-// Extract position name (e.g. "BTN" from "BU|20")
 function posName(hero: string): string {
   return hero.split('|')[0]
 }
 
-// ---- Grid component (shared) ----
+// Normalize position names to display
+function normalizePos(name: string): string {
+  if (name === 'BU') return 'BTN'
+  return name
+}
+
+// ---- Spot key: position + spot name (the unique identifier) ----
+interface SpotKey {
+  pos: string       // normalized position: "BTN", "UTG", etc.
+  spotName: string  // raw spot name: "BU RFI 40.81%", "vs UTG RFI", etc.
+  group: string
+  label: string     // display label: "BTN · RFI"
+}
+
+// ---- Grid component ----
 function RangeGrid({ spot, lockedHand, setLockedHand }: { spot: Spot; lockedHand: string | null; setLockedHand: (h: string | null) => void }) {
   return (
     <div className="rv-grid-wrap">
@@ -113,44 +126,16 @@ function RangeGrid({ spot, lockedHand, setLockedHand }: { spot: Spot; lockedHand
   )
 }
 
-// ---- Hand detail component (shared) ----
-function HandDetail({ hand, spot, context }: { hand: string; spot: Spot; context: string }) {
-  const freqs = spot.hands[hand]
-  return (
-    <div className="rv-hand-detail">
-      <h3>{hand}</h3>
-      <p className="muted">{context}</p>
-      <div className="rv-actions">
-        {spot.actions.map((action, i) => (
-          <div key={i} className="rv-action-row">
-            <span className="rv-action-label">{action}</span>
-            <div className="rv-action-bar">
-              <div className="rv-action-fill" style={{ width: `${freqs[i] || 0}%` }} />
-            </div>
-            <span className="rv-action-pct">{(freqs[i] || 0).toFixed(1)}%</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 export function RangeViewerPage() {
   const [data, setData] = useState<SolutionsData | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [mode, setMode] = useState<'browse' | 'compare'>('compare')
 
-  // Browse mode state
+  // The selected spot key: "pos||spotName"
+  const [activeSpotKey, setActiveSpotKey] = useState<string>('')
+  // The selected solution to display
   const [activeSolutionId, setActiveSolutionId] = useState<string>('')
-  const [activePosIdx, setActivePosIdx] = useState<number>(-1)
-  const [activeSpotIdx, setActiveSpotIdx] = useState<number>(-1)
-
-  // Compare mode state
-  const [cmpPos, setCmpPos] = useState<string>('')       // e.g. "BTN"
-  const [cmpSpotName, setCmpSpotName] = useState<string>('') // e.g. "BU RFI 40.81%"
-  const [cmpSolutionId, setCmpSolutionId] = useState<string>('')
-
   const [lockedHand, setLockedHand] = useState<string | null>(null)
+  const [filterText, setFilterText] = useState('')
 
   useEffect(() => {
     fetch(`${import.meta.env.BASE_URL}solutions.json`)
@@ -158,65 +143,71 @@ export function RangeViewerPage() {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
       })
-      .then((d: SolutionsData) => {
-        setData(d)
-        if (d.solutions.length > 0) setActiveSolutionId(d.solutions[0].id)
-      })
+      .then((d: SolutionsData) => setData(d))
       .catch((e) => setError(e.message))
   }, [])
 
-  // ---- Browse mode derived state ----
-  const activeSolution = useMemo(
-    () => data?.solutions.find((s) => s.id === activeSolutionId) ?? null,
-    [data, activeSolutionId]
-  )
-  const activePosition = activeSolution && activePosIdx >= 0 ? activeSolution.positions[activePosIdx] : null
-  const activeSpot = activePosition && activeSpotIdx >= 0 ? activePosition.spots[activeSpotIdx] : null
-
-  // ---- Compare mode: build the list of positions available across all solutions ----
-  const allPositions = useMemo(() => {
-    if (!data) return []
+  // ---- Build the master list of unique spots across all solutions ----
+  // Key: "pos||spotName", deduplicated
+  const allSpots = useMemo(() => {
+    if (!data) return [] as SpotKey[]
     const seen = new Set<string>()
-    const positions: string[] = []
+    const spots: SpotKey[] = []
     for (const sol of data.solutions) {
       for (const pos of sol.positions) {
-        const name = posName(pos.hero)
-        if (!seen.has(name)) {
-          seen.add(name)
-          positions.push(name)
-        }
-      }
-    }
-    return positions
-  }, [data])
-
-  // ---- Compare mode: for the selected position, find all distinct spot names across solutions ----
-  const cmpSpotNames = useMemo(() => {
-    if (!data || !cmpPos) return []
-    const seen = new Set<string>()
-    const names: { name: string; group: string }[] = []
-    for (const sol of data.solutions) {
-      for (const pos of sol.positions) {
-        if (posName(pos.hero) !== cmpPos) continue
+        const pn = normalizePos(posName(pos.hero))
         for (const spot of pos.spots) {
-          if (!seen.has(spot.name)) {
-            seen.add(spot.name)
-            names.push({ name: spot.name, group: spot.group })
+          const key = `${pn}||${spot.name}`
+          if (!seen.has(key)) {
+            seen.add(key)
+            // Build a clean label: "POS · GroupLabel" or "POS · spotName"
+            const groupLabel = GROUP_LABELS[spot.group] || spot.group
+            spots.push({
+              pos: pn,
+              spotName: spot.name,
+              group: spot.group,
+              label: `${pn} · ${groupLabel}`,
+            })
           }
         }
       }
     }
-    return names
-  }, [data, cmpPos])
+    // Sort: by position order (BB, SB, BTN, CO, HJ, LJ, MP, UTG), then by group
+    const posOrder = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
+    const groupOrder = ['rfi', 'lfi', 'general', '3bet', 'all-in', 'iso']
+    spots.sort((a, b) => {
+      const pa = posOrder.indexOf(a.pos)
+      const pb = posOrder.indexOf(b.pos)
+      if (pa !== pb) return pa - pb
+      const ga = groupOrder.indexOf(a.group)
+      const gb = groupOrder.indexOf(b.group)
+      if (ga !== gb) return ga - gb
+      return a.spotName.localeCompare(b.spotName)
+    })
+    return spots
+  }, [data])
 
-  // ---- Compare mode: for the selected position + spot name, find all solutions that have it ----
-  const cmpMatchingSolutions = useMemo(() => {
-    if (!data || !cmpPos || !cmpSpotName) return []
+  // ---- Filter spots by text ----
+  const filteredSpots = useMemo(() => {
+    if (!filterText.trim()) return allSpots
+    const q = filterText.toLowerCase()
+    return allSpots.filter((s) =>
+      s.label.toLowerCase().includes(q) ||
+      s.pos.toLowerCase().includes(q) ||
+      s.spotName.toLowerCase().includes(q) ||
+      (GROUP_LABELS[s.group] || s.group).toLowerCase().includes(q)
+    )
+  }, [allSpots, filterText])
+
+  // ---- For the selected spot, find all solutions that have it ----
+  const matchingSolutions = useMemo(() => {
+    if (!data || !activeSpotKey) return [] as { solution: Solution; spot: Spot }[]
+    const [pos, spotName] = activeSpotKey.split('||')
     const matches: { solution: Solution; spot: Spot }[] = []
     for (const sol of data.solutions) {
-      for (const pos of sol.positions) {
-        if (posName(pos.hero) !== cmpPos) continue
-        const spot = pos.spots.find((s) => s.name === cmpSpotName)
+      for (const p of sol.positions) {
+        if (normalizePos(posName(p.hero)) !== pos) continue
+        const spot = p.spots.find((s) => s.name === spotName)
         if (spot) {
           matches.push({ solution: sol, spot })
           break
@@ -224,209 +215,111 @@ export function RangeViewerPage() {
       }
     }
     return matches
-  }, [data, cmpPos, cmpSpotName])
+  }, [data, activeSpotKey])
 
-  // ---- Compare mode: the active spot being displayed ----
-  const cmpActive = cmpMatchingSolutions.find((m) => m.solution.id === cmpSolutionId) ?? cmpMatchingSolutions[0] ?? null
+  // ---- The active spot being displayed ----
+  const activeEntry = matchingSolutions.find((m) => m.solution.id === activeSolutionId) ?? matchingSolutions[0] ?? null
 
-  // Auto-select first position and first spot when entering compare mode
+  // Auto-select first spot when data loads
   useEffect(() => {
-    if (mode === 'compare' && !cmpPos && allPositions.length > 0) {
-      setCmpPos(allPositions[0])
+    if (allSpots.length > 0 && !activeSpotKey) {
+      // Default to first RFI spot
+      const firstRfi = allSpots.find((s) => s.group === 'rfi') ?? allSpots[0]
+      setActiveSpotKey(`${firstRfi.pos}||${firstRfi.spotName}`)
     }
-  }, [mode, cmpPos, allPositions])
+  }, [allSpots, activeSpotKey])
 
+  // Auto-select first solution when spot changes
   useEffect(() => {
-    if (cmpPos && cmpSpotNames.length > 0 && !cmpSpotNames.some((s) => s.name === cmpSpotName)) {
-      setCmpSpotName(cmpSpotNames[0].name)
+    if (matchingSolutions.length > 0 && !matchingSolutions.some((m) => m.solution.id === activeSolutionId)) {
+      setActiveSolutionId(matchingSolutions[0].solution.id)
     }
-  }, [cmpPos, cmpSpotNames, cmpSpotName])
-
-  useEffect(() => {
-    if (cmpMatchingSolutions.length > 0 && !cmpMatchingSolutions.some((m) => m.solution.id === cmpSolutionId)) {
-      setCmpSolutionId(cmpMatchingSolutions[0].solution.id)
-    }
-  }, [cmpMatchingSolutions, cmpSolutionId])
-
-  // ---- Spot count helper ----
-  const spotCountByGroup = (pos: Position) => {
-    const counts: Record<string, number> = {}
-    for (const s of pos.spots) counts[s.group] = (counts[s.group] || 0) + 1
-    return counts
-  }
+  }, [matchingSolutions, activeSolutionId])
 
   if (error) return <Section title="Range Viewer"><p className="muted">Error loading: {error}</p></Section>
   if (!data) return <Section title="Range Viewer"><p className="muted">Loading solutions...</p></Section>
 
-  const totalSpots = data.solutions.reduce((n, s) => n + s.positions.reduce((m, p) => m + p.spots.length, 0), 0)
+  const activeSpotKeyParsed = activeSpotKey ? allSpots.find((s) => `${s.pos}||${s.spotName}` === activeSpotKey) : null
 
   return (
     <>
       <Section title="Range Viewer">
-        <p>Browse real solver solutions. Pick a solution, then a hero position, then a spot to see the 13x13 action-frequency grid.</p>
-        <Callout><strong>{data.solutions.length} solutions</strong> · {totalSpots} spots total. Data lazy-loaded from <code>solutions.json</code>.</Callout>
+        <p>Pick a spot, then flip through solutions to compare ranges across stack depths and ICM stages.</p>
+        <Callout><strong>{data.solutions.length} solutions</strong> · {allSpots.length} unique spots. Data lazy-loaded from <code>solutions.json</code>.</Callout>
       </Section>
 
-      {/* Mode toggle */}
-      <Section title="Mode">
-        <div className="rv-mode-toggle">
-          <button className={`rv-mode-btn ${mode === 'compare' ? 'active' : ''}`} onClick={() => setMode('compare')}>
-            Compare
-          </button>
-          <button className={`rv-mode-btn ${mode === 'browse' ? 'active' : ''}`} onClick={() => setMode('browse')}>
-            Browse
-          </button>
+      {/* Spot selector with filter */}
+      <Section title="Spot">
+        <input
+          className="rv-filter"
+          type="text"
+          placeholder="Filter: e.g. BTN RFI, vs 3bet, UTG..."
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
+        />
+        <div className="rv-spot-grid">
+          {filteredSpots.map((s) => {
+            const key = `${s.pos}||${s.spotName}`
+            return (
+              <button
+                key={key}
+                className={`rv-spot-pick ${key === activeSpotKey ? 'active' : ''}`}
+                onClick={() => { setActiveSpotKey(key); setLockedHand(null) }}
+              >
+                <span className="rv-spot-pick-pos">{s.pos}</span>
+                <span className="rv-spot-pick-group">{GROUP_LABELS[s.group] || s.group}</span>
+                <span className="rv-spot-pick-name">{s.spotName}</span>
+              </button>
+            )
+          })}
         </div>
-        {mode === 'compare' && (
-          <p className="muted rv-mode-hint">Lock a position + spot, then flip through solutions to compare ranges.</p>
-        )}
       </Section>
 
-      {/* ==================== COMPARE MODE ==================== */}
-      {mode === 'compare' && (
-        <>
-          {/* Position selector */}
-          <Section title="Position">
-            <div className="rv-cmp-pos-row">
-              {allPositions.map((pos) => (
-                <button
-                  key={pos}
-                  className={`rv-cmp-chip ${pos === cmpPos ? 'active' : ''}`}
-                  onClick={() => { setCmpPos(pos); setLockedHand(null) }}
-                >
-                  {pos}
-                </button>
-              ))}
-            </div>
-          </Section>
-
-          {/* Spot name selector */}
-          {cmpSpotNames.length > 0 && (
-            <Section title={`Spot · ${cmpPos}`}>
-              <div className="rv-cmp-spot-row">
-                {cmpSpotNames.map((s) => (
-                  <button
-                    key={s.name}
-                    className={`rv-spot-btn ${s.name === cmpSpotName ? 'active' : ''}`}
-                    onClick={() => { setCmpSpotName(s.name); setLockedHand(null) }}
-                  >
-                    <span className="rv-spot-group">{GROUP_LABELS[s.group] || s.group}</span>
-                    <span className="rv-spot-name">{s.name}</span>
-                  </button>
-                ))}
-              </div>
-            </Section>
-          )}
-
-          {/* Solution selector — the quick-flip row */}
-          {cmpMatchingSolutions.length > 0 && (
-            <Section title="Solutions">
-              <div className="rv-cmp-sol-row">
-                {cmpMatchingSolutions.map(({ solution }) => (
-                  <button
-                    key={solution.id}
-                    className={`rv-cmp-sol-btn ${solution.id === (cmpActive?.solution.id ?? '') ? 'active' : ''}`}
-                    onClick={() => { setCmpSolutionId(solution.id); setLockedHand(null) }}
-                  >
-                    <span className="rv-cmp-sol-product">{solution.product}</span>
-                    <span className="rv-cmp-sol-depth">{solution.depth}</span>
-                    <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
-                  </button>
-                ))}
-              </div>
-            </Section>
-          )}
-
-          {/* Grid */}
-          {cmpActive && (
-            <Section title={`${cmpActive.spot.name} · ${cmpPos}`}>
-              <RangeGrid spot={cmpActive.spot} lockedHand={lockedHand} setLockedHand={setLockedHand} />
-            </Section>
-          )}
-
-          {/* Hand detail */}
-          {lockedHand && cmpActive && (
-            <Section title={`Hand Detail · ${lockedHand}`}>
-              <HandDetail hand={lockedHand} spot={cmpActive.spot} context={`${cmpActive.spot.name} · ${cmpPos} · ${cmpActive.solution.label}`} />
-            </Section>
-          )}
-        </>
+      {/* Solution flip row */}
+      {matchingSolutions.length > 0 && (
+        <Section title={`${activeSpotKeyParsed?.label ?? ''} · ${matchingSolutions.length} solutions`}>
+          <div className="rv-cmp-sol-row">
+            {matchingSolutions.map(({ solution }) => (
+              <button
+                key={solution.id}
+                className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
+                onClick={() => { setActiveSolutionId(solution.id); setLockedHand(null) }}
+              >
+                <span className="rv-cmp-sol-product">{solution.product}</span>
+                <span className="rv-cmp-sol-depth">{solution.depth}</span>
+                <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
+              </button>
+            ))}
+          </div>
+        </Section>
       )}
 
-      {/* ==================== BROWSE MODE ==================== */}
-      {mode === 'browse' && (
-        <>
-          {/* Solution selector */}
-          <Section title="Solutions">
-            <div className="rv-solution-list">
-              {data.solutions.map((sol) => (
-                <button
-                  key={sol.id}
-                  className={`rv-scenario-btn ${sol.id === activeSolutionId ? 'active' : ''}`}
-                  onClick={() => { setActiveSolutionId(sol.id); setActivePosIdx(-1); setActiveSpotIdx(-1); setLockedHand(null) }}
-                >
-                  <span className="rv-sol-product">{sol.product}</span>
-                  <span className="rv-sol-label">{sol.label}</span>
-                </button>
+      {/* Grid */}
+      {activeEntry && (
+        <Section title={`${activeEntry.spot.name} · ${activeSpotKeyParsed?.pos} · ${activeEntry.solution.label}`}>
+          <RangeGrid spot={activeEntry.spot} lockedHand={lockedHand} setLockedHand={setLockedHand} />
+        </Section>
+      )}
+
+      {/* Hand detail */}
+      {lockedHand && activeEntry && (
+        <Section title={`Hand Detail · ${lockedHand}`}>
+          <div className="rv-hand-detail">
+            <h3>{lockedHand}</h3>
+            <p className="muted">{activeEntry.spot.name} · {activeSpotKeyParsed?.pos} · {activeEntry.solution.label}</p>
+            <div className="rv-actions">
+              {activeEntry.spot.actions.map((action, i) => (
+                <div key={i} className="rv-action-row">
+                  <span className="rv-action-label">{action}</span>
+                  <div className="rv-action-bar">
+                    <div className="rv-action-fill" style={{ width: `${activeEntry.spot.hands[lockedHand][i] || 0}%` }} />
+                  </div>
+                  <span className="rv-action-pct">{(activeEntry.spot.hands[lockedHand][i] || 0).toFixed(1)}%</span>
+                </div>
               ))}
             </div>
-          </Section>
-
-          {/* Position selector */}
-          {activeSolution && (
-            <Section title={`Positions · ${activeSolution.label}`}>
-              <div className="rv-pos-list">
-                {activeSolution.positions.map((pos, pi) => {
-                  const counts = spotCountByGroup(pos)
-                  const groupSummary = Object.entries(counts).map(([g, n]) => `${GROUP_LABELS[g] || g}: ${n}`).join(' · ')
-                  return (
-                    <button
-                      key={pi}
-                      className={`rv-pos-btn ${pi === activePosIdx ? 'active' : ''}`}
-                      onClick={() => { setActivePosIdx(pi); setActiveSpotIdx(-1); setLockedHand(null) }}
-                    >
-                      <span className="rv-pos-hero">{pos.hero}</span>
-                      <span className="rv-pos-count">{pos.spots.length} spots</span>
-                      <span className="rv-pos-groups">{groupSummary}</span>
-                    </button>
-                  )
-                })}
-              </div>
-            </Section>
-          )}
-
-          {/* Spot selector */}
-          {activePosition && (
-            <Section title={`Spots · ${activePosition.hero}`}>
-              <div className="rv-spot-list">
-                {activePosition.spots.map((spot, si) => (
-                  <button
-                    key={si}
-                    className={`rv-spot-btn ${si === activeSpotIdx ? 'active' : ''}`}
-                    onClick={() => { setActiveSpotIdx(si); setLockedHand(null) }}
-                  >
-                    <span className="rv-spot-group">{GROUP_LABELS[spot.group] || spot.group}</span>
-                    <span className="rv-spot-name">{spot.name}</span>
-                  </button>
-                ))}
-              </div>
-            </Section>
-          )}
-
-          {/* Grid */}
-          {activeSpot && (
-            <Section title={`${activeSpot.name} · ${activePosition!.hero}`}>
-              <RangeGrid spot={activeSpot} lockedHand={lockedHand} setLockedHand={setLockedHand} />
-            </Section>
-          )}
-
-          {/* Hand detail */}
-          {lockedHand && activeSpot && (
-            <Section title={`Hand Detail · ${lockedHand}`}>
-              <HandDetail hand={lockedHand} spot={activeSpot} context={`${activeSpot.name} · ${activePosition!.hero}`} />
-            </Section>
-          )}
-        </>
+          </div>
+        </Section>
       )}
     </>
   )
