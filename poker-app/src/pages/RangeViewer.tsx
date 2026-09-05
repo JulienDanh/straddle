@@ -22,6 +22,7 @@ interface ManifestEntry {
   id: string
   label: string
   product: string
+  category: string
   depth: string
   file: string
 }
@@ -41,6 +42,7 @@ interface ParsedSolution {
   id: string
   label: string
   product: string
+  category: string
   depth: string
   columns: string[]
   positions: Position[]
@@ -141,6 +143,7 @@ function parseSolution(raw: RawSolution, manifest: ManifestEntry): ParsedSolutio
     id: manifest.id,
     label: manifest.label,
     product: manifest.product,
+    category: manifest.category,
     depth: manifest.depth,
     columns,
     positions,
@@ -352,7 +355,7 @@ export function RangeViewerPage() {
               {(() => {
                 const groups: Record<string, typeof matchingSolutions> = {}
                 for (const m of matchingSolutions) {
-                  const g = m.solution.product
+                  const g = m.solution.category || m.solution.product
                   if (!groups[g]) groups[g] = []
                   groups[g].push(m)
                 }

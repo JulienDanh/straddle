@@ -3,6 +3,7 @@
     "id": "chipev-10bb",
     "label": "ChipEV · 10bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "10bb",
     "file": "cev_solution_915_8max_AVG10_Equal.json"
   },
@@ -10,6 +11,7 @@
     "id": "chipev-15bb",
     "label": "ChipEV · 15bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "15bb",
     "file": "cev_solution_928_8max_AVG15_Equal.json"
   },
@@ -17,6 +19,7 @@
     "id": "chipev-20bb",
     "label": "ChipEV · 20bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "20bb",
     "file": "cev_solution_143_8max_AVG20_Equal.json"
   },
@@ -24,6 +27,7 @@
     "id": "chipev-25bb",
     "label": "ChipEV · 25bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "25bb",
     "file": "cev_solution_259_8max_AVG25_Equal.json"
   },
@@ -31,6 +35,7 @@
     "id": "chipev-30bb",
     "label": "ChipEV · 30bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "30bb",
     "file": "cev_solution_144_8max_AVG30_Equal.json"
   },
@@ -38,6 +43,7 @@
     "id": "chipev-40bb",
     "label": "ChipEV · 40bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "40bb",
     "file": "cev_solution_270_8max_AVG40_Equal.json"
   },
@@ -45,13 +51,159 @@
     "id": "chipev-50bb",
     "label": "ChipEV · 50bb",
     "product": "ChipEV",
+    "category": "ChipEV",
     "depth": "50bb",
     "file": "cev_solution_912_8max_AVG50_Equal.json"
+  },
+  {
+    "id": "icm-10bb-83pct",
+    "label": "ICM · 10bb (83% left)",
+    "product": "ICM",
+    "category": "ICM 83% left",
+    "depth": "10bb",
+    "file": "cev_solution_13_83pct_8max_AVG10_Equal_450.json"
+  },
+  {
+    "id": "icm-15bb-83pct",
+    "label": "ICM · 15bb (83% left)",
+    "product": "ICM",
+    "category": "ICM 83% left",
+    "depth": "15bb",
+    "file": "cev_solution_14_83pct_8max_AVG15_Equal_450.json"
+  },
+  {
+    "id": "icm-20bb-83pct",
+    "label": "ICM · 20bb (83% left)",
+    "product": "ICM",
+    "category": "ICM 83% left",
+    "depth": "20bb",
+    "file": "cev_solution_15_83pct_8max_AVG20_Equal_450.json"
+  },
+  {
+    "id": "icm-25bb-83pct",
+    "label": "ICM · 25bb (83% left)",
+    "product": "ICM",
+    "category": "ICM 83% left",
+    "depth": "25bb",
+    "file": "cev_solution_16_83pct_8max_AVG25_Equal_450.json"
+  },
+  {
+    "id": "icm-30bb-83pct",
+    "label": "ICM · 30bb (83% left)",
+    "product": "ICM",
+    "category": "ICM 83% left",
+    "depth": "30bb",
+    "file": "cev_solution_17_83pct_8max_AVG30_Equal_450.json"
+  },
+  {
+    "id": "icm-40bb-83pct",
+    "label": "ICM · 40bb (83% left)",
+    "product": "ICM",
+    "category": "ICM 83% left",
+    "depth": "40bb",
+    "file": "cev_solution_18_83pct_8max_AVG40_Equal_450.json"
+  },
+  {
+    "id": "icm-10bb-40pct",
+    "label": "ICM · 10bb (40% left)",
+    "product": "ICM",
+    "category": "ICM 40% left",
+    "depth": "10bb",
+    "file": "cev_solution_1_40pct_8max_AVG10_Equal_450.json"
+  },
+  {
+    "id": "icm-15bb-40pct",
+    "label": "ICM · 15bb (40% left)",
+    "product": "ICM",
+    "category": "ICM 40% left",
+    "depth": "15bb",
+    "file": "cev_solution_2_40pct_8max_AVG15_Equal_450.json"
+  },
+  {
+    "id": "icm-20bb-40pct",
+    "label": "ICM · 20bb (40% left)",
+    "product": "ICM",
+    "category": "ICM 40% left",
+    "depth": "20bb",
+    "file": "cev_solution_3_40pct_8max_AVG20_Equal_450.json"
+  },
+  {
+    "id": "icm-25bb-40pct",
+    "label": "ICM · 25bb (40% left)",
+    "product": "ICM",
+    "category": "ICM 40% left",
+    "depth": "25bb",
+    "file": "cev_solution_4_40pct_8max_AVG25_Equal_450.json"
+  },
+  {
+    "id": "icm-30bb-40pct",
+    "label": "ICM · 30bb (40% left)",
+    "product": "ICM",
+    "category": "ICM 40% left",
+    "depth": "30bb",
+    "file": "cev_solution_11_40pct_8max_AVG30_Equal_450.json"
+  },
+  {
+    "id": "icm-40bb-40pct",
+    "label": "ICM · 40bb (40% left)",
+    "product": "ICM",
+    "category": "ICM 40% left",
+    "depth": "40bb",
+    "file": "cev_solution_12_40pct_8max_AVG40_Equal_450.json"
+  },
+  {
+    "id": "icm-10bb-itm",
+    "label": "ICM · 10bb ITM Bubble",
+    "product": "ICM",
+    "category": "ICM ITM Bubble",
+    "depth": "10bb",
+    "file": "cev_solution_125_ITM_Bubble_8max_AVG10_Equal_450.json"
+  },
+  {
+    "id": "icm-15bb-itm",
+    "label": "ICM · 15bb ITM Bubble",
+    "product": "ICM",
+    "category": "ICM ITM Bubble",
+    "depth": "15bb",
+    "file": "cev_solution_126_ITM_Bubble_8max_AVG15_Equal_450.json"
+  },
+  {
+    "id": "icm-20bb-itm",
+    "label": "ICM · 20bb ITM Bubble",
+    "product": "ICM",
+    "category": "ICM ITM Bubble",
+    "depth": "20bb",
+    "file": "cev_solution_127_ITM_Bubble_8max_AVG20_Equal_450.json"
+  },
+  {
+    "id": "icm-25bb-itm",
+    "label": "ICM · 25bb ITM Bubble",
+    "product": "ICM",
+    "category": "ICM ITM Bubble",
+    "depth": "25bb",
+    "file": "cev_solution_128_ITM_Bubble_8max_AVG25_Equal_450.json"
+  },
+  {
+    "id": "icm-30bb-itm",
+    "label": "ICM · 30bb ITM Bubble",
+    "product": "ICM",
+    "category": "ICM ITM Bubble",
+    "depth": "30bb",
+    "file": "cev_solution_135_ITM_Bubble_8max_AVG30_Equal_450.json"
+  },
+  {
+    "id": "icm-40bb-itm",
+    "label": "ICM · 40bb ITM Bubble",
+    "product": "ICM",
+    "category": "ICM ITM Bubble",
+    "depth": "40bb",
+    "file": "cev_solution_136_ITM_Bubble_8max_AVG40_Equal_450.json"
   },
   {
     "id": "icm-10bb-ft",
     "label": "ICM · 10bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "10bb",
     "file": "cev_solution_903_FT_8max_AVG10_Equal.json"
   },
@@ -59,6 +211,7 @@
     "id": "icm-15bb-ft",
     "label": "ICM · 15bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "15bb",
     "file": "cev_solution_904_FT_8max_AVG15_Equal.json"
   },
@@ -66,6 +219,7 @@
     "id": "icm-20bb-ft",
     "label": "ICM · 20bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "20bb",
     "file": "cev_solution_905_FT_8max_AVG20_Equal.json"
   },
@@ -73,6 +227,7 @@
     "id": "icm-25bb-ft",
     "label": "ICM · 25bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "25bb",
     "file": "cev_solution_906_FT_8max_AVG25_Equal.json"
   },
@@ -80,6 +235,7 @@
     "id": "icm-30bb-ft",
     "label": "ICM · 30bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "30bb",
     "file": "cev_solution_907_FT_8max_AVG30_Equal.json"
   },
@@ -87,6 +243,7 @@
     "id": "icm-40bb-ft",
     "label": "ICM · 40bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "40bb",
     "file": "cev_solution_908_FT_8max_AVG40_Equal.json"
   },
@@ -94,28 +251,8 @@
     "id": "icm-50bb-ft",
     "label": "ICM · 50bb Bubble",
     "product": "ICM",
+    "category": "ICM Bubble",
     "depth": "50bb",
     "file": "cev_solution_909_FT_8max_AVG50_Equal.json"
-  },
-  {
-    "id": "icm-20bb-itm",
-    "label": "ICM · 20bb ITM Bubble",
-    "product": "ICM",
-    "depth": "20bb",
-    "file": "cev_solution_127_ITM_Bubble_8max_AVG20_Equal_450.json"
-  },
-  {
-    "id": "icm-20bb-40pct",
-    "label": "ICM · 20bb (40% left)",
-    "product": "ICM",
-    "depth": "20bb",
-    "file": "cev_solution_3_40pct_8max_AVG20_Equal_450.json"
-  },
-  {
-    "id": "icm-20bb-83pct",
-    "label": "ICM · 20bb (83% left)",
-    "product": "ICM",
-    "depth": "20bb",
-    "file": "cev_solution_15_83pct_8max_AVG20_Equal_450.json"
   }
 ]
