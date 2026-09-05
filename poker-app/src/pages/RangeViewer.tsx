@@ -89,6 +89,12 @@ function posName(hero: string): string {
   return name === 'BU' ? 'BTN' : name
 }
 
+// Strip trailing percentage from spot names so the same spot aggregates
+// across solutions (e.g. "SB RFI 85.57%" → "SB RFI", "vs UTG RFI" stays as-is)
+function normalizeSpotName(name: string): string {
+  return name.replace(/\s+\d+(\.\d+)?%$/, '').trim()
+}
+
 // ---- Parse a raw solution file into spots grouped by position ----
 function parseSolution(raw: RawSolution, manifest: ManifestEntry): ParsedSolution {
   const columns = raw.columns
@@ -121,7 +127,7 @@ function parseSolution(raw: RawSolution, manifest: ManifestEntry): ParsedSolutio
 
         const actions = (node.percentages || []).map((p) => p.action)
         spots.push({
-          name: cell.name,
+          name: normalizeSpotName(cell.name),
           group: cell.group,
           actions,
           hands,
