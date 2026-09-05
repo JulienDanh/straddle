@@ -71,9 +71,60 @@ body {
   margin-top: 3px;
 }
 
+/* ---- Course accordion ---- */
+.course {
+  border-bottom: 1px solid var(--line);
+}
+.course-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.12s;
+}
+.course-header:hover {
+  background: var(--panel2);
+}
+.course.active-course .course-label {
+  color: var(--accent);
+}
+.chevron {
+  display: inline-block;
+  font-size: 14px;
+  color: var(--muted);
+  transition: transform 0.18s;
+  transform: rotate(0deg);
+  width: 14px;
+  text-align: center;
+}
+.chevron.open {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+.course-label {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  color: var(--txt);
+}
+.course-count {
+  font-size: 10px;
+  color: var(--muted);
+  background: #0c1117;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.course-body {
+  padding: 2px 0 10px;
+}
+
 .nav-group {
   padding: 0 10px;
-  margin: 14px 0;
+  margin: 10px 0;
 }
 
 .nav-label {

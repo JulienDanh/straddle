@@ -87,7 +87,7 @@ function App() {
         <div className="header-bar">
           <button className="menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>≡</button>
           <div className="crumbs" dangerouslySetInnerHTML={{ __html: navTitles[page] || '' }} />
-          <span className="pill">React + Vite · 12 systems + Bubble Mastery</span>
+          <span className="pill">React + Vite · 2 courses</span>
         </div>
         <PageComponent />
         <footer>No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
