@@ -36,10 +36,29 @@ function spotHero(spotName: string, rowHero: string): string {
   return rowHero
 }
 function raiseFreq(spot: Spot, hand: string): number { const f = spot.hands[hand]; if (!f) return 0; return f.slice(1).reduce((s, v) => s + v, 0) }
+
+// Action colors (standard solver palette)
+const ACTION_COLORS = ['#6b7280', '#5fd0a8', '#6aa6ff', '#f0b86e']  // Fold=grey, Raise1=green, Call/Raise2=blue, Raise3=orange
+
 function cellStyle(spot: Spot, hand: string): React.CSSProperties {
   const freq = raiseFreq(spot, hand); if (freq <= 0) return {}
   const opacity = 0.15 + (freq / 100) * 0.85
   return { background: `rgba(95, 208, 168, ${opacity.toFixed(3)})`, color: freq > 50 ? '#0c1117' : '#d8e2ee', fontWeight: freq > 50 ? 700 : 400 }
+}
+
+// Build a multi-color action bar for a cell
+function actionBarStyle(freqs: number[]): React.CSSProperties {
+  const total = freqs.reduce((s, v) => s + v, 0)
+  if (total <= 0) return { display: 'none' }
+  let pos = 0
+  const stops: string[] = []
+  for (let i = 0; i < freqs.length; i++) {
+    const pct = (freqs[i] / total) * 100
+    stops.push(`${ACTION_COLORS[i] || '#666'} ${pos.toFixed(1)}%`)
+    pos += pct
+    stops.push(`${ACTION_COLORS[i] || '#666'} ${pos.toFixed(1)}%`)
+  }
+  return { background: `linear-gradient(to right, ${stops.join(', ')})` }
 }
 
 function parseSolution(raw: RawSolution, m: ManifestEntry): ParsedSolution {
@@ -351,6 +370,7 @@ export function RangeViewerPage() {
                           <th className="rv-rowhead">{RANKS[ri]}</th>
                           {rowCells.map((cell, ci) => {
                             const freq = raiseFreq(activeEntry.spot, cell.hand)
+                            const freqs = activeEntry.spot.hands[cell.hand] || []
                             const isLocked = lockedHand === cell.hand
                             return (
                               <td key={ci}
@@ -360,6 +380,7 @@ export function RangeViewerPage() {
                                 onClick={() => setLockedHand(isLocked ? null : cell.hand)}>
                                 <span className="rv-cell-hand">{cell.hand}</span>
                                 {freq > 0 && <span className="rv-cell-freq">{freq.toFixed(0)}</span>}
+                                {freq > 0 && <span className="rv-cell-bar" style={actionBarStyle(freqs)} />}
                               </td>
                             )
                           })}
