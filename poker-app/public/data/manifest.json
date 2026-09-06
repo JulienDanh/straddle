@@ -24,6 +24,15 @@
     "file": "cev_solution_143_8max_AVG20_Equal.json"
   },
   {
+    "id": "chipev-20bb-asym1",
+    "label": "ChipEV · 20bb BB25-UTG30",
+    "product": "ChipEV",
+    "category": "ChipEV",
+    "depth": "20bb",
+    "file": "cev_solution_1000_8max_AVG20_BB25-SB20-BTN15-CO10-HJ5-LJ20-MP35-UTG30.json",
+    "stacks": "BB25-SB20-BTN15-CO10-HJ5-LJ20-MP35-UTG30"
+  },
+  {
     "id": "chipev-25bb",
     "label": "ChipEV · 25bb",
     "product": "ChipEV",
@@ -216,6 +225,15 @@
     "file": "cev_solution_904_FT_8max_AVG15_Equal.json"
   },
   {
+    "id": "icm-20bb-asym1",
+    "label": "ICM · 20bb UTG5 (Bubble)",
+    "product": "ICM",
+    "category": "ICM Bubble",
+    "depth": "20bb",
+    "file": "cev_solution_1077_FT_8max_AVG20_BB10-SB15-BTN25-CO35-HJ30-LJ20-MP20-UTG5.json",
+    "stacks": "BB10-SB15-BTN25-CO35-HJ30-LJ20-MP20-UTG5"
+  },
+  {
     "id": "icm-20bb-ft",
     "label": "ICM · 20bb Bubble",
     "product": "ICM",
@@ -224,12 +242,48 @@
     "file": "cev_solution_905_FT_8max_AVG20_Equal.json"
   },
   {
+    "id": "icm-25bb-asym1",
+    "label": "ICM · 25bb BB30-UTG40 (Bubble)",
+    "product": "ICM",
+    "category": "ICM Bubble",
+    "depth": "25bb",
+    "file": "cev_solution_1042_FT_8max_AVG25_BB30-SB10-BTN25-CO35-HJ25-LJ20-MP15-UTG40.json",
+    "stacks": "BB30-SB10-BTN25-CO35-HJ25-LJ20-MP15-UTG40"
+  },
+  {
+    "id": "icm-25bb-asym2",
+    "label": "ICM · 25bb UTG10 (Bubble)",
+    "product": "ICM",
+    "category": "ICM Bubble",
+    "depth": "25bb",
+    "file": "cev_solution_1043_FT_8max_AVG25_BB35-SB40-BTN15-CO25-HJ20-LJ25-MP30-UTG10.json",
+    "stacks": "BB35-SB40-BTN15-CO25-HJ20-LJ25-MP30-UTG10"
+  },
+  {
+    "id": "icm-25bb-asym3",
+    "label": "ICM · 25bb BTN40 (Bubble)",
+    "product": "ICM",
+    "category": "ICM Bubble",
+    "depth": "25bb",
+    "file": "cev_solution_1040_FT_8max_AVG25_BB20-SB25-BTN40-CO30-HJ35-LJ10-MP25-UTG15.json",
+    "stacks": "BB20-SB25-BTN40-CO30-HJ35-LJ10-MP25-UTG15"
+  },
+  {
     "id": "icm-25bb-ft",
     "label": "ICM · 25bb Bubble",
     "product": "ICM",
     "category": "ICM Bubble",
     "depth": "25bb",
     "file": "cev_solution_906_FT_8max_AVG25_Equal.json"
+  },
+  {
+    "id": "icm-30bb-asym1",
+    "label": "ICM · 30bb CO60 (Bubble)",
+    "product": "ICM",
+    "category": "ICM Bubble",
+    "depth": "30bb",
+    "file": "cev_solution_1048_FT_8max_AVG30_BB20-SB15-BTN10-CO60-HJ45-LJ35-M30-UTG25.json",
+    "stacks": "BB20-SB15-BTN10-CO60-HJ45-LJ35-MP30-UTG25"
   },
   {
     "id": "icm-30bb-ft",
