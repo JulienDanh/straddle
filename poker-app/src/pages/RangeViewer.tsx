@@ -38,27 +38,39 @@ function spotHero(spotName: string, rowHero: string): string {
 function raiseFreq(spot: Spot, hand: string): number { const f = spot.hands[hand]; if (!f) return 0; return f.slice(1).reduce((s, v) => s + v, 0) }
 
 // Action colors (standard solver palette)
-const ACTION_COLORS = ['#6b7280', '#5fd0a8', '#6aa6ff', '#f0b86e']  // Fold=grey, Raise1=green, Call/Raise2=blue, Raise3=orange
+const ACTION_COLORS = ['#3a4453', '#5fd0a8', '#6aa6ff', '#f0b86e']  // Fold=dark grey, Raise=green, Call=blue, Raise2=orange
 
-function cellStyle(spot: Spot, hand: string): React.CSSProperties {
-  const freq = raiseFreq(spot, hand); if (freq <= 0) return {}
-  const opacity = 0.15 + (freq / 100) * 0.85
-  return { background: `rgba(95, 208, 168, ${opacity.toFixed(3)})`, color: freq > 50 ? '#0c1117' : '#d8e2ee', fontWeight: freq > 50 ? 700 : 400 }
-}
-
-// Build a multi-color action bar for a cell
-function actionBarStyle(freqs: number[]): React.CSSProperties {
+// Build multi-color cell background (vertical segments like Pio/GTO Wizard)
+function cellBg(freqs: number[]): string {
   const total = freqs.reduce((s, v) => s + v, 0)
-  if (total <= 0) return { display: 'none' }
+  if (total <= 0) return ''
   let pos = 0
   const stops: string[] = []
   for (let i = 0; i < freqs.length; i++) {
+    if (freqs[i] <= 0) continue
     const pct = (freqs[i] / total) * 100
-    stops.push(`${ACTION_COLORS[i] || '#666'} ${pos.toFixed(1)}%`)
+    const color = ACTION_COLORS[i] || '#666'
+    stops.push(`${color} ${pos.toFixed(1)}%`)
     pos += pct
-    stops.push(`${ACTION_COLORS[i] || '#666'} ${pos.toFixed(1)}%`)
+    stops.push(`${color} ${pos.toFixed(1)}%`)
   }
-  return { background: `linear-gradient(to right, ${stops.join(', ')})` }
+  return `linear-gradient(to bottom, ${stops.join(', ')})`
+}
+
+// Determine text color based on dominant action
+function textColor(freqs: number[]): string {
+  const total = freqs.reduce((s, v) => s + v, 0)
+  if (total <= 0) return '#8499b5'
+  // If mostly fold (dark), use light text; if mostly action (bright), use dark text
+  const foldPct = (freqs[0] || 0) / total
+  return foldPct > 0.5 ? '#8499b5' : '#0c1117'
+}
+
+function cellStyle(spot: Spot, hand: string): React.CSSProperties {
+  const freqs = spot.hands[hand] || []
+  const freq = raiseFreq(spot, hand)
+  if (freq <= 0) return {}
+  return { background: cellBg(freqs), color: textColor(freqs), fontWeight: freq > 50 ? 700 : 400 }
 }
 
 function parseSolution(raw: RawSolution, m: ManifestEntry): ParsedSolution {
@@ -370,7 +382,6 @@ export function RangeViewerPage() {
                           <th className="rv-rowhead">{RANKS[ri]}</th>
                           {rowCells.map((cell, ci) => {
                             const freq = raiseFreq(activeEntry.spot, cell.hand)
-                            const freqs = activeEntry.spot.hands[cell.hand] || []
                             const isLocked = lockedHand === cell.hand
                             return (
                               <td key={ci}
@@ -380,7 +391,6 @@ export function RangeViewerPage() {
                                 onClick={() => setLockedHand(isLocked ? null : cell.hand)}>
                                 <span className="rv-cell-hand">{cell.hand}</span>
                                 {freq > 0 && <span className="rv-cell-freq">{freq.toFixed(0)}</span>}
-                                {freq > 0 && <span className="rv-cell-bar" style={actionBarStyle(freqs)} />}
                               </td>
                             )
                           })}
@@ -388,6 +398,14 @@ export function RangeViewerPage() {
                       ))}
                     </tbody>
                   </table>
+                </div>
+                <div className="rv-legend">
+                  {activeEntry.spot.actions.map((action, i) => (
+                    <span key={i} className="rv-legend-item">
+                      <span className="rv-legend-dot" style={{ background: ACTION_COLORS[i] || '#666' }} />
+                      {action}
+                    </span>
+                  ))}
                 </div>
               </div>
 
