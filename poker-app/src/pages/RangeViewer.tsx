@@ -8,7 +8,7 @@ interface ManifestEntry { id: string; label: string; product: string; category: 
 interface Spot { name: string; group: string; actions: string[]; hands: Record<string, number[]> }
 interface Position { hero: string; spots: Spot[] }
 interface ParsedSolution { id: string; label: string; product: string; category: string; depth: string; columns: string[]; positions: Position[]; stacks?: string; isAsym: boolean }
-interface SpotKey { pos: string; spotName: string; group: string }
+interface SpotKey { pos: string; spotName: string; displayName: string; group: string }
 
 // ---- Constants ----
 const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const
@@ -122,7 +122,12 @@ function buildSpotKeys(solutions: ParsedSolution[]): SpotKey[] {
   const seen = new Set<string>(); const spots: SpotKey[] = []
   for (const sol of solutions) for (const pos of sol.positions) for (const spot of pos.spots) {
     const pn = posName(pos.hero); const key = `${pn}||${spot.name}`
-    if (!seen.has(key)) { seen.add(key); spots.push({ pos: pn, spotName: spot.name, group: spot.group }) }
+    if (!seen.has(key)) {
+      seen.add(key)
+      // Prefix defense spots with hero position for clarity
+      const display = spot.name.startsWith('vs ') ? `${pn} ${spot.name}` : spot.name
+      spots.push({ pos: pn, spotName: spot.name, displayName: display, group: spot.group })
+    }
   }
   spots.sort((a, b) => { const pa = POS_ORDER.indexOf(a.pos), pb = POS_ORDER.indexOf(b.pos); if (pa !== pb) return pa - pb; const ga = GROUP_ORDER.indexOf(a.group), gb = GROUP_ORDER.indexOf(b.group); if (ga !== gb) return ga - gb; return a.spotName.localeCompare(b.spotName) })
   return spots
@@ -352,7 +357,7 @@ export function RangeViewerPage() {
               <button key={s.spotName}
                 className={`rv-spot-tab ${s.spotName === activeSpotName ? 'active' : ''}`}
                 onClick={() => { setActiveSpotName(s.spotName); setLockedHand(null) }}>
-                {s.spotName}
+                {s.displayName}
               </button>
             ))}
           </div>
@@ -387,7 +392,7 @@ export function RangeViewerPage() {
             <div className="rv-content">
               <div className="rv-grid-area">
                 <div className="rv-grid-header">
-                  <span className="rv-grid-spot">{activeEntry.spot.name}</span>
+                  <span className="rv-grid-spot">{activePos} {activeEntry.spot.name}</span>
                   <span className="rv-grid-sol">{activeEntry.solution.label}</span>
                   {activeEntry.solution.stacks && <span className="rv-grid-stacks">{activeEntry.solution.stacks}</span>}
                 </div>
