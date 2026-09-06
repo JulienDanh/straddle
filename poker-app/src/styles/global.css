@@ -1278,3 +1278,15 @@ footer {
   margin-bottom: 6px;
   padding-left: 2px;
 }
+
+/* ---- Range Viewer: group filter chips ---- */
+.rv-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+.rv-group-chip {
+  padding: 5px 12px;
+  font-size: 11px;
+}

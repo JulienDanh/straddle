@@ -224,6 +224,7 @@ export function RangeViewerPage() {
 
   const [activeSpotKey, setActiveSpotKey] = useState('')
   const [activePos, setActivePos] = useState('')
+  const [activeGroup, setActiveGroup] = useState('')
   const [activeSolutionId, setActiveSolutionId] = useState('')
   const [lockedHand, setLockedHand] = useState<string | null>(null)
   const [filterText, setFilterText] = useState('')
@@ -265,10 +266,19 @@ export function RangeViewerPage() {
     return posOrder.filter((p) => seen.has(p))
   }, [allSpots])
 
-  // Spots filtered by selected position
+  // Available spot groups for the selected position
+  const availableGroups = useMemo(() => {
+    const groupOrder = ['rfi', 'lfi', 'general', '3bet', 'all-in', 'iso']
+    const spots = activePos ? allSpots.filter((s) => s.pos === activePos) : allSpots
+    const seen = new Set(spots.map((s) => s.group))
+    return groupOrder.filter((g) => seen.has(g))
+  }, [allSpots, activePos])
+
+  // Spots filtered by selected position + group + text
   const filteredSpots = useMemo(() => {
     let spots = allSpots
     if (activePos) spots = spots.filter((s) => s.pos === activePos)
+    if (activeGroup) spots = spots.filter((s) => s.group === activeGroup)
     if (filterText.trim()) {
       const q = filterText.toLowerCase()
       spots = spots.filter((s) =>
@@ -278,7 +288,7 @@ export function RangeViewerPage() {
       )
     }
     return spots
-  }, [allSpots, activePos, filterText])
+  }, [allSpots, activePos, activeGroup, filterText])
 
   // Solutions that have the selected spot
   const matchingSolutions = useMemo(() => {
@@ -300,16 +310,21 @@ export function RangeViewerPage() {
   // Auto-select defaults
   useEffect(() => {
     if (availablePositions.length > 0 && !activePos) {
-      // Default to UTG (first RFI spot)
       const utg = availablePositions.indexOf('UTG') >= 0 ? 'UTG' : availablePositions[0]
       setActivePos(utg)
     }
   }, [availablePositions, activePos])
 
+  // Auto-select first group (RFI) when position changes
+  useEffect(() => {
+    if (availableGroups.length > 0 && !availableGroups.includes(activeGroup)) {
+      setActiveGroup(availableGroups[0])
+    }
+  }, [availableGroups, activeGroup])
+
   useEffect(() => {
     if (filteredSpots.length > 0 && !filteredSpots.some((s) => `${s.pos}||${s.spotName}` === activeSpotKey)) {
-      const firstRfi = filteredSpots.find((s) => s.group === 'rfi') ?? filteredSpots[0]
-      setActiveSpotKey(`${firstRfi.pos}||${firstRfi.spotName}`)
+      setActiveSpotKey(`${filteredSpots[0].pos}||${filteredSpots[0].spotName}`)
     }
   }, [filteredSpots, activeSpotKey])
 
@@ -354,6 +369,17 @@ export function RangeViewerPage() {
 
           {/* Spot selector */}
           <Section title={`Spot${activePos ? ' · ' + activePos : ''}`}>
+            <div className="rv-group-row">
+              {availableGroups.map((g) => (
+                <button
+                  key={g}
+                  className={`rv-cmp-chip rv-group-chip ${g === activeGroup ? 'active' : ''}`}
+                  onClick={() => { setActiveGroup(g); setLockedHand(null) }}
+                >
+                  {GROUP_LABELS[g] || g}
+                </button>
+              ))}
+            </div>
             <input
               className="rv-filter"
               type="text"
@@ -370,7 +396,6 @@ export function RangeViewerPage() {
                     className={`rv-spot-pick ${key === activeSpotKey ? 'active' : ''}`}
                     onClick={() => { setActiveSpotKey(key); setLockedHand(null) }}
                   >
-                    <span className="rv-spot-pick-group">{GROUP_LABELS[s.group] || s.group}</span>
                     <span className="rv-spot-pick-name">{s.spotName}</span>
                   </button>
                 )
