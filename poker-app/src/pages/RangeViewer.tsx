@@ -122,6 +122,7 @@ export function RangeViewerPage() {
   const [activeGroup, setActiveGroup] = useState('')
   const [activeSpotName, setActiveSpotName] = useState('')
   const [activeDepth, setActiveDepth] = useState('')
+  const [activeCategory, setActiveCategory] = useState('')
   const [activeSolutionId, setActiveSolutionId] = useState('')
   const [lockedHand, setLockedHand] = useState<string | null>(null)
 
@@ -176,6 +177,7 @@ export function RangeViewerPage() {
     const matches: { solution: ParsedSolution; spot: Spot }[] = []
     for (const sol of Array.from(solutions.values())) {
       if (activeDepth && sol.depth !== activeDepth) continue
+      if (activeCategory && (sol.category || sol.product) !== activeCategory) continue
       for (const p of sol.positions) {
         if (posName(p.hero) !== activePos) continue
         const spot = p.spots.find(s => s.name === activeSpotName)
@@ -183,7 +185,7 @@ export function RangeViewerPage() {
       }
     }
     return matches
-  }, [solutions, activeSpotName, activePos, activeDepth])
+  }, [solutions, activeSpotName, activePos, activeDepth, activeCategory])
 
   const activeEntry = matchingSolutions.find(m => m.solution.id === activeSolutionId) ?? matchingSolutions[0] ?? null
 
@@ -251,10 +253,11 @@ export function RangeViewerPage() {
             <div className="rv-facet">
               <div className="rv-facet-label">Stage</div>
               <div className="rv-facet-chips">
+                <button className={`rv-facet-chip ${activeCategory === '' ? 'active' : ''}`}
+                  onClick={() => { setActiveCategory(''); setLockedHand(null) }}>All</button>
                 {availableCategories.map(c => (
-                  <button key={c} className={`rv-facet-chip ${c === '' ? 'active' : ''}`}
-                    onClick={() => setActiveDepth('')} // stage filter TODO if needed
-                    title={c}>{c}</button>
+                  <button key={c} className={`rv-facet-chip ${c === activeCategory ? 'active' : ''}`}
+                    onClick={() => { setActiveCategory(c); setLockedHand(null) }}>{c}</button>
                 ))}
               </div>
             </div>
