@@ -467,7 +467,6 @@ export function RangeViewerPage() {
                           className={`rv-cmp-sol-btn ${solution.id === (activeEntry?.solution.id ?? '') ? 'active' : ''}`}
                           onClick={() => { setActiveSolutionId(solution.id); setLockedHand(null) }}
                         >
-                          <span className="rv-cmp-sol-depth">{solution.depth}</span>
                           <span className="rv-cmp-sol-label">{solution.label.split('·')[1]?.trim() || solution.label}</span>
                         </button>
                       ))}
