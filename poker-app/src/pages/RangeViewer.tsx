@@ -80,8 +80,8 @@ function buildSpotKeys(solutions: ParsedSolution[]): SpotKey[] {
 }
 
 // ---- Chip component ----
-function Chip({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
-  return <button className={`rv-chip ${active ? 'active' : ''}`} onClick={onClick}>{children}</button>
+function Chip({ active, disabled, onClick, children }: { active: boolean; disabled?: boolean; onClick: () => void; children: React.ReactNode }) {
+  return <button className={`rv-chip ${active ? 'active' : ''} ${disabled ? 'disabled' : ''}`} onClick={onClick} disabled={disabled}>{children}</button>
 }
 
 // ---- Component ----
@@ -121,6 +121,75 @@ export function RangeViewerPage() {
   const availableGroups = useMemo(() => { const spots = activePos ? allSpots.filter(s => s.pos === activePos) : allSpots; const s = new Set(spots.map(x => x.group)); return GROUP_ORDER.filter(g => s.has(g)) }, [allSpots, activePos])
   const availableDepths = useMemo(() => { const s = new Set(manifest.map(m => m.depth)); return Array.from(s).sort((a, b) => depthVal(a) - depthVal(b)) }, [manifest])
   const availableCategories = useMemo(() => { const s = new Set(manifest.map(m => m.category)); return Array.from(s).sort((a, b) => (CAT_ORDER[a] ?? 99) - (CAT_ORDER[b] ?? 99)) }, [manifest])
+
+  // For a given (depth, category, stackType), check if any solutions have a spot for the active position
+  const solHasSpot = (sol: ParsedSolution, pos: string, spotName: string) =>
+    sol.positions.some(p => posName(p.hero) === pos && p.spots.some(s => s.name === spotName))
+
+  // Valid options for each facet given all OTHER active filters
+  const validDepths = useMemo(() => {
+    const valid = new Set<string>()
+    for (const sol of Array.from(solutions.values())) {
+      if (activeCategory && (sol.category || sol.product) !== activeCategory) continue
+      if (activeStackType === 'equal' && sol.isAsym) continue
+      if (activeStackType === 'asym' && !sol.isAsym) continue
+      if (activeSpotName && activePos && !solHasSpot(sol, activePos, activeSpotName)) continue
+      valid.add(sol.depth)
+    }
+    return valid
+  }, [solutions, activeCategory, activeStackType, activeSpotName, activePos])
+
+  const validCategories = useMemo(() => {
+    const valid = new Set<string>()
+    for (const sol of Array.from(solutions.values())) {
+      if (activeDepth && sol.depth !== activeDepth) continue
+      if (activeStackType === 'equal' && sol.isAsym) continue
+      if (activeStackType === 'asym' && !sol.isAsym) continue
+      if (activeSpotName && activePos && !solHasSpot(sol, activePos, activeSpotName)) continue
+      valid.add(sol.category || sol.product)
+    }
+    return valid
+  }, [solutions, activeDepth, activeStackType, activeSpotName, activePos])
+
+  const validStackTypes = useMemo(() => {
+    const hasEqual = manifest.some(m => {
+      if (activeDepth && m.depth !== activeDepth) return false
+      if (activeCategory && m.category !== activeCategory) return false
+      if (activeSpotName && activePos) {
+        const sol = solutions.get(m.id)
+        if (!sol || !solHasSpot(sol, activePos, activeSpotName)) return false
+      }
+      return !('stacks' in m && m.stacks)
+    })
+    const hasAsym = manifest.some(m => {
+      if (activeDepth && m.depth !== activeDepth) return false
+      if (activeCategory && m.category !== activeCategory) return false
+      if (activeSpotName && activePos) {
+        const sol = solutions.get(m.id)
+        if (!sol || !solHasSpot(sol, activePos, activeSpotName)) return false
+      }
+      return 'stacks' in m && !!m.stacks
+    })
+    return { equal: hasEqual, asym: hasAsym }
+  }, [manifest, solutions, activeDepth, activeCategory, activeSpotName, activePos])
+
+  const validPositions = useMemo(() => {
+    const valid = new Set<string>()
+    for (const s of allSpots) {
+      if (activeDepth || activeCategory || activeStackType) {
+        const hasMatching = Array.from(solutions.values()).some(sol => {
+          if (activeDepth && sol.depth !== activeDepth) return false
+          if (activeCategory && (sol.category || sol.product) !== activeCategory) return false
+          if (activeStackType === 'equal' && sol.isAsym) return false
+          if (activeStackType === 'asym' && !sol.isAsym) return false
+          return sol.positions.some(p => posName(p.hero) === s.pos)
+        })
+        if (!hasMatching) continue
+      }
+      valid.add(s.pos)
+    }
+    return valid
+  }, [allSpots, solutions, activeDepth, activeCategory, activeStackType])
 
   const filteredSpots = useMemo(() => {
     let spots = allSpots
@@ -188,7 +257,7 @@ export function RangeViewerPage() {
               <span className="rv-filter-label">Position</span>
               <div className="rv-chip-row">
                 {availablePositions.map(p => (
-                  <Chip key={p} active={p === activePos} onClick={() => { setActivePos(p); setLockedHand(null) }}>{p}</Chip>
+                  <Chip key={p} active={p === activePos} disabled={!validPositions.has(p)} onClick={() => { setActivePos(p); setLockedHand(null) }}>{p}</Chip>
                 ))}
               </div>
             </div>
@@ -206,7 +275,7 @@ export function RangeViewerPage() {
               <span className="rv-filter-label">Depth</span>
               <div className="rv-chip-row">
                 <Chip active={activeDepth === ''} onClick={() => setActiveDepth('')}>All</Chip>
-                {availableDepths.map(d => <Chip key={d} active={d === activeDepth} onClick={() => setActiveDepth(d)}>{d}</Chip>)}
+                {availableDepths.map(d => <Chip key={d} active={d === activeDepth} disabled={!validDepths.has(d)} onClick={() => setActiveDepth(d)}>{d}</Chip>)}
               </div>
             </div>
             {/* Stage */}
@@ -214,7 +283,7 @@ export function RangeViewerPage() {
               <span className="rv-filter-label">Stage</span>
               <div className="rv-chip-row">
                 <Chip active={activeCategory === ''} onClick={() => { setActiveCategory(''); setLockedHand(null) }}>All</Chip>
-                {availableCategories.map(c => <Chip key={c} active={c === activeCategory} onClick={() => { setActiveCategory(c); setLockedHand(null) }}>{c}</Chip>)}
+                {availableCategories.map(c => <Chip key={c} active={c === activeCategory} disabled={!validCategories.has(c)} onClick={() => { setActiveCategory(c); setLockedHand(null) }}>{c}</Chip>)}
               </div>
             </div>
             {/* Stacks */}
@@ -222,8 +291,8 @@ export function RangeViewerPage() {
               <span className="rv-filter-label">Stacks</span>
               <div className="rv-chip-row">
                 <Chip active={activeStackType === ''} onClick={() => { setActiveStackType(''); setLockedHand(null) }}>All</Chip>
-                <Chip active={activeStackType === 'equal'} onClick={() => { setActiveStackType('equal'); setLockedHand(null) }}>Equal</Chip>
-                <Chip active={activeStackType === 'asym'} onClick={() => { setActiveStackType('asym'); setLockedHand(null) }}>Asymmetrical</Chip>
+                <Chip active={activeStackType === 'equal'} disabled={!validStackTypes.equal} onClick={() => { setActiveStackType('equal'); setLockedHand(null) }}>Equal</Chip>
+                <Chip active={activeStackType === 'asym'} disabled={!validStackTypes.asym} onClick={() => { setActiveStackType('asym'); setLockedHand(null) }}>Asymmetrical</Chip>
               </div>
             </div>
           </div>

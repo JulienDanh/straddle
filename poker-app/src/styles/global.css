@@ -1093,3 +1093,8 @@ footer {
   .rv-grid-area { min-width: 0; }
   .rv-hand-panel { min-width: 0; max-width: none; }
 }
+.rv-chip.disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
