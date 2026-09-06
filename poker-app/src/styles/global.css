@@ -1290,3 +1290,152 @@ footer {
   padding: 5px 12px;
   font-size: 11px;
 }
+
+/* ---- Range Viewer: faceted layout ---- */
+.rv-layout {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+/* Facet sidebar */
+.rv-facets {
+  flex-shrink: 0;
+  width: 200px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+  position: sticky;
+  top: 10px;
+}
+.rv-facet {
+  margin-bottom: 16px;
+}
+.rv-facet:last-child {
+  margin-bottom: 0;
+}
+.rv-facet-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.rv-facet-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.rv-facet-chip {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.12s;
+  -webkit-tap-highlight-color: transparent;
+}
+.rv-facet-chip:hover {
+  border-color: var(--accent);
+  color: var(--txt);
+}
+.rv-facet-chip.active {
+  background: var(--accent);
+  color: #0c1117;
+  border-color: var(--accent);
+}
+
+/* Main content */
+.rv-main {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Spot bar */
+.rv-spot-bar {
+  margin-bottom: 14px;
+}
+.rv-spot-bar-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+.rv-spot-scroll {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.rv-spot-tab {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: 0.12s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+}
+.rv-spot-tab:hover {
+  border-color: var(--accent);
+  color: var(--txt);
+}
+.rv-spot-tab.active {
+  background: var(--accent);
+  color: #0c1117;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+/* Solution bar */
+.rv-sol-bar {
+  margin-bottom: 14px;
+}
+.rv-sol-bar-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+/* Grid section */
+.rv-grid-section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 16px;
+}
+.rv-grid-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--txt);
+  margin-bottom: 12px;
+}
+
+/* Hand detail inline */
+.rv-main .rv-hand-detail {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+}
+
+/* Responsive: stack sidebar on mobile */
+@media (max-width: 768px) {
+  .rv-layout {
+    flex-direction: column;
+  }
+  .rv-facets {
+    width: 100%;
+    position: static;
+  }
+}
