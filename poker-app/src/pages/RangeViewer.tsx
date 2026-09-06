@@ -37,11 +37,29 @@ function spotHero(spotName: string, rowHero: string): string {
 }
 function raiseFreq(spot: Spot, hand: string): number { const f = spot.hands[hand]; if (!f) return 0; return f.slice(1).reduce((s, v) => s + v, 0) }
 
-// Action colors (standard solver palette)
-const ACTION_COLORS = ['#3a4453', '#5fd0a8', '#6aa6ff', '#f0b86e']  // Fold=dark grey, Raise=green, Call=blue, Raise2=orange
+// Action color mapping by action name
+// Fold=dark grey, Raise=red, Call=blue, Check=teal
+// For all-in spots, Call=purple (calling an all-in)
+const ACTION_COLOR_MAP: Record<string, string> = {
+  'Fold': '#3a4453',
+  'Raise': '#ef6f6f',      // red
+  'Call': '#6aa6ff',       // blue
+  'Check': '#5fd0a8',     // teal/green
+}
+
+// Override color for all-in spots: Call = purple
+const ACTION_COLOR_MAP_ALLIN: Record<string, string> = {
+  'Fold': '#3a4453',
+  'Call': '#a855f7',      // purple (calling an all-in)
+}
+
+function actionColor(actionName: string, isAllIn: boolean): string {
+  if (isAllIn && ACTION_COLOR_MAP_ALLIN[actionName]) return ACTION_COLOR_MAP_ALLIN[actionName]
+  return ACTION_COLOR_MAP[actionName] || '#666'
+}
 
 // Build multi-color cell background (vertical segments like Pio/GTO Wizard)
-function cellBg(freqs: number[]): string {
+function cellBg(freqs: number[], actions: string[], isAllIn: boolean): string {
   const total = freqs.reduce((s, v) => s + v, 0)
   if (total <= 0) return ''
   let pos = 0
@@ -49,7 +67,7 @@ function cellBg(freqs: number[]): string {
   for (let i = 0; i < freqs.length; i++) {
     if (freqs[i] <= 0) continue
     const pct = (freqs[i] / total) * 100
-    const color = ACTION_COLORS[i] || '#666'
+    const color = actionColor(actions[i] || `Raise${i}`, isAllIn)
     stops.push(`${color} ${pos.toFixed(1)}%`)
     pos += pct
     stops.push(`${color} ${pos.toFixed(1)}%`)
@@ -61,7 +79,6 @@ function cellBg(freqs: number[]): string {
 function textColor(freqs: number[]): string {
   const total = freqs.reduce((s, v) => s + v, 0)
   if (total <= 0) return '#8499b5'
-  // If mostly fold (dark), use light text; if mostly action (bright), use dark text
   const foldPct = (freqs[0] || 0) / total
   return foldPct > 0.5 ? '#8499b5' : '#0c1117'
 }
@@ -70,7 +87,8 @@ function cellStyle(spot: Spot, hand: string): React.CSSProperties {
   const freqs = spot.hands[hand] || []
   const freq = raiseFreq(spot, hand)
   if (freq <= 0) return {}
-  return { background: cellBg(freqs), color: textColor(freqs), fontWeight: freq > 50 ? 700 : 400 }
+  const isAllIn = spot.group === 'all-in'
+  return { background: cellBg(freqs, spot.actions, isAllIn), color: textColor(freqs), fontWeight: freq > 50 ? 700 : 400 }
 }
 
 function parseSolution(raw: RawSolution, m: ManifestEntry): ParsedSolution {
@@ -400,12 +418,15 @@ export function RangeViewerPage() {
                   </table>
                 </div>
                 <div className="rv-legend">
-                  {activeEntry.spot.actions.map((action, i) => (
-                    <span key={i} className="rv-legend-item">
-                      <span className="rv-legend-dot" style={{ background: ACTION_COLORS[i] || '#666' }} />
-                      {action}
-                    </span>
-                  ))}
+                  {activeEntry.spot.actions.map((action, i) => {
+                    const isAllIn = activeEntry.spot.group === 'all-in'
+                    return (
+                      <span key={i} className="rv-legend-item">
+                        <span className="rv-legend-dot" style={{ background: actionColor(action, isAllIn) }} />
+                        {action}
+                      </span>
+                    )
+                  })}
                 </div>
               </div>
 
