@@ -7,7 +7,7 @@ interface RawSolution { columns: string[]; table: Record<string, (RawCell | RawC
 interface ManifestEntry { id: string; label: string; product: string; category: string; depth: string; file: string; stacks?: string }
 interface Spot { name: string; group: string; actions: string[]; hands: Record<string, number[]> }
 interface Position { hero: string; spots: Spot[] }
-interface ParsedSolution { id: string; label: string; product: string; category: string; depth: string; columns: string[]; positions: Position[]; stacks?: string }
+interface ParsedSolution { id: string; label: string; product: string; category: string; depth: string; columns: string[]; positions: Position[]; stacks?: string; isAsym: boolean }
 interface SpotKey { pos: string; spotName: string; group: string }
 
 // ---- Constants ----
@@ -66,7 +66,7 @@ function parseSolution(raw: RawSolution, m: ManifestEntry): ParsedSolution {
       }
     }
   }
-  return { id: m.id, label: m.label, product: m.product, category: m.category, depth: m.depth, columns: raw.columns, positions: Array.from(posMap.values()).sort((a, b) => POS_ORDER.indexOf(a.hero) - POS_ORDER.indexOf(b.hero)), stacks: m.stacks }
+  return { id: m.id, label: m.label, product: m.product, category: m.category, depth: m.depth, columns: raw.columns, positions: Array.from(posMap.values()).sort((a, b) => POS_ORDER.indexOf(a.hero) - POS_ORDER.indexOf(b.hero)), stacks: m.stacks, isAsym: !!m.stacks }
 }
 
 function buildSpotKeys(solutions: ParsedSolution[]): SpotKey[] {
@@ -97,6 +97,7 @@ export function RangeViewerPage() {
   const [activeSpotName, setActiveSpotName] = useState('')
   const [activeDepth, setActiveDepth] = useState('')
   const [activeCategory, setActiveCategory] = useState('')
+  const [activeStackType, setActiveStackType] = useState('')  // '' = all, 'equal', 'asym'
   const [activeSolutionId, setActiveSolutionId] = useState('')
   const [lockedHand, setLockedHand] = useState<string | null>(null)
 
@@ -134,6 +135,8 @@ export function RangeViewerPage() {
     for (const sol of Array.from(solutions.values())) {
       if (activeDepth && sol.depth !== activeDepth) continue
       if (activeCategory && (sol.category || sol.product) !== activeCategory) continue
+      if (activeStackType === 'equal' && sol.isAsym) continue
+      if (activeStackType === 'asym' && !sol.isAsym) continue
       for (const p of sol.positions) {
         if (posName(p.hero) !== activePos) continue
         const spot = p.spots.find(s => s.name === activeSpotName)
@@ -141,7 +144,7 @@ export function RangeViewerPage() {
       }
     }
     return matches
-  }, [solutions, activeSpotName, activePos, activeDepth, activeCategory])
+  }, [solutions, activeSpotName, activePos, activeDepth, activeCategory, activeStackType])
 
   const activeEntry = matchingSolutions.find(m => m.solution.id === activeSolutionId) ?? matchingSolutions[0] ?? null
   const isLoading = solutions.size < manifest.length || manifest.length === 0
@@ -212,6 +215,15 @@ export function RangeViewerPage() {
               <div className="rv-chip-row">
                 <Chip active={activeCategory === ''} onClick={() => { setActiveCategory(''); setLockedHand(null) }}>All</Chip>
                 {availableCategories.map(c => <Chip key={c} active={c === activeCategory} onClick={() => { setActiveCategory(c); setLockedHand(null) }}>{c}</Chip>)}
+              </div>
+            </div>
+            {/* Stacks */}
+            <div className="rv-filter-group">
+              <span className="rv-filter-label">Stacks</span>
+              <div className="rv-chip-row">
+                <Chip active={activeStackType === ''} onClick={() => { setActiveStackType(''); setLockedHand(null) }}>All</Chip>
+                <Chip active={activeStackType === 'equal'} onClick={() => { setActiveStackType('equal'); setLockedHand(null) }}>Equal</Chip>
+                <Chip active={activeStackType === 'asym'} onClick={() => { setActiveStackType('asym'); setLockedHand(null) }}>Asymmetrical</Chip>
               </div>
             </div>
           </div>
