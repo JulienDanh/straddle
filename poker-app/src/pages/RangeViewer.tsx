@@ -225,6 +225,7 @@ export function RangeViewerPage() {
   const [activeSpotKey, setActiveSpotKey] = useState('')
   const [activePos, setActivePos] = useState('')
   const [activeGroup, setActiveGroup] = useState('')
+  const [activeDepth, setActiveDepth] = useState('')
   const [activeSolutionId, setActiveSolutionId] = useState('')
   const [lockedHand, setLockedHand] = useState<string | null>(null)
   const [filterText, setFilterText] = useState('')
@@ -296,6 +297,7 @@ export function RangeViewerPage() {
     const [pos, spotName] = activeSpotKey.split('||')
     const matches: { solution: ParsedSolution; spot: Spot }[] = []
     for (const sol of Array.from(solutions.values())) {
+      if (activeDepth && sol.depth !== activeDepth) continue
       for (const p of sol.positions) {
         if (posName(p.hero) !== pos) continue
         const spot = p.spots.find((s) => s.name === spotName)
@@ -303,6 +305,22 @@ export function RangeViewerPage() {
       }
     }
     return matches
+  }, [solutions, activeSpotKey, activeDepth])
+
+  // Available depths across all matching solutions (for the depth filter)
+  const availableDepths = useMemo(() => {
+    if (!activeSpotKey || solutions.size === 0) return [] as string[]
+    const [pos, spotName] = activeSpotKey.split('||')
+    const depths = new Set<string>()
+    for (const sol of Array.from(solutions.values())) {
+      for (const p of sol.positions) {
+        if (posName(p.hero) !== pos) continue
+        if (p.spots.some((s) => s.name === spotName)) {
+          depths.add(sol.depth)
+        }
+      }
+    }
+    return Array.from(depths).sort((a, b) => (parseInt(a) || 0) - (parseInt(b) || 0))
   }, [solutions, activeSpotKey])
 
   const activeEntry = matchingSolutions.find((m) => m.solution.id === activeSolutionId) ?? matchingSolutions[0] ?? null
@@ -403,9 +421,26 @@ export function RangeViewerPage() {
             </div>
           </Section>
 
-          {/* Solution flip row — grouped by category, sorted by bb */}
+          {/* Depth filter + solution flip row */}
           {matchingSolutions.length > 0 && (
             <Section title={`${activeSpotKeyParsed?.label ?? ''} · ${matchingSolutions.length} solutions`}>
+              <div className="rv-group-row">
+                <button
+                  className={`rv-cmp-chip rv-group-chip ${activeDepth === '' ? 'active' : ''}`}
+                  onClick={() => setActiveDepth('')}
+                >
+                  All
+                </button>
+                {availableDepths.map((d) => (
+                  <button
+                    key={d}
+                    className={`rv-cmp-chip rv-group-chip ${d === activeDepth ? 'active' : ''}`}
+                    onClick={() => setActiveDepth(d)}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
               {(() => {
                 const depthVal = (d: string) => parseInt(d) || 0
                 const catOrder: Record<string, number> = {
