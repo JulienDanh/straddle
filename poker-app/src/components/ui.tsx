@@ -20,6 +20,15 @@ export function Tag({ variant = 'default', children }: { variant?: 'default' | '
   return <span className={`tag ${variant}`}>{children}</span>
 }
 
+// ---- Action badge ----
+// Inline colored badge for a poker action. Colors match the RangeGrid palette.
+// Usage: <Action>Fold</Action>  <Action variant="call">Call</Action>
+//        <Action variant="raise">Raise 6bb</Action>  <Action variant="allIn">All-in</Action>
+//        <Action variant="check">Check</Action>  <Action variant="bet">Bet</Action>
+export function Action({ variant = 'fold', children }: { variant?: 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'; children: ReactNode }) {
+  return <span className={`action-badge ${variant}`}>{children}</span>
+}
+
 // ---- Muted text ----
 export function Muted({ children }: { children: ReactNode }) {
   return <span className="muted">{children}</span>
@@ -121,6 +130,37 @@ export function S({ children }: { children: ReactNode }) { return <span classNam
 export function H({ children }: { children: ReactNode }) { return <span className="h">{children}</span> }
 export function D({ children }: { children: ReactNode }) { return <span className="d">{children}</span> }
 export function C({ children }: { children: ReactNode }) { return <span className="c">{children}</span> }
+
+// ---- Playing card ----
+// Displays a single playing card as a rounded card face with rank + suit.
+// Input: "As", "Kd", "Th", "2c", etc. Case-insensitive.
+const SUIT_SYMBOL: Record<string, string> = { s: '♠', h: '♥', d: '♦', c: '♣' }
+const SUIT_CLASS: Record<string, string> = { s: 's', h: 'h', d: 'd', c: 'c' }
+
+export function PlayingCard({ card, size = 'md' }: { card: string; size?: 'sm' | 'md' | 'lg' }) {
+  const r = card[0]?.toUpperCase() ?? ''
+  const s = card[1]?.toLowerCase() ?? ''
+  const suit = SUIT_SYMBOL[s] ?? ''
+  const cls = SUIT_CLASS[s] ?? ''
+  return (
+    <span className={`pcard ${size} ${cls}`}>
+      <span className="pcard-r">{r}</span>
+      <span className="pcard-s">{suit}</span>
+    </span>
+  )
+}
+
+// ---- Hole cards (pair of playing cards) ----
+// Displays two cards side by side. Input: "AsKd", "AhKh", "7c2d", etc.
+export function HoleCards({ cards, size = 'md' }: { cards: string; size?: 'sm' | 'md' | 'lg' }) {
+  if (cards.length < 4) return <span className="holecards" />
+  return (
+    <span className="holecards">
+      <PlayingCard card={cards.slice(0, 2)} size={size} />
+      <PlayingCard card={cards.slice(2, 4)} size={size} />
+    </span>
+  )
+}
 
 // ---- Flashcards + Quiz section wrapper ----
 export function FlashcardsSection({ cards }: { cards: [string, string][] }) {

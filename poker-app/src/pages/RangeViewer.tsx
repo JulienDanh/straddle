@@ -1,137 +1,11 @@
 import { useState, useEffect, useMemo } from 'react'
-
-// ---- Types ----
-interface RawCell { name: string; group: string; nodeId: number }
-interface RawNode { ranges: Record<string, { freq: number[] }>[]; percentages: { action: string }[] }
-interface RawSolution { columns: string[]; table: Record<string, (RawCell | RawCell[])[]>; nodes: Record<string, RawNode> }
-interface ManifestEntry { id: string; label: string; product: string; category: string; depth: string; file: string; stacks?: string }
-interface Spot { name: string; group: string; actions: string[]; hands: Record<string, number[]> }
-interface Position { hero: string; spots: Spot[] }
-interface ParsedSolution { id: string; label: string; product: string; category: string; depth: string; columns: string[]; positions: Position[]; stacks?: string; isAsym: boolean }
-interface SpotKey { pos: string; spotName: string; displayName: string; group: string }
-
-// ---- Constants ----
-const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const
-const HAND_GRID: { hand: string }[][] = RANKS.map((row, ri) =>
-  RANKS.map((col, ci) => {
-    if (row === col) return { hand: `${row}${col}` }
-    const idx1 = RANKS.indexOf(row), idx2 = RANKS.indexOf(col)
-    const [hi, lo] = idx1 < idx2 ? [row, col] : [col, row]
-    return { hand: ci > ri ? `${hi}${lo}s` : `${hi}${lo}o` }
-  })
-)
-const POS_ORDER = ['BB', 'SB', 'BTN', 'CO', 'HJ', 'LJ', 'MP', 'UTG']
-const GROUP_ORDER = ['rfi', 'lfi', 'general', '3bet', 'all-in', 'iso']
-const GROUP_LABELS: Record<string, string> = { 'rfi': 'RFI', 'lfi': 'LFI', 'general': 'vs Open', '3bet': 'vs 3-Bet', 'all-in': 'vs All-in', 'iso': 'vs ISO' }
-const CAT_ORDER: Record<string, number> = { 'ChipEV': 0, 'ICM 83% left': 1, 'ICM 40% left': 2, 'ICM ITM Bubble': 3, 'ICM Bubble': 4 }
-const depthVal = (d: string) => parseInt(d) || 0
-
-// ---- Helpers ----
-function posName(hero: string): string { const n = hero.split('|')[0]; return n === 'BU' ? 'BTN' : n }
-function normalizeSpotName(name: string): string { return name.replace(/\s+\d+(\.\d+)?%$/, '').trim() }
-function spotHero(spotName: string, rowHero: string): string {
-  const name = normalizeSpotName(spotName)
-  if (name.endsWith(' RFI') || name.endsWith(' LFI')) { const o = name.split(' ')[0]; if (o && o !== 'vs') return o === 'BU' ? 'BTN' : o }
-  if (name.includes(' vs ')) { const d = name.split(' vs ')[0].trim(); if (d) return d === 'BU' ? 'BTN' : d }
-  return rowHero
-}
-function raiseFreq(spot: Spot, hand: string): number { const f = spot.hands[hand]; if (!f) return 0; return f.slice(1).reduce((s, v) => s + v, 0) }
-
-// Action color mapping by action name
-// Fold=dark grey, Raise=red, Call=blue, Check=teal
-// For all-in spots, Call=purple (calling an all-in)
-const ACTION_COLOR_MAP: Record<string, string> = {
-  'Fold': '#3a4453',
-  'Raise': '#ef6f6f',      // red
-  'Call': '#6aa6ff',       // blue
-  'Check': '#5fd0a8',     // teal/green
-}
-
-// Override color for all-in spots: Call = purple
-const ACTION_COLOR_MAP_ALLIN: Record<string, string> = {
-  'Fold': '#3a4453',
-  'Call': '#a855f7',      // purple (calling an all-in)
-}
-
-function actionColor(actionName: string, isAllIn: boolean): string {
-  if (isAllIn && ACTION_COLOR_MAP_ALLIN[actionName]) return ACTION_COLOR_MAP_ALLIN[actionName]
-  return ACTION_COLOR_MAP[actionName] || '#666'
-}
-
-// Build multi-color cell background (vertical segments like Pio/GTO Wizard)
-function cellBg(freqs: number[], actions: string[], isAllIn: boolean): string {
-  const total = freqs.reduce((s, v) => s + v, 0)
-  if (total <= 0) return ''
-  let pos = 0
-  const stops: string[] = []
-  for (let i = 0; i < freqs.length; i++) {
-    if (freqs[i] <= 0) continue
-    const pct = (freqs[i] / total) * 100
-    const color = actionColor(actions[i] || `Raise${i}`, isAllIn)
-    stops.push(`${color} ${pos.toFixed(1)}%`)
-    pos += pct
-    stops.push(`${color} ${pos.toFixed(1)}%`)
-  }
-  return `linear-gradient(to bottom, ${stops.join(', ')})`
-}
-
-// Determine text color based on dominant action
-function textColor(freqs: number[]): string {
-  const total = freqs.reduce((s, v) => s + v, 0)
-  if (total <= 0) return '#8499b5'
-  const foldPct = (freqs[0] || 0) / total
-  return foldPct > 0.5 ? '#8499b5' : '#0c1117'
-}
-
-function cellStyle(spot: Spot, hand: string): React.CSSProperties {
-  const freqs = spot.hands[hand] || []
-  const freq = raiseFreq(spot, hand)
-  if (freq <= 0) return {}
-  const isAllIn = spot.group === 'all-in'
-  return { background: cellBg(freqs, spot.actions, isAllIn), color: textColor(freqs), fontWeight: freq > 50 ? 700 : 400 }
-}
-
-function parseSolution(raw: RawSolution, m: ManifestEntry): ParsedSolution {
-  const posMap = new Map<string, Position>()
-  for (let rowIdx = 1; rowIdx <= raw.columns.length; rowIdx++) {
-    const rowHero = posName(raw.columns[rowIdx - 1])
-    const seenNodeIds = new Set<number>()
-    for (const cg of raw.table[String(rowIdx)] || []) {
-      const items = Array.isArray(cg) ? cg : [cg]
-      for (const cell of items) {
-        if (typeof cell.nodeId !== 'number') continue
-        if (seenNodeIds.has(cell.nodeId)) continue
-        seenNodeIds.add(cell.nodeId)
-        const node = raw.nodes[String(cell.nodeId)]
-        if (!node) continue
-        const hands: Record<string, number[]> = {}
-        for (let ri = 0; ri < (node.ranges || []).length; ri++)
-          for (let ci = 0; ci < Object.keys(node.ranges[ri] || {}).length; ci++)
-            hands[HAND_GRID[ri][ci].hand] = (node.ranges[ri][Object.keys(node.ranges[ri])[ci]]?.freq || []).map(Number)
-        const spotName = normalizeSpotName(cell.name)
-        const hero = spotHero(cell.name, rowHero)
-        if (!posMap.has(hero)) posMap.set(hero, { hero, spots: [] })
-        posMap.get(hero)!.spots.push({ name: spotName, group: cell.group, actions: (node.percentages || []).map((p) => p.action), hands })
-      }
-    }
-  }
-  return { id: m.id, label: m.label, product: m.product, category: m.category, depth: m.depth, columns: raw.columns, positions: Array.from(posMap.values()).sort((a, b) => POS_ORDER.indexOf(a.hero) - POS_ORDER.indexOf(b.hero)), stacks: m.stacks, isAsym: !!m.stacks }
-}
-
-function buildSpotKeys(solutions: ParsedSolution[]): SpotKey[] {
-  const seen = new Set<string>(); const spots: SpotKey[] = []
-  for (const sol of solutions) for (const pos of sol.positions) for (const spot of pos.spots) {
-    const pn = posName(pos.hero); const key = `${pn}||${spot.name}`
-    if (!seen.has(key)) {
-      seen.add(key)
-      // Prefix defense spots with hero position for clarity
-      const display = spot.name.startsWith('vs ') ? `${pn} ${spot.name}` : spot.name
-      spots.push({ pos: pn, spotName: spot.name, displayName: display, group: spot.group })
-    }
-  }
-  spots.sort((a, b) => { const pa = POS_ORDER.indexOf(a.pos), pb = POS_ORDER.indexOf(b.pos); if (pa !== pb) return pa - pb; const ga = GROUP_ORDER.indexOf(a.group), gb = GROUP_ORDER.indexOf(b.group); if (ga !== gb) return ga - gb; return a.spotName.localeCompare(b.spotName) })
-  return spots
-}
+import {
+  RANKS, HAND_GRID, POS_ORDER, GROUP_ORDER, GROUP_LABELS, CAT_ORDER, depthVal,
+  posName, raiseFreq, solPosStack, fmtStack, solDepthMatches,
+  actionColors, actionLabel, cellStyle,
+  parseSolution, buildSpotKeys,
+  type ManifestEntry, type ParsedSolution, type Spot,
+} from './solutionParser'
 
 // ---- Chip component ----
 function Chip({ active, disabled, onClick, children }: { active: boolean; disabled?: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -173,7 +47,7 @@ export function RangeViewerPage() {
   const allSpots = useMemo(() => buildSpotKeys(Array.from(solutions.values())), [solutions])
   const availablePositions = useMemo(() => { const s = new Set(allSpots.map(x => x.pos)); return POS_ORDER.filter(p => s.has(p)) }, [allSpots])
   const availableGroups = useMemo(() => { const spots = activePos ? allSpots.filter(s => s.pos === activePos) : allSpots; const s = new Set(spots.map(x => x.group)); return GROUP_ORDER.filter(g => s.has(g)) }, [allSpots, activePos])
-  const availableDepths = useMemo(() => { const s = new Set(manifest.map(m => m.depth)); return Array.from(s).sort((a, b) => depthVal(a) - depthVal(b)) }, [manifest])
+  const availableDepths = useMemo(() => { const s = new Set<string>(); for (const sol of Array.from(solutions.values())) s.add(fmtStack(activePos ? solPosStack(sol, activePos) : depthVal(sol.depth))); return Array.from(s).sort((a, b) => depthVal(a) - depthVal(b)) }, [solutions, activePos])
   const availableCategories = useMemo(() => { const s = new Set(manifest.map(m => m.category)); return Array.from(s).sort((a, b) => (CAT_ORDER[a] ?? 99) - (CAT_ORDER[b] ?? 99)) }, [manifest])
 
   // For a given (depth, category, stackType), check if any solutions have a spot for the active position
@@ -188,7 +62,7 @@ export function RangeViewerPage() {
       if (activeStackType === 'equal' && sol.isAsym) continue
       if (activeStackType === 'asym' && !sol.isAsym) continue
       if (activeSpotName && activePos && !solHasSpot(sol, activePos, activeSpotName)) continue
-      valid.add(sol.depth)
+      valid.add(fmtStack(activePos ? solPosStack(sol, activePos) : depthVal(sol.depth)))
     }
     return valid
   }, [solutions, activeCategory, activeStackType, activeSpotName, activePos])
@@ -196,7 +70,7 @@ export function RangeViewerPage() {
   const validCategories = useMemo(() => {
     const valid = new Set<string>()
     for (const sol of Array.from(solutions.values())) {
-      if (activeDepth && sol.depth !== activeDepth) continue
+      if (activeDepth && !solDepthMatches(sol, activePos, activeDepth)) continue
       if (activeStackType === 'equal' && sol.isAsym) continue
       if (activeStackType === 'asym' && !sol.isAsym) continue
       if (activeSpotName && activePos && !solHasSpot(sol, activePos, activeSpotName)) continue
@@ -207,21 +81,17 @@ export function RangeViewerPage() {
 
   const validStackTypes = useMemo(() => {
     const hasEqual = manifest.some(m => {
-      if (activeDepth && m.depth !== activeDepth) return false
+      const sol = solutions.get(m.id)
+      if (activeDepth && (!sol || !solDepthMatches(sol, activePos, activeDepth))) return false
       if (activeCategory && m.category !== activeCategory) return false
-      if (activeSpotName && activePos) {
-        const sol = solutions.get(m.id)
-        if (!sol || !solHasSpot(sol, activePos, activeSpotName)) return false
-      }
+      if (activeSpotName && activePos && (!sol || !solHasSpot(sol, activePos, activeSpotName))) return false
       return !('stacks' in m && m.stacks)
     })
     const hasAsym = manifest.some(m => {
-      if (activeDepth && m.depth !== activeDepth) return false
+      const sol = solutions.get(m.id)
+      if (activeDepth && (!sol || !solDepthMatches(sol, activePos, activeDepth))) return false
       if (activeCategory && m.category !== activeCategory) return false
-      if (activeSpotName && activePos) {
-        const sol = solutions.get(m.id)
-        if (!sol || !solHasSpot(sol, activePos, activeSpotName)) return false
-      }
+      if (activeSpotName && activePos && (!sol || !solHasSpot(sol, activePos, activeSpotName))) return false
       return 'stacks' in m && !!m.stacks
     })
     return { equal: hasEqual, asym: hasAsym }
@@ -232,7 +102,7 @@ export function RangeViewerPage() {
     for (const s of allSpots) {
       if (activeDepth || activeCategory || activeStackType) {
         const hasMatching = Array.from(solutions.values()).some(sol => {
-          if (activeDepth && sol.depth !== activeDepth) return false
+          if (activeDepth && !solDepthMatches(sol, s.pos, activeDepth)) return false
           if (activeCategory && (sol.category || sol.product) !== activeCategory) return false
           if (activeStackType === 'equal' && sol.isAsym) return false
           if (activeStackType === 'asym' && !sol.isAsym) return false
@@ -256,7 +126,7 @@ export function RangeViewerPage() {
     if (!activeSpotName || solutions.size === 0) return [] as { solution: ParsedSolution; spot: Spot }[]
     const matches: { solution: ParsedSolution; spot: Spot }[] = []
     for (const sol of Array.from(solutions.values())) {
-      if (activeDepth && sol.depth !== activeDepth) continue
+      if (activeDepth && !solDepthMatches(sol, activePos, activeDepth)) continue
       if (activeCategory && (sol.category || sol.product) !== activeCategory) continue
       if (activeStackType === 'equal' && sol.isAsym) continue
       if (activeStackType === 'asym' && !sol.isAsym) continue
@@ -277,6 +147,8 @@ export function RangeViewerPage() {
   useEffect(() => { if (availableGroups.length && !availableGroups.includes(activeGroup)) setActiveGroup(availableGroups[0]) }, [availableGroups, activeGroup])
   useEffect(() => { if (filteredSpots.length && !filteredSpots.some(s => s.spotName === activeSpotName)) setActiveSpotName(filteredSpots[0].spotName) }, [filteredSpots, activeSpotName])
   useEffect(() => { if (matchingSolutions.length && !matchingSolutions.some(m => m.solution.id === activeSolutionId)) setActiveSolutionId(matchingSolutions[0].solution.id) }, [matchingSolutions, activeSolutionId])
+  // Reset depth when it's no longer valid for the active position (e.g. switching positions changes the available per-position stacks)
+  useEffect(() => { if (activeDepth && !availableDepths.includes(activeDepth)) setActiveDepth('') }, [availableDepths, activeDepth])
 
   // Keyboard: left/right to flip solutions
   useEffect(() => {
@@ -326,7 +198,7 @@ export function RangeViewerPage() {
             </div>
             {/* Depth */}
             <div className="rv-filter-group">
-              <span className="rv-filter-label">Depth</span>
+              <span className="rv-filter-label">{activePos ? `${activePos} Stack` : 'Depth'}</span>
               <div className="rv-chip-row">
                 <Chip active={activeDepth === ''} onClick={() => setActiveDepth('')}>All</Chip>
                 {availableDepths.map(d => <Chip key={d} active={d === activeDepth} disabled={!validDepths.has(d)} onClick={() => setActiveDepth(d)}>{d}</Chip>)}
@@ -388,13 +260,29 @@ export function RangeViewerPage() {
           )}
 
           {/* ===== Grid + hand detail ===== */}
-          {activeEntry && (
+          {activeEntry && (() => {
+            const isAllIn = activeEntry.spot.group === 'all-in'
+            const colors = actionColors(activeEntry.spot.actions, isAllIn)
+            const cd = lockedHand ? activeEntry.spot.hands[lockedHand] : null
+            const bestEv = cd ? Math.max(...cd.ev.map((e, i) => (cd.freq[i] > 0 ? e : -Infinity))) : -Infinity
+            return (
             <div className="rv-content">
               <div className="rv-grid-area">
                 <div className="rv-grid-header">
                   <span className="rv-grid-spot">{activePos} {activeEntry.spot.name}</span>
                   <span className="rv-grid-sol">{activeEntry.solution.label}</span>
+                  {activeEntry.solution.isAsym && <span className="rv-grid-herostack">{activePos} {solPosStack(activeEntry.solution, activePos)}bb</span>}
                   {activeEntry.solution.stacks && <span className="rv-grid-stacks">{activeEntry.solution.stacks}</span>}
+                </div>
+                {/* Spot-level action mix (headline from solver) */}
+                <div className="rv-spot-summary">
+                  {activeEntry.spot.actions.map((a, i) => (
+                    <span key={i} className="rv-summary-item">
+                      <span className="rv-summary-dot" style={{ background: colors[i] }} />
+                      <span className="rv-summary-name">{actionLabel(a, isAllIn)}</span>
+                      <span className="rv-summary-pct">{a.spotPct.toFixed(1)}%</span>
+                    </span>
+                  ))}
                 </div>
                 <div className="rv-grid-wrap">
                   <table className="rv-grid">
@@ -406,14 +294,16 @@ export function RangeViewerPage() {
                           {rowCells.map((cell, ci) => {
                             const freq = raiseFreq(activeEntry.spot, cell.hand)
                             const isLocked = lockedHand === cell.hand
+                            const w = activeEntry.spot.hands[cell.hand]?.weight ?? 100
                             return (
                               <td key={ci}
                                 className={`rv-cell ${freq > 0 ? 'in-range' : ''} ${isLocked ? 'locked' : ''}`}
-                                style={cellStyle(activeEntry.spot, cell.hand)}
-                                title={cell.hand}
+                                style={cellStyle(activeEntry.spot, cell.hand, colors)}
+                                title={`${cell.hand}${w < 100 ? ` · weight ${w}%` : ''}`}
                                 onClick={() => setLockedHand(isLocked ? null : cell.hand)}>
                                 <span className="rv-cell-hand">{cell.hand}</span>
                                 {freq > 0 && <span className="rv-cell-freq">{freq.toFixed(0)}</span>}
+                                {w < 100 && w > 0 && freq > 0 && <span className="rv-cell-w">·</span>}
                               </td>
                             )
                           })}
@@ -423,37 +313,47 @@ export function RangeViewerPage() {
                   </table>
                 </div>
                 <div className="rv-legend">
-                  {activeEntry.spot.actions.map((action, i) => {
-                    const isAllIn = activeEntry.spot.group === 'all-in'
-                    return (
-                      <span key={i} className="rv-legend-item">
-                        <span className="rv-legend-dot" style={{ background: actionColor(action, isAllIn) }} />
-                        {action}
-                      </span>
-                    )
-                  })}
+                  {activeEntry.spot.actions.map((a, i) => (
+                    <span key={i} className="rv-legend-item">
+                      <span className="rv-legend-dot" style={{ background: colors[i] }} />
+                      {actionLabel(a, isAllIn)}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              {lockedHand && (
+              {lockedHand && cd && (
                 <div className="rv-hand-panel">
                   <div className="rv-hand-panel-title">{lockedHand}</div>
                   <div className="rv-hand-panel-context">{activeEntry.spot.name} · {activeEntry.solution.label}</div>
-                  <div className="rv-actions">
-                    {activeEntry.spot.actions.map((action, i) => (
-                      <div key={i} className="rv-action-row">
-                        <span className="rv-action-label">{action}</span>
-                        <div className="rv-action-bar">
-                          <div className="rv-action-fill" style={{ width: `${activeEntry.spot.hands[lockedHand]?.[i] || 0}%` }} />
-                        </div>
-                        <span className="rv-action-pct">{(activeEntry.spot.hands[lockedHand]?.[i] || 0).toFixed(1)}%</span>
-                      </div>
-                    ))}
+                  <div className="rv-hand-meta">
+                    {cd.combos.length > 0 && <span>{cd.combos.length} combo{cd.combos.length > 1 ? 's' : ''}</span>}
+                    {cd.weight < 100 && <span className="rv-weight-warn">weight {cd.weight.toFixed(0)}%</span>}
+                    {cd.weight === 0 && <span className="rv-weight-warn">blocked</span>}
                   </div>
+                  <div className="rv-actions">
+                    {activeEntry.spot.actions.map((a, i) => {
+                      const f = cd.freq[i] || 0
+                      const e = cd.ev[i] ?? 0
+                      const isBest = f > 0 && e === bestEv && bestEv !== -Infinity
+                      return (
+                        <div key={i} className={`rv-action-row${isBest ? ' best' : ''}`}>
+                          <span className="rv-action-label" style={{ color: colors[i] }}>{actionLabel(a, isAllIn)}</span>
+                          <div className="rv-action-bar">
+                            <div className="rv-action-fill" style={{ width: `${f}%`, background: colors[i] }} />
+                          </div>
+                          <span className="rv-action-pct">{f.toFixed(1)}%</span>
+                          <span className="rv-action-ev" title="EV in bb">{e.toFixed(2)}</span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                  <div className="rv-hand-ev-note">EV in bb · <span className="rv-best-mark">■</span> highest-EV action</div>
                 </div>
               )}
             </div>
-          )}
+            )
+          })()}
         </>
       )}
     </div>

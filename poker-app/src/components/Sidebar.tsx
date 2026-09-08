@@ -161,6 +161,12 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         >
           <span className="num">·</span> Range Viewer
         </div>
+        <div
+          className={`nav-item ${activePage === 'sandbox' ? 'active' : ''}`}
+          onClick={() => handleNavigate('sandbox')}
+        >
+          <span className="num">·</span> Design System
+        </div>
       </div>
     </aside>
   )
