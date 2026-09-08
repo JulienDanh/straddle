@@ -1,12 +1,15 @@
 import type { ReactNode } from 'react'
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui-shadcn/card'
 
 // ---- Section wrapper ----
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="bg-panel border border-line rounded-[14px] p-[22px] my-4 shadow-lg">
-      <h2 className="text-xl border-l-[3px] border-accent pl-2.5 mb-3.5">{title}</h2>
-      {children}
-    </section>
+    <Card className="bg-panel border-line rounded-[14px] p-[22px] my-4 shadow-lg gap-0">
+      <CardHeader className="p-0 pb-3.5">
+        <CardTitle className="text-xl border-l-[3px] border-accent pl-2.5">{title}</CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">{children}</CardContent>
+    </Card>
   )
 }
 
@@ -142,7 +145,7 @@ const VERDICT_STYLES: Record<string, string> = {
 
 export function HandExampleCard({ ex }: { ex: HandExample }) {
   return (
-    <div className="bg-panel2 border border-line rounded-xl p-4 my-3 grid [grid-template-columns:auto_1fr] gap-3.5 items-start transition-shadow hover:shadow-lg [@media(max-width:560px)]:[grid-template-columns:1fr]">
+    <Card className="bg-panel2 border-line rounded-xl p-4 my-3 grid [grid-template-columns:auto_1fr] gap-3.5 items-start transition-shadow hover:shadow-lg [@media(max-width:560px)]:[grid-template-columns:1fr]">
       <div className="flex flex-col gap-2 min-w-0">
         <Tag variant={ex.tagVariant}>{ex.tag}</Tag>
         <div className="inline-flex gap-0.5 font-bold text-[15px] bg-dark border border-line px-3 py-2 rounded-[10px] self-start whitespace-nowrap">{ex.board}</div>
@@ -154,7 +157,7 @@ export function HandExampleCard({ ex }: { ex: HandExample }) {
         <p className="text-txt text-[13px]"><strong className="text-accent2">System:</strong> {ex.system}</p>
         <p className="text-muted text-[13px]"><strong className="text-accent2">Solver:</strong> {ex.solver}</p>
       </div>
-    </div>
+    </Card>
   )
 }
 

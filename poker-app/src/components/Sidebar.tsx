@@ -1,5 +1,9 @@
 import { useState } from 'react'
 import type { QuizQuestion } from './ui'
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui-shadcn/accordion'
+import { Card } from '@/components/ui-shadcn/card'
+import { Progress } from '@/components/ui-shadcn/progress'
+import { Button } from '@/components/ui-shadcn/button'
 
 interface SidebarProps {
   activePage: string
@@ -98,18 +102,6 @@ function courseOfPage(pageId: string): string {
 
 export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
   const activeCourse = courseOfPage(activePage)
-  const [manual, setManual] = useState<Record<string, boolean>>({})
-  const [seen, setSeen] = useState<string | null>(null)
-
-  // Auto-expand when the active course changes (via navigation); keep manual toggles otherwise.
-  if (activeCourse !== seen) {
-    setSeen(activeCourse)
-  }
-  const isExpanded = (id: string) => (manual[id] !== undefined ? manual[id] : id === activeCourse)
-
-  const toggleCourse = (id: string) => {
-    setManual((prev) => ({ ...prev, [id]: !isExpanded(id) }))
-  }
 
   const handleNavigate = (page: string) => onNavigate(page)
 
@@ -121,21 +113,16 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         <h1 className="text-[15px] tracking-wide">Poker Study Guide</h1>
         <div className="text-[11px] text-muted mt-0.5">{COURSES.length} courses · {COURSES.reduce((n, c) => n + c.groups.reduce((m, g) => m + g.pages.length, 0), 0)} pages</div>
       </div>
-      {COURSES.map((course) => {
-        const expanded = isExpanded(course.id)
-        const isActiveCourse = course.id === activeCourse
-        return (
-          <div key={course.id} className="border-b border-line">
-            <div
-              className="flex items-center gap-2 px-[18px] py-3 cursor-pointer select-none transition-colors hover:bg-panel2"
-              onClick={() => toggleCourse(course.id)}
-            >
-              <span className={`inline-block text-sm w-3.5 text-center transition-transform duration-200 ${expanded ? 'rotate-90 text-accent' : 'rotate-0 text-muted'}`}>›</span>
-              <span className={`flex-1 text-[13px] font-semibold tracking-tight ${isActiveCourse ? 'text-accent' : 'text-txt'}`}>{course.label}</span>
-              <span className="text-[10px] text-muted bg-dark border border-line rounded-full px-1.5 py-px">{course.groups.reduce((n, g) => n + g.pages.length, 0)}</span>
-            </div>
-            {expanded && (
-              <div className="py-0.5 pb-2.5">
+      <Accordion type="single" defaultValue={activeCourse} collapsible className="w-full">
+        {COURSES.map((course) => {
+          const isActiveCourse = course.id === activeCourse
+          return (
+            <AccordionItem key={course.id} value={course.id} className="border-b border-line">
+              <AccordionTrigger className="flex items-center gap-2 px-[18px] py-3 cursor-pointer hover:bg-panel2 hover:no-underline [&>svg]:hidden">
+                <span className={`flex-1 text-[13px] font-semibold tracking-tight ${isActiveCourse ? 'text-accent' : 'text-txt'}`}>{course.label}</span>
+                <span className="text-[10px] text-muted bg-dark border border-line rounded-full px-1.5 py-px">{course.groups.reduce((n, g) => n + g.pages.length, 0)}</span>
+              </AccordionTrigger>
+              <AccordionContent className="py-0.5 pb-2.5">
                 {course.groups.map((group) => (
                   <div key={group.label} className="px-2.5 my-2.5">
                     <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">{group.label}</div>
@@ -151,11 +138,11 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
                     ))}
                   </div>
                 ))}
-              </div>
-            )}
-          </div>
-        )
-      })}
+              </AccordionContent>
+            </AccordionItem>
+          )
+        })}
+      </Accordion>
       <div className="px-2.5 mt-4 border-t border-line pt-3">
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         <div
@@ -239,16 +226,14 @@ export function Quiz({ questions }: { questions: QuizQuestion[] }) {
 
   return (
     <>
-      <div className="h-1.5 bg-panel2 rounded-sm overflow-hidden my-1.5 mb-4">
-        <div className="h-full bg-accent transition-all duration-300" style={{ width: `${(score / questions.length) * 100}%` }} />
-      </div>
+      <Progress value={(score / questions.length) * 100} className="h-1.5 my-1.5 mb-4 bg-panel2 [&>div]:bg-accent" />
       <div className="text-[13px] text-muted text-right">Score {score} / {questions.length}</div>
       {questions.map((item, qIdx) => {
         const picked = answers[qIdx]
         const answered = picked !== null
         const isCorrect = answered && picked === item.a
         return (
-          <div key={qIdx} className="bg-panel2 border border-line rounded-xl p-4 my-3.5">
+          <Card key={qIdx} className="bg-panel2 border-line rounded-xl p-4 my-3.5 gap-0">
             <div className="text-[13px] text-muted mb-2">Q{qIdx + 1}/{questions.length}. {item.q}</div>
             <div className="flex gap-2.5 flex-wrap mt-3">
               {item.o.map((opt, i) => (
@@ -268,11 +253,11 @@ export function Quiz({ questions }: { questions: QuizQuestion[] }) {
                 {item.why}
               </div>
             )}
-          </div>
+          </Card>
         )
       })}
       {allAnswered && (
-        <div className="bg-panel2 border border-line rounded-xl p-4 my-3.5 text-center">
+        <Card className="bg-panel2 border-line rounded-xl p-4 my-3.5 text-center gap-0">
           <h3 className="text-lg font-bold mb-1">Done — {score} / {questions.length}</h3>
           <p className="text-muted text-[13px]">
             {score === questions.length
@@ -281,8 +266,8 @@ export function Quiz({ questions }: { questions: QuizQuestion[] }) {
               ? 'Solid. Review the flashcards.'
               : 'Re-read this system and retry.'}
           </p>
-          <button className="mt-3 bg-panel border border-line text-txt px-4 py-2 rounded-lg cursor-pointer text-sm transition-colors hover:border-accent2" onClick={reset}>Retake</button>
-        </div>
+          <Button variant="outline" className="mt-3" onClick={reset}>Retake</Button>
+        </Card>
       )}
     </>
   )
