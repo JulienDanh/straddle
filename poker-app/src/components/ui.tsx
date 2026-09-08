@@ -3,8 +3,8 @@ import type { ReactNode } from 'react'
 // ---- Section wrapper ----
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="section">
-      <h2>{title}</h2>
+    <section className="bg-panel border border-line rounded-[14px] p-[22px] my-4 shadow-lg">
+      <h2 className="text-xl border-l-[3px] border-accent pl-2.5 mb-3.5">{title}</h2>
       {children}
     </section>
   )
@@ -12,36 +12,52 @@ export function Section({ title, children }: { title: string; children: ReactNod
 
 // ---- Callout ----
 export function Callout({ variant = 'default', children }: { variant?: 'default' | 'warn' | 'bad' | 'good'; children: ReactNode }) {
-  return <div className={`callout ${variant !== 'default' ? variant : ''}`}>{children}</div>
+  const borderColors: Record<string, string> = {
+    default: 'border-accent2',
+    warn: 'border-warn',
+    bad: 'border-bad',
+    good: 'border-good',
+  }
+  return <div className={`bg-panel2 border-l-[3px] ${borderColors[variant]} px-4 py-3 rounded-lg my-3.5`}>{children}</div>
 }
 
 // ---- Tag (pill) ----
 export function Tag({ variant = 'default', children }: { variant?: 'default' | 'risk' | 'call' | 'fold'; children: ReactNode }) {
-  return <span className={`tag ${variant}`}>{children}</span>
+  const styles: Record<string, string> = {
+    default: 'text-good border-good',
+    risk: 'text-warn border-warn',
+    call: 'text-accent2 border-accent2',
+    fold: 'text-bad border-bad',
+  }
+  return <span className={`inline-block text-[11px] px-2 py-0.5 rounded-full border mr-1.5 ${styles[variant]}`}>{children}</span>
 }
 
 // ---- Action badge ----
-// Inline colored badge for a poker action. Colors match the RangeGrid palette.
-// Usage: <Action>Fold</Action>  <Action variant="call">Call</Action>
-//        <Action variant="raise">Raise 6bb</Action>  <Action variant="allIn">All-in</Action>
-//        <Action variant="check">Check</Action>  <Action variant="bet">Bet</Action>
 export function Action({ variant = 'fold', children }: { variant?: 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'; children: ReactNode }) {
-  return <span className={`action-badge ${variant}`}>{children}</span>
+  const styles: Record<string, string> = {
+    fold: 'bg-[#3a4453] text-muted',
+    call: 'bg-[#6aa6ff] text-[#0c1117]',
+    raise: 'bg-[#ef6f6f] text-[#0c1117]',
+    allIn: 'bg-[#c83838] text-white',
+    check: 'bg-[#5fd0a8] text-[#0c1117]',
+    bet: 'bg-[#ef6f6f] text-[#0c1117]',
+  }
+  return <span className={`inline-block text-[11px] font-bold px-2 py-0.5 rounded whitespace-nowrap align-middle ${styles[variant]}`}>{children}</span>
 }
 
 // ---- Muted text ----
 export function Muted({ children }: { children: ReactNode }) {
-  return <span className="muted">{children}</span>
+  return <span className="text-muted">{children}</span>
 }
 
 // ---- Small text ----
 export function Small({ children }: { children: ReactNode }) {
-  return <span className="small">{children}</span>
+  return <span className="text-xs text-muted">{children}</span>
 }
 
 // ---- Inline code ----
 export function Code({ children }: { children: ReactNode }) {
-  return <code>{children}</code>
+  return <code className="bg-dark border border-line px-1.5 py-0.5 rounded text-[13px]">{children}</code>
 }
 
 // ---- Decision Matrix ----

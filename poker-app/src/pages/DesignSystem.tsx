@@ -1,5 +1,6 @@
 import { RangeGrid } from '../components/RangeGrid'
 import { HoleCards, Action } from '../components/ui'
+import { Button } from '@/components/ui-shadcn/button'
 
 // Sandbox page for testing RangeGrid display with real combo-data strings.
 // Each grid uses the Pio/GTO Wizard export format (0-1 scale per combo).
@@ -10,6 +11,18 @@ export function DesignSystemPage() {
   return (
     <div className="rv-page">
       <h2 style={{ marginBottom: 24, fontSize: 20, fontWeight: 700 }}>Design System</h2>
+
+      <div style={{ marginBottom: 40 }}>
+        <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>shadcn/ui Button</h3>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+          <Button>Default</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="destructive">Destructive</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="link">Link</Button>
+        </div>
+      </div>
 
       <div style={{ marginBottom: 40 }}>
         <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>Hole Cards</h3>

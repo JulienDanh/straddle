@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  /* Surfaces — match :root in global.css */
+  --color-bg: #0f1419;
+  --color-panel: #1a2230;
+  --color-panel2: #222c3d;
+  --color-line: #2e3a4d;
+  --color-dark: #0c1117;
+
+  /* Text */
+  --color-txt: #d8e2ee;
+  --color-muted: #8499b5;
+
+  /* Accents */
+  --color-accent: #5fd0a8;
+  --color-accent2: #6aa6ff;
+  --color-warn: #f0b86e;
+  --color-bad: #ef6f6f;
+  --color-good: #5fd0a8;
+
+  /* Suits */
+  --color-spade: #b8c0cc;
+  --color-heart: #d33b4a;
+  --color-diamond: #2a7fd4;
+  --color-club: #2f8f5b;
+
+  /* shadcn semantic tokens */
+  --color-background: #0f1419;
+  --color-foreground: #d8e2ee;
+  --color-card: #1a2230;
+  --color-card-foreground: #d8e2ee;
+  --color-popover: #1a2230;
+  --color-popover-foreground: #d8e2ee;
+  --color-primary: #5fd0a8;
+  --color-primary-foreground: #0c1117;
+  --color-secondary: #222c3d;
+  --color-secondary-foreground: #d8e2ee;
+  --color-muted-foreground: #8499b5;
+  --color-accent-foreground: #d8e2ee;
+  --color-destructive: #ef6f6f;
+  --color-destructive-foreground: #d8e2ee;
+  --color-border: #2e3a4d;
+  --color-input: #2e3a4d;
+  --color-ring: #5fd0a8;
+  --color-radius: 0.5rem;
+}

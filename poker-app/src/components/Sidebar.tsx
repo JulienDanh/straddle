@@ -114,36 +114,39 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
   const handleNavigate = (page: string) => onNavigate(page)
 
   return (
-    <aside className={`sidebar ${open ? 'open' : ''}`}>
-      <div className="brand">
-        <h1>Poker Study Guide</h1>
-        <div className="sub">{COURSES.length} courses · {COURSES.reduce((n, c) => n + c.groups.reduce((m, g) => m + g.pages.length, 0), 0)} pages</div>
+    <aside
+      className={`w-[260px] flex-shrink-0 bg-dark border-r border-line sticky top-0 h-screen overflow-y-auto py-[18px] [@media(max-width:760px)]:fixed [@media(max-width:760px)]:left-[-270px] [@media(max-width:760px)]:z-30 [@media(max-width:760px)]:transition-all [@media(max-width:760px)]:duration-200 ${open ? '[@media(max-width:760px)]:!left-0' : ''}`}
+    >
+      <div className="px-[18px] pb-3.5 border-b border-line mb-2.5">
+        <h1 className="text-[15px] tracking-wide">Poker Study Guide</h1>
+        <div className="text-[11px] text-muted mt-0.5">{COURSES.length} courses · {COURSES.reduce((n, c) => n + c.groups.reduce((m, g) => m + g.pages.length, 0), 0)} pages</div>
       </div>
       {COURSES.map((course) => {
         const expanded = isExpanded(course.id)
         const isActiveCourse = course.id === activeCourse
         return (
-          <div key={course.id} className={`course ${expanded ? 'expanded' : ''} ${isActiveCourse ? 'active-course' : ''}`}>
+          <div key={course.id} className="border-b border-line">
             <div
-              className="course-header"
+              className="flex items-center gap-2 px-[18px] py-3 cursor-pointer select-none transition-colors hover:bg-panel2"
               onClick={() => toggleCourse(course.id)}
             >
-              <span className={`chevron ${expanded ? 'open' : ''}`}>›</span>
-              <span className="course-label">{course.label}</span>
-              <span className="course-count">{course.groups.reduce((n, g) => n + g.pages.length, 0)}</span>
+              <span className={`inline-block text-sm w-3.5 text-center transition-transform duration-200 ${expanded ? 'rotate-90 text-accent' : 'rotate-0 text-muted'}`}>›</span>
+              <span className={`flex-1 text-[13px] font-semibold tracking-tight ${isActiveCourse ? 'text-accent' : 'text-txt'}`}>{course.label}</span>
+              <span className="text-[10px] text-muted bg-dark border border-line rounded-full px-1.5 py-px">{course.groups.reduce((n, g) => n + g.pages.length, 0)}</span>
             </div>
             {expanded && (
-              <div className="course-body">
+              <div className="py-0.5 pb-2.5">
                 {course.groups.map((group) => (
-                  <div key={group.label} className="nav-group">
-                    <div className="nav-label">{group.label}</div>
+                  <div key={group.label} className="px-2.5 my-2.5">
+                    <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">{group.label}</div>
                     {group.pages.map((p) => (
                       <div
                         key={p.id}
-                        className={`nav-item ${activePage === p.id ? 'active' : ''}`}
+                        className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === p.id ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
                         onClick={() => handleNavigate(p.id)}
                       >
-                        <span className="num">{p.num}</span> {p.label}
+                        <span className={`text-[10px] w-5 text-center bg-dark border rounded px-0 py-px ${activePage === p.id ? 'text-accent border-accent' : 'text-muted border-line'}`}>{p.num}</span>
+                        {p.label}
                       </div>
                     ))}
                   </div>
@@ -153,19 +156,19 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
           </div>
         )
       })}
-      <div className="nav-group tools-group">
-        <div className="nav-label">Tools</div>
+      <div className="px-2.5 mt-4 border-t border-line pt-3">
+        <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         <div
-          className={`nav-item ${activePage === 'rangeviewer' ? 'active' : ''}`}
+          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'rangeviewer' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
           onClick={() => handleNavigate('rangeviewer')}
         >
-          <span className="num">·</span> Range Viewer
+          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Range Viewer
         </div>
         <div
-          className={`nav-item ${activePage === 'sandbox' ? 'active' : ''}`}
+          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'sandbox' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
           onClick={() => handleNavigate('sandbox')}
         >
-          <span className="num">·</span> Design System
+          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Design System
         </div>
       </div>
     </aside>

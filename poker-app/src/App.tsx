@@ -103,17 +103,23 @@ function App() {
   const PageComponent = PAGES[page]
 
   return (
-    <div className="layout">
-      <div className={`sidebar-backdrop ${sidebarOpen ? 'show' : ''}`} onClick={() => setSidebarOpen(false)} />
+    <div className="flex min-h-screen">
+      <div
+        className={`fixed inset-0 z-20 bg-black/50 ${sidebarOpen ? 'block' : 'hidden'}`}
+        onClick={() => setSidebarOpen(false)}
+      />
       <Sidebar activePage={page} onNavigate={navigate} open={sidebarOpen} />
-      <main className="main">
-        <div className="header-bar">
-          <button className="menu-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>≡</button>
-          <div className="crumbs" dangerouslySetInnerHTML={{ __html: navTitles[page] || '' }} />
-          <span className="pill">React + Vite · 2 courses</span>
+      <main className="flex-1 px-8 pt-6 pb-20 min-w-0 max-w-[1000px] mx-auto">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <button
+            className="hidden border border-line bg-panel text-txt px-2.5 py-1.5 rounded-lg text-lg cursor-pointer [@media(max-width:760px)]:block"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+          >≡</button>
+          <div className="text-xs text-muted" dangerouslySetInnerHTML={{ __html: navTitles[page] || '' }} />
+          <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">React + Vite · 2 courses</span>
         </div>
         <PageComponent />
-        <footer>No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
+        <footer className="text-center text-muted text-xs mt-8">No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
       </main>
     </div>
   )
