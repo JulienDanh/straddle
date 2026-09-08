@@ -190,20 +190,20 @@ export function Flashcards({ cards }: { cards: [string, string][] }) {
   if (!cards.length) return null
 
   return (
-    <div className="cards-grid">
+    <div className="grid gap-3 [grid-template-columns:repeat(auto-fill,minmax(240px,1fr))]">
       {cards.map((card: [string, string], i: number) => (
         <div
           key={i}
-          className={`flip ${flipped.has(i) ? 'flipped' : ''}`}
+          className="h-[150px] cursor-pointer [perspective:1000px]"
           onClick={() => toggle(i)}
         >
-          <div className="flip-inner">
-            <div className="face">
-              <div className="q">{card[0]}</div>
-              <div className="hint">tap to reveal</div>
+          <div className={`relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] ${flipped.has(i) ? '[transform:rotateY(180deg)]' : ''}`}>
+            <div className="absolute inset-0 [backface-visibility:hidden] rounded-xl border border-line p-3.5 flex flex-col justify-center items-center text-center bg-panel2">
+              <div className="font-semibold text-[13.5px]">{card[0]}</div>
+              <div className="text-[11px] text-muted mt-2">tap to reveal</div>
             </div>
-            <div className="face back">
-              <div className="a">{card[1]}</div>
+            <div className="absolute inset-0 [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-xl border border-line p-3.5 flex flex-col justify-center items-center text-center bg-dark">
+              <div className="text-[12.5px] text-accent">{card[1]}</div>
             </div>
           </div>
         </div>
@@ -227,44 +227,43 @@ export function Quiz({ questions }: { questions: QuizQuestion[] }) {
 
   const reset = () => setAnswers(questions.map(() => null))
 
+  const btnClass = (answered: boolean, isPicked: boolean, isAnswer: boolean) => {
+    let cls = 'bg-panel border border-line text-txt px-4 py-2 rounded-lg cursor-pointer text-sm transition-colors hover:border-accent2'
+    if (answered) {
+      if (isAnswer) cls = 'border-good bg-[#16352c] text-good cursor-default opacity-70'
+      else if (isPicked) cls = 'border-bad bg-[#3a1f24] text-bad cursor-default opacity-70'
+      else cls = 'border-line bg-panel text-txt cursor-default opacity-70'
+    }
+    return cls
+  }
+
   return (
     <>
-      <div className="progress">
-        <div style={{ width: `${(score / questions.length) * 100}%` }} />
+      <div className="h-1.5 bg-panel2 rounded-sm overflow-hidden my-1.5 mb-4">
+        <div className="h-full bg-accent transition-all duration-300" style={{ width: `${(score / questions.length) * 100}%` }} />
       </div>
-      <div className="score">
-        Score {score} / {questions.length}
-      </div>
+      <div className="text-[13px] text-muted text-right">Score {score} / {questions.length}</div>
       {questions.map((item, qIdx) => {
         const picked = answers[qIdx]
         const answered = picked !== null
         const isCorrect = answered && picked === item.a
         return (
-          <div key={qIdx} className="quiz-card">
-            <div className="quiz-q">
-              Q{qIdx + 1}/{questions.length}. {item.q}
-            </div>
-            <div className="choices">
-              {item.o.map((opt, i) => {
-                let cls = ''
-                if (answered) {
-                  if (i === item.a) cls = 'correct'
-                  else if (i === picked) cls = 'wrong'
-                }
-                return (
-                  <button
-                    key={i}
-                    className={`btn ${cls}`}
-                    disabled={answered}
-                    onClick={() => handlePick(qIdx, i)}
-                  >
-                    {opt}
-                  </button>
-                )
-              })}
+          <div key={qIdx} className="bg-panel2 border border-line rounded-xl p-4 my-3.5">
+            <div className="text-[13px] text-muted mb-2">Q{qIdx + 1}/{questions.length}. {item.q}</div>
+            <div className="flex gap-2.5 flex-wrap mt-3">
+              {item.o.map((opt, i) => (
+                <button
+                  key={i}
+                  className={btnClass(answered, i === picked, i === item.a)}
+                  disabled={answered}
+                  onClick={() => handlePick(qIdx, i)}
+                >
+                  {opt}
+                </button>
+              ))}
             </div>
             {answered && (
-              <div className="explanation" style={{ display: 'block' }}>
+              <div className="mt-3 p-3 bg-dark rounded-lg border border-line text-[13px]">
                 <strong>{isCorrect ? 'Correct.' : 'Not quite.'}</strong>{' '}
                 {item.why}
               </div>
@@ -273,18 +272,16 @@ export function Quiz({ questions }: { questions: QuizQuestion[] }) {
         )
       })}
       {allAnswered && (
-        <div className="quiz-card" style={{ textAlign: 'center' }}>
-          <h3 style={{ border: 'none', padding: 0 }}>
-            Done — {score} / {questions.length}
-          </h3>
-          <p className="muted">
+        <div className="bg-panel2 border border-line rounded-xl p-4 my-3.5 text-center">
+          <h3 className="text-lg font-bold mb-1">Done — {score} / {questions.length}</h3>
+          <p className="text-muted text-[13px]">
             {score === questions.length
               ? 'Clean run.'
               : score >= questions.length * 0.7
               ? 'Solid. Review the flashcards.'
               : 'Re-read this system and retry.'}
           </p>
-          <button className="btn" onClick={reset}>Retake</button>
+          <button className="mt-3 bg-panel border border-line text-txt px-4 py-2 rounded-lg cursor-pointer text-sm transition-colors hover:border-accent2" onClick={reset}>Retake</button>
         </div>
       )}
     </>

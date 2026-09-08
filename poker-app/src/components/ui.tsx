@@ -80,30 +80,41 @@ export function DecisionMatrix({ columns, rows, intro }: { columns: string[]; ro
   const cols = ['1.2fr', ...columns.map(() => '1fr')].join(' ')
   return (
     <>
-      {intro && <p className="muted">{intro}</p>}
-      <div className="dmatrix" style={{ gridTemplateColumns: cols }}>
+      {intro && <p className="text-muted">{intro}</p>}
+      <div className="grid gap-1.5 my-4 text-[13px]" style={{ gridTemplateColumns: cols }}>
         <div></div>
         {columns.map((c, i) => (
-          <div key={i} className="dmatrix-head">{c}</div>
+          <div key={i} className="text-[10px] uppercase tracking-widest text-muted px-2 py-1">{c}</div>
         ))}
         {rows.map((row, i) => (
-          <Row key={i} row={row} />
+          <DmRowView key={i} row={row} />
         ))}
       </div>
     </>
   )
 }
 
-function Row({ row }: { row: DmRow }) {
+const DM_CELL_STYLES: Record<CellColor, string> = {
+  green: 'border-good bg-[rgba(95,208,168,0.1)]',
+  orange: 'border-warn bg-[rgba(240,184,110,0.08)]',
+  red: 'border-bad bg-[rgba(239,111,111,0.08)]',
+}
+const DM_ACTION_STYLES: Record<CellColor, string> = {
+  green: 'text-good',
+  orange: 'text-warn',
+  red: 'text-bad',
+}
+
+function DmRowView({ row }: { row: DmRow }) {
   return (
     <>
-      <div className="dm-label">
-        {row.label} {row.labelSub && <small>({row.labelSub})</small>}
+      <div className="font-bold text-sm mb-0.5">
+        {row.label} {row.labelSub && <small className="font-normal text-[11px] text-muted">({row.labelSub})</small>}
       </div>
       {row.cells.map((cell, i) => (
-        <div key={i} className={`dm-cell ${cell.color}`}>
-          <div className={`dm-action ${cell.color}`}>{cell.action}</div>
-          {cell.sub && <div className="dm-sub">{cell.sub}</div>}
+        <div key={i} className={`rounded-[10px] px-3.5 py-3 border flex flex-col gap-1.5 transition-transform min-h-16 ${DM_CELL_STYLES[cell.color]}`}>
+          <div className={`font-bold text-sm ${DM_ACTION_STYLES[cell.color]}`}>{cell.action}</div>
+          {cell.sub && <div className="text-[11.5px] text-muted leading-relaxed">{cell.sub}</div>}
         </div>
       ))}
     </>
@@ -123,55 +134,77 @@ export interface HandExample {
   solver: ReactNode
 }
 
+const VERDICT_STYLES: Record<string, string> = {
+  agree: 'text-good bg-[rgba(95,208,168,0.12)] border-good',
+  mixed: 'text-warn bg-[rgba(240,184,110,0.12)] border-warn',
+  mistake: 'text-bad bg-[rgba(239,111,111,0.12)] border-bad',
+}
+
 export function HandExampleCard({ ex }: { ex: HandExample }) {
   return (
-    <div className="ex-card">
-      <div className="ex-left">
+    <div className="bg-panel2 border border-line rounded-xl p-4 my-3 grid [grid-template-columns:auto_1fr] gap-3.5 items-start transition-shadow hover:shadow-lg [@media(max-width:560px)]:[grid-template-columns:1fr]">
+      <div className="flex flex-col gap-2 min-w-0">
         <Tag variant={ex.tagVariant}>{ex.tag}</Tag>
-        <div className="ex-board">{ex.board}</div>
-        {ex.holeCards && <div className="ex-hole">{ex.holeCards}</div>}
-        <div className="ex-desc">{ex.desc}</div>
+        <div className="inline-flex gap-0.5 font-bold text-[15px] bg-dark border border-line px-3 py-2 rounded-[10px] self-start whitespace-nowrap">{ex.board}</div>
+        {ex.holeCards && <div className="inline-flex gap-0.5 font-bold text-sm bg-dark border border-line px-2.5 py-1.5 rounded-[10px] self-start whitespace-nowrap"><span className="text-[10px] font-normal text-muted self-center">hole: </span>{ex.holeCards}</div>}
+        <div className="text-[11px] text-muted leading-tight px-0.5">{ex.desc}</div>
       </div>
-      <div className="ex-right">
-        <span className={`ex-verdict ${ex.verdict}`}>{ex.verdictText}</span>
-        <p className="ex-sys"><strong>System:</strong> {ex.system}</p>
-        <p className="ex-solver"><strong>Solver:</strong> {ex.solver}</p>
+      <div className="flex flex-col gap-1.5 min-w-0">
+        <span className={`inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full self-start whitespace-nowrap border ${VERDICT_STYLES[ex.verdict]}`}>{ex.verdictText}</span>
+        <p className="text-txt text-[13px]"><strong className="text-accent2">System:</strong> {ex.system}</p>
+        <p className="text-muted text-[13px]"><strong className="text-accent2">Solver:</strong> {ex.solver}</p>
       </div>
     </div>
   )
 }
 
 // ---- Card suit components ----
-export function S({ children }: { children: ReactNode }) { return <span className="s">{children}</span> }
-export function H({ children }: { children: ReactNode }) { return <span className="h">{children}</span> }
-export function D({ children }: { children: ReactNode }) { return <span className="d">{children}</span> }
-export function C({ children }: { children: ReactNode }) { return <span className="c">{children}</span> }
+export function S({ children }: { children: ReactNode }) { return <span className="text-spade">{children}</span> }
+export function H({ children }: { children: ReactNode }) { return <span className="text-heart">{children}</span> }
+export function D({ children }: { children: ReactNode }) { return <span className="text-diamond">{children}</span> }
+export function C({ children }: { children: ReactNode }) { return <span className="text-club">{children}</span> }
 
 // ---- Playing card ----
-// Displays a single playing card as a rounded card face with rank + suit.
-// Input: "As", "Kd", "Th", "2c", etc. Case-insensitive.
 const SUIT_SYMBOL: Record<string, string> = { s: '♠', h: '♥', d: '♦', c: '♣' }
-const SUIT_CLASS: Record<string, string> = { s: 's', h: 'h', d: 'd', c: 'c' }
+const SUIT_TEXT: Record<string, string> = {
+  s: 'text-[#1a1a1a]',
+  h: 'text-[#d33b4a]',
+  d: 'text-[#2a7fd4]',
+  c: 'text-[#2f8f5b]',
+}
+const PCARD_SIZE: Record<string, string> = {
+  sm: 'w-[30px] h-[42px]',
+  md: 'w-[40px] h-[56px]',
+  lg: 'w-[52px] h-[72px]',
+}
+const PCARD_R_SIZE: Record<string, string> = {
+  sm: 'text-[14px]',
+  md: 'text-[18px]',
+  lg: 'text-[24px]',
+}
+const PCARD_S_SIZE: Record<string, string> = {
+  sm: 'text-[13px]',
+  md: 'text-[16px]',
+  lg: 'text-[20px]',
+}
 
 export function PlayingCard({ card, size = 'md' }: { card: string; size?: 'sm' | 'md' | 'lg' }) {
   const r = card[0]?.toUpperCase() ?? ''
   const s = card[1]?.toLowerCase() ?? ''
   const suit = SUIT_SYMBOL[s] ?? ''
-  const cls = SUIT_CLASS[s] ?? ''
   return (
-    <span className={`pcard ${size} ${cls}`}>
-      <span className="pcard-r">{r}</span>
-      <span className="pcard-s">{suit}</span>
+    <span className={`inline-flex flex-col items-center justify-center bg-[#f4f1ea] border border-[#888] rounded-[5px] leading-none font-bold align-middle ${PCARD_SIZE[size]} ${SUIT_TEXT[s] ?? ''}`}>
+      <span className={PCARD_R_SIZE[size]}>{r}</span>
+      <span className={PCARD_S_SIZE[size]}>{suit}</span>
     </span>
   )
 }
 
 // ---- Hole cards (pair of playing cards) ----
-// Displays two cards side by side. Input: "AsKd", "AhKh", "7c2d", etc.
 export function HoleCards({ cards, size = 'md' }: { cards: string; size?: 'sm' | 'md' | 'lg' }) {
-  if (cards.length < 4) return <span className="holecards" />
+  if (cards.length < 4) return <span className="inline-flex" />
   return (
-    <span className="holecards">
+    <span className="inline-flex gap-1 align-middle">
       <PlayingCard card={cards.slice(0, 2)} size={size} />
       <PlayingCard card={cards.slice(2, 4)} size={size} />
     </span>
