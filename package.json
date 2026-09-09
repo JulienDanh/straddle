@@ -13,5 +13,11 @@
     "storybook": "npm run storybook --workspace @poker/design-system",
     "build-storybook": "npm run build-storybook --workspace @poker/design-system",
     "build-all": "npm run build-storybook --workspace @poker/design-system && npm run build --workspace @poker/study-app"
+  },
+  "dependencies": {
+    "dagre": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/dagre": "^0.7.54"
   }
 }

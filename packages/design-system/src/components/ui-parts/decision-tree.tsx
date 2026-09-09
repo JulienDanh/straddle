@@ -1,12 +1,16 @@
-import { useState, type ReactNode } from 'react'
+import { useState, useMemo, type ReactNode } from 'react'
 import ReactFlow, {
   type Node,
   type Edge,
   type NodeTypes,
   Background,
+  BackgroundVariant,
+  MiniMap,
   Handle,
   Position,
+  MarkerType,
 } from 'reactflow'
+import dagre from 'dagre'
 import 'reactflow/dist/style.css'
 
 export interface DecisionNode {
@@ -23,33 +27,33 @@ export interface DecisionLeaf {
   boards?: ReactNode[]
 }
 
-const LEAF_BORDER: Record<string, string> = {
-  bet: '#ef6f6f', check: '#5fd0a8', fold: '#2e3a4d', call: '#6aa6ff', raise: '#ef6f6f', allIn: '#c83838',
+const LEAF_COLOR: Record<string, string> = {
+  bet: '#ef6f6f', check: '#5fd0a8', fold: '#8499b5', call: '#6aa6ff', raise: '#ef6f6f', allIn: '#c83838',
 }
 
-// --- Custom node components ---
+// --- Custom nodes ---
 
 function QuestionNode({ data }: { data: { question: string; hint?: string } }) {
   return (
-    <div className="bg-panel border border-[#6aa6ff]/40 rounded-lg px-3 py-2 text-center min-w-[150px] max-w-[220px] shadow-md">
-      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d' }} />
+    <div className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 text-center min-w-[160px] max-w-[220px] shadow-lg" style={{ border: '1.5px solid rgba(106,166,255,0.4)' }}>
+      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
       <span className="text-[13px] font-semibold text-[#d8e2ee]">{data.question}</span>
-      {data.hint && <span className="text-[11px] text-[#8499b5] block mt-0.5 leading-tight">{data.hint}</span>}
-      <Handle type="source" id="yes" position={Position.Right} style={{ background: '#5fd0a8', right: '-4px' }} />
-      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ef6f6f', right: '-4px', top: '70%' }} />
+      {data.hint && <span className="text-[11px] text-[#8499b5] block mt-1 leading-tight">{data.hint}</span>}
+      <Handle type="source" id="yes" position={Position.Right} style={{ background: '#5fd0a8', width: 8, height: 8, border: 'none', top: '35%' }} />
+      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ef6f6f', width: 8, height: 8, border: 'none', top: '65%' }} />
     </div>
   )
 }
 
 function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant: string; boards?: ReactNode[] } }) {
   const [open, setOpen] = useState(false)
-  const borderColor = LEAF_BORDER[data.variant] || '#2e3a4d'
+  const color = LEAF_COLOR[data.variant] || '#8499b5'
   return (
     <div
-      className="bg-panel rounded-lg px-3 py-2 min-w-[170px] max-w-[220px] shadow-md"
-      style={{ borderLeft: `3px solid ${borderColor}`, border: `1px solid #2e3a4d`, borderLeftWidth: '3px', borderLeftColor: borderColor }}
+      className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
+      style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}` }}
     >
-      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d' }} />
+      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
       <div className="flex items-center gap-2">
         {data.action}
       </div>
@@ -70,76 +74,91 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
   )
 }
 
-const nodeTypes: NodeTypes = {
-  question: QuestionNode,
-  leaf: LeafNode,
+const nodeTypes: NodeTypes = { question: QuestionNode, leaf: LeafNode }
+
+// --- Tree → flat nodes, then dagre auto-layout ---
+
+const isLeaf = (x: any): x is DecisionLeaf => 'action' in x
+
+let idCounter = 0
+
+function flatten(node: DecisionNode | DecisionLeaf, parentId?: string, branch?: 'yes' | 'no'): { id: string; node: DecisionNode | DecisionLeaf; parentId?: string; branch?: 'yes' | 'no' }[] {
+  const id = `n${idCounter++}`
+  const result: { id: string; node: DecisionNode | DecisionLeaf; parentId?: string; branch?: 'yes' | 'no' }[] = [{ id, node, parentId, branch }]
+  if (!isLeaf(node)) {
+    if (node.yes) result.push(...flatten(node.yes, id, 'yes'))
+    if (node.no) result.push(...flatten(node.no, id, 'no'))
+  }
+  return result
 }
 
-// --- Tree → nodes/edges conversion ---
+function layoutTree(root: DecisionNode): { nodes: Node[]; edges: Edge[] } {
+  idCounter = 0
+  const flat = flatten(root)
 
-let nodeId = 0
+  const g = new dagre.graphlib.Graph()
+  g.setGraph({ rankdir: 'LR', ranksep: 80, nodesep: 50, marginx: 20, marginy: 20 })
+  g.setDefaultEdgeLabel(() => ({}))
 
-function buildGraph(node: DecisionNode | DecisionLeaf, x: number, y: number, parentId?: string, branch?: 'yes' | 'no'): { nodes: Node[]; edges: Edge[] } {
-  const id = `n${nodeId++}`
-  const nodes: Node[] = []
-  const edges: Edge[] = []
-
-  const isLeaf = (n: any): n is DecisionLeaf => 'action' in n
-
-  if (isLeaf(node)) {
-    nodes.push({
-      id,
-      type: 'leaf',
-      position: { x, y },
-      data: { action: node.action, reason: node.reason, variant: node.actionVariant, boards: node.boards },
-    })
-  } else {
-    nodes.push({
-      id,
-      type: 'question',
-      position: { x, y },
-      data: { question: node.question, hint: node.hint },
-    })
+  // Add nodes with estimated sizes
+  for (const f of flat) {
+    const w = isLeaf(f.node) ? 190 : 200
+    const h = isLeaf(f.node) ? (f.node.boards?.length ? 70 : 50) : (f.node.hint ? 60 : 40)
+    g.setNode(f.id, { width: w, height: h })
   }
 
-  if (parentId && branch) {
-    edges.push({
-      id: `e${parentId}-${id}`,
-      source: parentId,
-      target: id,
-      sourceHandle: branch,
-      label: branch === 'yes' ? 'YES' : 'NO',
-      labelStyle: { fontSize: 10, fontWeight: 700, fill: branch === 'yes' ? '#5fd0a8' : '#ef6f6f' },
-      labelBgStyle: { fill: '#1a2230' },
-      style: { stroke: branch === 'yes' ? '#5fd0a8' : '#ef6f6f', strokeWidth: 1.5 },
-      type: 'smoothstep',
-    })
+  // Add edges
+  for (const f of flat) {
+    if (f.parentId && f.branch) {
+      g.setEdge(f.parentId, f.id)
+    }
   }
 
-  if (!isLeaf(node)) {
-    const childX = x + 300
-    const offsetY = 140
-    const yesResult = node.yes ? buildGraph(node.yes, childX, y - offsetY, id, 'yes') : { nodes: [], edges: [] }
-    const noResult = node.no ? buildGraph(node.no, childX, y + offsetY, id, 'no') : { nodes: [], edges: [] }
-    nodes.push(...yesResult.nodes, ...noResult.nodes)
-    edges.push(...yesResult.edges, ...noResult.edges)
-  }
+  dagre.layout(g)
+
+  const nodes: Node[] = flat.map(f => {
+    const pos = g.node(f.id)
+    const x = isLeaf(f.node)
+      ? {
+          type: 'leaf' as const,
+          data: { action: f.node.action, reason: f.node.reason, variant: f.node.actionVariant, boards: f.node.boards },
+        }
+      : {
+          type: 'question' as const,
+          data: { question: (f.node as DecisionNode).question, hint: (f.node as DecisionNode).hint },
+        }
+    return { id: f.id, position: { x: pos.x - pos.width / 2, y: pos.y - pos.height / 2 }, ...x }
+  })
+
+  const edges: Edge[] = flat.filter(f => f.parentId && f.branch).map(f => ({
+    id: `e${f.parentId}-${f.id}`,
+    source: f.parentId!,
+    target: f.id,
+    sourceHandle: f.branch,
+    label: f.branch === 'yes' ? 'YES' : 'NO',
+    labelStyle: { fontSize: 11, fontWeight: 700, fill: f.branch === 'yes' ? '#5fd0a8' : '#ef6f6f' },
+    labelBgStyle: { fill: '#0f1419' },
+    labelBgPadding: [4, 2] as [number, number],
+    labelBgBorderRadius: 4,
+    style: { stroke: f.branch === 'yes' ? '#5fd0a8' : '#ef6f6f', strokeWidth: 2 },
+    type: 'smoothstep',
+    markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: f.branch === 'yes' ? '#5fd0a8' : '#ef6f6f' },
+  }))
 
   return { nodes, edges }
 }
 
 export function DecisionTree({ root }: { root: DecisionNode }) {
-  nodeId = 0
-  const { nodes, edges } = buildGraph(root, 400, 0)
+  const { nodes, edges } = useMemo(() => layoutTree(root), [root])
 
   return (
-    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden relative" style={{ height: '500px' }}>
+    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden relative bg-[#0f1419]" style={{ height: '500px' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2, minZoom: 0.5, maxZoom: 1.2 }}
+        fitViewOptions={{ padding: 0.25 }}
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
@@ -147,11 +166,22 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
         zoomOnScroll={false}
         zoomOnDoubleClick={false}
         zoomOnPinch={false}
-        minZoom={0.5}
+        minZoom={0.4}
         maxZoom={1.2}
         proOptions={{ hideAttribution: true }}
       >
-        <Background color="#2e3a4d" gap={16} size={1} />
+        <Background variant={BackgroundVariant.Dots} color="#2e3a4d" gap={20} size={2} />
+        <MiniMap
+          nodeColor={(n) => {
+            if (n.type === 'question') return '#6aa6ff'
+            const v = (n.data as any)?.variant
+            return LEAF_COLOR[v] || '#8499b5'
+          }}
+          maskColor="rgba(15,20,25,0.7)"
+          style={{ background: '#0f1419', border: '1px solid #2e3a4d' }}
+          pannable
+          zoomable
+        />
       </ReactFlow>
     </div>
   )
