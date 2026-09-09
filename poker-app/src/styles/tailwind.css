@@ -317,6 +317,24 @@
 .rv-grid-sm .rv-rowhead {
   font-size: 8px;
 }
+/* Medium grid — cells with hand labels for range previews */
+.rv-grid-md th,
+.rv-grid-md td {
+  width: 28px;
+  height: 22px;
+  min-width: 28px;
+  font-size: 8px;
+  padding: 1px 0;
+  border-width: 1px;
+  text-align: center;
+}
+.rv-grid-md thead th {
+  font-size: 9px;
+  height: 16px;
+}
+.rv-grid-md .rv-rowhead {
+  font-size: 9px;
+}
 .rv-compact {
   display: inline-block;
   overflow-x: auto;

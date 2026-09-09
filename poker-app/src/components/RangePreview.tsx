@@ -23,7 +23,7 @@ export function RangePreview({ title, range, color = '#6aa6ff' }: RangePreviewPr
     <div className="inline-block">
       {title && <div className="text-xs text-muted mb-1.5 font-medium">{title}</div>}
       <div className="rv-grid-wrap rv-compact">
-        <table className="rv-grid rv-grid-sm">
+        <table className="rv-grid rv-grid-md">
           <thead><tr><th></th>{RANKS.map(r => <th key={r}>{r}</th>)}</tr></thead>
           <tbody>
             {HAND_GRID.map((rowCells, ri) => (
@@ -34,9 +34,11 @@ export function RangePreview({ title, range, color = '#6aa6ff' }: RangePreviewPr
                   return (
                     <td key={ci}
                       className={`rv-cell ${inRange ? 'in-range' : ''}`}
-                      style={{ background: inRange ? color : undefined }}
+                      style={{ background: inRange ? color : undefined, color: inRange ? '#0c1117' : undefined, fontWeight: inRange ? 700 : 400 }}
                       title={`${cell.hand}: ${inRange ? 'in range' : 'fold'}`}
-                    />
+                    >
+                      {cell.hand}
+                    </td>
                   )
                 })}
               </tr>
