@@ -1,4 +1,4 @@
-import { useState, useMemo, type ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 import ReactFlow, {
   type Node,
   type Edge,
@@ -45,37 +45,17 @@ function QuestionNode({ data }: { data: { question: string; hint?: string } }) {
 }
 
 function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant: string; boards?: ReactNode[] } }) {
-  const [open, setOpen] = useState(false)
   const color = LEAF_COLOR[data.variant] || '#8499b5'
   return (
     <div
-      className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg relative"
-      style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}`, pointerEvents: 'auto' }}
+      className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
+      style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}` }}
     >
       <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
       <div className="flex items-center gap-2">
         {data.action}
       </div>
       <span className="text-[12px] font-medium text-[#d8e2ee] leading-snug block mt-0.5">{data.reason}</span>
-      {data.boards && data.boards.length > 0 && (
-        <button
-          onClick={() => setOpen(!open)}
-          className="text-[10px] text-[#8499b5] hover:text-[#d8e2ee] cursor-pointer mt-1.5 nodrag"
-          style={{ pointerEvents: 'auto' }}
-        >
-          {open ? '− Hide' : `+ ${data.boards.length} examples`}
-        </button>
-      )}
-      {open && data.boards && (
-        <div
-          className="absolute left-full top-0 ml-3 z-50 bg-[#1a2230] border border-[#2e3a4d] rounded-lg p-2.5 shadow-2xl nodrag"
-          style={{ pointerEvents: 'auto', minWidth: '200px' }}
-        >
-          <div className="flex flex-wrap gap-1.5">
-            {data.boards.map((b, i) => <div key={i}>{b}</div>)}
-          </div>
-        </div>
-      )}
     </div>
   )
 }
@@ -109,7 +89,7 @@ function layoutTree(root: DecisionNode): { nodes: Node[]; edges: Edge[] } {
   // Add nodes with estimated sizes
   for (const f of flat) {
     const w = isLeaf(f.node) ? 190 : 200
-    const h = isLeaf(f.node) ? (f.node.boards?.length ? 70 : 50) : (f.node.hint ? 60 : 40)
+    const h = isLeaf(f.node) ? 50 : (f.node.hint ? 60 : 40)
     g.setNode(f.id, { width: w, height: h })
   }
 
