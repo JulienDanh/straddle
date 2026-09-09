@@ -4,7 +4,6 @@ import ReactFlow, {
   type Edge,
   type NodeTypes,
   Background,
-  Controls,
   Handle,
   Position,
 } from 'reactflow'
@@ -134,24 +133,25 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
   const { nodes, edges } = buildGraph(root, 400, 0)
 
   return (
-    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden" style={{ height: '400px' }}>
+    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden relative" style={{ height: '500px' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.15 }}
+        fitViewOptions={{ padding: 0.2, minZoom: 0.5, maxZoom: 1.2 }}
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
         panOnDrag
-        zoomOnScroll
-        minZoom={0.3}
-        maxZoom={1.5}
+        zoomOnScroll={false}
+        zoomOnDoubleClick={false}
+        zoomOnPinch={false}
+        minZoom={0.5}
+        maxZoom={1.2}
         proOptions={{ hideAttribution: true }}
       >
         <Background color="#2e3a4d" gap={16} size={1} />
-        <Controls showInteractive={false} className="!border-[#2e3a4d] !bg-[#1a2230]" />
       </ReactFlow>
     </div>
   )
