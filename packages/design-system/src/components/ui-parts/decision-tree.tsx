@@ -32,11 +32,11 @@ const LEAF_BORDER: Record<string, string> = {
 function QuestionNode({ data }: { data: { question: string; hint?: string } }) {
   return (
     <div className="bg-panel border border-[#6aa6ff]/40 rounded-lg px-3 py-2 text-center min-w-[150px] max-w-[220px] shadow-md">
-      <Handle type="target" position={Position.Top} style={{ background: '#2e3a4d' }} />
+      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d' }} />
       <span className="text-[13px] font-semibold text-[#d8e2ee]">{data.question}</span>
       {data.hint && <span className="text-[11px] text-[#8499b5] block mt-0.5 leading-tight">{data.hint}</span>}
-      <Handle type="source" id="yes" position={Position.Left} style={{ background: '#5fd0a8', left: '-4px' }} />
-      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ef6f6f', right: '-4px' }} />
+      <Handle type="source" id="yes" position={Position.Right} style={{ background: '#5fd0a8', right: '-4px' }} />
+      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ef6f6f', right: '-4px', top: '70%' }} />
     </div>
   )
 }
@@ -49,7 +49,7 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
       className="bg-panel rounded-lg px-3 py-2 min-w-[170px] max-w-[220px] shadow-md"
       style={{ borderLeft: `3px solid ${borderColor}`, border: `1px solid #2e3a4d`, borderLeftWidth: '3px', borderLeftColor: borderColor }}
     >
-      <Handle type="target" position={Position.Top} style={{ background: '#2e3a4d' }} />
+      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d' }} />
       <div className="flex items-center gap-2">
         {data.action}
       </div>
@@ -117,10 +117,10 @@ function buildGraph(node: DecisionNode | DecisionLeaf, x: number, y: number, par
   }
 
   if (!isLeaf(node)) {
-    const childY = y + 120
-    const offsetX = 250
-    const yesResult = node.yes ? buildGraph(node.yes, x - offsetX, childY, id, 'yes') : { nodes: [], edges: [] }
-    const noResult = node.no ? buildGraph(node.no, x + offsetX, childY, id, 'no') : { nodes: [], edges: [] }
+    const childX = x + 300
+    const offsetY = 140
+    const yesResult = node.yes ? buildGraph(node.yes, childX, y - offsetY, id, 'yes') : { nodes: [], edges: [] }
+    const noResult = node.no ? buildGraph(node.no, childX, y + offsetY, id, 'no') : { nodes: [], edges: [] }
     nodes.push(...yesResult.nodes, ...noResult.nodes)
     edges.push(...yesResult.edges, ...noResult.edges)
   }
