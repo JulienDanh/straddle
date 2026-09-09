@@ -14,68 +14,67 @@ export interface DecisionLeaf {
   boards?: ReactNode[]
 }
 
-function Leaf({ leaf }: { leaf: DecisionLeaf }) {
-  const [showBoards, setShowBoards] = useState(false)
-  const colorClass = {
-    bet: 'border-bad bg-[rgba(239,111,111,0.06)]',
-    check: 'border-good bg-[rgba(95,208,168,0.06)]',
-    fold: 'border-line bg-[rgba(58,68,83,0.4)]',
-    call: 'border-accent2 bg-[rgba(106,166,255,0.06)]',
-    raise: 'border-bad bg-[rgba(239,111,111,0.06)]',
-    allIn: 'border-bad bg-[rgba(200,56,56,0.08)]',
-  }[leaf.actionVariant]
+const LEAF_STYLES: Record<string, string> = {
+  bet: 'border-l-[3px] border-bad bg-[rgba(239,111,111,0.06)]',
+  check: 'border-l-[3px] border-good bg-[rgba(95,208,168,0.06)]',
+  fold: 'border-l-[3px] border-line bg-[rgba(58,68,83,0.4)]',
+  call: 'border-l-[3px] border-accent2 bg-[rgba(106,166,255,0.06)]',
+  raise: 'border-l-[3px] border-bad bg-[rgba(239,111,111,0.06)]',
+  allIn: 'border-l-[3px] border-bad bg-[rgba(200,56,56,0.1)]',
+}
 
+function Leaf({ leaf }: { leaf: DecisionLeaf }) {
+  const [open, setOpen] = useState(false)
   return (
-    <div className={`border rounded-lg p-3 ${colorClass}`}>
-      <div className="flex items-center gap-2 mb-1">
+    <div className={`border border-line border-l-[3px] rounded-lg p-2.5 ${LEAF_STYLES[leaf.actionVariant]}`}>
+      <div className="flex items-center gap-2">
         {leaf.action}
-        <span className="text-[13px] font-semibold text-txt">{leaf.reason}</span>
+        <span className="text-[12px] font-medium text-txt leading-snug">{leaf.reason}</span>
       </div>
       {leaf.boards && leaf.boards.length > 0 && (
-        <div className="mt-2">
-          <button
-            onClick={() => setShowBoards(!showBoards)}
-            className="text-[11px] text-muted hover:text-txt cursor-pointer"
-          >
-            {showBoards ? 'Hide examples' : `Show ${leaf.boards.length} examples`}
+        <>
+          <button onClick={() => setOpen(!open)} className="text-[10px] text-muted hover:text-txt cursor-pointer mt-1.5">
+            {open ? '− Hide' : `+ ${leaf.boards.length} examples`}
           </button>
-          {showBoards && (
-            <div className="flex flex-wrap gap-2 mt-2">
-              {leaf.boards.map((board, i) => (
-                <div key={i}>{board}</div>
-              ))}
+          {open && (
+            <div className="flex flex-wrap gap-1.5 mt-1.5">
+              {leaf.boards.map((b, i) => <div key={i}>{b}</div>)}
             </div>
           )}
-        </div>
+        </>
       )}
     </div>
   )
 }
 
-function TreeNode({ node }: { node: DecisionNode }) {
+const isLeaf = (x: any): x is DecisionLeaf => 'action' in x
+
+function Branch({ node }: { node: DecisionNode }) {
   return (
-    <div className="flex flex-col gap-2">
-      <div className="bg-panel2 border border-line rounded-lg px-3 py-2 text-center">
-        <span className="text-[13px] font-semibold text-txt">{node.question}</span>
-        {node.hint && <span className="text-[11px] text-muted block mt-0.5">{node.hint}</span>}
+    <div className="flex flex-col gap-2.5">
+      {/* Question row: badge + question in one line */}
+      <div className="flex items-start gap-0">
+        <div className="bg-panel border border-accent2/40 rounded-lg px-3 py-2 flex-1">
+          <span className="text-[13px] font-semibold text-txt">{node.question}</span>
+          {node.hint && <span className="text-[11px] text-muted block mt-0.5">{node.hint}</span>}
+        </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-bold text-good bg-[rgba(95,208,168,0.15)] border border-good/30 rounded px-1.5 py-0.5">YES</span>
-          </div>
-          {node.yes && ('question' in node.yes
-            ? <TreeNode node={node.yes as DecisionNode} />
-            : <Leaf leaf={node.yes as DecisionLeaf} />
+      {/* Branches */}
+      <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-3 pl-4 sm:pl-6">
+        {/* YES */}
+        <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
+          <span className="text-[10px] font-bold text-good bg-[rgba(95,208,168,0.12)] border border-good/30 rounded px-1.5 py-px w-fit">YES</span>
+          {node.yes && (isLeaf(node.yes)
+            ? <Leaf leaf={node.yes} />
+            : <Branch node={node.yes} />
           )}
         </div>
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1.5">
-            <span className="text-[11px] font-bold text-bad bg-[rgba(239,111,111,0.15)] border border-bad/30 rounded px-1.5 py-0.5">NO</span>
-          </div>
-          {node.no && ('question' in node.no
-            ? <TreeNode node={node.no as DecisionNode} />
-            : <Leaf leaf={node.no as DecisionLeaf} />
+        {/* NO */}
+        <div className="flex flex-col gap-1.5 flex-1 min-w-[200px]">
+          <span className="text-[10px] font-bold text-bad bg-[rgba(239,111,111,0.12)] border border-bad/30 rounded px-1.5 py-px w-fit">NO</span>
+          {node.no && (isLeaf(node.no)
+            ? <Leaf leaf={node.no} />
+            : <Branch node={node.no} />
           )}
         </div>
       </div>
@@ -85,8 +84,8 @@ function TreeNode({ node }: { node: DecisionNode }) {
 
 export function DecisionTree({ root }: { root: DecisionNode }) {
   return (
-    <div className="my-4">
-      <TreeNode node={root} />
+    <div className="my-4 border border-line rounded-xl p-4 bg-panel/50">
+      <Branch node={root} />
     </div>
   )
 }
