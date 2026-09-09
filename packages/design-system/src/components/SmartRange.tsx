@@ -1,24 +1,26 @@
-// SmartRange — badge that shows the top N% of hands by standard ranking.
+// SmartRange — badge that shows the top N% of hands by ranking.
 //
 // Props:
 //   pct — percentage of hands (0-100), e.g. 18 means top 18% of hands
+//   mode — 'push' (Sklansky-Chubukov, for short-stack) or 'open' (opening equity, for deeper stacks)
 //   label — optional badge label override (defaults to "Range {pct}%")
 //   color — hex color for included hands (default: accent blue)
 
 import { useState, useRef, useEffect } from 'react'
 import { RANKS, HAND_GRID } from './solutionParser'
-import { topRange } from './hand-ranking'
+import { topRange, type RangeMode } from './hand-ranking'
 
 export interface SmartRangeProps {
   pct: number
+  mode?: RangeMode
   label?: string
   color?: string
 }
 
-export function SmartRange({ pct, label, color = '#6aa6ff' }: SmartRangeProps) {
+export function SmartRange({ pct, mode = 'open', label, color = '#6aa6ff' }: SmartRangeProps) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLSpanElement>(null)
-  const handSet = new Set(topRange(pct))
+  const handSet = new Set(topRange(pct, mode))
 
   useEffect(() => {
     if (!open) return

@@ -12,11 +12,11 @@ export function BM2Page() {
 
         <h3>Range visualizations</h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          <SmartRange pct={20} label="BTN 12bb · 20%" color="#ef6f6f" />
-          <SmartRange pct={28} label="BTN 12bb · 28% (chicken)" color="#ef6f6f" />
-          <SmartRange pct={35} label="BTN 33bb · 35%" color="#ef6f6f" />
-          <SmartRange pct={7} label="UTG 16bb · 7%" color="#ef6f6f" />
-          <SmartRange pct={9} label="UTG 29bb · 9%" color="#ef6f6f" />
+          <SmartRange pct={20} mode="push" label="BTN 12bb · 20%" color="#ef6f6f" />
+          <SmartRange pct={28} mode="push" label="BTN 12bb · 28% (chicken)" color="#ef6f6f" />
+          <SmartRange pct={35} mode="open" label="BTN 33bb · 35%" color="#ef6f6f" />
+          <SmartRange pct={7} mode="push" label="UTG 16bb · 7%" color="#ef6f6f" />
+          <SmartRange pct={9} mode="push" label="UTG 29bb · 9%" color="#ef6f6f" />
         </div>
 
         <h3>Your stack vs the big blind × cover ratio</h3>
