@@ -1,5 +1,6 @@
 import { Section, Callout, Action } from '../components/ui'
 import { StrategyQuestions } from '../components/StrategyQuestions'
+import { RangePreview } from '../components/RangePreview'
 
 
 export function BM2Page() {
@@ -8,6 +9,15 @@ export function BM2Page() {
       <Section title="Opening Into Covered Stacks (You Are Covered)">
         <p>A stack (or several) behind covers you. You open much tighter than baseline, with the degree of tightness driven by how much the BB covers you, position of covering stacks, and presence of shorter stacks elsewhere.</p>
         <Callout variant="bad"><strong>Same stack, different range.</strong> 12bb on the button is not static. Into a 53bb BB you open ~20%; into a 16bb BB you open ~28%. The BB's depth, not just yours, drives your range.</Callout>
+
+        <h3>Range visualizations</h3>
+        <div className="flex flex-wrap gap-4 mb-4">
+          <RangePreview title="BTN 12bb · Covered by heaps (53bb BB) · ~20%" range="55+, A2s+, A9o+, ATo+, K9s+, KTo+, Q9s+, QTo+, J9s+, T9s" color="#ef6f6f" />
+          <RangePreview title="BTN 12bb · Game of chicken (16bb BB) · ~28%" range="44+, A2s+, A8o+, ATo+, K8s+, KTo+, Q8s+, QTo+, J8s+, JTo, T8s+, 98s, 87s, 76s, 65s" color="#ef6f6f" />
+          <RangePreview title="BTN 33bb · Covered (53bb BB) · ~35%" range="33+, A2s+, A7o+, ATo+, K6s+, K9o+, Q8s+, Q9o+, J8s+, J9o+, T8s+, T9o, 98s, 87s, 76s, 65s" color="#ef6f6f" />
+          <RangePreview title="UTG 16bb · Covered by most · ~7%" range="77+, AJs+, AQo+, AKs, KQs" color="#ef6f6f" />
+          <RangePreview title="UTG 29bb · Covered by most · ~9%" range="66+, ATs+, AJo+, AQs+, AKo, KQs, KJs" color="#ef6f6f" />
+        </div>
 
         <h3>Your stack vs the big blind × cover ratio</h3>
         <table>
