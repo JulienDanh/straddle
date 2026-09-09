@@ -5,7 +5,6 @@ import ReactFlow, {
   type NodeTypes,
   Background,
   BackgroundVariant,
-  MiniMap,
   Handle,
   Position,
   MarkerType,
@@ -51,7 +50,7 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
   return (
     <div
       className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
-      style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}` }}
+      style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}`, pointerEvents: 'auto' }}
     >
       <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
       <div className="flex items-center gap-2">
@@ -60,7 +59,11 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
       <span className="text-[12px] font-medium text-[#d8e2ee] leading-snug block mt-0.5">{data.reason}</span>
       {data.boards && data.boards.length > 0 && (
         <>
-          <button onClick={() => setOpen(!open)} className="text-[10px] text-[#8499b5] hover:text-[#d8e2ee] cursor-pointer mt-1.5">
+          <button
+            onClick={() => setOpen(!open)}
+            className="text-[10px] text-[#8499b5] hover:text-[#d8e2ee] cursor-pointer mt-1.5 nodrag"
+            style={{ pointerEvents: 'auto' }}
+          >
             {open ? '− Hide' : `+ ${data.boards.length} examples`}
           </button>
           {open && (
@@ -162,26 +165,16 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
-        panOnDrag
+        panOnDrag={false}
         zoomOnScroll={false}
         zoomOnDoubleClick={false}
         zoomOnPinch={false}
-        minZoom={0.4}
-        maxZoom={1.2}
+        preventScrolling={false}
+        minZoom={1}
+        maxZoom={1}
         proOptions={{ hideAttribution: true }}
       >
         <Background variant={BackgroundVariant.Dots} color="#2e3a4d" gap={20} size={2} />
-        <MiniMap
-          nodeColor={(n) => {
-            if (n.type === 'question') return '#6aa6ff'
-            const v = (n.data as any)?.variant
-            return LEAF_COLOR[v] || '#8499b5'
-          }}
-          maskColor="rgba(15,20,25,0.7)"
-          style={{ background: '#0f1419', border: '1px solid #2e3a4d' }}
-          pannable
-          zoomable
-        />
       </ReactFlow>
     </div>
   )
