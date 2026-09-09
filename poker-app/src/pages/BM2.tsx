@@ -1,6 +1,6 @@
 import { Section, Callout, Action } from '../components/ui'
 import { StrategyQuestions } from '../components/StrategyQuestions'
-import { RangeBadge } from '../components/RangePreview'
+import { SmartRange } from '../components/SmartRange'
 
 
 export function BM2Page() {
@@ -12,11 +12,11 @@ export function BM2Page() {
 
         <h3>Range visualizations</h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          <RangeBadge label="BTN 12bb · 20%" range="55+, A2s+, A9o+, ATo+, K9s+, KTo+, Q9s+, QTo+, J9s+, T9s" color="#ef6f6f" />
-          <RangeBadge label="BTN 12bb · 28% (chicken)" range="44+, A2s+, A8o+, ATo+, K8s+, KTo+, Q8s+, QTo+, J8s+, JTo, T8s+, 98s, 87s, 76s, 65s" color="#ef6f6f" />
-          <RangeBadge label="BTN 33bb · 35%" range="33+, A2s+, A7o+, ATo+, K6s+, K9o+, Q8s+, Q9o+, J8s+, J9o+, T8s+, T9o, 98s, 87s, 76s, 65s" color="#ef6f6f" />
-          <RangeBadge label="UTG 16bb · 7%" range="77+, AJs+, AQo+, AKs, KQs" color="#ef6f6f" />
-          <RangeBadge label="UTG 29bb · 9%" range="66+, ATs+, AJo+, AQs+, AKo, KQs, KJs" color="#ef6f6f" />
+          <SmartRange pct={20} label="BTN 12bb · 20%" color="#ef6f6f" />
+          <SmartRange pct={28} label="BTN 12bb · 28% (chicken)" color="#ef6f6f" />
+          <SmartRange pct={35} label="BTN 33bb · 35%" color="#ef6f6f" />
+          <SmartRange pct={7} label="UTG 16bb · 7%" color="#ef6f6f" />
+          <SmartRange pct={9} label="UTG 29bb · 9%" color="#ef6f6f" />
         </div>
 
         <h3>Your stack vs the big blind × cover ratio</h3>

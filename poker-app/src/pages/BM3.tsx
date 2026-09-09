@@ -1,6 +1,6 @@
 import { Section, Callout, Action } from '../components/ui'
 import { StrategyQuestions } from '../components/StrategyQuestions'
-import { RangeBadge } from '../components/RangePreview'
+import { SmartRange } from '../components/SmartRange'
 
 
 export function BM3Page() {
@@ -12,11 +12,11 @@ export function BM3Page() {
 
         <h3>Range visualizations</h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          <RangeBadge label="BTN 125bb · 75%" range="22+, A2s+, A2o+, K2s+, K5o+, Q2s+, Q7o+, J2s+, J7o+, T2s+, T7o+, 92s+, 97o+, 82s+, 87o, 72s+, 76o, 62s+, 65o, 52s+, 54o, 42s+, 43o, 32s" color="#5fd0a8" />
-          <RangeBadge label="BTN 80bb · 68%" range="22+, A2s+, A2o+, K2s+, K7o+, Q4s+, Q8o+, J6s+, J8o+, T6s+, T8o+, 96s+, 98o, 86s+, 87o, 75s+, 76o, 64s+, 65o, 53s+, 54o, 43s" color="#5fd0a8" />
-          <RangeBadge label="UTG 100bb · 35%" range="22+, A2s+, A8o+, ATo+, K8s+, K9o+, KJo+, Q9s+, QJo+, J9s+, JTo, T9s, 98s, 87s, 76s, 65s" color="#5fd0a8" />
-          <RangeBadge label="UTG 58bb · 25%" range="33+, A4s+, A9o+, AJo+, K9s+, KJo+, QTs+, QJo+, JTs, T9s, 98s" color="#5fd0a8" />
-          <RangeBadge label="UTG 65bb · 38%" range="22+, A2s+, A7o+, ATo+, K7s+, K9o+, Q8s+, QTo+, J8s+, JTo, T8s+, 98s, 87s, 76s, 65s, 54s" color="#5fd0a8" />
+          <SmartRange pct={75} label="BTN 125bb · 75%" color="#5fd0a8" />
+          <SmartRange pct={68} label="BTN 80bb · 68%" color="#5fd0a8" />
+          <SmartRange pct={35} label="UTG 100bb · 35%" color="#5fd0a8" />
+          <SmartRange pct={25} label="UTG 58bb · 25%" color="#5fd0a8" />
+          <SmartRange pct={38} label="UTG 65bb · 38%" color="#5fd0a8" />
         </div>
 
         <h3>Your cover ratio × BB depth</h3>

@@ -1,6 +1,6 @@
 import { Section, Callout, Code, Action } from '../components/ui'
 import { StrategyQuestions } from '../components/StrategyQuestions'
-import { RangeBadge } from '../components/RangePreview'
+import { SmartRange } from '../components/SmartRange'
 
 
 export function BM1Page() {
@@ -12,8 +12,8 @@ export function BM1Page() {
 
         <h3>Range visualizations (ICM baselines)</h3>
         <div className="flex flex-wrap gap-2 mb-4">
-          <RangeBadge label="UTG 30bb · 16%" range="55+, A8s+, AJo+, ATo+, KQs, KJs, KJo, QJs, QJo, JTs" color="#6aa6ff" />
-          <RangeBadge label="BTN 40bb · 35%" range="33+, A2s+, A6o+, A9o+, K7s+, K9o+, Q8s+, Q9o+, J8s+, J9o+, T8s+, T9o, 98s, 87s, 76s, 65s, 54s" color="#6aa6ff" />
+          <SmartRange pct={16} label="UTG 30bb · 16%" color="#6aa6ff" />
+          <SmartRange pct={35} label="BTN 40bb · 35%" color="#6aa6ff" />
         </div>
 
         <h3>ChipEV vs ICM-Adjusted</h3>
