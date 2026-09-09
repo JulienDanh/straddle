@@ -1,5 +1,7 @@
 import { RangeGrid } from '../components/RangeGrid'
-import { HoleCards, Action } from '../components/ui'
+import { HoleCards, Action, Board, BoardType, RandomBoard } from '../components/ui'
+import { StrategyQuiz } from '../components/StrategyQuiz'
+import { StrategyQuestions } from '../components/StrategyQuestions'
 import { Button } from '@/components/ui-shadcn/button'
 
 // Sandbox page for testing RangeGrid display with real combo-data strings.
@@ -44,6 +46,69 @@ export function DesignSystemPage() {
             <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>md · ThTd</div>
           </div>
         </div>
+      </div>
+
+      <div style={{ marginBottom: 40 }}>
+        <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>Board</h3>
+        <div style={{ display: 'flex', gap: 32, alignItems: 'flex-end', flexWrap: 'wrap' }}>
+          <div>
+            <Board cards="AsKd5c" size="sm" />
+            <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>sm · flop</div>
+          </div>
+          <div>
+            <Board cards="AhKh2d" size="md" />
+            <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>md · flop</div>
+          </div>
+          <div>
+            <Board cards="AsKd5cTd" size="md" />
+            <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>md · flop + turn</div>
+          </div>
+          <div>
+            <Board cards="AhKd5cTh2s" size="lg" />
+            <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>lg · full board</div>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 40 }}>
+        <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>BoardType</h3>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+          <BoardType cards="Js8d4c" label="J-high · clean" variant="green" />
+          <BoardType cards="Ah9h5h" label="Ace-monotone" variant="red" />
+          <BoardType cards="Jc6d6s" label="High-low-low" variant="orange" />
+          <BoardType label="T-high+" />
+          <BoardType label="9-high & below" variant="orange" />
+          <BoardType cards="Ks8h3h" label="K-high · two-tone" variant="green" size="md" />
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 40 }}>
+        <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>RandomBoard</h3>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
+          <RandomBoard high="A" variant="green" />
+          <RandomBoard high="K" variant="green" />
+          <RandomBoard high="Q" variant="green" />
+          <RandomBoard high="J" variant="green" />
+          <RandomBoard high="T" variant="green" />
+          <RandomBoard high="9" variant="orange" />
+        </div>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
+          <RandomBoard high="A" suit="monotone" variant="red" />
+          <RandomBoard high="K" suit="two-tone" />
+          <RandomBoard high="Q" suit="rainbow" />
+          <RandomBoard high="J" suit="monotone" variant="red" />
+        </div>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
+          <RandomBoard high="J" paired lowCard={6} variant="orange" label="High-low-low" />
+          <RandomBoard high="T" paired lowCard={5} variant="orange" label="High-low-low" />
+          <RandomBoard high="K" paired variant="orange" label="Paired" />
+        </div>
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+          <RandomBoard akx variant="orange" />
+          <RandomBoard high="T" connected variant="green" />
+          <RandomBoard high="Q" connected variant="orange" label="Q-high · connected" />
+        </div>
+        <div style={{ marginTop: 10, fontSize: 11, color: 'var(--muted)' }}>Re-rolls on each page render</div>
       </div>
 
       <div style={{ marginBottom: 40 }}>
@@ -101,6 +166,39 @@ export function DesignSystemPage() {
           subtitle="ChipEV · 20bb"
           fold="72o:1,73o:1,74o:1,82o:1,83o:1,92o:1,93o:1,T2o:1,T3o:1,J2o:1,J3o:1,J4o:1,Q2o:1,Q3o:1,Q4o:1,K2o:1,K3o:1,K4o:1,A2o:0.3,A3o:0.2,A4o:0.1,32s:1,42s:1,43s:1,52s:1,53s:1,62s:1,63s:1,72s:1,73s:1,74s:1,82s:1,83s:1,84s:1,92s:1,93s:1,94s:1,95s:1,T2s:1,T3s:1,T4s:0.5,T5s:0.3,J2s:1,J3s:1,J4s:0.2,Q2s:1,Q3s:1,Q4s:0.1,Q5s:0.05,K2s:1,K3s:0.8,K4s:0.3,K5s:0.1,A2s:0.05,A3s:0.03,A4s:0.01"
           allIn="AA:1,KK:1,QQ:1,JJ:1,TT:1,99:1,88:1,77:1,66:1,55:1,44:1,33:1,22:1,AKs:1,AQs:1,AJs:1,ATs:1,A9s:1,A8s:0.8,A7s:0.6,A6s:0.4,A5s:0.5,A4s:0.3,A3s:0.2,A2s:0.1,AKo:1,AQo:1,AJo:1,ATo:0.8,A9o:0.5,A8o:0.3,A7o:0.1,KQs:1,KJs:1,KTs:0.8,K9s:0.5,KQo:1,KJo:0.8,KTo:0.5,QJs:1,QTs:0.5,JTs:0.3,T9s:0.2,98s:0.1"
+        />
+      </div>
+
+      <div style={{ marginBottom: 40 }}>
+        <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>Strategy Quiz</h3>
+        <StrategyQuiz
+          title="System 1 — C-bet or Mix?"
+          options={[
+            { label: 'C-bet 100%', variant: 'bet' },
+            { label: 'Mix', variant: 'check' },
+          ]}
+          scenarios={[
+            { board: { high: 'T', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'T-high+ clean → c-bet 100%. No risk factor present.' },
+            { board: { high: 'A', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'A-high clean → c-bet 100%. Highest frequency bucket.' },
+            { board: { high: 'A', suit: 'monotone', variant: 'red' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'Ace-monotone is a risk factor. Bet strong + weak, check medium.' },
+            { board: { high: 'J', paired: true, lowCard: 6, variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'High-low-low (paired low card under high). Bet trips + weak, check underpairs.' },
+            { board: { high: '9', variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: '9-high & below → always mix (~70/30). No 100% exists.' },
+            { board: { akx: true, variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'AKx family (AK2/AK3/AK4). Slow down — not 100%.' },
+            { board: { high: 'Q', connected: true, variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: '1 straight possible → still bet frequently. 3 straights would slow down.' },
+            { board: { high: 'K', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'K-high clean → c-bet 100%. No risk factor.' },
+          ]}
+        />
+      </div>
+
+      <div style={{ marginBottom: 40 }}>
+        <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>Strategy Questions</h3>
+        <StrategyQuestions
+          title="Demo — Rules Quiz"
+          questions={[
+            { question: 'What are the two flop buckets for System 1?', options: ['T-high+ and 9-high & below', 'Ace-high and everything else', 'Paired and unpaired', 'Wet and dry'], correct: 0, explanation: 'Bucket 1: T-high+ → c-bet 100%. Bucket 2: 9-high & below → mix ~70/30.' },
+            { question: 'What adaptation when shallow (20bb)?', options: ['C-bet less — less risk', 'C-bet more — overpair asymmetry amplified', 'No change', 'Check everything'], correct: 1, explanation: 'Shallow amplifies overpair advantage. Bet MORE, not less. Most players do the opposite.' },
+            { question: 'Is KK3 (high-high-low) a risk factor?', options: ['Yes — two high cards', 'No — only paired low under high counts', 'Sometimes', 'Only if monotone'], correct: 1, explanation: 'KK3 is high-high-low, NOT high-low-low. Only paired low under high (K33, J66, T55) counts.' },
+          ]}
         />
       </div>
     </div>

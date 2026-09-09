@@ -1,18 +1,7 @@
-import { Section, Callout, DecisionMatrix, HandExampleCard, FlashcardsSection, QuizSection, S, H, D, C } from '../components/ui'
-import type { HandExample, QuizQuestion } from '../components/ui'
+import { Section, Callout, Action } from '../components/ui'
+import { StrategyQuiz } from '../components/StrategyQuiz'
+import { StrategyQuestions } from '../components/StrategyQuestions'
 
-const flashcards: [string, string][] = [["Covered BB on bubble — donk lead freq?","Almost never. BTN's wider range connects better; BB's tight range connects worse."],["BB check-raise sizing on low boards?","All-in (check-shove). Small raises let IP draw out — catastrophic under ICM."],["Top pair on A-K-x / A-Q-x as covered BB?","Pure check-call. ~88-90% equity, board lockdown — no protection needed."],["Top pair on Q-high — check-raise?","Yes if ≥83-85% equity. K/A turn can outdraw; ace-high can't."],["A-A-8 vs A-8-8 — which gets check-raise range?","A-8-8 (high-low-low). BB has the pair. A-A-8 (high-high-low): pure check-call, no pair."],["Turn FD on board — check-call or raise?","Call if you unblock IP's bluffs; raise if you block them (more likely vs value you beat)."],["Adding click-raise for IP does what?","Drops BB check-raise sharply. Non-all-in check-raises 'really suck in ICM'."],["BTN covers BB — default c-bet strategy?","Range bet. BB check-raises far less; BTN has more board coverage. Risk factors neutralized."],["Two reasons BTN range-bets more when covering?","1) BB rarely check-raises. 2) BTN ~70% vs BB ~20-30% defense — ranges nearly flipped."],["Which monotone boards need check-back?","Those connecting OOP: A-K-8♣, A-9-8♣, K-J-3♣, K-9-8♣, Q-8-3♣, J-10-8♣."],["K-K-9 vs K-K-4 — which checks back?","K-K-9 (9 connects BB). K-K-4 ~95% range bet."],["When is 'always range-bet' approximately correct?","When you cover BB by more than ~2x their stack."]]
-const quizzes: QuizQuestion[] = [{q:"Covered BB on bubble — donk lead freq?",o:["Often — take initiative","Almost never — BTN's wider range connects better","~50%","Always"],a:1,why:"Leads are very muted; BTN connects better, BB's tight range connects worse."},{q:"BB check-raise sizing on low boards under ICM?",o:["Small raise","All-in (check-shove) — maximize protection","Check-call","Min-raise"],a:1,why:"Small raises let IP draw out — catastrophic under ICM. Shove to deny equity."},{q:"A-A-8 vs A-8-8 as covered BB — which gets check-raise range?",o:["A-A-8","A-8-8 — BB has the pair","Both","Neither"],a:1,why:"High-low-low (A-8-8): BB has 8x → raise. High-high-low (A-A-8): no pair → check-call."},{q:"Turn FD on board — check-call or raise with made hand?",o:["Always call","Call if unblock IP's bluffs; raise if block them","Always raise","Fold"],a:1,why:"Unblock bluffs → call (face bluffs you beat). Block bluffs → raise (face value you stack)."},{q:"BTN covers BB — default c-bet strategy?",o:["Check more like chip","Range bet — BB rarely check-raises, BTN has coverage","Bet value only","Check all"],a:1,why:"BB XR far less; BTN ~70% vs BB ~20-30% defense. Risk factors neutralized."},{q:"When is 'always range-bet' approximately correct?",o:["Always","When you cover BB by more than ~2x their stack","Never","Only ace-high"],a:1,why:"Covering by 2x+ → BB can't fight back → range-bet almost all boards."}]
-
-const examples: HandExample[] = [
-  { tag: "Ace-high lockdown", tagVariant: "default", board: <>A<H>♥</H> K<D>♦</D> 5<C>♣</C></>, holeCards: <>BB 20bb · BTN 50bb</>, desc: "Top pair on ace-high", verdict: "agree", verdictText: "System agrees", system: "Pure check-call. ~88-90% equity, board lockdown — no protection needed.", solver: "No check-raise value range → pure check-call top pair." },
-  { tag: "Q-high — check-raise", tagVariant: "risk", board: <>Q<S>♠</S> 8<H>♥</H> 3<D>♦</D></>, holeCards: <>K<S>♠</S> Q<H>♥</H> · BB 20bb</>, desc: "Top pair on Q-high, ~85% equity", verdict: "agree", verdictText: "System agrees", system: "Check-raise. K/A turn can outdraw; ace-high same equity doesn't.", solver: "Check-raise ~83-85%+ equity top pairs on Q/J-high." },
-  { tag: "High-low-low paired", tagVariant: "risk", board: <>A<C>♣</C> 8<H>♥</H> 8<D>♦</D></>, desc: "A-8-8 (high-low-low) vs A-A-8 (high-high-low)", verdict: "agree", verdictText: "System agrees", system: "A-8-8: check-raise the 8x (BB has the pair). A-A-8: pure check-call (no pair).", solver: "High-low-low gets XR range; high-high-low doesn't." },
-  { tag: "BTN range-bet (low)", tagVariant: "default", board: <>8<H>♥</H> 5<D>♦</D> 3<C>♣</C></>, holeCards: <>BTN 50bb covers BB 20bb</>, desc: "Low board, BTN c-bet", verdict: "agree", verdictText: "System agrees", system: "Range bet. BB too tight to connect; XR ~11% (vs ~33% check in chip).", solver: "Low boards become range-bets when covering." },
-  { tag: "Monotone connects OOP", tagVariant: "risk", board: <>A<C>♣</C> K<C>♣</C> 8<D>♦</D></>, holeCards: <>BTN covering</>, desc: "Monotone connecting OOP", verdict: "agree", verdictText: "System agrees", system: "Check back some. Connects with OOP's flatting range (K-8, A-8).", solver: "Distinguish from A-5-2♣ which BTN range-bets." },
-  { tag: "K-Q-10 — check ~60%", tagVariant: "risk", board: <>K<S>♠</S> Q<H>♥</H> 10<D>♦</D></>, holeCards: <>BTN covering</>, desc: "Middling Broadway rainbow", verdict: "agree", verdictText: "System agrees", system: "Check ~60%. Bet KT+/AK/JT (straight); mix AJ/A10; check A7-A9.", solver: "Strongest teaching hand. Don't mash range." },
-  { tag: "Low paired — range bet", tagVariant: "default", board: <>4<C>♣</C> 4<D>♦</D> 3<H>♥</H></>, holeCards: <>BTN covering</>, desc: "Low paired board", verdict: "agree", verdictText: "System agrees", system: "Range bet in ICM. Would check ~33% in chip. BB plays call-or-fold, no XR.", solver: "Low paired boards become range-bets under ICM." },
-]
 
 export function BM8Page() {
   return (
@@ -20,46 +9,23 @@ export function BM8Page() {
       <Section title="BTN Covers BB — Postflop">
         <p>BTN (50bb) covers BB (20bb) on the bubble. Two sides: BB defense (modules 11) and BTN c-betting (module 12). The covering stack range-bets far more flops than in chip EV; the covered BB check-raises far less and plays protection-oriented.</p>
         <Callout variant="good"><strong>Bet MORE air when covered, not less.</strong> Because BB can't check-raise you, your c-bet frequency goes UP under ICM — the opposite of what most players do.</Callout>
-      </Section>
 
-      <Section title="Decision Matrix">
-        <DecisionMatrix
-          columns={["BB defense (covered)", "BTN c-bet (covering)"]}
-          intro="Board class (row) × side (column). Green = the default action."
-          rows={[
-            { label: "Ace-high (A-K-x, A-Q-x)", cells: [
-              { action: "Pure check-call top pair", sub: "~88-90% equity, lockdown. No protection.", color: "green" },
-              { action: "Range bet", sub: "BB has no check-raise value range.", color: "green" },
-            ]},
-            { label: "Q-high / J-high", cells: [
-              { action: "Check-raise ≥83-85%", sub: "K/A turn can outdraw → protection.", color: "orange" },
-              { action: "Range bet (or near)", sub: "BB XR only ~5% (vs ~20% chip).", color: "green" },
-            ]},
-            { label: "Low boards", cells: [
-              { action: "Check-shove strong value", sub: "Maximize protection. No small raises.", color: "orange" },
-              { action: "Range bet", sub: "BB has near-zero connection. XR ~11%.", color: "green" },
-            ]},
-            { label: "Paired, high-high-low (A-A-8)", cells: [
-              { action: "Pure check-call", sub: "No XR range — BB lacks the pair.", color: "green" },
-              { action: "Range bet", sub: "K-K-2/K-K-4 ~95%. K-K-9 checks some.", color: "green" },
-            ]},
-            { label: "Monotone connecting OOP", cells: [
-              { action: "Check-call / check-shove", sub: "Case by case.", color: "orange" },
-              { action: "Check back some", sub: "A-K-8♣, A-9-8♣, K-J-3♣, Q-8-3♣.", color: "orange" },
-            ]},
-            { label: "Middling Broadway (K-Q-10)", cells: [
-              { action: "Check-raise some", sub: "Board connects both.", color: "orange" },
-              { action: "Check ~60%", sub: "Bet strongest + weakest ace-highs; check mid.", color: "orange" },
-            ]},
-          ]}
-        />
-      </Section>
+        <h3>Board class × side</h3>
+        <table>
+          <tr><th>Board class</th><th>BB defense (covered)</th><th>BTN c-bet (covering)</th></tr>
+          <tr><td><strong>Ace-high (A-K-x, A-Q-x)</strong></td><td><Action variant="call">Pure check-call top pair</Action> — ~88-90% equity, lockdown. No protection.</td><td><Action variant="bet">Range bet</Action> — BB has no check-raise value range.</td></tr>
+          <tr><td><strong>Q-high / J-high</strong></td><td><Action variant="raise">Check-raise 80%+</Action> — K/A turn can outdraw → protection.</td><td><Action variant="bet">Range bet (or near)</Action> — BB XR only ~5% (vs ~20% chip).</td></tr>
+          <tr><td><strong>Low boards</strong></td><td><Action variant="raise">Check-shove strong value</Action> — Maximize protection. No small raises.</td><td><Action variant="bet">Range bet</Action> — BB has near-zero connection. XR ~11%.</td></tr>
+          <tr><td><strong>Paired, high-high-low (A-A-8)</strong></td><td><Action variant="call">Pure check-call</Action> — No XR range — BB lacks the pair.</td><td><Action variant="bet">Range bet</Action> — K-K-2/K-K-4 ~95%. K-K-9 checks some.</td></tr>
+          <tr><td><strong>Monotone connecting OOP</strong></td><td><Action variant="raise">Check-call / check-shove</Action> — Case by case.</td><td><Action variant="check">Check back some</Action> — A-K-8♣, A-9-8♣, K-J-3♣, Q-8-3♣.</td></tr>
+          <tr><td><strong>Middling Broadway (K-Q-10)</strong></td><td><Action variant="raise">Check-raise some</Action> — Board connects both.</td><td><Action variant="check">Check ~60%</Action> — Bet strongest + weakest ace-highs; check mid.</td></tr>
+        </table>
 
-      <Section title="Core Rules — BB Defense (covered)">
+        <h3>Core Rules — BB Defense (covered)</h3>
         <table>
           <tr><th>Board class</th><th>Default</th></tr>
           <tr><td><strong>Ace-high lockdown</strong></td><td>Pure check-call top pair. ~88-90% equity, no outdraw.</td></tr>
-          <tr><td><strong>Q-high / J-high</strong></td><td>Check-raise top pairs ≥83-85% equity. K/A turn can outdraw.</td></tr>
+          <tr><td><strong>Q-high / J-high</strong></td><td>Check-raise top pairs with 80%+ equity. K/A turn can outdraw.</td></tr>
           <tr><td><strong>Low boards</strong></td><td>Check-shove strong value + few semi-bluffs. Maximize protection.</td></tr>
           <tr><td><strong>Paired high-high-low (A-A-8)</strong></td><td>Pure check-call. BB lacks the pair → no XR value.</td></tr>
           <tr><td><strong>Paired high-low-low (A-8-8)</strong></td><td>Check-raise the pair (8x). BB has the pair.</td></tr>
@@ -67,16 +33,12 @@ export function BM8Page() {
           <tr><td><strong>Rivers</strong></td><td>Donk-jam only if opponent under-bluffs; default check.</td></tr>
         </table>
         <Callout variant="bad"><strong>A smaller raise size for IP kills your check-raise range.</strong> When IP can click-raise (not just jam), OOP check-raise freq collapses. Non-all-in check-raises 'really suck in ICM.'</Callout>
-      </Section>
 
-      <Section title="Core Rules — BTN C-bet (covering)">
-        <h3>Range-bet boards</h3>
-        <p>Ace-high (A-K-x, A-Q-x, A-7-x), K-high disconnected (K-9-3, K-J-2, K-4-3), Q-high disconnected, low boards (7-5-2, 8-5-3, 5-3-2), low paired (4-4-3, 6-6-3), high-high-low paired (K-K-2, K-K-4), A-side monotone (A-5-2♣).</p>
-        <h3>Check-back boards</h3>
-        <p>Middling Broadway rainbow (K-Q-10: ~60% check), high-high-mid paired (K-K-9, K-K-8), monotone connecting OOP (A-K-8♣, A-9-8♣, K-J-3♣, K-9-8♣, Q-8-3♣, J-10-8♣), 10-9-8♣ monotone (~20% check threshold).</p>
-      </Section>
+        <h3>Core Rules — BTN C-bet (covering)</h3>
+        <p><strong>Range-bet boards:</strong> Ace-high (A-K-x, A-Q-x, A-7-x), K-high disconnected (K-9-3, K-J-2, K-4-3), Q-high disconnected, low boards (7-5-2, 8-5-3, 5-3-2), low paired (4-4-3, 6-6-3), high-high-low paired (K-K-2, K-K-4), A-side monotone (A-5-2♣).</p>
+        <p><strong>Check-back boards:</strong> Middling Broadway rainbow (K-Q-10: ~60% check), high-high-mid paired (K-K-9, K-K-8), monotone connecting OOP (A-K-8♣, A-9-8♣, K-J-3♣, K-9-8♣, Q-8-3♣, J-10-8♣), 10-9-8♣ monotone (~20% check threshold).</p>
 
-      <Section title="Risk Factors / Exceptions (BTN c-bet)">
+        <h3>Risk Factors (BTN c-bet)</h3>
         <p>In chip EV, BTN c-bet risk factors are: paired boards (high check-raise), low boards (BB doesn't fold enough), monotone boards (check back). In ICM these are largely <strong>neutralized</strong> because BB check-raises far less and BTN has more board coverage.</p>
         <table>
           <tr><th>Remaining risk factor</th><th>Effect</th></tr>
@@ -86,18 +48,39 @@ export function BM8Page() {
           <tr><td><strong>Deeper effective stacks</strong></td><td>More reverse implied odds when check-raised; check-back freq rises.</td></tr>
         </table>
         <Callout variant="good"><strong>If you cover by more than ~2x their stack, "closing your eyes and always range-betting" is approximately correct.</strong></Callout>
+
+        <h3>Sizing</h3>
+        <p>BTN c-bet ~quarter pot (~1.8bb into ~5.5bb pot). BB check-raise on low boards: all-in (check-shove), not small. BB check-raise on ace-high: pure check-call — no raise. Equities that flip check-call → check-raise on Q/J-high: ~80%+. Equities that stay check-call on ace-high: ~88-90% (lockdown).</p>
       </Section>
 
-      <Section title="Sizing">
-        <p>BTN c-bet ~quarter pot (~1.8bb into ~5.5bb pot). BB check-raise on low boards: all-in (check-shove), not small. BB check-raise on ace-high: pure check-call — no raise. Equities that flip check-call → check-raise on Q/J-high: ~83-85%+. Equities that stay check-call on ace-high: ~88-90% (lockdown).</p>
-      </Section>
-
-      <Section title="Hand Examples">
-        {examples.map((ex, i) => <HandExampleCard key={i} ex={ex} />)}
-      </Section>
-
-      <FlashcardsSection cards={flashcards} />
-      <QuizSection questions={quizzes} />
+      <StrategyQuiz
+        title="BM8 — BTN Covers BB: Bet or Check?"
+        options={[
+          { label: 'Range bet', variant: 'bet' },
+          { label: 'Check back', variant: 'check' },
+          { label: 'Check-raise (BB)', variant: 'raise' },
+        ]}
+        scenarios={[
+          { board: { high: 'A', variant: 'green' }, correct: { label: 'Range bet', variant: 'bet' }, explanation: 'Ace-high (AKx, AQx): BB has no check-raise value range → range bet. (BB defense: pure check-call, ~88-90% equity lockdown.)' },
+          { board: { high: 'K', variant: 'green' }, correct: { label: 'Range bet', variant: 'bet' }, explanation: 'K-high disconnected → range bet. BB XR only ~5% (vs ~20% chip). Bet MORE air when covered.' },
+          { board: { high: '9', variant: 'green' }, correct: { label: 'Range bet', variant: 'bet' }, explanation: 'Low boards → range bet. BB has near-zero connection. XR ~11%.' },
+          { board: { high: '9', paired: true, variant: 'green', label: 'Low paired (443)' }, correct: { label: 'Range bet', variant: 'bet' }, explanation: 'Low paired → range bet in ICM (would check ~33% in chip). BB plays call-or-fold, no XR.' },
+          { board: { high: 'K', connected: true, variant: 'orange' }, correct: { label: 'Check back', variant: 'check' }, explanation: 'Middling Broadway (KQ10) → check ~60%. Bet KT+/AK/JT (straight); mix AJ/A10; check A7-A9.' },
+          { board: { high: 'A', suit: 'monotone', variant: 'orange' }, correct: { label: 'Check back', variant: 'check' }, explanation: 'Monotone connecting OOP (AK8♣, A98♣, KJ3♣) → check back some. Connects with BB\'s flatting range.' },
+          { board: { high: 'Q', variant: 'orange' }, correct: { label: 'Check-raise (BB)', variant: 'raise' }, explanation: 'Q/J-high: BB check-raises top pairs with 80%+ equity. K/A turn can outdraw → protection.' },
+        ]}
+      />
+      <StrategyQuestions
+        title="BM8 — BTN Covers BB Rules"
+        questions={[
+          { question: 'What is the counter-intuitive ICM c-bet rule?', options: ['Bet MORE air when covered, not less', 'Bet less air when covered', 'No change', 'Always check'], correct: 0, explanation: 'BB can\'t check-raise you (no value XR range), so c-bet frequency goes UP. The opposite of what most players do.' },
+          { question: 'What does BB do with top pair on ace-high?', options: ['Pure check-call (~88-90% equity, lockdown)', 'Check-raise', 'Fold', 'Donk-lead'], correct: 0, explanation: 'No outdraw → no protection needed. Pure check-call. Board lockdown.' },
+          { question: 'What does BB do with top pair on Q-high/J-high?', options: ['Check-raise with 80%+ equity (K/A turn can outdraw)', 'Pure check-call', 'Fold', 'Donk-lead'], correct: 0, explanation: 'Q/J-high top pairs: check-raise for protection with 80%+ equity. K/A turn can outdraw. Ace-high same equity doesn\'t.' },
+          { question: 'What is the difference between A-8-8 and A-A-8 (paired)?', options: ['A-8-8 (high-low-low) → check-raise the 8x; A-A-8 (high-high-low) → pure check-call', 'Both check-call', 'Both check-raise', 'Both fold'], correct: 0, explanation: 'High-low-low: BB has the pair → XR range. High-high-low: BB lacks the pair → pure check-call.' },
+          { question: 'When covering by more than ~2x, what is approximately correct?', options: ['"Closing your eyes and always range-betting"', 'Always check', 'Only bet strong hands', 'Bet 25% pot'], correct: 0, explanation: 'If you cover by more than ~2x their stack, always range-betting is approximately correct. BB\'s tight defense lacks coverage.' },
+          { question: 'What is the BTN c-bet sizing?', options: ['~quarter pot (~1.8bb into ~5.5bb)', 'Pot-sized', 'Overbet', 'All-in'], correct: 0, explanation: 'BTN c-bet ~quarter pot. BB check-raise on low boards: all-in (check-shove), not small.' },
+        ]}
+      />
     </>
   )
 }

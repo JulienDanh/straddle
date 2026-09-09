@@ -24,43 +24,94 @@ sometimes garbled. Treat them as raw data, not polished prose.
 ## Content structure (per system)
 
 Every system page follows the same template. Consistency makes the study guide
-navigable; variety makes it harder to learn. The page is ordered so the visual
-summary comes first, then the detail, then the practice.
+navigable; variety makes it harder to learn.
 
 1. **Title section** — system name, one-sentence scenario (who opened, who called,
    what decision we're making), and a short intro paragraph.
-2. **Decision Matrix** — a color-coded grid at the top. Rows = categories (flop
-   types, hand types, stack depths). Columns = conditions (default / with risk
-   factor, or with draws / without). Cells are color-coded: green = do it,
-   orange = mix/caution, red = fold/don't. Each cell has a bold action label
-   and a short sub. This is the visual summary the student sees first — find
-   your row, scan across, know the action. Do NOT repeat the matrix content in
-   callouts or prose below; it lives here once.
-3. **Core rules / buckets** — the primary decision framework as tables. This is
-   the canonical source for the rules. If the matrix says "see risk factors
-   below," this is where the detail lives.
-4. **Risk factors / exceptions** — what overrides the default rule, as a table.
-   Always separate "primary" from "secondary" if the source does.
-5. **Sizing** — a short paragraph or table. Include the default and the
-   reasoning.
-6. **Hand examples** — 4-7 real examples from the transcript. Each shows the
-   board, the system's recommendation, and the solver's verdict. Tag each with
-   the decision type (default / risk / fold / call) using colored pills.
+2. **BoardTable** — a table where each row shows visual board types (rendered with
+   `RandomBoard` or `BoardType`) + the action to take (`Action` badge) + a note.
+   Group rows by action/frequency (e.g. all "C-bet 100%" boards in one row, all
+   "Mix" boards in another). This replaces the old Decision Matrix as the visual
+   summary — it's more concrete and shows actual board textures.
+3. **Callouts** — 2-3 high-impact points: the key insight, the counter-intuitive
+   rule, and the critical distinction.
+4. **Risk factor details** — brief text for factors that don't fit in the BoardTable
+   (e.g. stack depth, blocker nuances). Keep this short — the BoardTable already
+   shows the boards and actions.
+5. **Sizing** — one line. Cite the transcript's actual sizing (e.g. "~40% pot" for
+   System 1, "1/4 to 1/3 pot" for System 2). Don't mix sizings across systems.
+6. **Hand examples** — 4-7 real examples from the transcript. Use `HandExampleCard`
+   with `board` and `holeCards` as card-string props (e.g. `board: "Ah9h5h"`,
+   `holeCards: "QdJc"`). The component renders them with visual `Board` and
+   `HoleCards` components automatically.
 7. **Flashcards** — 8-12 Q&A pairs for active recall. Front: the question. Back:
    the answer, one sentence. These test the *rules*, not the anecdotes.
 8. **Quiz** — 5-6 multiple-choice questions applying the system to new spots.
-   Each has a one-sentence explanation linking back to the rule. The quiz
-   requires *applying* the system, not reciting it.
+   Each has a one-sentence explanation linking back to the rule.
 
 ### Anti-duplication rules
 
-- **Each rule lives in exactly one place.** The canonical section (table, list,
-  or opening callout) owns the full statement. The matrix shows the decision;
-  the detail lives in the rules section. Never copy-paste a table row into a
-  matrix cell — use a short pointer like "See risk factors below" instead.
-- **No closing callouts under the matrix.** Do not add a callout after the
-  decision matrix that restates the opening thesis. The thesis is already
-  stated in the title section or the core rules. The matrix ends clean.
+- **Each rule lives in exactly one place.** The BoardTable shows the boards and
+  actions. The callouts show the key insights. The risk factor details show what
+  doesn't fit in the table. Never repeat the same information across sections.
+- **No separate Decision Matrix section.** The BoardTable replaces it. Don't add
+  a Decision Matrix that restates what the BoardTable already shows.
+- **No separate Risk Factors section.** Risk factors are integrated into the
+  BoardTable (as the "Mix" rows) with a brief details section for nuance. Don't
+  duplicate them as a standalone section.
+
+## Component library
+
+All components live in `poker-app/src/components/ui.tsx` (custom) and
+`poker-app/src/components/ui-shadcn/` (shadcn/ui). Import custom components from
+`../components/ui` and shadcn components from `@/components/ui-shadcn/`.
+
+### Poker-specific components
+
+- **`Board`** — renders 3-5 community cards as visual card faces. Prop: `cards`
+  as a string (e.g. `"AsKd5c"`), optional `size` (`'sm' | 'md' | 'lg'`).
+- **`HoleCards`** — renders two hole cards as visual card faces. Prop: `cards`
+  as a 4-char string (e.g. `"AsKd"`), optional `size`.
+- **`PlayingCard`** — single card face. Props: `card` (e.g. `"As"`), `size`.
+- **`BoardType`** — a pill showing a visual board + a texture label. Props:
+  `cards?`, `label`, `variant` (`'default' | 'green' | 'orange' | 'red'`),
+  `size`.
+- **`RandomBoard`** — generates a random flop matching constraints and renders
+  it as a `BoardType`. Props: `high` (`'A' | 'K' | 'Q' | 'J' | 'T' | '9'`),
+  `suit` (`'monotone' | 'two-tone' | 'rainbow'`), `paired`, `connected`,
+  `lowCard` (rank index), `akx`, `label?`, `variant?`, `size?`.
+- **`BoardTable`** — a table with `boards` (array of `ReactNode`), `action`
+  (`ReactNode`), and `note` (`ReactNode`) per row. Use `RandomBoard` for
+  board examples and `Action` badges for the action column.
+- **`Action`** — inline colored badge for poker actions. Props: `variant`
+  (`'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'`), children = label text.
+- **`HandExampleCard`** — renders a hand example with visual board, hole cards,
+  tag, verdict, system/solver text. Props: `board` and `holeCards` as card-string
+  props (NOT JSX). The component handles rendering internally.
+- **Suit components** `S`, `H`, `D`, `C` — colored suit symbols for inline text
+  use (e.g. in prose, not in examples — examples use `Board`/`HoleCards`).
+
+### Card string format
+
+All card-related props use a consistent string format:
+- Rank: `A K Q J T 9 8 7 6 5 4 3 2` (case-insensitive, normalized to uppercase)
+- Suit: `s h d c` (spades, hearts, diamonds, clubs — lowercase)
+- Board: `"AsKd5c"` (3-5 cards concatenated, 2 chars each)
+- Hole cards: `"QdJc"` (4 chars, two cards)
+- Single card: `"As"` (2 chars)
+
+### shadcn/ui components
+
+- **`Button`** — `@/components/ui-shadcn/button`, variants: `default`, `secondary`,
+  `outline`, `destructive`, `ghost`, `link`.
+- **`Card`** — `@/components/ui-shadcn/card`, exports `Card`, `CardHeader`,
+  `CardTitle`, `CardContent`, `CardFooter`.
+- **`Accordion`** — `@/components/ui-shadcn/accordion`, used in Sidebar for
+  course navigation.
+- **`Progress`** — `@/components/ui-shadcn/progress`, used in Quiz.
+- Add more: `npx shadcn@latest add <component>` — they land in
+  `src/components/ui-shadcn/`. Fix the `cn` import: change `from "cn"` to
+  `from "@/lib/utils"`.
 
 ## Writing for learning
 
@@ -89,19 +140,27 @@ summary comes first, then the detail, then the practice.
 
 ## Build conventions
 
-- **React + Vite + TypeScript.** The app lives in `poker-app/`. Page content
-  (sections, tables, matrices, examples) lives in `poker-app/src/pages/*.html`
-  and is loaded at build time via Vite's `import.meta.glob` raw imports.
-- **Flashcard and quiz data** live in `poker-app/src/data/content.ts` as typed
-  exports (`flashcards`, `quizzes`, `navTitles`).
-- **Components:** `Sidebar` (nav), `Flashcards` (flip cards), `Quiz` (scored
-  quiz), `SystemPage` (loads HTML content + injects React components for
-  flashcards/quiz).
-- **Styles:** `poker-app/src/styles/global.css` — all CSS in one file, ported
-  from the original vanilla version.
+- **React + Vite + TypeScript + Tailwind v4 + shadcn/ui.** The app lives in
+  `poker-app/`. No `global.css` — all styling is in `src/styles/tailwind.css`
+  (Tailwind utilities + `@theme` tokens + `@layer base` for element styles).
+- **Page content** lives in `poker-app/src/pages/*.tsx`. Each page is a React
+  component that imports from `../components/ui` and renders sections inline.
+- **Routing:** hash-based router in `App.tsx` (`#s1`, `#bm1`, etc.). No
+  react-router. Pages are mapped in a `PAGES` record.
+- **Sidebar nav:** `src/components/Sidebar.tsx` — uses shadcn `Accordion` for
+  course navigation. Also exports `Flashcards` and `Quiz` components.
+- **Range Viewer:** `src/pages/RangeViewer.tsx` + `src/pages/solutionParser.ts`
+  — a solver-data browser (not a product priority, user has GTO Wizard).
+  `src/components/RangeGrid.tsx` is a reusable range grid component.
+- **Design System page:** `src/pages/DesignSystem.tsx` — demos all components.
+  Visit `#sandbox` to see every component in action.
+- **Path alias:** `@/*` maps to `src/*` (configured in `tsconfig.app.json` and
+  `vite.config.ts`).
 - **Deploy:** GitHub Actions builds `poker-app/` and deploys `dist/` to Pages.
   Base path is `/straddle/` (set in `vite.config.ts`).
 - **Develop locally:** `cd poker-app && npm run dev`.
+- **Build:** `cd poker-app && npm run build` (runs `tsc -b && vite build`).
+- **Lint:** `cd poker-app && npm run lint` (uses `oxlint`).
 
 ## What to avoid
 
@@ -113,6 +172,13 @@ summary comes first, then the detail, then the practice.
   cover.
 - **No unsourced claims.** Every rule should trace to a statement in a transcript.
   If you're inferring a rule, say so or leave it out.
-- **No emoji or decorative styling.** The tags and callouts carry the visual
-  hierarchy. Adding icons or color beyond the defined palette makes it harder to
-  scan, not easier.
+- **No emoji or decorative styling.** The tags, callouts, and action badges carry
+  the visual hierarchy. Adding icons or color beyond the defined palette makes it
+  harder to scan, not easier.
+- **No mixing sizings across systems.** System 1 is ~40% pot. System 2 is 1/4 to
+  1/3 pot. Don't generalize — cite the transcript.
+- **No JSX in example data.** `HandExample` takes `board` and `holeCards` as
+  card strings (e.g. `"Ah9h5h"`, `"QdJc"`), not JSX elements. The
+  `HandExampleCard` component renders them with `Board` and `HoleCards`.
+- **No standalone Decision Matrix or Risk Factors sections.** Use `BoardTable`
+  instead — it's more visual and groups by action.
