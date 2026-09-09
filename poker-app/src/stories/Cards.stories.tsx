@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { HoleCards, Board, BoardType, RandomBoard, BoardTable } from '../components/ui-parts/cards'
+import { HoleCards, Board, BoardType, RandomBoard, BoardTable, H as Heart } from '../components/ui-parts/cards'
 import { Action } from '../components/ui-parts/primitives'
 
 const meta = {
@@ -66,5 +66,22 @@ export const BoardTableExample: Story = {
       { boards: [<RandomBoard high="A" suit="monotone" variant="orange" />, <RandomBoard high="J" paired lowCard={6} variant="orange" />], action: <Action variant="check">Mix</Action>, note: 'Bet strong + weak, check medium.' },
       { boards: [<RandomBoard high="9" variant="orange" />], action: <Action variant="check">Mix ~70/30</Action>, note: 'No 100% exists.' },
     ]} />
+  ),
+}
+
+export const SuitSpan: Story = {
+  render: () => (
+    <div className="flex gap-3 items-center text-base">
+      <span>A</span><Heart>♥</Heart><span>K</span><Heart>♥</Heart>
+    </div>
+  ),
+}
+
+export const BoardTypeMdSize: Story = {
+  render: () => (
+    <div className="flex gap-4 flex-wrap items-center">
+      <BoardType cards="Ks8h3h" label="K-high · two-tone" variant="green" size="md" />
+      <BoardType cards="AsKd5c" label="A-high · rainbow" variant="green" size="md" />
+    </div>
   ),
 }
