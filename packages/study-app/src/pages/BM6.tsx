@@ -1,4 +1,4 @@
-import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM6Page() {
@@ -34,24 +34,18 @@ export function BM6Page() {
               <Callout variant="bad"><strong>When covering the 3-bettor, you can cold call; when covered by the 3-bettor, you can't.</strong> Same hand, different stack dynamic. 50bb vs 25bb 3-bet → 24% calls. 25bb vs 50bb 3-bet → 0% calls. Stack relationship to the 3-bettor, not absolute depth, is the key variable.</Callout>
 
               <Collapsible title="Core rules">
-                <table>
-                  <tr><th>Rule</th><th>Detail</th></tr>
-                  <tr><td><strong>BB stack dictates opener width</strong></td><td>UTG opens wider when BB short/covered; tighter when BB has big covering stack.</td></tr>
-                  <tr><td><strong>SB cold call vs UTG when BB very short (10bb)</strong></td><td>SB is 'protected' — UTG's tight range + short BB = can't squeeze. Narrow value range.</td></tr>
-                  <tr><td><strong>3-bet sizing by depth</strong></td><td>~6-6.5bb mid; ~8-8.5bb at 45+bb. Matching range to size matters more than number.</td></tr>
-                  <tr><td><strong>Zero-EV fringe hands</strong></td><td>Let FGS (other-table stacks) and tendencies decide. Short stack elsewhere = lean fold.</td></tr>
-                  <tr><td><strong>Exploits happen at the fringes</strong></td><td>Over-exploiting forces opponents to adjust; in ICM, stolen equity spreads to ALL players.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>BB stack dictates opener width</strong></>, <>UTG opens wider when BB short/covered; tighter when BB has big covering stack.</>],
+                  [<><strong>SB cold call vs UTG when BB very short (10bb)</strong></>, <>SB is 'protected' — UTG's tight range + short BB = can't squeeze. Narrow value range.</>],
+                  [<><strong>3-bet sizing by depth</strong></>, <>~6-6.5bb mid; ~8-8.5bb at 45+bb. Matching range to size matters more than number.</>],
+                  [<><strong>Zero-EV fringe hands</strong></>, <>Let FGS (other-table stacks) and tendencies decide. Short stack elsewhere = lean fold.</>],
+                  [<><strong>Exploits happen at the fringes</strong></>, <>Over-exploiting forces opponents to adjust; in ICM, stolen equity spreads to ALL players.</>]]} />
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>Who 3-bets you matters</strong></td><td>Short 3-bettor (~25bb) → raise/fold. You cover them (50v25) → cold-call range exists.</td></tr>
-                  <tr><td><strong>UTG+1 3-bet vs UTG deep (50bb)</strong></td><td>Jax+, AQ; Tens ~0 EV. Very thin bluffs only.</td></tr>
-                  <tr><td><strong>Raise to 7.9bb leaving 0.1 behind</strong></td><td>Leak. Raise to <Code>~5bb</Code> to fold to jam+call behind (caller shows QQ+).</td></tr>
-                  <tr><td><strong>4-bet noise</strong></td><td>Some solver 4-bet ranges (CO 4-betting Jacks) appear too loose — likely zero-EV noise. Author wouldn't get Jacks in.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Who 3-bets you matters</strong></>, <>Short 3-bettor (~25bb) → raise/fold. You cover them (50v25) → cold-call range exists.</>],
+                  [<><strong>UTG+1 3-bet vs UTG deep (50bb)</strong></>, <>Jax+, AQ; Tens ~0 EV. Very thin bluffs only.</>],
+                  [<><strong>Raise to 7.9bb leaving 0.1 behind</strong></>, <>Leak. Raise to <Code>~5bb</Code> to fold to jam+call behind (caller shows QQ+).</>],
+                  [<><strong>4-bet noise</strong></>, <>Some solver 4-bet ranges (CO 4-betting Jacks) appear too loose — likely zero-EV noise. Author wouldn't get Jacks in.</>]]} />
                 <Callout variant="warn"><strong>Over-exploiting on the bubble is doubly costly.</strong> In ICM, equity stolen from you spreads to ALL players, not just the exploiter. Exploits happen at the fringes, not the core.</Callout>
               </Collapsible>
 

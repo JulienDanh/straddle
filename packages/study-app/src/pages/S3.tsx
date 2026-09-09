@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, BoardTable, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S3Page() {
@@ -12,33 +12,61 @@ export function S3Page() {
           label: 'Study',
           content: (
             <>
-              <h3>Fold target &amp; mechanisms</h3>
+              <Callout variant="good"><strong>Why BB matters:</strong> Skilled player goes from −112 bb/100 (walk-away) to −20 — 92 points of opportunity. UTG only has 27. BB skill is <em>definitively</em> most important.</Callout>
+
+              <h3>Decision: defend or fold more?</h3>
               <p>SB bets 1bb into ~3.7bb. Risk/reward = 1/4 ≈ <strong>25% fold</strong>. Defend ~75%. Focus on the 25% you fold.</p>
               <p>Three defending mechanisms: <strong>high-card defending</strong> (A-high pure → J-high starts folding), <strong>three to a straight</strong> (98o, 86o, 65o — pure calls), <strong>backdoor flush draw</strong> (high card of suit &gt; low card).</p>
               <Callout variant="warn"><strong>Ace and Deuce are NOT strategically relevant.</strong> Everything has overcards to deuce / undercards to ace. No over-unders to either. <em>Ignore them.</em> Build strategy around the other board cards.</Callout>
 
-              <h3>Board types and actions</h3>
-              <BoardTable rows={[
-                { boards: [<RandomBoard high="K" label="KQ8 (key=8, high)" variant="green" />, <RandomBoard high="Q" label="Q83 (key=8, high)" variant="green" />], action: <Action variant="call">Defend ~75%</Action>, note: <><strong>High key card (8):</strong> double-overs rare/valuable → rarely fold. Worst hands = double-unders to key card (fold unless gutshots/3-straight).</> },
-                { boards: [<RandomBoard high="A" label="A42 (key=4, low)" variant="orange" />, <RandomBoard high="K" label="K62 (key=6, low)" variant="orange" />], action: <Action variant="fold">Fold more</Action>, note: <><strong>Low key card (5):</strong> double-overs common → fold more. Over-unders worst hands (73, 83, 93) fold. BDFD can rescue non-worst.</> },
-                { boards: [<RandomBoard high="K" paired label="K77" variant="orange" />, <RandomBoard high="J" paired label="J66" variant="orange" />], action: <Action variant="call">Defend around unpaired</Action>, note: "Paired card unusable (can't have equity vs trips). Evaluate around unpaired high card. High-card defending dominates." },
-              ]} />
+              <DecisionTree
+                root={{
+                  question: 'Is the board paired?',
+                  yes: {
+                    action: <Action variant="call">Defend around unpaired</Action>,
+                    actionVariant: 'call',
+                    reason: "Paired card unusable. Evaluate around unpaired high card.",
+                    boards: [
+                      <RandomBoard high="K" paired label="K77" variant="green" />,
+                      <RandomBoard high="J" paired label="J66" variant="green" />,
+                    ],
+                  },
+                  no: {
+                    question: 'Is the key card high (≈8+)?',
+                    hint: 'Key card = second-highest board card (ignore A and 2)',
+                    yes: {
+                      action: <Action variant="call">Defend ~75%</Action>,
+                      actionVariant: 'call',
+                      reason: 'Double-overs rare and valuable → rarely fold.',
+                      boards: [
+                        <RandomBoard high="K" label="KQ8 (key=8)" variant="green" />,
+                        <RandomBoard high="Q" label="Q83 (key=8)" variant="green" />,
+                      ],
+                    },
+                    no: {
+                      action: <Action variant="fold">Fold more</Action>,
+                      actionVariant: 'fold',
+                      reason: 'Double-overs common. Over-unders (73, 83, 93) fold. BDFD can rescue non-worst.',
+                      boards: [
+                        <RandomBoard high="A" label="A42 (key=4)" variant="orange" />,
+                        <RandomBoard high="K" label="K62 (key=6)" variant="orange" />,
+                      ],
+                    },
+                  },
+                }}
+              />
 
               <Collapsible title="Classify around the key card">
-                <table>
-                  <tr><th>Category</th><th>Definition</th><th>Playability</th></tr>
-                  <tr><td><strong>Double Overs</strong></td><td>Both above key card</td><td>Easy play (high key card = rare; low = may fold)</td></tr>
-                  <tr><td><strong>Over-under</strong></td><td>One over, one under</td><td>Sensitive — worst hands. BDFD often needed.</td></tr>
-                  <tr><td><strong>Double unders</strong></td><td>Both below</td><td>Often fold — <em>unless</em> gut shots / 3-straight</td></tr>
-                </table>
-                <Callout variant="bad"><strong>BDFD is not always enough.</strong> Identify the <em>worst</em> hand on the board first (A42 → 7; K62 → over-unders to 6; KQ8 → double-unders to 8). Even with BDFD, the worst hands (42s on K77) still fold.</Callout>
+                <DataTable columns={[{header:'Category'},{header:'Definition'},{header:'Playability'}]} rows={[
+                  [<><strong>Double Overs</strong></>, 'Both above key card', 'Easy play (high key card = rare; low = may fold)'],
+                  [<><strong>Over-under</strong></>, 'One over, one under', 'Sensitive — worst hands. BDFD often needed.'],
+                  [<><strong>Double unders</strong></>, 'Both below', 'Often fold — unless gut shots / 3-straight'],
+                ]} />
+                <Callout variant="bad"><strong>BDFD is not always enough.</strong> Identify the <em>worst</em> hand on the board first. Even with BDFD, the worst hands (42s on K77) still fold.</Callout>
               </Collapsible>
 
-              <Collapsible title="Preflop asymmetry">
+              <Collapsible title="Preflop asymmetry & Sizing">
                 <Callout>SB has a folding range; BB does not. 2x/3x favor BB. BB checking = capped (no AK/AQ/overpairs). SB has advantage on Broadway boards; BB on low boards.</Callout>
-              </Collapsible>
-
-              <Collapsible title="Sizing">
                 <p>1bb stab into ~3.7bb pot.</p>
               </Collapsible>
             </>

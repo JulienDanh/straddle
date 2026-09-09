@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM3Page() {
@@ -39,23 +39,17 @@ export function BM3Page() {
               <Callout variant="good"><strong>Being covered by one or two players does NOT mean play tight.</strong> If you cover the rest (especially the BB), you still open wider than baseline. The covering player folds ~80%; you then pressure everyone you cover.</Callout>
 
               <Collapsible title="Composition by BB depth (when you cover)">
-                <table>
-                  <tr><th>BB stack</th><th>Open range composition</th></tr>
-                  <tr><td><strong>Deep (40-68bb)</strong></td><td>Low suited connectors (54s, 76s), suited high-low (Q4s, J7s), lowest pairs (22-33) all acceptable — want playability.</td></tr>
-                  <tr><td><strong>Mid (26bb)</strong></td><td>Sliver of low pairs, marginal suited connectors, marginal high-low suited.</td></tr>
-                  <tr><td><strong>Very short (sub-5bb)</strong></td><td>High-card dense, Ace-X heavy. Drop suited connectors and low pairs — want raw equity.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'BB stack' }, { header: 'Open range composition' }]} rows={[[<><strong>Deep (40-68bb)</strong></>, <>Low suited connectors (54s, 76s), suited high-low (Q4s, J7s), lowest pairs (22-33) all acceptable — want playability.</>],
+                  [<><strong>Mid (26bb)</strong></>, <>Sliver of low pairs, marginal suited connectors, marginal high-low suited.</>],
+                  [<><strong>Very short (sub-5bb)</strong></>, <>High-card dense, Ace-X heavy. Drop suited connectors and low pairs — want raw equity.</>]]} />
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>Stacks behind close to yours</strong></td><td>Dial back top-line frequency; losing a pot hurts more.</td></tr>
-                  <tr><td><strong>Blinds sub-20-25bb</strong></td><td>Heavy open shoving appears. Commonly missed by regs — a major leak.</td></tr>
-                  <tr><td><strong>Blinds 30bb+</strong></td><td>Little/no open shove; min-raise range.</td></tr>
-                  <tr><td><strong>Micro stack about to hit blinds (other table)</strong></td><td>Blinds disincentivized to play — ramp up opens.</td></tr>
-                  <tr><td><strong>Covering and called</strong></td><td>Not a disaster — you still cover; losing the pot doesn't end your tournament.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Stacks behind close to yours</strong></>, <>Dial back top-line frequency; losing a pot hurts more.</>],
+                  [<><strong>Blinds sub-20-25bb</strong></>, <>Heavy open shoving appears. Commonly missed by regs — a major leak.</>],
+                  [<><strong>Blinds 30bb+</strong></>, <>Little/no open shove; min-raise range.</>],
+                  [<><strong>Micro stack about to hit blinds (other table)</strong></>, <>Blinds disincentivized to play — ramp up opens.</>],
+                  [<><strong>Covering and called</strong></>, <>Not a disaster — you still cover; losing the pot doesn't end your tournament.</>]]} />
               </Collapsible>
 
               <Collapsible title="Sizing">

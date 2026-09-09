@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM8Page() {
@@ -14,38 +14,29 @@ export function BM8Page() {
               <Callout variant="good"><strong>Bet MORE air when covered, not less.</strong> Because BB can't check-raise you, your c-bet frequency goes UP under ICM — the opposite of what most players do.</Callout>
               
                       <h3>Board class × side</h3>
-<table>
-                        <tr><th>Board class</th><th>BB defense (covered)</th><th>BTN c-bet (covering)</th></tr>
-                        <tr><td><strong>Ace-high (A-K-x, A-Q-x)</strong></td><td><Action variant="call">Pure check-call top pair</Action> — ~88-90% equity, lockdown. No protection.</td><td><Action variant="bet">Range bet</Action> — BB has no check-raise value range.</td></tr>
-                        <tr><td><strong>Q-high / J-high</strong></td><td><Action variant="raise">Check-raise 80%+</Action> — K/A turn can outdraw → protection.</td><td><Action variant="bet">Range bet (or near)</Action> — BB XR only ~5% (vs ~20% chip).</td></tr>
-                        <tr><td><strong>Low boards</strong></td><td><Action variant="raise">Check-shove strong value</Action> — Maximize protection. No small raises.</td><td><Action variant="bet">Range bet</Action> — BB has near-zero connection. XR ~11%.</td></tr>
-                        <tr><td><strong>Paired, high-high-low (A-A-8)</strong></td><td><Action variant="call">Pure check-call</Action> — No XR range — BB lacks the pair.</td><td><Action variant="bet">Range bet</Action> — K-K-2/K-K-4 ~95%. K-K-9 checks some.</td></tr>
-                        <tr><td><strong>Monotone connecting OOP</strong></td><td><Action variant="raise">Check-call / check-shove</Action> — Case by case.</td><td><Action variant="check">Check back some</Action> — A-K-8♣, A-9-8♣, K-J-3♣, Q-8-3♣.</td></tr>
-                        <tr><td><strong>Middling Broadway (K-Q-10)</strong></td><td><Action variant="raise">Check-raise some</Action> — Board connects both.</td><td><Action variant="check">Check ~60%</Action> — Bet strongest + weakest ace-highs; check mid.</td></tr>
-                      </table><Collapsible title="Core Rules — BB Defense (covered)">
-              <table>
-                        <tr><th>Board class</th><th>Default</th></tr>
-                        <tr><td><strong>Ace-high lockdown</strong></td><td>Pure check-call top pair. ~88-90% equity, no outdraw.</td></tr>
-                        <tr><td><strong>Q-high / J-high</strong></td><td>Check-raise top pairs with 80%+ equity. K/A turn can outdraw.</td></tr>
-                        <tr><td><strong>Low boards</strong></td><td>Check-shove strong value + few semi-bluffs. Maximize protection.</td></tr>
-                        <tr><td><strong>Paired high-high-low (A-A-8)</strong></td><td>Pure check-call. BB lacks the pair → no XR value.</td></tr>
-                        <tr><td><strong>Paired high-low-low (A-8-8)</strong></td><td>Check-raise the pair (8x). BB has the pair.</td></tr>
-                        <tr><td><strong>Turns</strong></td><td>Almost never donk-lead (~≤10%).</td></tr>
-                        <tr><td><strong>Rivers</strong></td><td>Donk-jam only if opponent under-bluffs; default check.</td></tr>
-                      </table>
+<DataTable columns={[{ header: 'Board class' }, { header: 'BB defense (covered)' }, { header: 'BTN c-bet (covering)' }]} rows={[[<><strong>Ace-high (A-K-x, A-Q-x)</strong></>, <><Action variant="call">Pure check-call top pair</Action> — ~88-90% equity, lockdown. No protection.</>, <><Action variant="bet">Range bet</Action> — BB has no check-raise value range.</>],
+                  [<><strong>Q-high / J-high</strong></>, <><Action variant="raise">Check-raise 80%+</Action> — K/A turn can outdraw → protection.</>, <><Action variant="bet">Range bet (or near)</Action> — BB XR only ~5% (vs ~20% chip).</>],
+                  [<><strong>Low boards</strong></>, <><Action variant="raise">Check-shove strong value</Action> — Maximize protection. No small raises.</>, <><Action variant="bet">Range bet</Action> — BB has near-zero connection. XR ~11%.</>],
+                  [<><strong>Paired, high-high-low (A-A-8)</strong></>, <><Action variant="call">Pure check-call</Action> — No XR range — BB lacks the pair.</>, <><Action variant="bet">Range bet</Action> — K-K-2/K-K-4 ~95%. K-K-9 checks some.</>],
+                  [<><strong>Monotone connecting OOP</strong></>, <><Action variant="raise">Check-call / check-shove</Action> — Case by case.</>, <><Action variant="check">Check back some</Action> — A-K-8♣, A-9-8♣, K-J-3♣, Q-8-3♣.</>],
+                  [<><strong>Middling Broadway (K-Q-10)</strong></>, <><Action variant="raise">Check-raise some</Action> — Board connects both.</>, <><Action variant="check">Check ~60%</Action> — Bet strongest + weakest ace-highs; check mid.</>]]} /><Collapsible title="Core Rules — BB Defense (covered)">
+              <DataTable columns={[{ header: 'Board class' }, { header: 'Default' }]} rows={[[<><strong>Ace-high lockdown</strong></>, <>Pure check-call top pair. ~88-90% equity, no outdraw.</>],
+                  [<><strong>Q-high / J-high</strong></>, <>Check-raise top pairs with 80%+ equity. K/A turn can outdraw.</>],
+                  [<><strong>Low boards</strong></>, <>Check-shove strong value + few semi-bluffs. Maximize protection.</>],
+                  [<><strong>Paired high-high-low (A-A-8)</strong></>, <>Pure check-call. BB lacks the pair → no XR value.</>],
+                  [<><strong>Paired high-low-low (A-8-8)</strong></>, <>Check-raise the pair (8x). BB has the pair.</>],
+                  [<><strong>Turns</strong></>, <>Almost never donk-lead (~≤10%).</>],
+                  [<><strong>Rivers</strong></>, <>Donk-jam only if opponent under-bluffs; default check.</>]]} />
                       <Callout variant="bad"><strong>A smaller raise size for IP kills your check-raise range.</strong> When IP can click-raise (not just jam), OOP check-raise freq collapses. Non-all-in check-raises 'really suck in ICM.'</Callout>
               </Collapsible><Collapsible title="Core Rules — BTN C-bet (covering)">
               <p><strong>Range-bet boards:</strong> Ace-high (A-K-x, A-Q-x, A-7-x), K-high disconnected (K-9-3, K-J-2, K-4-3), Q-high disconnected, low boards (7-5-2, 8-5-3, 5-3-2), low paired (4-4-3, 6-6-3), high-high-low paired (K-K-2, K-K-4), A-side monotone (A-5-2♣).</p>
                       <p><strong>Check-back boards:</strong> Middling Broadway rainbow (K-Q-10: ~60% check), high-high-mid paired (K-K-9, K-K-8), monotone connecting OOP (A-K-8♣, A-9-8♣, K-J-3♣, K-9-8♣, Q-8-3♣, J-10-8♣), 10-9-8♣ monotone (~20% check threshold).</p>
               </Collapsible><Collapsible title="Risk Factors (BTN c-bet)">
               <p>In chip EV, BTN c-bet risk factors are: paired boards (high check-raise), low boards (BB doesn't fold enough), monotone boards (check back). In ICM these are largely <strong>neutralized</strong> because BB check-raises far less and BTN has more board coverage.</p>
-                      <table>
-                        <tr><th>Remaining risk factor</th><th>Effect</th></tr>
-                        <tr><td><strong>Monotone connecting OOP</strong></td><td>Check back some (A-K-8♣, K-J-3♣, Q-8-3♣, J-10-8♣).</td></tr>
-                        <tr><td><strong>Middling Broadway rainbow (K-Q-10)</strong></td><td>~60% check.</td></tr>
-                        <tr><td><strong>High-high-mid paired (K-K-9)</strong></td><td>Mid card gives BB some pairs → check back.</td></tr>
-                        <tr><td><strong>Deeper effective stacks</strong></td><td>More reverse implied odds when check-raised; check-back freq rises.</td></tr>
-                      </table>
+                      <DataTable columns={[{ header: 'Remaining risk factor' }, { header: 'Effect' }]} rows={[[<><strong>Monotone connecting OOP</strong></>, <>Check back some (A-K-8♣, K-J-3♣, Q-8-3♣, J-10-8♣).</>],
+                  [<><strong>Middling Broadway rainbow (K-Q-10)</strong></>, <>~60% check.</>],
+                  [<><strong>High-high-mid paired (K-K-9)</strong></>, <>Mid card gives BB some pairs → check back.</>],
+                  [<><strong>Deeper effective stacks</strong></>, <>More reverse implied odds when check-raised; check-back freq rises.</>]]} />
                       <Callout variant="good"><strong>If you cover by more than ~2x their stack, "closing your eyes and always range-betting" is approximately correct.</strong></Callout>
               </Collapsible><Collapsible title="Sizing">
               <p>BTN c-bet ~quarter pot (~1.8bb into ~5.5bb pot). BB check-raise on low boards: all-in (check-shove), not small. BB check-raise on ace-high: pure check-call — no raise. Equities that flip check-call → check-raise on Q/J-high: ~80%+. Equities that stay check-call on ace-high: ~88-90% (lockdown).</p>

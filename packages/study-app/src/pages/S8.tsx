@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S8Page() {
@@ -12,14 +12,11 @@ export function S8Page() {
           content: (
             <>
               <h3>Sizing by nut ratio</h3>
-              <table>
-                <tr><th>Situation</th><th>Sizing</th><th>Why</th></tr>
-                <tr><td>Villain capped (low nut ratio)</td><td><Action variant="bet">Overbet / pot</Action></td><td>Geometric to get stacks in. Fold% rises slower than bet size.</td></tr>
-                <tr><td>Both have nuts possible</td><td><Action variant="bet">~70% pot</Action></td><td>Large but not overbet. Nuts frequency constrains sizing.</td></tr>
-                <tr><td>Thin value hand</td><td><Action variant="check">Check</Action></td><td>Don't bet thin hands small. &lt;50% pot almost never correct IP.</td></tr>
-                <tr><td>&lt; 50% pot IP</td><td><Action variant="fold">Almost NEVER</Action></td><td>Small bets don't justify the CR risk.</td></tr>
-                <tr><td>Medium-strong (merge)</td><td><Action variant="bet">Bet pot (merge)</Action></td><td>If folds better AND called by worse (e.g. pocket Queens).</td></tr>
-              </table>
+              <DataTable columns={[{ header: 'Situation' }, { header: 'Sizing' }, { header: 'Why' }]} rows={[[<>Villain capped (low nut ratio)</>, <><Action variant="bet">Overbet / pot</Action></>, <>Geometric to get stacks in. Fold% rises slower than bet size.</>],
+                  [<>Both have nuts possible</>, <><Action variant="bet">~70% pot</Action></>, <>Large but not overbet. Nuts frequency constrains sizing.</>],
+                  [<>Thin value hand</>, <><Action variant="check">Check</Action></>, <>Don't bet thin hands small. &lt;50% pot almost never correct IP.</>],
+                  [<>&lt; 50% pot IP</>, <><Action variant="fold">Almost NEVER</Action></>, <>Small bets don't justify the CR risk.</>],
+                  [<>Medium-strong (merge)</>, <><Action variant="bet">Bet pot (merge)</Action></>, <>If folds better AND called by worse (e.g. pocket Queens).</>]]} />
 
               <Callout variant="bad">Reopening action risks being check-raised off equity. Small bets don't justify that risk. Fold% rises slower than bet size → bigger bets profit more.</Callout>
 
@@ -36,12 +33,9 @@ export function S8Page() {
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>Villain uncapped (can have nuts)</strong></td><td>Don't overbet — ~70% pot</td></tr>
-                  <tr><td><strong>Quads risk</strong></td><td>~48 combos. Don't assume villain can't have quads.</td></tr>
-                  <tr><td><strong>Turn check-back inflection</strong></td><td>If you checked turn, villain's river check = weakness → bet big</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Villain uncapped (can have nuts)</strong></>, <>Don't overbet — ~70% pot</>],
+                  [<><strong>Quads risk</strong></>, <>~48 combos. Don't assume villain can't have quads.</>],
+                  [<><strong>Turn check-back inflection</strong></>, <>If you checked turn, villain's river check = weakness → bet big</>]]} />
               </Collapsible>
 
               <Collapsible title="Sizing">

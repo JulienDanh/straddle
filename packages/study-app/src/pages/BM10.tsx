@@ -1,4 +1,4 @@
-import { Section, Callout, Code, Action, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Code, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM10Page() {
@@ -14,35 +14,26 @@ export function BM10Page() {
               <Callout variant="warn"><strong>The stack gap matters more than the fact that you cover.</strong> Covering by 2x+ → range bet. Stacks within ~8-10bb → check 50% on mid connected boards. "I cover" is not enough information.</Callout>
               
                       <h3>Board class × side</h3>
-<table>
-                        <tr><th>Board class</th><th>BB defense (covered)</th><th>UTG c-bet (covering)</th></tr>
-                        <tr><td><strong>Low disconnected (854, 752, A44)</strong></td><td><Action variant="call">Mostly check-call</Action> — Tight range lacks connection.</td><td><Action variant="bet">Range bet</Action> — BB folds offsuit connectors — can't connect.</td></tr>
-                        <tr><td><strong>Mid connected (977, 764, J97)</strong></td><td><Action variant="call">Check-call / check-raise (deep)</Action> — Range composition overrides texture.</td><td><Action variant="check">Range bet (2x+); ~50% (close)</Action> — Stack gap determines.</td></tr>
-                        <tr><td><strong>AK7, AQ2 (high)</strong></td><td><Action variant="call">Tight check-call</Action> — KQ only check-raise (short).</td><td><Action variant="check">Big bet/check split (40bb+ BB)</Action> — Check QQ/JJ/TT/weak Ax; bet large strong.</td></tr>
-                        <tr><td><strong>Ace-low paired (A88, A77, A66)</strong></td><td><Action variant="call">Check-call mostly</Action> — Short: barely has the pair.</td><td><Action variant="bet">Range bet (short BB)</Action> — ICM pressure overrides; checks develop deeper.</td></tr>
-                      </table><Collapsible title="Core Rules — BB Defense (covered, short)">
-              <table>
-                        <tr><th>Rule</th><th>Detail</th></tr>
-                        <tr><td><strong>Check-shove is a mistake vs UTG</strong></td><td>IP folds only ~60%; need &gt;75% for check-jam. UTG range too strong (sets, overpairs, TPTK).</td></tr>
-                        <tr><td><strong>Check-raise threshold (short, ICM)</strong></td><td>KQ only on K84. KJ/KT/K9 and below = pure check-call. Much stronger than chipEV.</td></tr>
-                        <tr><td><strong>Range composition overrides board texture</strong></td><td>944 looks good for BB, but if BB's defense range doesn't include offsuit 9x/4x (short), check-raising is wrong.</td></tr>
-                        <tr><td><strong>Flush turns favor the short stack</strong></td><td>Short BB: flushes 17.8% of range (suited-heavy). Deep: 12.5%. Short leads more on flush turns.</td></tr>
-                        <tr><td><strong>A♠ turn &gt; 4♠ turn for BB</strong></td><td>A♠ removes IP's suited aces. BB leads 40% on A♠, 26% on 4♠.</td></tr>
-                      </table>
+<DataTable columns={[{ header: 'Board class' }, { header: 'BB defense (covered)' }, { header: 'UTG c-bet (covering)' }]} rows={[[<><strong>Low disconnected (854, 752, A44)</strong></>, <><Action variant="call">Mostly check-call</Action> — Tight range lacks connection.</>, <><Action variant="bet">Range bet</Action> — BB folds offsuit connectors — can't connect.</>],
+                  [<><strong>Mid connected (977, 764, J97)</strong></>, <><Action variant="call">Check-call / check-raise (deep)</Action> — Range composition overrides texture.</>, <><Action variant="check">Range bet (2x+); ~50% (close)</Action> — Stack gap determines.</>],
+                  [<><strong>AK7, AQ2 (high)</strong></>, <><Action variant="call">Tight check-call</Action> — KQ only check-raise (short).</>, <><Action variant="check">Big bet/check split (40bb+ BB)</Action> — Check QQ/JJ/TT/weak Ax; bet large strong.</>],
+                  [<><strong>Ace-low paired (A88, A77, A66)</strong></>, <><Action variant="call">Check-call mostly</Action> — Short: barely has the pair.</>, <><Action variant="bet">Range bet (short BB)</Action> — ICM pressure overrides; checks develop deeper.</>]]} /><Collapsible title="Core Rules — BB Defense (covered, short)">
+              <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>Check-shove is a mistake vs UTG</strong></>, <>IP folds only ~60%; need &gt;75% for check-jam. UTG range too strong (sets, overpairs, TPTK).</>],
+                  [<><strong>Check-raise threshold (short, ICM)</strong></>, <>KQ only on K84. KJ/KT/K9 and below = pure check-call. Much stronger than chipEV.</>],
+                  [<><strong>Range composition overrides board texture</strong></>, <>944 looks good for BB, but if BB's defense range doesn't include offsuit 9x/4x (short), check-raising is wrong.</>],
+                  [<><strong>Flush turns favor the short stack</strong></>, <>Short BB: flushes 17.8% of range (suited-heavy). Deep: 12.5%. Short leads more on flush turns.</>],
+                  [<><strong>A♠ turn &gt; 4♠ turn for BB</strong></>, <>A♠ removes IP's suited aces. BB leads 40% on A♠, 26% on 4♠.</>]]} />
                       <Callout variant="bad"><strong>Bet LESS when you have the nuts on the bubble — leave 1-3bb behind.</strong> Shoving all-in when called and losing means zero tournament equity. Leaving 2bb means you're still alive — those 2bb are worth ~$200 in a $100 tournament on the bubble vs ~$0 early game.</Callout>
               </Collapsible><Collapsible title="Core Rules — UTG C-bet (covering)">
               <p><strong>Covering by 2x+ (~90%+ c-bet):</strong> Range bet or near-range-bet almost all boards. Even boards that check in chipEV (854 two-tone, 752, A44) are range-bets because BB's tight defense range lacks coverage.</p>
                       <p><strong>Stacks close (game of chicken):</strong> ~50% c-bet on mid connected boards. BB leads some boards. UTG opens tighter (~27%). Board-dependent. The stack gap matters more than coverage.</p>
                       <p><strong>40bb+ BB covered:</strong> Big-bet/check split on AK7, AQ2: check back QQ/JJ/TT/weak Ax/Kx; bet very large (67-80%) with strong hands.</p>
               </Collapsible><Collapsible title="Risk factors">
-              <table>
-                        <tr><th>Factor</th><th>Effect</th></tr>
-                        <tr><td><strong>Tighter opener = stronger IP range</strong></td><td>UTG ~20-24% vs late position much wider. Kills check-shove profitability.</td></tr>
-                        <tr><td><strong>Flush-completing turns favor short BB</strong></td><td>Short has 17.8% flushes (suited-heavy) vs deep 12.5%.</td></tr>
-                        <tr><td><strong>A♠ vs low spade turn</strong></td><td>A♠ better for BB (removes IP suited aces). BB leads 40% on A♠, 26% on 4♠.</td></tr>
-                        <tr><td><strong>BB's preflop range determines c-bet strategy</strong></td><td>Not just "I cover." If BB defends wider (deeper, closer), they have more low-mid coverage → check more.</td></tr>
-                        <tr><td><strong>ICM pressure is directional</strong></td><td>Cover by heaps → range bet (losing still leaves working stack). Close → check more (losing is catastrophic).</td></tr>
-                      </table>
+              <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Tighter opener = stronger IP range</strong></>, <>UTG ~20-24% vs late position much wider. Kills check-shove profitability.</>],
+                  [<><strong>Flush-completing turns favor short BB</strong></>, <>Short has 17.8% flushes (suited-heavy) vs deep 12.5%.</>],
+                  [<><strong>A♠ vs low spade turn</strong></>, <>A♠ better for BB (removes IP suited aces). BB leads 40% on A♠, 26% on 4♠.</>],
+                  [<><strong>BB's preflop range determines c-bet strategy</strong></>, <>Not just "I cover." If BB defends wider (deeper, closer), they have more low-mid coverage → check more.</>],
+                  [<><strong>ICM pressure is directional</strong></>, <>Cover by heaps → range bet (losing still leaves working stack). Close → check more (losing is catastrophic).</>]]} />
               </Collapsible><Collapsible title="Sizing">
               <p>River polar bet: <Code>~13.5bb</Code> leaving 1-3bb behind — never shove. Block-bet thin value ~40% pot. Check-raise short: ~4.3bb (no leverage); deep: ~6.5bb (turn/river threat). Check-shove needs &gt;75% fold; UTG folds only ~60% → mistake.</p>
               </Collapsible>

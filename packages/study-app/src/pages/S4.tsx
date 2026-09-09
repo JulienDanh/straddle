@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, BoardTable, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S4Page() {
@@ -11,13 +11,53 @@ export function S4Page() {
           label: 'Study',
           content: (
             <>
-              <h3>Board types and actions</h3>
-              <BoardTable rows={[
-                { boards: [<RandomBoard high="K" suit="monotone" variant="green" label="3-flush on board" streets={5} />], action: <Action variant="bet">Bluff (System 2)</Action>, note: "One card of the flush suit blocks flushes AND hero calls. Obvious blocking effect — use System 2 first." },
-                { boards: [<RandomBoard high="A" variant="green" streets={5} />, <RandomBoard high="K" variant="green" streets={5} />], action: <Action variant="bet">Bluff (System 1)</Action>, note: "Wide ranges, no obvious suit blanked → too hard for System 2. Bluff weakest hands first; prioritize the LOW card." },
-                { boards: [<RandomBoard high="A" variant="green" label="Three Broadway · EP" streets={5} />, <RandomBoard high="K" variant="green" label="Three Broadway · EP" streets={5} />], action: <Action variant="bet">Bluff all suited air</Action>, note: "Three Broadway cards on board + EP opener = no offsuit air in range. Only suited hands can bluff — scarce. Pure bluff them all." },
-                { boards: [<RandomBoard high="A" suit="monotone" variant="red" label="Busted straight + flush" streets={5} />], action: <Action variant="fold">Don't bluff</Action>, note: "Holding QJ♥ on a heart board blocks both busted straights AND flush draws. Terrible bluff. Prefer hands that block only one (67♥/78♥ block flush only)." },
-              ]} />
+              <DecisionTree
+                root={{
+                  question: 'Is there a 3-flush on the river?',
+                  hint: 'Monotone board — obvious blocking effect',
+                  yes: {
+                    action: <Action variant="raise">Bluff (System 2)</Action>,
+                    actionVariant: 'raise',
+                    reason: 'One card of the flush suit blocks flushes AND hero calls. Use System 2 first.',
+                    boards: [
+                      <RandomBoard high="K" suit="monotone" variant="green" label="3-flush on board" streets={5} />,
+                    ],
+                  },
+                  no: {
+                    question: 'Three Broadway on board + EP opener?',
+                    hint: 'No offsuit air in range',
+                    yes: {
+                      action: <Action variant="bet">Bluff all suited air</Action>,
+                      actionVariant: 'bet',
+                      reason: 'Only suited hands can bluff — scarce. Pure bluff them all.',
+                      boards: [
+                        <RandomBoard high="A" variant="green" label="Three Broadway · EP" streets={5} />,
+                      ],
+                    },
+                    no: {
+                      question: 'Does your hand block both busted straights AND flushes?',
+                      hint: 'e.g. QJ♥ on heart board with straight draws missed',
+                      yes: {
+                        action: <Action variant="fold">Don't bluff</Action>,
+                        actionVariant: 'fold',
+                        reason: 'Blocking both folding regions is terrible. Prefer hands blocking only one.',
+                        boards: [
+                          <RandomBoard high="A" suit="monotone" variant="red" label="Busted straight + flush" streets={5} />,
+                        ],
+                      },
+                      no: {
+                        action: <Action variant="bet">Bluff (System 1)</Action>,
+                        actionVariant: 'bet',
+                        reason: 'Wide ranges, no obvious suit blanked. Bluff weakest hands first; prioritize the LOW card.',
+                        boards: [
+                          <RandomBoard high="A" variant="green" streets={5} />,
+                          <RandomBoard high="K" variant="green" streets={5} />,
+                        ],
+                      },
+                    },
+                  },
+                }}
+              />
 
               <Callout>Low cards have good blocking effects vs linear ranges (deuce blocks few value, unblocks folds — opponents folded 2x preflop).</Callout>
 
@@ -32,7 +72,7 @@ export function S4Page() {
                   <li><strong>Two-tone flop called:</strong> opponent called with 2 suits. Bluff avoiding those; prefer others.</li>
                   <li><strong>High card vs low card of suit:</strong> high card heart is <em>worse</em> (blocks more folds). Low card heart less damaging.</li>
                 </ul>
-                <Callout variant="bad"><strong>You can't always have the ideal bluff.</strong> If hearts bet flop+turn, you <em>won't have hearts left</em> on river. Don't wait for the perfect blocker — you'll have <em>no</em> bluffing range. Value bets require bluffs (in common scenarios) — bluffs need value to carry them.</Callout>
+                <Callout variant="bad"><strong>You can't always have the ideal bluff.</strong> If hearts bet flop+turn, you <em>won't have hearts left</em> on river. Don't wait for the perfect blocker — you'll have <em>no</em> bluffing range.</Callout>
               </Collapsible>
 
               <Collapsible title="Sizing">

@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM7Page() {
@@ -38,25 +38,19 @@ export function BM7Page() {
               <Callout variant="warn"><strong>One player left to bust is not one answer.</strong> 1/8 = 12.5% (tight), 1/16 = 6.25% (looser), 2/152 = 1.3% (extreme). The absolute number is meaningless without the %.</Callout>
 
               <Collapsible title="Bubble-impact buckets">
-                <table>
-                  <tr><th>Bucket</th><th>Direction</th></tr>
-                  <tr><td><strong>% of field left to bust</strong></td><td>Higher % (12.5%) → tighter; lower % (1.3%) → slightly looser.</td></tr>
-                  <tr><td><strong>Stacks at other tables</strong></td><td>Short stacks elsewhere + you cover them → tighter opens (nearly locked to cash).</td></tr>
-                  <tr><td><strong>Position of those stacks</strong></td><td>4bb stack posting BB next → tight; full orbit left → closer to default.</td></tr>
-                  <tr><td><strong>Blind increases</strong></td><td>Who's getting hit — short/micro stacks affected; big stacks barely.</td></tr>
-                  <tr><td><strong>Someone already busting</strong></td><td>Other table busts a player you cover → you're now a lock to cash → play tighter, not looser.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Bucket' }, { header: 'Direction' }]} rows={[[<><strong>% of field left to bust</strong></>, <>Higher % (12.5%) → tighter; lower % (1.3%) → slightly looser.</>],
+                  [<><strong>Stacks at other tables</strong></>, <>Short stacks elsewhere + you cover them → tighter opens (nearly locked to cash).</>],
+                  [<><strong>Position of those stacks</strong></>, <>4bb stack posting BB next → tight; full orbit left → closer to default.</>],
+                  [<><strong>Blind increases</strong></>, <>Who's getting hit — short/micro stacks affected; big stacks barely.</>],
+                  [<><strong>Someone already busting</strong></>, <>Other table busts a player you cover → you're now a lock to cash → play tighter, not looser.</>]]} />
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>Shorter stacks at other tables (you cover)</strong></td><td>Tighten the default range.</td></tr>
-                  <tr><td><strong>Short stack posting BB next hand</strong></td><td>Tighten.</td></tr>
-                  <tr><td><strong>Blind increase about to hit micro-stack</strong></td><td>Tighten.</td></tr>
-                  <tr><td><strong>Fewer players per table to bust</strong></td><td>2 of 16 vs 2 of 57 → tighter.</td></tr>
-                  <tr><td><strong>You're short yourself</strong></td><td>Adjustments cost a larger % of your stack (10-20% vs 1-2% for chip leader).</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Shorter stacks at other tables (you cover)</strong></>, <>Tighten the default range.</>],
+                  [<><strong>Short stack posting BB next hand</strong></>, <>Tighten.</>],
+                  [<><strong>Blind increase about to hit micro-stack</strong></>, <>Tighten.</>],
+                  [<><strong>Fewer players per table to bust</strong></>, <>2 of 16 vs 2 of 57 → tighter.</>],
+                  [<><strong>You're short yourself</strong></>, <>Adjustments cost a larger % of your stack (10-20% vs 1-2% for chip leader).</>]]} />
                 <Callout variant="good"><strong>Short-stack range precision matters more than big-stack range precision.</strong> A 1-2% open-freq error costs a short stack 10-20% of their stack; the same error costs the chip leader 1-2%. Spend study time on the short-stack ranges.</Callout>
               </Collapsible>
 

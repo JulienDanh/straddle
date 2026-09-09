@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S10Page() {
@@ -12,14 +12,11 @@ export function S10Page() {
           content: (
             <>
               <h3>Sizing by situation</h3>
-              <table>
-                <tr><th>Situation</th><th>Action</th><th>Sizing</th></tr>
-                <tr><td>Can't CR but called by worse</td><td><Action variant="bet">Bet</Action></td><td>Don't let opponent polarize by checking</td></tr>
-                <tr><td>Opponent checked turn, medium hand</td><td><Action variant="bet">Bet (block)</Action></td><td>Small (25–33%) forces them to defend 75%+</td></tr>
-                <tr><td>Opponent capped (no nuts)</td><td><Action variant="bet">Bet large / overbet</Action></td><td>Large vs capped ranges</td></tr>
-                <tr><td>Opponent has high nut ratio</td><td><Action variant="bet">Bet small</Action></td><td>Nuts frequency constrains sizing</td></tr>
-                <tr><td>Short SPR (&lt;2x pot)</td><td><Action variant="allIn">Prefer jamming</Action></td><td>Checking loses optionality</td></tr>
-              </table>
+              <DataTable columns={[{ header: 'Situation' }, { header: 'Action' }, { header: 'Sizing' }]} rows={[[<>Can't CR but called by worse</>, <><Action variant="bet">Bet</Action></>, <>Don't let opponent polarize by checking</>],
+                  [<>Opponent checked turn, medium hand</>, <><Action variant="bet">Bet (block)</Action></>, <>Small (25–33%) forces them to defend 75%+</>],
+                  [<>Opponent capped (no nuts)</>, <><Action variant="bet">Bet large / overbet</Action></>, <>Large vs capped ranges</>],
+                  [<>Opponent has high nut ratio</>, <><Action variant="bet">Bet small</Action></>, <>Nuts frequency constrains sizing</>],
+                  [<>Short SPR (&lt;2x pot)</>, <><Action variant="allIn">Prefer jamming</Action></>, <>Checking loses optionality</>]]} />
 
               <Callout variant="good">When villain's range weakens, your medium-strength hands become the <em>relative nuts</em> → bet for value.</Callout>
               <Callout variant="bad"><strong>Checking converts strong hands into bluff catchers.</strong> IP auto-polarizes — bets hands that beat you, checks hands you beat. You lose value against the entire medium-strength region.</Callout>

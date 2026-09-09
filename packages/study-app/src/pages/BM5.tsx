@@ -1,4 +1,4 @@
-import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM5Page() {
@@ -38,24 +38,18 @@ export function BM5Page() {
               <Callout variant="warn"><strong>Re-steal MORE, not less, when covered and short.</strong> It feels terrible to shove A5s and bust on the bubble. But playing too passive reduces dollar EV — you cash slightly more often but never double. Think dollar EV, not binary cash/fail.</Callout>
 
               <Collapsible title="Core rules">
-                <table>
-                  <tr><th>Rule</th><th>Detail</th></tr>
-                  <tr><td><strong>SB cold-call threshold</strong></td><td>~20bb. Below: ~0% cold calls, raise/fold only.</td></tr>
-                  <tr><td><strong>SB cold calls wider when BB is short</strong></td><td>BB handcuffed (can't squeeze/lead). SB "almost in the BB" — realizes more equity.</td></tr>
-                  <tr><td><strong>Re-steal &gt; cold call when covered</strong></td><td>Win outright more often AND avoid losing postflop ~50%+ of the time.</td></tr>
-                  <tr><td><strong>3-bet sizing UP in ICM</strong></td><td>Larger 3-bets deny equity to speculative calls and lower SPR for narrow value.</td></tr>
-                  <tr><td><strong>BB defends wider than chips vs tight UTG</strong></td><td>UTG opens 8% on bubble. BB can donk-lead low/mid boards that miss UTG's range.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>SB cold-call threshold</strong></>, <>~20bb. Below: ~0% cold calls, raise/fold only.</>],
+                  [<><strong>SB cold calls wider when BB is short</strong></>, <>BB handcuffed (can't squeeze/lead). SB "almost in the BB" — realizes more equity.</>],
+                  [<><strong>Re-steal &gt; cold call when covered</strong></>, <>Win outright more often AND avoid losing postflop ~50%+ of the time.</>],
+                  [<><strong>3-bet sizing UP in ICM</strong></>, <>Larger 3-bets deny equity to speculative calls and lower SPR for narrow value.</>],
+                  [<><strong>BB defends wider than chips vs tight UTG</strong></>, <>UTG opens 8% on bubble. BB can donk-lead low/mid boards that miss UTG's range.</>]]} />
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>BB covers both opener and SB</strong></td><td>SB cold calls shrink — BB can squeeze/lead post. SB plays raise/fold.</td></tr>
-                  <tr><td><strong>BB is short</strong></td><td>SB cold calls more — BB can't apply pressure (handcuffed).</td></tr>
-                  <tr><td><strong>BTN opens 70%+ (BB short)</strong></td><td>SB cold-call range widens more than expected — SB "almost in the BB."</td></tr>
-                  <tr><td><strong>Squeeze when SB can't cold call</strong></td><td>BB squeezes very liberally — cold calls don't exist, so squeeze jams print.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>BB covers both opener and SB</strong></>, <>SB cold calls shrink — BB can squeeze/lead post. SB plays raise/fold.</>],
+                  [<><strong>BB is short</strong></>, <>SB cold calls more — BB can't apply pressure (handcuffed).</>],
+                  [<><strong>BTN opens 70%+ (BB short)</strong></>, <>SB cold-call range widens more than expected — SB "almost in the BB."</>],
+                  [<><strong>Squeeze when SB can't cold call</strong></>, <>BB squeezes very liberally — cold calls don't exist, so squeeze jams print.</>]]} />
               </Collapsible>
 
               <Collapsible title="Sizing">

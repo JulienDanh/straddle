@@ -1,4 +1,4 @@
-import { Section, Callout, Tabs, Collapsible, Pyramid } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Tabs, Collapsible, Pyramid, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S5Page() {
@@ -27,15 +27,12 @@ export function S5Page() {
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect on medium hands</th></tr>
-                  <tr><td><strong>Deep (80bb+)</strong></td><td>Opponent calls more top pair → more callers above medium</td></tr>
-                  <tr><td><strong>Short (25bb)</strong></td><td>Opponent CRs top pair instead of calling → fewer calls above</td></tr>
-                  <tr><td><strong>Turn improves your range (A/K)</strong></td><td>May justify barreling medium (range advantage)</td></tr>
-                  <tr><td><strong>EP open (range bet flop)</strong></td><td>Less need to polarize; range advantage vs BB</td></tr>
-                  <tr><td><strong>Turn card quality</strong></td><td>Bad card for range + medium strength → check (JJ on Q75→ bad turn)</td></tr>
-                  <tr><td><strong>Kicker</strong></td><td>No-kicker mediums (J9, 99) check; AJ/A♥ minimum to barrel</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect on medium hands' }]} rows={[[<><strong>Deep (80bb+)</strong></>, <>Opponent calls more top pair → more callers above medium</>],
+                  [<><strong>Short (25bb)</strong></>, <>Opponent CRs top pair instead of calling → fewer calls above</>],
+                  [<><strong>Turn improves your range (A/K)</strong></>, <>May justify barreling medium (range advantage)</>],
+                  [<><strong>EP open (range bet flop)</strong></>, <>Less need to polarize; range advantage vs BB</>],
+                  [<><strong>Turn card quality</strong></>, <>Bad card for range + medium strength → check (JJ on Q75→ bad turn)</>],
+                  [<><strong>Kicker</strong></>, <>No-kicker mediums (J9, 99) check; AJ/A♥ minimum to barrel</>]]} />
               </Collapsible>
 
               <Collapsible title="Sizing">

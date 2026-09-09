@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, BoardTable, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S6Page() {
@@ -11,35 +11,79 @@ export function S6Page() {
           label: 'Study',
           content: (
             <>
-              <Callout variant="warn"><strong>Inflection: 35bb.</strong> Above \u2192 nuts-oriented CR (sets, two pair, TPTK mix). <strong>At/below \u2192 aggressive top-pair CR.</strong> Shorter = more CR. Most players under-CR top pair when short \u2014 correct the leak.</Callout>
-              
-                      <h3>Board types and actions</h3>
-                      <BoardTable rows={[
-                        { boards: [<RandomBoard high="Q" variant="green" />, <RandomBoard high="K" variant="green" />], action: <Action variant="raise">Check-raise top pair</Action>, note: <><strong>\u226435bb:</strong> top pair = pure CR. Shorter = more CR. KQ/QJ/QT pure CR; taper to Q2 pure call.</> },
-                        { boards: [<RandomBoard high="Q" suit="two-tone" variant="orange" label="Top pair + BDFD" />], action: <Action variant="call">Check-call</Action>, note: "Backdoor FD prefers check-call to realize the flush draw. Q9\u2665 calls more than Q9o. CR gives up flush equity." },
-                        { boards: [<RandomBoard high="J" variant="red" label="Two pair / sets" />, <RandomBoard high="K" variant="red" label="Two pair / sets" />], action: <Action variant="call">Trap (check-call)</Action>, note: "SPR short enough to shove river without raising flop. Two pair/sets/pockets trap." },
-                      ]} />
-              
-                      <Collapsible title="CR hierarchy (high boards)">
+              <Callout variant="warn"><strong>Inflection: 35bb.</strong> Above → nuts-oriented CR (sets, two pair, TPTK mix). <strong>At/below → aggressive top-pair CR.</strong> Shorter = more CR. Most players under-CR top pair when short — correct the leak.</Callout>
+
+              <DecisionTree
+                root={{
+                  question: 'Is your stack ≤35bb?',
+                  hint: 'Short stack = aggressive top-pair CR',
+                  yes: {
+                    question: 'What hand type?',
+                    yes: {
+                      question: 'Top pair?',
+                      hint: 'Kicker determines CR frequency',
+                      yes: {
+                        question: 'Backdoor flush draw (both suited)?',
+                        yes: {
+                          action: <Action variant="call">Check-call</Action>,
+                          actionVariant: 'call',
+                          reason: 'Realize the flush draw. CR gives up flush equity.',
+                          boards: [
+                            <RandomBoard high="Q" suit="two-tone" variant="orange" label="Top pair + BDFD" />,
+                          ],
+                        },
+                        no: {
+                          action: <Action variant="raise">Check-raise top pair</Action>,
+                          actionVariant: 'raise',
+                          reason: 'Pure CR. KQ/QJ/QT pure; taper to Q2 pure call.',
+                          boards: [
+                            <RandomBoard high="Q" variant="green" />,
+                            <RandomBoard high="K" variant="green" />,
+                          ],
+                        },
+                      },
+                      no: {
+                        action: <Action variant="call">Trap (check-call)</Action>,
+                        actionVariant: 'call',
+                        reason: 'Two pair/sets/pockets trap. SPR short enough to shove river.',
+                        boards: [
+                          <RandomBoard high="J" variant="red" label="Two pair / sets" />,
+                          <RandomBoard high="K" variant="red" label="Two pair / sets" />,
+                        ],
+                      },
+                    },
+                  },
+                  no: {
+                    action: <Action variant="call">Nuts-oriented CR</Action>,
+                    actionVariant: 'call',
+                    reason: 'Sets, two pair, TPTK mix. Less top-pair CR when deep.',
+                    boards: [],
+                  },
+                }}
+              />
+
+              <Collapsible title="CR hierarchy (high boards)">
               <p>On Q-high (Q73), kicker determines CR frequency:</p>
-                      <table>
-                        <tr><th>Hand</th><th>CR frequency</th></tr>
-                        <tr><td>KQ, QJ, QT</td><td>Pure CR</td></tr>
-                        <tr><td>Q9</td><td>Heavy CR (offsuit); backdoor FD \u2192 check-call</td></tr>
-                        <tr><td>Q8</td><td>Medium mix</td></tr>
-                        <tr><td>Q7, Q6, Q5, Q4</td><td>Tapering mix</td></tr>
-                        <tr><td>Q2</td><td>Pure call</td></tr>
-                      </table>
-              </Collapsible><Collapsible title="Risk factors">
-              <table>
-                        <tr><th>Factor</th><th>Effect</th></tr>
-                        <tr><td><strong>Backdoor FD (both suited)</strong></td><td>Prefers check-call (Q9\u2665 calls more than Q9o)</td></tr>
-                        <tr><td><strong>Two pair / sets / pockets</strong></td><td>Trap (check-call) \u2014 SPR short enough to shove</td></tr>
-                        <tr><td><strong>Opponent c-betting 100%</strong></td><td>CR all top pairs \u2014 their range too weak</td></tr>
-                        <tr><td><strong>Deeper stacks (&gt;35bb)</strong></td><td>Less CR with thin top pair; mix CR/check-call with great kicker</td></tr>
-                      </table>
-              </Collapsible><Collapsible title="Sizing">
-              <p>CR to <strong>small size</strong> (~3x the c-bet). Short stacks = 2-street game.</p>
+              <DataTable columns={[{header:'Hand'},{header:'CR frequency'}]} rows={[
+                ['KQ, QJ, QT', 'Pure CR'],
+                ['Q9', 'Heavy CR (offsuit); backdoor FD → check-call'],
+                ['Q8', 'Medium mix'],
+                ['Q7, Q6, Q5, Q4', 'Tapering mix'],
+                ['Q2', 'Pure call'],
+              ]} />
+              </Collapsible>
+
+              <Collapsible title="Risk factors">
+                <DataTable columns={[{header:'Factor'},{header:'Effect'}]} rows={[
+                  [<><strong>Backdoor FD (both suited)</strong></>, 'Prefers check-call (Q9♥ calls more than Q9o)'],
+                  [<><strong>Two pair / sets / pockets</strong></>, 'Trap (check-call) — SPR short enough to shove'],
+                  [<><strong>Opponent c-betting 100%</strong></>, 'CR all top pairs — their range too weak'],
+                  [<><strong>Deeper stacks (&gt;35bb)</strong></>, 'Less CR with thin top pair; mix CR/check-call with great kicker'],
+                ]} />
+              </Collapsible>
+
+              <Collapsible title="Sizing">
+                <p>CR to <strong>small size</strong> (~3x the c-bet). Short stacks = 2-street game.</p>
               </Collapsible>
             </>
           ),

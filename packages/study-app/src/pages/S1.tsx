@@ -1,6 +1,5 @@
-import { Section, Callout, Tag, Action, RandomBoard, BoardTable, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Tag, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
-
 
 export function S1Page() {
   return (
@@ -12,13 +11,49 @@ export function S1Page() {
           label: 'Study',
           content: (
             <>
-              <h3>Board types and actions</h3>
-              <BoardTable rows={[
-                { boards: [<RandomBoard high="T" variant="green" />, <RandomBoard high="J" variant="green" />, <RandomBoard high="K" variant="green" />, <RandomBoard high="A" variant="green" />, <RandomBoard high="Q" connected variant="green" />, <RandomBoard high="K" connected variant="green" />], action: <Action variant="bet">C-bet 100%</Action>, note: "Every hand. Small size. 1 straight → still bet frequently." },
-                { boards: [<RandomBoard high="A" suit="monotone" variant="orange" />, <RandomBoard akx variant="orange" />, <RandomBoard akx variant="orange" />, <RandomBoard high="A" paired lowCard={2} variant="orange" label="A22" />, <RandomBoard high="J" paired lowCard={6} variant="orange" label="High-low-low" />], action: <Action variant="check">Mix</Action>, note: <><Action variant="bet">Bet</Action> strong + weak · <Action variant="check">Check</Action> medium</> },
-                { boards: [<RandomBoard high="J" connected variant="red" />, <RandomBoard high="T" connected variant="red" />, <RandomBoard high="9" connected variant="red" />], action: <Action variant="check">Mix</Action>, note: <><Action variant="bet">Bet</Action> strong + weak · <Action variant="check">Check</Action> medium · 3 straights → slow down heavily</> },
-                { boards: [<RandomBoard high="9" variant="orange" />, <RandomBoard high="9" paired variant="orange" label="9-high · paired" />], action: <Action variant="check">Mix ~70/30</Action>, note: "Strong+weak bet, medium checks. No 100% exists." },
-              ]} />
+              <DecisionTree
+                root={{
+                  question: 'Is the board T-high or higher?',
+                  hint: 'A, K, Q, J, T as the highest card',
+                  yes: {
+                    question: 'Are there risk factors?',
+                    hint: 'Monotone · AKx · Paired low under high · 3+ straights',
+                    yes: {
+                      action: <Action variant="check">Mix</Action>,
+                      actionVariant: 'check',
+                      reason: 'Bet strong + weak, check medium',
+                      boards: [
+                        <RandomBoard high="A" suit="monotone" variant="orange" />,
+                        <RandomBoard akx variant="orange" />,
+                        <RandomBoard high="A" paired lowCard={2} variant="orange" label="A22" />,
+                        <RandomBoard high="J" paired lowCard={6} variant="orange" label="High-low-low" />,
+                        <RandomBoard high="J" connected variant="red" />,
+                      ],
+                    },
+                    no: {
+                      action: <Action variant="bet">C-bet 100%</Action>,
+                      actionVariant: 'bet',
+                      reason: 'Every hand. Small size.',
+                      boards: [
+                        <RandomBoard high="T" variant="green" />,
+                        <RandomBoard high="J" variant="green" />,
+                        <RandomBoard high="K" variant="green" />,
+                        <RandomBoard high="A" variant="green" />,
+                        <RandomBoard high="Q" connected variant="green" />,
+                      ],
+                    },
+                  },
+                  no: {
+                    action: <Action variant="check">Mix ~70/30</Action>,
+                    actionVariant: 'check',
+                    reason: '9-high & below. No 100% exists. Bet strong+weak, check medium.',
+                    boards: [
+                      <RandomBoard high="9" variant="orange" />,
+                      <RandomBoard high="9" paired variant="orange" label="9-high paired" />,
+                    ],
+                  },
+                }}
+              />
 
               <Callout>Bucket 1 (T-high+) occurs far more often — one ace makes a flop ace-high. Highest-ROI piece.</Callout>
               <Callout variant="warn"><strong>Bet MORE when shallow, not less.</strong> Most players do the opposite — correct the leak.</Callout>
@@ -28,9 +63,13 @@ export function S1Page() {
               </Collapsible>
 
               <Collapsible title="Risk factor details">
+                <p><strong>Monotone</strong> — Ace-monotone is a risk factor. Bet strong + weak, check medium.</p>
+                <p><strong>AKx family</strong> — AK2/AK3/AK4. Slow down — not 100%.</p>
+                <p><strong>High-low-low (paired low under high)</strong> — T55, J66, K33. Bet trips + weak, check underpairs.</p>
+                <Callout variant="bad"><strong>Not High-High-Low.</strong> KK3 rainbow is <em>not</em> a risk factor — c-bet 100%. Only paired low under high counts.</Callout>
+                <p><strong>Straights possible</strong> — 1 straight → still bet frequently. 3 straights → slow down heavily.</p>
                 <p><strong>Stack depth</strong> <Tag variant="risk">secondary</Tag> — deeper (→150bb) → caution. Shallower (→20bb) → lean into 100%.</p>
                 <p><strong>Blocker nuance (high-low-low):</strong> AT with an ace that blocks backdoor flush draws bets more; AT without that blocker checks more.</p>
-                <Callout variant="bad"><strong>Not High-High-Low.</strong> KK3 rainbow is <em>not</em> a risk factor — c-bet 100%. Only paired low under high counts.</Callout>
               </Collapsible>
 
               <Collapsible title="Sizing">

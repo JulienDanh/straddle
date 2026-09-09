@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, BoardTable, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 
@@ -12,20 +12,73 @@ export function S2Page() {
           label: 'Study',
           content: (
             <>
-              <h3>Board types and actions</h3>
-              <BoardTable rows={[
-                { boards: [<RandomBoard high="A" variant="green" />, <RandomBoard high="K" variant="green" />, <RandomBoard high="Q" variant="green" />], action: <Action variant="bet">C-bet 100%</Action>, note: "Ace-high. Risk factors: monotone, paired, deep stacks." },
-                { boards: [<RandomBoard high="K" variant="green" />, <RandomBoard high="Q" variant="green" />, <RandomBoard high="J" variant="green" />, <RandomBoard high="T" variant="green" />], action: <Action variant="bet">C-bet 100%</Action>, note: "T–K high + deuce/3 present → disconnected → bet 100%." },
-                { boards: [<RandomBoard high="A" suit="monotone" variant="orange" />, <RandomBoard high="A" paired variant="orange" label="A-J-J" />], action: <Action variant="check">Mix</Action>, note: <><Action variant="bet">Bet</Action> strong + weak · <Action variant="check">Check</Action> medium · deeper → more checking</> },
-                { boards: [<RandomBoard high="K" paired variant="orange" />, <RandomBoard high="K" suit="monotone" variant="orange" />], action: <Action variant="check">Mix</Action>, note: "T–K risk factors: two low cards (biggest), monotone. Paired less concerning." },
-                { boards: [<RandomBoard high="9" variant="orange" />, <RandomBoard high="9" variant="orange" />, <RandomBoard high="9" variant="orange" />], action: <Action variant="check">Mix ~60/40</Action>, note: "9-high & below. Bet top + bottom (selective), check middle. No 100% exists." },
-              ]} />
+              <DecisionTree
+                root={{
+                  question: 'What is the high card?',
+                  yes: {
+                    question: 'Ace-high?',
+                    hint: 'BTN has the most aces',
+                    yes: {
+                      question: 'Risk factors?',
+                      hint: 'Monotone · Paired · Deep stacks',
+                      yes: {
+                        action: <Action variant="check">Mix</Action>,
+                        actionVariant: 'check',
+                        reason: 'Bet strong + weak, check medium. Deeper → more checking.',
+                        boards: [
+                          <RandomBoard high="A" suit="monotone" variant="orange" />,
+                          <RandomBoard high="A" paired variant="orange" label="A-J-J" />,
+                        ],
+                      },
+                      no: {
+                        action: <Action variant="bet">C-bet 100%</Action>,
+                        actionVariant: 'bet',
+                        reason: 'BTN has the most aces. Risk-free.',
+                        boards: [
+                          <RandomBoard high="A" variant="green" />,
+                        ],
+                      },
+                    },
+                    no: {
+                      question: 'T–K high. Deuce or 3 present?',
+                      hint: 'Disconnected = no two low cards interacting',
+                      yes: {
+                        action: <Action variant="bet">C-bet 100%</Action>,
+                        actionVariant: 'bet',
+                        reason: 'Disconnected → bet 100%.',
+                        boards: [
+                          <RandomBoard high="K" variant="green" />,
+                          <RandomBoard high="Q" variant="green" />,
+                          <RandomBoard high="T" variant="green" />,
+                        ],
+                      },
+                      no: {
+                        action: <Action variant="check">Mix</Action>,
+                        actionVariant: 'check',
+                        reason: 'Two low cards (biggest risk) or monotone. Bet strong+weak, check middle.',
+                        boards: [
+                          <RandomBoard high="K" paired variant="orange" />,
+                          <RandomBoard high="K" suit="monotone" variant="orange" />,
+                        ],
+                      },
+                    },
+                  },
+                  no: {
+                    action: <Action variant="check">Mix ~60/40</Action>,
+                    actionVariant: 'check',
+                    reason: '9-high & below. No 100% exists. BTN misses low boards harder.',
+                    boards: [
+                      <RandomBoard high="9" variant="orange" />,
+                    ],
+                  },
+                }}
+              />
 
               <Callout>BTN range is wider (offsuit 8s+), so it misses low boards harder. When BTN doesn't interact, build a checking strategy — bet top, bet bottom, check middle.</Callout>
 
               <Collapsible title="Two-suit awareness (key skill)">
                 <p>On two-tone boards, BB defends around <em>two</em> suits. Most only think about the flush-draw suit. Also <strong>block the second suit</strong> (non-flush-draw suit BB calls with via backdoor draws) — no equity risk.</p>
-                <Callout variant="warn"><strong>K83 two-tone (hearts+diamonds):</strong> KJ with heart+diamond = pure bet. KJ with spades+clubs (both off) = pure check. KJ with a heart blocks BB's heart-based continuing range with no equity risk.</Callout>
+                <Callout variant="warn"><strong>K83 two-tone (hearts+diamonds):</strong> KJ with heart+diamond = pure bet. KJ with spades+clubs (both off) = pure check.</Callout>
               </Collapsible>
 
               <Collapsible title="Sizing">

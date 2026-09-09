@@ -1,4 +1,4 @@
-import { Section, Callout, H, Tabs, Collapsible } from '@poker/design-system/src/components/ui'
+import { Section, Callout, H, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S11Page() {
@@ -12,22 +12,16 @@ export function S11Page() {
           content: (
             <>
               <h3>Good vs bad bluff catchers</h3>
-              <table>
-                <tr><th>Attribute</th><th>Good</th><th>Bad</th></tr>
-                <tr><td>Blocks value</td><td>King (blocks KK, KQ)</td><td>8/9 (blocks nothing valuable)</td></tr>
-                <tr><td>Unblocks bluffs</td><td>4, 3, deuce</td><td>8, 9, T (blocks offsuit opens)</td></tr>
-              </table>
+              <DataTable columns={[{ header: 'Attribute' }, { header: 'Good' }, { header: 'Bad' }]} rows={[[<>Blocks value</>, <>King (blocks KK, KQ)</>, <>8/9 (blocks nothing valuable)</>],
+                  [<>Unblocks bluffs</>, <>4, 3, deuce</>, <>8, 9, T (blocks offsuit opens)</>]]} />
 
               <Callout>Value range <em>wide</em> → focus on unblocking bluffs. <em>Narrow</em> → focus on blocking value.</Callout>
               <Callout variant="warn"><strong>Preflop awareness:</strong> BTN opens suited 5+ and offsuit 8+. 4-x/3-x <em>unblock</em> bluffs (not opened); 8-x/9-x <em>block</em> bluffs (opened).</Callout>
 
               <Collapsible title="Three keys">
-                <table>
-                  <tr><th>#</th><th>Key</th><th>Description</th></tr>
-                  <tr><td>1</td><td><strong>Range awareness</strong></td><td>Know what combos you arrive with</td></tr>
-                  <tr><td>2</td><td><strong>Unblock bluffs</strong></td><td>Prefer hands that don't block opponent's bluffing region</td></tr>
-                  <tr><td>3</td><td><strong>Block value</strong></td><td>Prefer hands that block opponent's value region</td></tr>
-                </table>
+                <DataTable columns={[{ header: '#' }, { header: 'Key' }, { header: 'Description' }]} rows={[[<>1</>, <><strong>Range awareness</strong></>, <>Know what combos you arrive with</>],
+                  [<>2</>, <><strong>Unblock bluffs</strong></>, <>Prefer hands that don't block opponent's bluffing region</>],
+                  [<>3</>, <><strong>Block value</strong></>, <>Prefer hands that block opponent's value region</>]]} />
               </Collapsible>
 
               <Collapsible title="Core principle">

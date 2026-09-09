@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM4Page() {
@@ -38,22 +38,16 @@ export function BM4Page() {
               <Callout variant="bad"><strong>Limping is a MISTAKE when you cover a short stack on the bubble.</strong> BB overfolds ~85%. Limping gives free equity realization to hands that would fold to a shove. Shove/raise instead.</Callout>
 
               <Collapsible title="Core rules">
-                <table>
-                  <tr><th>Rule</th><th>Detail</th></tr>
-                  <tr><td><strong>BB calls only ~10-22%</strong></td><td>vs ~37% call rate in chip model. ICM pressure roughly halves BB call frequency.</td></tr>
-                  <tr><td><strong>Open-shove selection shifts UP in ICM</strong></td><td>Drop A2s/A3s; threshold shifts past AJo to AQo. Bluffs shift up with value.</td></tr>
-                  <tr><td><strong>Limp-shove disappears at 40+bb</strong></td><td>Limp-call pairs instead — BB can't pile vs uncapped, trapping range.</td></tr>
-                  <tr><td><strong>Covering SB at ~22bb</strong></td><td>Shove vs limp depends on other-table ICM pressure. More pressure = more shoving.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>BB calls only ~10-22%</strong></>, <>vs ~37% call rate in chip model. ICM pressure roughly halves BB call frequency.</>],
+                  [<><strong>Open-shove selection shifts UP in ICM</strong></>, <>Drop A2s/A3s; threshold shifts past AJo to AQo. Bluffs shift up with value.</>],
+                  [<><strong>Limp-shove disappears at 40+bb</strong></>, <>Limp-call pairs instead — BB can't pile vs uncapped, trapping range.</>],
+                  [<><strong>Covering SB at ~22bb</strong></>, <>Shove vs limp depends on other-table ICM pressure. More pressure = more shoving.</>]]} />
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>Other-table short stacks</strong></td><td>Covering SB leans harder into shoving/raising (max ICM pressure on BB).</td></tr>
-                  <tr><td><strong>BB call frequency</strong></td><td>BB calls only ~10-22% when covered (vs ~37% in chip model). Limping gives free equity to folders.</td></tr>
-                  <tr><td><strong>At 25% field left</strong></td><td>Limping reappears for covered short stacks; on direct bubble, gone.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Other-table short stacks</strong></>, <>Covering SB leans harder into shoving/raising (max ICM pressure on BB).</>],
+                  [<><strong>BB call frequency</strong></>, <>BB calls only ~10-22% when covered (vs ~37% in chip model). Limping gives free equity to folders.</>],
+                  [<><strong>At 25% field left</strong></>, <>Limping reappears for covered short stacks; on direct bubble, gone.</>]]} />
               </Collapsible>
 
               <Collapsible title="Sizing">

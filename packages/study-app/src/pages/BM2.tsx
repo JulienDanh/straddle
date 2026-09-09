@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM2Page() {
@@ -54,13 +54,10 @@ export function BM2Page() {
               </Collapsible>
 
               <Collapsible title="Risk factors">
-                <table>
-                  <tr><th>Factor</th><th>Effect</th></tr>
-                  <tr><td><strong>Open-shove hand shift (covered)</strong></td><td>Shift stronger — AQ not AJ. Offsuit Ax shove terribly. Drop A2s/A3s.</td></tr>
-                  <tr><td><strong>Low pairs (22-33) when covered and short</strong></td><td>Often fold — they block the blinds' pair-folds, hurting your fold equity.</td></tr>
-                  <tr><td><strong>Covered by one but cover the rest</strong></td><td>Still wider than baseline — covering player folds ~80%; you pressure the rest.</td></tr>
-                  <tr><td><strong>FGS: short stacks at other tables</strong></td><td>Tighten further — folding has positive $EV when others may bust before you.</td></tr>
-                </table>
+                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Open-shove hand shift (covered)</strong></>, <>Shift stronger — AQ not AJ. Offsuit Ax shove terribly. Drop A2s/A3s.</>],
+                  [<><strong>Low pairs (22-33) when covered and short</strong></>, <>Often fold — they block the blinds' pair-folds, hurting your fold equity.</>],
+                  [<><strong>Covered by one but cover the rest</strong></>, <>Still wider than baseline — covering player folds ~80%; you pressure the rest.</>],
+                  [<><strong>FGS: short stacks at other tables</strong></>, <>Tighten further — folding has positive $EV when others may bust before you.</>]]} />
                 <Callout><strong>Folding is not zero EV on the bubble.</strong> With shorter stacks elsewhere, folding has positive $EV — and you get free hands coming next. This makes the thinnest opens pass.</Callout>
               </Collapsible>
 
