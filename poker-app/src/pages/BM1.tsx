@@ -1,6 +1,6 @@
 import { Section, Callout, Code, Action } from '../components/ui'
 import { StrategyQuestions } from '../components/StrategyQuestions'
-import { RangePreview } from '../components/RangePreview'
+import { RangeBadge } from '../components/RangePreview'
 
 
 export function BM1Page() {
@@ -11,9 +11,9 @@ export function BM1Page() {
         <Callout variant="warn"><strong>Blockers become MORE valuable than playability in ICM.</strong> A2s opens where Q9s folds. A9o opens where T9s folds. You're blocking 3-bet bluffs, not playing postflop — because opponents 3-bet/fold, not cold call.</Callout>
 
         <h3>Range visualizations (ICM baselines)</h3>
-        <div className="flex flex-wrap gap-4 mb-4">
-          <RangePreview title="UTG 30bb · ICM equal stacks · ~16%" range="55+, A8s+, AJo+, ATo+, KQs, KJs, KJo, QJs, QJo, JTs" color="#6aa6ff" />
-          <RangePreview title="BTN 40bb · ICM equal stacks · ~35%" range="33+, A2s+, A6o+, A9o+, K7s+, K9o+, Q8s+, Q9o+, J8s+, J9o+, T8s+, T9o, 98s, 87s, 76s, 65s, 54s" color="#6aa6ff" />
+        <div className="flex flex-wrap gap-2 mb-4">
+          <RangeBadge label="UTG 30bb · 16%" range="55+, A8s+, AJo+, ATo+, KQs, KJs, KJo, QJs, QJo, JTs" color="#6aa6ff" />
+          <RangeBadge label="BTN 40bb · 35%" range="33+, A2s+, A6o+, A9o+, K7s+, K9o+, Q8s+, Q9o+, J8s+, J9o+, T8s+, T9o, 98s, 87s, 76s, 65s, 54s" color="#6aa6ff" />
         </div>
 
         <h3>ChipEV vs ICM-Adjusted</h3>
