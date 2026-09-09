@@ -42,7 +42,7 @@ export function S4Page() {
                         actionVariant: 'fold',
                         reason: 'Blocking both folding regions is terrible. Prefer hands blocking only one.',
                         boards: [
-                          <RandomBoard high="A" suit="monotone" variant="red" label="Busted straight + flush" streets={5} />,
+                          <RandomBoard high="A" suit="two-tone" variant="red" label="Busted straight + flush" streets={5} />,
                         ],
                       },
                       no: {

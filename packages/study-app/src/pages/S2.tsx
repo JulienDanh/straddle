@@ -14,7 +14,7 @@ export function S2Page() {
             <>
               <DecisionTree
                 root={{
-                  question: 'What is the high card?',
+                  question: 'Is the high card T or higher?',
                   yes: {
                     question: 'Ace-high?',
                     hint: 'BTN has the most aces',

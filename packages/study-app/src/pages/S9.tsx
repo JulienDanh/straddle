@@ -43,8 +43,8 @@ export function S9Page() {
                         actionVariant: 'call',
                         reason: 'Pure call (vs small bet). 3-straight + 3-flush = call or CR.',
                         boards: [
-                          <RandomBoard high="K" variant="green" />,
-                          <RandomBoard high="Q" variant="green" />,
+                          <RandomBoard high="K" suit="two-tone" variant="green" />,
+                          <RandomBoard high="Q" suit="two-tone" variant="green" />,,
                         ],
                       },
                       no: {

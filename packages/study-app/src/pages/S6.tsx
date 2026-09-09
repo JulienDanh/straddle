@@ -18,39 +18,36 @@ export function S6Page() {
                   question: 'Is your stack ≤35bb?',
                   hint: 'Short stack = aggressive top-pair CR',
                   yes: {
-                    question: 'What hand type?',
+                    question: 'Top pair (good kicker)?',
+                    hint: 'KQ/QJ/QT pure CR; taper to Q2 pure call',
                     yes: {
-                      question: 'Top pair?',
-                      hint: 'Kicker determines CR frequency',
+                      question: 'Backdoor flush draw (both suited)?',
                       yes: {
-                        question: 'Backdoor flush draw (both suited)?',
-                        yes: {
-                          action: <Action variant="call">Check-call</Action>,
-                          actionVariant: 'call',
-                          reason: 'Realize the flush draw. CR gives up flush equity.',
-                          boards: [
-                            <RandomBoard high="Q" suit="two-tone" variant="orange" label="Top pair + BDFD" />,
-                          ],
-                        },
-                        no: {
-                          action: <Action variant="raise">Check-raise top pair</Action>,
-                          actionVariant: 'raise',
-                          reason: 'Pure CR. KQ/QJ/QT pure; taper to Q2 pure call.',
-                          boards: [
-                            <RandomBoard high="Q" variant="green" />,
-                            <RandomBoard high="K" variant="green" />,
-                          ],
-                        },
-                      },
-                      no: {
-                        action: <Action variant="call">Trap (check-call)</Action>,
+                        action: <Action variant="call">Check-call</Action>,
                         actionVariant: 'call',
-                        reason: 'Two pair/sets/pockets trap. SPR short enough to shove river.',
+                        reason: 'Realize the flush draw. CR gives up flush equity.',
                         boards: [
-                          <RandomBoard high="J" variant="red" label="Two pair / sets" />,
-                          <RandomBoard high="K" variant="red" label="Two pair / sets" />,
+                          <RandomBoard high="Q" suit="two-tone" variant="orange" label="Top pair + BDFD" />,
                         ],
                       },
+                      no: {
+                        action: <Action variant="raise">Check-raise top pair</Action>,
+                        actionVariant: 'raise',
+                        reason: 'Pure CR. Shorter = more aggressive.',
+                        boards: [
+                          <RandomBoard high="Q" variant="green" />,
+                          <RandomBoard high="K" variant="green" />,
+                        ],
+                      },
+                    },
+                    no: {
+                      action: <Action variant="call">Trap (check-call)</Action>,
+                      actionVariant: 'call',
+                      reason: 'Two pair/sets/pockets trap. SPR short enough to shove river.',
+                      boards: [
+                        <RandomBoard high="J" variant="red" label="Two pair / sets" />,
+                        <RandomBoard high="K" variant="red" label="Two pair / sets" />,
+                      ],
                     },
                   },
                   no: {
