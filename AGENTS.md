@@ -108,7 +108,7 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`HoleCards`** — renders two hole cards as visual card faces. Prop: `cards` as a 4-char string (e.g. `"AsKd"`), optional `size`.
 - **`PlayingCard`** — single card face. Props: `card` (e.g. `"As"`), `size`.
 - **`BoardType`** — a pill showing a visual board + a texture label. Props: `cards?`, `label`, `variant` (`'default' | 'green' | 'orange' | 'red'`), `size`.
-- **`RandomBoard`** — generates a random flop matching constraints and renders it as a `BoardType`. Props: `high` (`'A' | 'K' | 'Q' | 'J' | 'T' | '9'`), `suit` (`'monotone' | 'two-tone' | 'rainbow'`), `paired`, `connected`, `lowCard` (rank index), `akx`, `straightPossible` (1/2/3), `label?`, `variant?`, `size?`, `streets?` (3/4/5).
+- **`RandomBoard`** — generates a random flop matching constraints and renders it as a `BoardType`. Props: `high` (`'A' | 'K' | 'Q' | 'J' | 'T' | '9'`), `suit` (`'monotone' | 'two-tone' | 'rainbow'`), `paired`, `connected`, `lowCard` (rank index), `akx`, `label?`, `variant?`, `size?`, `streets?` (3/4/5).
 - **`Action`** — inline colored badge for poker actions. Props: `variant` (`'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'`), children = label text.
 - **`H`** — colored heart suit symbol for inline text. Only `H` exists; no `S`/`D`/`C` suit components.
 
@@ -164,4 +164,3 @@ When building a `DecisionTree` for a board-texture system:
 - **No unsourced claims.** Every rule should trace to a statement in a transcript. If you're inferring a rule, say so or leave it out.
 - **No emoji or decorative styling.** The tags, callouts, and action badges carry the visual hierarchy. Adding icons or color beyond the defined palette makes it harder to scan, not easier.
 - **No mixing sizings across systems.** System 1 is ~40% pot. System 2 is 1/4 to 1/3 pot. Don't generalize — cite the transcript.
-- **No BoardTable.** Use `DecisionTree` for board-texture systems. BoardTable is deprecated.

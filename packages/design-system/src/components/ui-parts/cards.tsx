@@ -241,37 +241,3 @@ function randomExtraCard(usedCards: Set<string>, avoidSuit?: string): string {
   usedCards.add(card)
   return card
 }
-
-// ---- BoardTable ----
-export interface BoardTableRow {
-  boards: ReactNode[]
-  action: ReactNode
-  note?: ReactNode
-}
-
-export function BoardTable({ rows }: { rows: BoardTableRow[] }) {
-  return (
-    <table className="w-full border-collapse my-3 text-[13px]">
-      <thead>
-        <tr>
-          <th style={{ width: '45%' }}>Boards</th>
-          <th style={{ width: '20%' }}>Action</th>
-          <th>Note</th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row, i) => (
-          <tr key={i}>
-            <td>
-              <div className="flex flex-wrap gap-2 items-center">
-                {row.boards}
-              </div>
-            </td>
-            <td>{row.action}</td>
-            <td className="text-muted">{row.note}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  )
-}

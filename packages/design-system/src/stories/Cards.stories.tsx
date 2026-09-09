@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { HoleCards, Board, BoardType, RandomBoard, BoardTable, H as Heart } from '../components/ui-parts/cards'
+import { HoleCards, Board, BoardType, RandomBoard, H as Heart } from '../components/ui-parts/cards'
 import { Action } from '../components/ui-parts/primitives'
 
 const meta = {
@@ -56,16 +56,6 @@ export const RandomBoards: Story = {
       </div>
       <div className="text-xs text-muted">Re-rolls on each render</div>
     </div>
-  ),
-}
-
-export const BoardTableExample: Story = {
-  render: () => (
-    <BoardTable rows={[
-      { boards: [<RandomBoard high="A" variant="green" />, <RandomBoard high="K" variant="green" />], action: <Action variant="bet">C-bet 100%</Action>, note: 'T-high+ clean. Small size.' },
-      { boards: [<RandomBoard high="A" suit="monotone" variant="orange" />, <RandomBoard high="J" paired lowCard={6} variant="orange" />], action: <Action variant="check">Mix</Action>, note: 'Bet strong + weak, check medium.' },
-      { boards: [<RandomBoard high="9" variant="orange" />], action: <Action variant="check">Mix ~70/30</Action>, note: 'No 100% exists.' },
-    ]} />
   ),
 }
 

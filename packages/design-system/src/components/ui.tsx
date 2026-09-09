@@ -7,8 +7,8 @@ export {
 
 export {
   H,
-  HoleCards, Board, BoardType, RandomBoard, BoardTable,
-  type RandomBoardProps, type BoardTableRow,
+  HoleCards, Board, BoardType, RandomBoard,
+  type RandomBoardProps,
 } from './ui-parts/cards'
 
 export { Tabs } from './ui-parts/tabs'
