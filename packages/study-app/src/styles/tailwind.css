@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "../../../../packages/design-system/src";
+
 @theme {
   /* Surfaces — match :root in global.css */
   --color-bg: #0f1419;
