@@ -49,7 +49,7 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
   const color = LEAF_COLOR[data.variant] || '#8499b5'
   return (
     <div
-      className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
+      className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg relative"
       style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}`, pointerEvents: 'auto' }}
     >
       <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
@@ -58,20 +58,23 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
       </div>
       <span className="text-[12px] font-medium text-[#d8e2ee] leading-snug block mt-0.5">{data.reason}</span>
       {data.boards && data.boards.length > 0 && (
-        <>
-          <button
-            onClick={() => setOpen(!open)}
-            className="text-[10px] text-[#8499b5] hover:text-[#d8e2ee] cursor-pointer mt-1.5 nodrag"
-            style={{ pointerEvents: 'auto' }}
-          >
-            {open ? '− Hide' : `+ ${data.boards.length} examples`}
-          </button>
-          {open && (
-            <div className="flex flex-wrap gap-1.5 mt-1.5">
-              {data.boards.map((b, i) => <div key={i}>{b}</div>)}
-            </div>
-          )}
-        </>
+        <button
+          onClick={() => setOpen(!open)}
+          className="text-[10px] text-[#8499b5] hover:text-[#d8e2ee] cursor-pointer mt-1.5 nodrag"
+          style={{ pointerEvents: 'auto' }}
+        >
+          {open ? '− Hide' : `+ ${data.boards.length} examples`}
+        </button>
+      )}
+      {open && data.boards && (
+        <div
+          className="absolute left-full top-0 ml-3 z-50 bg-[#1a2230] border border-[#2e3a4d] rounded-lg p-2.5 shadow-2xl nodrag"
+          style={{ pointerEvents: 'auto', minWidth: '200px' }}
+        >
+          <div className="flex flex-wrap gap-1.5">
+            {data.boards.map((b, i) => <div key={i}>{b}</div>)}
+          </div>
+        </div>
       )}
     </div>
   )
