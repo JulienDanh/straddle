@@ -1,6 +1,5 @@
 import { Section, Callout, Action } from '@poker/design-system/src/components/ui'
 import { StrategyQuestions } from '@poker/design-system/src/components/StrategyQuestions'
-import { SmartRange } from '@poker/design-system/src/components/SmartRange'
 
 
 export function BM3Page() {
@@ -10,14 +9,6 @@ export function BM3Page() {
         <p>You cover most/all stacks behind. Open significantly wider than the ICM equal-stack baseline — often 2x+ from EP. Key adjustments: how much you cover and whether the blinds are deep or very short.</p>
         <Callout variant="warn"><strong>Open shoves are heavily underused by regs when covering on the bubble.</strong> When blinds are sub-20-25bb and you cover, open-shove a huge chunk of your range. Defaulting to min-raise/fold with 70-85% of hands leaves massive raise-fold equity on the table.</Callout>
 
-        <h3>Range visualizations</h3>
-        <div className="flex flex-wrap gap-2 mb-4">
-          <SmartRange pct={75} label="BTN 125bb · 75%" color="#5fd0a8" />
-          <SmartRange pct={68} label="BTN 80bb · 68%" color="#5fd0a8" />
-          <SmartRange pct={35} label="UTG 100bb · 35%" color="#5fd0a8" />
-          <SmartRange pct={25} label="UTG 58bb · 25%" color="#5fd0a8" />
-          <SmartRange pct={38} label="UTG 65bb · 38%" color="#5fd0a8" />
-        </div>
 
         <h3>Your cover ratio × BB depth</h3>
         <p>Composition shifts with BB stack.</p>

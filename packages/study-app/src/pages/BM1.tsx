@@ -1,6 +1,5 @@
 import { Section, Callout, Code, Action } from '@poker/design-system/src/components/ui'
 import { StrategyQuestions } from '@poker/design-system/src/components/StrategyQuestions'
-import { SmartRange } from '@poker/design-system/src/components/SmartRange'
 
 
 export function BM1Page() {
@@ -10,11 +9,6 @@ export function BM1Page() {
         <p>Equal stacks on the bubble. We compare ICM-adjusted preflop ranges to ChipEV to identify the repeating shifts: blockers gain value, speculative hands and cold calls drop, value thresholds tighten, shoves fade.</p>
         <Callout variant="warn"><strong>Blockers become MORE valuable than playability in ICM.</strong> A2s opens where Q9s folds. A9o opens where T9s folds. You're blocking 3-bet bluffs, not playing postflop — because opponents 3-bet/fold, not cold call.</Callout>
 
-        <h3>Range visualizations (ICM baselines)</h3>
-        <div className="flex flex-wrap gap-2 mb-4">
-          <SmartRange pct={16} label="UTG 30bb · 16%" color="#6aa6ff" />
-          <SmartRange pct={35} label="BTN 40bb · 35%" color="#6aa6ff" />
-        </div>
 
         <h3>ChipEV vs ICM-Adjusted</h3>
         <table>

@@ -1,6 +1,5 @@
 import { Section, Callout, Action } from '@poker/design-system/src/components/ui'
 import { StrategyQuestions } from '@poker/design-system/src/components/StrategyQuestions'
-import { SmartRange } from '@poker/design-system/src/components/SmartRange'
 
 
 export function BM2Page() {
@@ -10,14 +9,6 @@ export function BM2Page() {
         <p>A stack (or several) behind covers you. You open much tighter than baseline, with the degree of tightness driven by how much the BB covers you, position of covering stacks, and presence of shorter stacks elsewhere.</p>
         <Callout variant="bad"><strong>Same stack, different range.</strong> 12bb on the button is not static. Into a 53bb BB you open ~20%; into a 16bb BB you open ~28%. The BB's depth, not just yours, drives your range.</Callout>
 
-        <h3>Range visualizations</h3>
-        <div className="flex flex-wrap gap-2 mb-4">
-          <SmartRange pct={20} mode="push" label="BTN 12bb · 20%" color="#ef6f6f" />
-          <SmartRange pct={28} mode="push" label="BTN 12bb · 28% (chicken)" color="#ef6f6f" />
-          <SmartRange pct={35} mode="open" label="BTN 33bb · 35%" color="#ef6f6f" />
-          <SmartRange pct={7} mode="push" label="UTG 16bb · 7%" color="#ef6f6f" />
-          <SmartRange pct={9} mode="push" label="UTG 29bb · 9%" color="#ef6f6f" />
-        </div>
 
         <h3>Your stack vs the big blind × cover ratio</h3>
         <table>
