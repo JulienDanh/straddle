@@ -139,12 +139,6 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
       <div className="px-2.5 mt-4 border-t border-line pt-3">
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         <div
-          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'rangeviewer' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
-          onClick={() => onNavigate('rangeviewer')}
-        >
-          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Range Viewer
-        </div>
-        <div
           className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'sandbox' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
           onClick={() => onNavigate('sandbox')}
         >

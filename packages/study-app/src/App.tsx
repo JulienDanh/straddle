@@ -26,7 +26,6 @@ import { BM8Page } from './pages/BM8'
 import { BM9Page } from './pages/BM9'
 import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
-import { RangeViewerPage } from './pages/RangeViewer'
 import { DesignSystemPage } from './pages/DesignSystem'
 
 const navTitles: Record<string, { course: string; title: string }> = {
@@ -56,7 +55,6 @@ const navTitles: Record<string, { course: string; title: string }> = {
   bm9: { course: 'Bubble Mastery', title: 'BB Covers BTN (Postflop)' },
   bm10: { course: 'Bubble Mastery', title: 'UTG Covers BB (Postflop)' },
   bm11: { course: 'Bubble Mastery', title: 'Polar Opens · Split Range' },
-  rangeviewer: { course: '', title: 'Range Viewer' },
   sandbox: { course: '', title: 'Design System' },
 }
 
@@ -66,7 +64,6 @@ const PAGES = {
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage,
   bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
-  rangeviewer: RangeViewerPage,
   sandbox: DesignSystemPage,
 } as const
 
