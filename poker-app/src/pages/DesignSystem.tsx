@@ -13,6 +13,9 @@ export function DesignSystemPage() {
   return (
     <div className="rv-page">
       <h2 style={{ marginBottom: 24, fontSize: 20, fontWeight: 700 }}>Design System</h2>
+      <p style={{ marginBottom: 20, fontSize: 13, color: 'var(--muted)' }}>
+        Full component documentation available in <a href="./storybook/" style={{ color: 'var(--accent)' }}>Storybook</a>.
+      </p>
 
       <div style={{ marginBottom: 40 }}>
         <h3 style={{ marginBottom: 12, fontSize: 14, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.6 }}>shadcn/ui Button</h3>

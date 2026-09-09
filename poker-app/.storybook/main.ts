@@ -12,6 +12,13 @@ const config: StorybookConfig = {
     "@storybook/addon-docs",
     "@storybook/addon-mcp"
   ],
-  "framework": "@storybook/react-vite"
+  "framework": "@storybook/react-vite",
+  "docs": {
+    "autodocs": "tag"
+  },
+  async viteFinal(config) {
+    config.base = process.env.STORYBOOK_BASE || '/'
+    return config
+  },
 };
 export default config;
