@@ -138,13 +138,13 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
   const { nodes, edges } = useMemo(() => layoutTree(root), [root])
 
   return (
-    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden relative bg-[#0f1419]" style={{ height: '500px' }}>
+    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden relative bg-[#0f1419]" style={{ height: '400px' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.25 }}
+        fitViewOptions={{ padding: 0.15, minZoom: 0.2, maxZoom: 1 }}
         nodesDraggable={false}
         nodesConnectable={false}
         elementsSelectable={false}
@@ -153,7 +153,7 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
         zoomOnDoubleClick={false}
         zoomOnPinch={false}
         preventScrolling={false}
-        minZoom={1}
+        minZoom={0.2}
         maxZoom={1}
         proOptions={{ hideAttribution: true }}
       >
