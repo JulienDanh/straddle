@@ -25,16 +25,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Build React app and Storybook
+      - name: Build app and Storybook
         run: |
-          cd poker-app
           npm install
           npm run build
           STORYBOOK_BASE=/straddle/storybook/ npm run build-storybook
-          mv storybook-static dist/storybook
+          mv packages/design-system/storybook-static packages/study-app/dist/storybook
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: poker-app/dist
+          path: packages/study-app/dist
       - id: deployment
         uses: actions/deploy-pages@v4

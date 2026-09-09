@@ -1,0 +1,17 @@
+{
+  "name": "poker-study",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "packages/design-system",
+    "packages/study-app"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @poker/study-app",
+    "build": "npm run build --workspace @poker/study-app",
+    "storybook": "npm run storybook --workspace @poker/design-system",
+    "build-storybook": "npm run build-storybook --workspace @poker/design-system",
+    "build-all": "npm run build-storybook --workspace @poker/design-system && npm run build --workspace @poker/study-app"
+  }
+}

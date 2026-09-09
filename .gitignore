@@ -1,7 +1,7 @@
 # macOS
 .DS_Store
-# Build output is committed for simplicity (single-file deploy)
-# Uncomment to exclude if you prefer to build on CI:
-# systems.html
-poker-app/node_modules/
-poker-app/dist/
+# Dependencies
+node_modules/
+# Build output
+packages/*/dist/
+packages/*/storybook-static/
