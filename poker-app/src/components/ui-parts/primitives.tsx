@@ -44,10 +44,6 @@ export function Action({ variant = 'fold', children }: { variant?: 'fold' | 'cal
   return <span className={`inline-block text-[11px] font-bold px-2 py-0.5 rounded whitespace-nowrap align-middle ${styles[variant]}`}>{children}</span>
 }
 
-export function Muted({ children }: { children: ReactNode }) {
-  return <span className="text-muted">{children}</span>
-}
-
 export function Small({ children }: { children: ReactNode }) {
   return <span className="text-xs text-muted">{children}</span>
 }

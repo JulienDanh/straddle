@@ -29,43 +29,38 @@ import { BM11Page } from './pages/BM11'
 import { RangeViewerPage } from './pages/RangeViewer'
 import { DesignSystemPage } from './pages/DesignSystem'
 
-const navTitles: Record<string, string> = {
-  primer: 'No-Limit Systems &rsaquo; <b>Preflop Primer</b>',
-  s1: 'No-Limit Systems &rsaquo; <b>System 1 &middot; UTG vs BB C-bet</b>',
-  s2: 'No-Limit Systems &rsaquo; <b>System 2 &middot; BTN vs BB C-bet</b>',
-  s3: 'No-Limit Systems &rsaquo; <b>System 3 &middot; BB vs SB Limp Stab</b>',
-  s4: 'No-Limit Systems &rsaquo; <b>System 4 &middot; River Bluffing</b>',
-  s5: 'No-Limit Systems &rsaquo; <b>System 5 &middot; Barreling Med Hands</b>',
-  s6: 'No-Limit Systems &rsaquo; <b>System 6 &middot; Check-Raising Top Pair</b>',
-  s7: 'No-Limit Systems &rsaquo; <b>System 7 &middot; C-bet Folding Flops</b>',
-  s8: 'No-Limit Systems &rsaquo; <b>System 8 &middot; Bet Sizing IP</b>',
-  s9: 'No-Limit Systems &rsaquo; <b>System 9 &middot; Defending Flops</b>',
-  s10: 'No-Limit Systems &rsaquo; <b>System 10 &middot; River Value Betting</b>',
-  s11: 'No-Limit Systems &rsaquo; <b>System 11 &middot; Hero Calling</b>',
-  s12: 'No-Limit Systems &rsaquo; <b>System 12 &middot; Defending 3-Bets OOP</b>',
-  conclusion: 'No-Limit Systems &rsaquo; <b>Cross-System Principles</b>',
-  bmprimer: 'Bubble Mastery &rsaquo; <b>ICM & FGS Foundations</b>',
-  bm1: 'Bubble Mastery &rsaquo; <b>ICM vs ChipEV Preflop</b>',
-  bm2: 'Bubble Mastery &rsaquo; <b>Opening Into Covered Stacks</b>',
-  bm3: 'Bubble Mastery &rsaquo; <b>Opening Into Covering Stacks</b>',
-  bm4: 'Bubble Mastery &rsaquo; <b>Blind vs Blind</b>',
-  bm5: 'Bubble Mastery &rsaquo; <b>Blinds Facing Open</b>',
-  bm6: 'Bubble Mastery &rsaquo; <b>Dealing With 3-Bets</b>',
-  bm7: 'Bubble Mastery &rsaquo; <b>Identifying Bubble Impact</b>',
-  bm8: 'Bubble Mastery &rsaquo; <b>BTN Covers BB (Postflop)</b>',
-  bm9: 'Bubble Mastery &rsaquo; <b>BB Covers BTN (Postflop)</b>',
-  bm10: 'Bubble Mastery &rsaquo; <b>UTG Covers BB (Postflop)</b>',
-  bm11: 'Bubble Mastery &rsaquo; <b>Polar Opens &middot; Split Range</b>',
-  rangeviewer: '<b>Range Viewer</b>',
-  sandbox: '<b>Design System</b>',
+const navTitles: Record<string, { course: string; title: string }> = {
+  primer: { course: 'No-Limit Systems', title: 'Preflop Primer' },
+  s1: { course: 'No-Limit Systems', title: 'System 1 · UTG vs BB C-bet' },
+  s2: { course: 'No-Limit Systems', title: 'System 2 · BTN vs BB C-bet' },
+  s3: { course: 'No-Limit Systems', title: 'System 3 · BB vs SB Limp Stab' },
+  s4: { course: 'No-Limit Systems', title: 'System 4 · River Bluffing' },
+  s5: { course: 'No-Limit Systems', title: 'System 5 · Barreling Med Hands' },
+  s6: { course: 'No-Limit Systems', title: 'System 6 · Check-Raising Top Pair' },
+  s7: { course: 'No-Limit Systems', title: 'System 7 · C-bet Folding Flops' },
+  s8: { course: 'No-Limit Systems', title: 'System 8 · Bet Sizing IP' },
+  s9: { course: 'No-Limit Systems', title: 'System 9 · Defending Flops' },
+  s10: { course: 'No-Limit Systems', title: 'System 10 · River Value Betting' },
+  s11: { course: 'No-Limit Systems', title: 'System 11 · Hero Calling' },
+  s12: { course: 'No-Limit Systems', title: 'System 12 · Defending 3-Bets OOP' },
+  conclusion: { course: 'No-Limit Systems', title: 'Cross-System Principles' },
+  bmprimer: { course: 'Bubble Mastery', title: 'ICM & FGS Foundations' },
+  bm1: { course: 'Bubble Mastery', title: 'ICM vs ChipEV Preflop' },
+  bm2: { course: 'Bubble Mastery', title: 'Opening Into Covered Stacks' },
+  bm3: { course: 'Bubble Mastery', title: 'Opening Into Covering Stacks' },
+  bm4: { course: 'Bubble Mastery', title: 'Blind vs Blind' },
+  bm5: { course: 'Bubble Mastery', title: 'Blinds Facing Open' },
+  bm6: { course: 'Bubble Mastery', title: 'Dealing With 3-Bets' },
+  bm7: { course: 'Bubble Mastery', title: 'Identifying Bubble Impact' },
+  bm8: { course: 'Bubble Mastery', title: 'BTN Covers BB (Postflop)' },
+  bm9: { course: 'Bubble Mastery', title: 'BB Covers BTN (Postflop)' },
+  bm10: { course: 'Bubble Mastery', title: 'UTG Covers BB (Postflop)' },
+  bm11: { course: 'Bubble Mastery', title: 'Polar Opens · Split Range' },
+  rangeviewer: { course: '', title: 'Range Viewer' },
+  sandbox: { course: '', title: 'Design System' },
 }
 
-type PageId = 'primer' | 's1' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's9' | 's10' | 's11' | 's12' | 'conclusion'
-  | 'bmprimer' | 'bm1' | 'bm2' | 'bm3' | 'bm4' | 'bm5' | 'bm6' | 'bm7' | 'bm8' | 'bm9' | 'bm10' | 'bm11'
-  | 'rangeviewer'
-  | 'sandbox'
-
-const PAGES: Record<PageId, React.FC> = {
+const PAGES = {
   primer: PrimerPage, s1: S1Page, s2: S2Page, s3: S3Page, s4: S4Page,
   s5: S5Page, s6: S6Page, s7: S7Page, s8: S8Page, s9: S9Page,
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage,
@@ -73,7 +68,9 @@ const PAGES: Record<PageId, React.FC> = {
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
   rangeviewer: RangeViewerPage,
   sandbox: DesignSystemPage,
-}
+} as const
+
+type PageId = keyof typeof PAGES
 
 const VALID_PAGES = new Set(Object.keys(PAGES))
 
@@ -95,12 +92,12 @@ function App() {
 
   const navigate = (p: string) => {
     window.location.hash = p
-    setPage(p as PageId)
     setSidebarOpen(false)
     window.scrollTo(0, 0)
   }
 
   const PageComponent = PAGES[page]
+  const nav = navTitles[page]
 
   return (
     <div className="flex min-h-screen">
@@ -115,7 +112,10 @@ function App() {
             className="hidden border border-line bg-panel text-txt px-2.5 py-1.5 rounded-lg text-lg cursor-pointer [@media(max-width:760px)]:block"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >≡</button>
-          <div className="text-xs text-muted" dangerouslySetInnerHTML={{ __html: navTitles[page] || '' }} />
+          <div className="text-xs text-muted">
+            {nav?.course && <>{nav.course} <span className="text-txt">&rsaquo;</span> </>}
+            <b className="text-txt">{nav?.title}</b>
+          </div>
           <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">React + Vite · 2 courses</span>
         </div>
         <PageComponent />

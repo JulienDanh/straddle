@@ -1,10 +1,7 @@
 import type { ReactNode } from 'react'
 
-// ---- Card suit components ----
-export function S({ children }: { children: ReactNode }) { return <span className="text-spade">{children}</span> }
+// ---- Suit component (only H is used externally) ----
 export function H({ children }: { children: ReactNode }) { return <span className="text-heart">{children}</span> }
-export function D({ children }: { children: ReactNode }) { return <span className="text-diamond">{children}</span> }
-export function C({ children }: { children: ReactNode }) { return <span className="text-club">{children}</span> }
 
 // ---- Playing card ----
 const SUIT_SYMBOL: Record<string, string> = { s: '♠', h: '♥', d: '♦', c: '♣' }
@@ -192,11 +189,9 @@ function range(start: number, end: number): number[] {
 
 function describeBoard(c: BoardConstraints): string {
   const parts: string[] = []
-  if (c.high) parts.push(c.high === 'A' ? 'A-high' : c.high === 'K' ? 'K-high' : c.high === 'Q' ? 'Q-high' : c.high === 'J' ? 'J-high' : c.high === 'T' ? 'T-high' : `${c.high}-high`)
+  if (c.high) parts.push(`${c.high}-high`)
   if (c.paired) parts.push('paired')
-  if (c.suit === 'monotone') parts.push('monotone')
-  if (c.suit === 'two-tone') parts.push('two-tone')
-  if (c.suit === 'rainbow') parts.push('rainbow')
+  if (c.suit) parts.push(c.suit)
   if (c.connected) parts.push('connected')
   if (c.akx) parts.push('AKx')
   return parts.join(' · ') || 'random'

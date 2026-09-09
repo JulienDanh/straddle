@@ -98,8 +98,6 @@ function courseOfPage(pageId: string): string {
 export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
   const activeCourse = courseOfPage(activePage)
 
-  const handleNavigate = (page: string) => onNavigate(page)
-
   return (
     <aside
       className={`w-[260px] flex-shrink-0 bg-dark border-r border-line sticky top-0 h-screen overflow-y-auto py-[18px] [@media(max-width:760px)]:fixed [@media(max-width:760px)]:left-[-270px] [@media(max-width:760px)]:z-30 [@media(max-width:760px)]:transition-all [@media(max-width:760px)]:duration-200 ${open ? '[@media(max-width:760px)]:!left-0' : ''}`}
@@ -125,7 +123,7 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
                       <div
                         key={p.id}
                         className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === p.id ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
-                        onClick={() => handleNavigate(p.id)}
+                        onClick={() => onNavigate(p.id)}
                       >
                         <span className={`text-[10px] w-5 text-center bg-dark border rounded px-0 py-px ${activePage === p.id ? 'text-accent border-accent' : 'text-muted border-line'}`}>{p.num}</span>
                         {p.label}
@@ -142,13 +140,13 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         <div
           className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'rangeviewer' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
-          onClick={() => handleNavigate('rangeviewer')}
+          onClick={() => onNavigate('rangeviewer')}
         >
           <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Range Viewer
         </div>
         <div
           className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'sandbox' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
-          onClick={() => handleNavigate('sandbox')}
+          onClick={() => onNavigate('sandbox')}
         >
           <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Design System
         </div>

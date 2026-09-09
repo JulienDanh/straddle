@@ -4,6 +4,7 @@ import { Action } from './ui-parts/primitives'
 import { Button } from '@/components/ui-shadcn/button'
 import { Card } from '@/components/ui-shadcn/card'
 import type { RandomBoardProps } from './ui-parts/cards'
+import { revealOptionClass, feedbackBoxClass } from './quiz-shared'
 
 export interface StrategyQuizOption {
   label: string
@@ -84,25 +85,21 @@ export function StrategyQuiz({ title = 'Strategy Quiz', scenarios, options }: St
               {options.map((opt, i) => {
                 const isThisCorrect = opt.label === scenario.correct.label
                 const isThisPicked = i === picked
-                let cls = 'opacity-50'
-                if (isThisCorrect) cls = 'border-good bg-[rgba(95,208,168,0.15)] text-good'
-                else if (isThisPicked && !isThisCorrect) cls = 'border-bad bg-[rgba(239,111,111,0.15)] text-bad'
                 return (
                   <span
                     key={i}
-                    className={`inline-block text-sm font-bold px-4 py-2 rounded-lg border ${cls}`}
+                    className={`inline-block text-sm font-bold px-4 py-2 rounded-lg border ${revealOptionClass(isThisCorrect, isThisPicked)}`}
                   >
                     {opt.label}
                     {isThisPicked && !isThisCorrect && ' — your pick'}
-                    {isThisCorrect && !isThisPicked && ' — correct'}
-                    {isThisCorrect && isThisPicked && ' — correct'}
+                    {isThisCorrect && ' — correct'}
                   </span>
                 )
               })}
             </div>
 
             {/* Explanation */}
-            <div className={`p-3 rounded-lg border ${isCorrect ? 'border-good bg-[rgba(95,208,168,0.08)]' : 'border-bad bg-[rgba(239,111,111,0.08)]'}`}>
+            <div className={`p-3 rounded-lg border ${feedbackBoxClass(isCorrect)}`}>
               <div className="flex items-center gap-2 mb-1">
                 <Action variant={scenario.correct.variant}>{scenario.correct.label}</Action>
                 <span className="text-sm font-bold text-txt">

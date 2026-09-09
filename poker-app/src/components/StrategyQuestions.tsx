@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react'
 import { Button } from '@/components/ui-shadcn/button'
 import { Card } from '@/components/ui-shadcn/card'
+import { revealOptionClass, feedbackBoxClass, shuffle } from './quiz-shared'
 
 export interface StrategyQuestion {
   question: string
@@ -75,25 +76,21 @@ export function StrategyQuestions({
             {q.options.map((opt, i) => {
               const isThisCorrect = i === q.correct
               const isThisPicked = i === picked
-              let cls = 'opacity-50'
-              if (isThisCorrect) cls = 'border-good bg-[rgba(95,208,168,0.15)] text-good'
-              else if (isThisPicked && !isThisCorrect) cls = 'border-bad bg-[rgba(239,111,111,0.15)] text-bad'
               return (
                 <div
                   key={i}
-                  className={`text-left text-sm border px-4 py-2.5 rounded-lg ${cls}`}
+                  className={`text-left text-sm border px-4 py-2.5 rounded-lg ${revealOptionClass(isThisCorrect, isThisPicked)}`}
                 >
                   {opt}
                   {isThisPicked && !isThisCorrect && ' — your pick'}
-                  {isThisCorrect && !isThisPicked && ' — correct'}
-                  {isThisCorrect && isThisPicked && ' — correct'}
+                  {isThisCorrect && ' — correct'}
                 </div>
               )
             })}
           </div>
 
           {/* Explanation */}
-          <div className={`p-3 rounded-lg border mb-4 ${isCorrect ? 'border-good bg-[rgba(95,208,168,0.08)]' : 'border-bad bg-[rgba(239,111,111,0.08)]'}`}>
+          <div className={`p-3 rounded-lg border mb-4 ${feedbackBoxClass(isCorrect)}`}>
             <span className="text-sm font-bold text-txt">
               {isCorrect ? 'Correct. ' : 'Not quite. '}
             </span>
@@ -110,15 +107,6 @@ export function StrategyQuestions({
       )}
     </Card>
   )
-}
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr]
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[a[i], a[j]] = [a[j], a[i]]
-  }
-  return a
 }
 
 export default StrategyQuestions
