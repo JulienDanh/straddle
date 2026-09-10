@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S6Page() {
@@ -12,6 +12,18 @@ export function S6Page() {
           content: (
             <>
               <Callout variant="warn"><strong>Inflection: 35bb.</strong> Above → nuts-oriented CR (sets, two pair, TPTK mix). <strong>At/below → aggressive top-pair CR.</strong> Shorter = more CR. Most players under-CR top pair when short — correct the leak.</Callout>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Check-calling top pair at short stacks — should be check-raising for value protection. Overvaluing position — "EP opened so I need TPTK" — stack depth matters more than position. Not recognizing the 35bb inflection point. Trapping with top pair instead of two pair — top pair needs protection, two pair can trap.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"35bb = inflection point — below it, check-raise top pair"</li>
+                  <li>"Top pair check-raises, two pair traps"</li>
+                  <li>"Shorter = more check-raising"</li>
+                  <li>"Lower flop = kicker matters less"</li>
+                  <li>"Backdoor flush draw = check-call (doesn't need protection)"</li>
+                </ul>
+              </Collapsible>
 
               <DecisionTree
                 root={{
@@ -82,6 +94,17 @@ export function S6Page() {
               <Collapsible title="Sizing">
                 <p>CR to <strong>small size</strong> (~3x the c-bet). Short stacks = 2-street game.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="K7 on Q75 (HJ, 25bb)" action="Check-raise" actionVariant="raise">Pure check-raise. KQ, QJ, QT all pure CR. Q9 heavy mix, Q8 medium, Q2 pure call. Hierarchical taper.</HandExample>
+                <HandExample spot="K7 on K84 (EP, 13bb)" action="Check-raise" actionVariant="raise">Pure check-raise. All Kx from KQ to K2 pure CR. K8 (two pair) = trap (check-call).</HandExample>
+                <HandExample spot="K3♣ on K94 (HJ, 15bb)" action="Check-call (trap)" actionVariant="call">Flush draw hands trap, non-flush-draw top pairs CR. K7 no club = check-raise (protection).</HandExample>
+                <HandExample spot="65o on 864r (CO, 25bb)" action="Check-raise" actionVariant="raise">Pure check-raise (top pair + gut shot). Need protection. 85, 87 with gut shots = good CR.</HandExample>
             </>
           ),
         },

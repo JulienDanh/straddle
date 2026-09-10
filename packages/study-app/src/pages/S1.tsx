@@ -1,4 +1,4 @@
-import { Section, Callout, Tag, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Tag, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S1Page() {
@@ -58,6 +58,16 @@ export function S1Page() {
               <Callout>Bucket 1 (T-high+) occurs far more often — one ace makes a flop ace-high. Highest-ROI piece.</Callout>
               <Callout variant="warn"><strong>Bet MORE when shallow, not less.</strong> Most players do the opposite — correct the leak.</Callout>
 
+              <Callout variant="warn"><strong>Common Leaks:</strong> Most players bet LESS when shallow — should bet MORE (overpair asymmetry amplified at shallow depth). Checking medium-strength hands makes range vulnerable to aggression. Professional players routinely check back T-high+ clean boards — a systematic error this system corrects.</Callout>
+
+              <Collapsible title="Heuristics">
+                <ul>
+                  <li>"Bet top, bet bottom, check middle"</li>
+                  <li>"Bet MORE when shallow, not less"</li>
+                  <li>"High-low-low IS a risk factor; high-high-low is NOT"</li>
+                </ul>
+              </Collapsible>
+
               <Collapsible title="Why bet 100% on T-high+?">
                 <p><strong>Overpair asymmetry</strong>: UTG has far more strong pairs than BB caller. Shorter stacks amplify → bet more. Deeper → more caution.</p>
               </Collapsible>
@@ -75,6 +85,17 @@ export function S1Page() {
               <Collapsible title="Sizing">
                 <p>Solver examples land at ~40% pot. The transcript does not prescribe a specific size for this system.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+              <HandExample spot="K83 two-tone (king-high, disconnected, 40bb)" action="C-bet 100%" actionVariant="bet">Solver agrees — 0% check. Player checked, costing EV.</HandExample>
+              <HandExample spot="KK3 rainbow (high-high-low)" action="C-bet 100%" actionVariant="bet">KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.</HandExample>
+              <HandExample spot="AJ5 monotone (ace-high monotone)" action="Mix" actionVariant="check">Risk factor. Bet flushes/sets/trash, check medium (pocket Ks no heart, ATs, weak aces).</HandExample>
+              <HandExample spot="J66 (high-low-low, paired)" action="Mix 50%" actionVariant="check">Bet trips (6x) + trash, check underpairs (TT-77) and medium aces (AT, AK).</HandExample>
             </>
           ),
         },

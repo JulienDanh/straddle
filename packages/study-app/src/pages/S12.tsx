@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S12Page() {
@@ -12,6 +12,18 @@ export function S12Page() {
           content: (
             <>
               <Callout variant="bad"><strong>Key thesis:</strong> 3-bettor is ahead preflop. High boards favor them; low boards favor caller. <em>Fold far more than MDF on high boards; defend robustly on low.</em></Callout>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Over-defending pocket pairs on ace/king high — 77, 88, 99 look playable but are heavy folds. Over-defending ace-high with BDFD — AJs with BDFD is worth zero on AJ4 vs a 3-bet. Under-defending low boards — folding pairs and high cards that are actually profitable. Applying MDF blindly — the 3-bettor's range is too strong on high boards for basic MDF to work.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"T-high+: be nitty. 9-: be gangster."</li>
+                  <li>"Ace and king high = danger zone — fold heavily"</li>
+                  <li>"MDF doesn't apply normally on high boards vs 3-bets"</li>
+                  <li>"Low boards = defend wide, be sticky"</li>
+                  <li>"If neither player hits the board, the preflop favorite wins"</li>
+                </ul>
+              </Collapsible>
 
               <DecisionTree
                 root={{
@@ -74,6 +86,18 @@ export function S12Page() {
               <Collapsible title="Sizing">
                 <p>Against 20–25% on high boards fold 50%+; against 33% on low boards fold ~27%.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="AJs on 842 (EP vs HJ 3-bet, 20% c-bet)" action="Fold" actionVariant="fold">Two low cards help, but AJs is still worth zero vs a tight 3-bet range.</HandExample>
+                <HandExample spot="77 on K84r (EP vs BTN 3-bet, 20%)" action="Fold" actionVariant="fold">King-high = danger zone. 77, 66, 55 = heavy folds. Even TT mixes to fold.</HandExample>
+                <HandExample spot="55 on 984 (EP 3-bet caller, 33% c-bet)" action="Call" actionVariant="call">Low board = favorable. 55 is worth 100+ bb/100. Defend gut shots, KQs with BDFD.</HandExample>
+                <HandExample spot="44 on 963 (EP vs BTN 3-bet, jam)" action="Call" actionVariant="call">Neither player hits this board. 44 is pure call. Pair vs pair, we're ahead often enough.</HandExample>
+                <HandExample spot="AQo on 752 (EP vs BTN 3-bet, 25bb)" action="Call / shove" actionVariant="raise">AQ is worth 186 bb/100. Low board = hero is resilient.</HandExample>
             </>
           ),
         },

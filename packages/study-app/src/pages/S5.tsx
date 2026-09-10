@@ -1,4 +1,4 @@
-import { Section, Callout, Tabs, Collapsible, Pyramid, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Tabs, Collapsible, Pyramid, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S5Page() {
@@ -21,6 +21,17 @@ export function S5Page() {
               <Callout variant="bad"><strong>Don't barrel medium-strength hands.</strong> They lose to hands that call and only beat bluffs. Check keeps them as bluff catchers. Barreling gets value-owned.</Callout>
               <Callout variant="good"><strong>Merge = thin value + fold equity.</strong> A medium hand can bet only if it <em>folds better AND gets called by worse</em>. Classic merge: ATo on Q73→J folds Q-x/K-x and gets called by J-T, J-4s, 10x draws. If it can't do both, it checks.</Callout>
 
+              <Callout variant="warn"><strong>Common Leaks:</strong> Barreling medium-strength hands for "protection" — they get called by better and fold worse. Not recognizing when a hand is medium-strength: J9 on Q73 is jack-X no kicker = medium. Overestimating the value of a pair — pocket nines on K72 is medium, not a value bet. Missing merge opportunities when villain is capped.</Callout>
+
+              <Collapsible title="Heuristics">
+                <ul>
+                  <li>"Bet top, bet bottom, check middle"</li>
+                  <li>"Medium hands have no business betting — called by better, fold worse"</li>
+                  <li>"Merge = bet that's simultaneously a bluff and a value bet"</li>
+                  <li>"If you can't check-raise it, heavily consider betting it" (strong hands)</li>
+                </ul>
+              </Collapsible>
+
               <Collapsible title="When medium CAN bet — the merge exception">
                 <p>A medium hand can bet only if it <strong>folds better AND gets called by worse</strong>. Not all medium hands can do this.</p>
                 <p>J9 (no kicker) checks — loses to KJ/JT floats. AJ with a good kicker is the minimum jack to barrel.</p>
@@ -38,6 +49,17 @@ export function S5Page() {
               <Collapsible title="Sizing">
                 <p>Default turn: <strong>polarize</strong> — pot-ish or check. Solver often prefers ~116% overbet or check. Adding 60% allows thinner value (K8s) but doesn't rescue medium hands (99 still checks).</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+              <HandExample spot="J9 on Q73 → J turn (CO, 80bb)" action="Check" actionVariant="check">Medium strength (Jx no kicker). Villain check-calls KQ, QJ at depth. Solver: KJ checks, J9 checks, only AJ barrels.</HandExample>
+              <HandExample spot="99 on K72 → Q turn (50bb)" action="Check" actionVariant="check">Medium strength. Check. Solver: 99 and 88 don't bet even with small sizing added. Bet KK, A3s, T8s.</HandExample>
+              <HandExample spot="JJ on Q75r → 8 turn (CO, 50bb)" action="Check" actionVariant="check">Medium strength. Bad turn (improves villain's connected hands). Check. 72% check with donk stripped out. Pocket 88 (open-ender) CAN barrel — 99 and JJ cannot.</HandExample>
+              <HandExample spot="ATo on Q73 → J turn (merge, 50bb)" action="Bet pot (merge)" actionVariant="bet">Exception — merge bet. Villain checked back flop (capped). AT folds KX/QX (better) and calls J10/J4s/10Xd (worse).</HandExample>
             </>
           ),
         },

@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S7Page() {
@@ -12,6 +12,18 @@ export function S7Page() {
           content: (
             <>
               <Callout><strong>Fold% = Risk / (Pot + Risk)</strong> — makes zero-equity bluffs indifferent. But villain's bluffs have real equity → <strong>actual fold% is LOWER</strong>. Defend more than MDF.</Callout>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Folding hands that are too strong — MDF says defend 65%, ace-high is snap call. Not doing the MDF calculation — making emotional decisions when facing a big raise. Overfolding to check-raises — HUD-reading opponents will exploit high fold-to-CR. Not identifying the worst hands — if you can't identify trash, you can't engineer the fold correctly.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"MDF keeps you rational — it doesn't produce a hand chart in your head"</li>
+                  <li>"Fold the trash, defend everything else"</li>
+                  <li>"When in doubt, the bet is too small to fold much"</li>
+                  <li>"Paired board: evaluate the unpaired card"</li>
+                  <li>"Villain's bluffs have equity — fold less than basic MDF"</li>
+                </ul>
+              </Collapsible>
 
               <DecisionTree
                 root={{
@@ -85,6 +97,17 @@ export function S7Page() {
               <Collapsible title="Sizing">
                 <p>Depends on villain's CR size. Smaller CR → defend almost everything; larger → fold more.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="A5 on JJ3 (BTN, 50bb)" action="Defend (call)" actionVariant="call">CR to 4bb. MDF fold = 38%. Actual fold = ~18%. A5 is way too strong to fold. Only trash folds.</HandExample>
+                <HandExample spot="K10 on T33 (BTN, 35bb)" action="Defend (call)" actionVariant="call">Paired board — key card = T. Overcards to T = pure call. Fold double-unders (98o, 87o).</HandExample>
+                <HandExample spot="AJ on 533r (BTN, 35bb)" action="Defend (call)" actionVariant="call">CR to 7.3bb. MDF fold = 50%. Actual fold = ~42%. AJ is near the nuts (BTN doesn't have 3s). Snap call.</HandExample>
+                <HandExample spot="K2s on 662 (BTN, 25bb)" action="Defend (call)" actionVariant="call">CR to 2bb (very small). Actual fold = ~2%. K2s with BDFD is worth 45bb/100 — pure call. Almost nothing folds.</HandExample>
             </>
           ),
         },

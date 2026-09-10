@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S3Page() {
@@ -13,6 +13,18 @@ export function S3Page() {
           content: (
             <>
               <Callout variant="good"><strong>Why BB matters:</strong> Skilled player goes from −112 bb/100 (walk-away) to −20 — 92 points of opportunity. UTG only has 27. BB skill is <em>definitively</em> most important.</Callout>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Overfolding — BB win rate is the most important in all of NLHE (92 points of opportunity). Folding too much vs stab = giving money away. Defending every BDFD blindly — the worst hands with BDFDs still fold (42o with a spade on K72 is a fold). Not identifying the worst hand on the board — critical skill. Underestimating three-to-a-straight value.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"Ace and deuce are not strategically relevant"</li>
+                  <li>"Double-overs play, double-unders fold, over-unders need help"</li>
+                  <li>"Three-to-a-straight never folds blind vs blind"</li>
+                  <li>"Identify the worst hand on the board — if you can't, you can't defend correctly"</li>
+                  <li>"High card BDFD &gt; low card BDFD"</li>
+                </ul>
+              </Collapsible>
 
               <h3>Decision: defend or fold more?</h3>
               <p>SB bets 1bb into ~3.7bb. Risk/reward = 1/4 ≈ <strong>25% fold</strong>. Defend ~75%. Focus on the 25% you fold.</p>
@@ -69,6 +81,17 @@ export function S3Page() {
                 <Callout>SB has a folding range; BB does not. 2x/3x favor BB. BB checking = capped (no AK/AQ/overpairs). SB has advantage on Broadway boards; BB on low boards.</Callout>
                 <p>1bb stab into ~3.7bb pot.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="K72 two-tone, 70bb" action="Defend (high card)" actionVariant="call">Key card = K (paired 7 is unusable). High card defending: defend all ace highs, then queen highs. 32o is a fold.</HandExample>
+                <HandExample spot="A42 two-tone, 70bb" action="Defend (gut shots)" actionVariant="call">Key card = 4. All 3x and 5x are pure calls (gut shots). Worst hands contain a 7 (97, T7). J9 with a heart is pure play.</HandExample>
+                <HandExample spot="KQ8 rainbow" action="Fold double-unders" actionVariant="fold">Key card = 8. Double-unders (65, 54, 53) = pure folds. 97 with three-to-straight = pure play. All BDFDs playable (scarce).</HandExample>
+                <HandExample spot="JJ3 two-tone" action="Defend (straights)" actionVariant="call">Key card = 3 (very low). Anything with a deuce = death sentence. T9 with three-to-straight = pure play.</HandExample>
             </>
           ),
         },

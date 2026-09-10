@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 
@@ -84,6 +84,28 @@ export function S2Page() {
               <Collapsible title="Sizing">
                 <p>No explicit sizing prescribed in the transcript. Small c-bet on low boards where BTN misses.</p>
               </Collapsible>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Checking back boards that should be 100% c-bet (ace-high, T–K high with deuce/three). Not recognizing when BTN misses a board entirely (no 8+) — must check, not bet blindly. Only considering one suit for blocker effects — should consider both calling suits. Betting too small in position — IP can polarize, should bet larger.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"If there's no 8+ on the board, BTN probably misses — check more"</li>
+                  <li>"Consider both suits, not just the flush draw suit"</li>
+                  <li>"In position can polarize — bet bigger"</li>
+                  <li>"Miss a 15% check? Costs ~0% EV — just bet range"</li>
+                </ul>
+              </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="AJJ paired (ace-high, 50bb)" action="Mix" actionVariant="check">Paired board = risk factor. Check KQ, QQ, TT-77 (medium). Bet Jx + trash. Solver checks ~50%.</HandExample>
+                <HandExample spot="KJ2 (king-high with deuce)" action="C-bet 100%" actionVariant="bet">Solver shows 14% check — simplification to 100% costs ~0% EV.</HandExample>
+                <HandExample spot="543 two-tone (no 8+, BTN misses)" action="Check" actionVariant="check">Must check. Bet top (66+, 87s), check middle (A8, KQ, pairs), bet some bottom (J8s with BDFD).</HandExample>
+                <HandExample spot="K63 (two low cards)" action="Mix" actionVariant="check">Risk factor. Not 100%. Check medium (QQ, JJ, 9x). Bet strong + weak.</HandExample>
             </>
           ),
         },

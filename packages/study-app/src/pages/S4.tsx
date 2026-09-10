@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S4Page() {
@@ -78,6 +78,30 @@ export function S4Page() {
               <Collapsible title="Sizing">
                 <p>~65% pot for river bluffs.</p>
               </Collapsible>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Waiting for the perfect blocker and never bluffing — if you can't have the ideal hand, bluff with what you have. Not having a bluffing range at all — checking every weak hand means your value bets lose fold equity. Bluffing with hands too high up — opportunity cost of checking is too high. Only considering one suit for blocker effects — must consider how villain calls AND folds by suit.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"Bluff from the bottom of the range up"</li>
+                  <li>"Pay attention to the lowest card in your hand, not the highest"</li>
+                  <li>"If you have value, you need bluffs"</li>
+                  <li>"Three Broadway = no offsuit air = bluff aggressively"</li>
+                  <li>"How should you NOT bluff? — easier to identify what to avoid"</li>
+                  <li>"Don't wait for the perfect blocker — it's not realistic"</li>
+                </ul>
+              </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="86o on AK4 two-tone (BB vs SB, river)" action="Bluff" actionVariant="bet">System 1 — bottom of range, bluff. Avoid clubs and hearts (villain calls with both). Pure bluff.</HandExample>
+                <HandExample spot="75o with 7♣ on Q106cc → Tc river" action="Bluff (one-club)" actionVariant="bet">One-club bias (System 2). Board 3-flushed — obvious suit to block. Without a club = check.</HandExample>
+                <HandExample spot="J9s on AKQ J T board (EP vs CO)" action="Bluff" actionVariant="bet">Three Broadway — no offsuit air in EP range. Bluffs are scarce. System 1 overrides System 2.</HandExample>
+                <HandExample spot="82s on Q106 → J → A river (BB vs SB)" action="Bluff" actionVariant="bet">2x combos are ideal System 2 bluffs — villain folded 2x preflop, so having a deuce unblocks their folding range.</HandExample>
             </>
           ),
         },

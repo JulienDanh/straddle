@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S9Page() {
@@ -12,6 +12,18 @@ export function S9Page() {
           content: (
             <>
               <Callout><strong>Weak own range + Weak opponent range + Small bet → defend very wide.</strong></Callout>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Folding bottom pair to small bets — bottom pair with a BDFD is a "super pair," worth hundreds of bb/100. Not recognizing when all three inputs (small bet + weak opener + weak hero range) align → must defend very wide. Folding gut shots with BDFDs — these are "super gut shots," much more resilient. Not differentiating between similar-looking hands: 97♦ (gut shot + BDFD = play) vs 97o (gut shot, double unders = fold vs big bet).</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"Three inputs: small bet + weak opener + weak hero range = defend wide"</li>
+                  <li>"Compare hands to themselves — a super gut shot beats a naked gut shot"</li>
+                  <li>"BDFD &gt; good kicker"</li>
+                  <li>"High card of the suit &gt; low card"</li>
+                  <li>"Rainbow = creative defense; two-tone = clean defense"</li>
+                </ul>
+              </Collapsible>
 
               <DecisionTree
                 root={{
@@ -83,6 +95,17 @@ export function S9Page() {
               <Collapsible title="Sizing">
                 <p>Against 25–33% defend wide; against 50%+ fold bottom of marginal.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="97♦ on J105 (HJ, 60bb, half pot)" action="Call" actionVariant="call">"Super gut shot" — gut shot + BDFD. Can turn combo draws on diamond turns. 97o is a pure fold; 97♦ is a call.</HandExample>
+                <HandExample spot="Q9 with Q♦ on T72 (BTN, 80bb, 30% bet)" action="Call" actionVariant="call">Pure play. Overcard to T, BDFD, blocks villain's diamond calls.</HandExample>
+                <HandExample spot="J6♠ on T52 (CO, 60bb, 25% bet)" action="Check-raise" actionVariant="raise">Direct equity vs T (jack), backdoor straight (6), BDFD (spades). Opponent misses this board a lot.</HandExample>
+                <HandExample spot="JTo on Q62r (BTN, 80bb, 83% bet)" action="Fold" actionVariant="fold">Three-to-straight but no BDFD. Sizing-sensitive — folds vs big bet, calls vs small.</HandExample>
             </>
           ),
         },

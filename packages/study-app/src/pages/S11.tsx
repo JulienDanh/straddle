@@ -1,4 +1,4 @@
-import { Section, Callout, H, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, H, Tabs, Collapsible, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S11Page() {
@@ -17,6 +17,18 @@ export function S11Page() {
 
               <Callout>Value range <em>wide</em> → focus on unblocking bluffs. <em>Narrow</em> → focus on blocking value.</Callout>
               <Callout variant="warn"><strong>Preflop awareness:</strong> BTN opens suited 5+ and offsuit 8+. 4-x/3-x <em>unblock</em> bluffs (not opened); 8-x/9-x <em>block</em> bluffs (opened).</Callout>
+
+              <Callout variant="warn"><strong>Common Leaks:</strong> Treating all bluff catchers as equal — some are worth 27% of the pot, others are worth zero. Not thinking about villain's preflop range — it determines which cards block bluffs vs value. Calling with hands that block villain's bluffs — you make it harder for them to fold. Not recognizing when villain's range is imbalanced (too much value, no bluffs) — fold.</Callout>
+
+                            <Collapsible title="Heuristics">
+                <ul>
+                  <li>"Not all bluff catchers are equal — some are worth a lot, some are worth zero"</li>
+                  <li>"Block value, unblock bluffs"</li>
+                  <li>"Focus on what to AVOID, not what to call with"</li>
+                  <li>"Preflop range determines which cards matter"</li>
+                  <li>"Turn check = inflection point = call wider"</li>
+                </ul>
+              </Collapsible>
 
               <Collapsible title="Three keys">
                 <DataTable columns={[{ header: '#' }, { header: 'Key' }, { header: 'Description' }]} rows={[[<>1</>, <><strong>Range awareness</strong></>, <>Know what combos you arrive with</>],
@@ -38,6 +50,16 @@ export function S11Page() {
               <Collapsible title="Sizing">
                 <p>No explicit sizing — it's a call/fold decision.</p>
               </Collapsible>
+            </>
+          ),
+        },
+        {
+          label: 'Examples',
+          content: (
+            <>
+<HandExample spot="A3♥ on A972K (EP, 4-way, 1/3 bet)" action="Check-raise" actionVariant="raise">Villain's small bet = thin value (KQ, QJ) or A3-A5♥. CR folds A3-A5♥, calls KQ/QJ.</HandExample>
+                <HandExample spot="A9s on 9642A (4-way, 7bb into 28bb)" action="Fold" actionVariant="fold">No natural bluffs in villain's range. They need 25% bluffs — no suited connectors called multi-way. Range is all value.</HandExample>
+                <HandExample spot="K7 on A73 2 K (BTN vs BB, 1/2 pot)" action="Call" actionVariant="call">Villain checked turn → no AK, AQ, sets. K7 blocks KX value, unblocks 8x/9x bluffs. 87 is a bad call (blocks 8x bluffs).</HandExample>
             </>
           ),
         },
