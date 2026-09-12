@@ -26,13 +26,13 @@ packages/
 │       │   ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
 │       └── stories/               — Storybook stories for all components
 ├── ranges/          — the shared range store (not an npm workspace; data only)
-│   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/), one JSON per spot
-│                                inside it: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json,
-│                                utg/cbet-vs-bb.json. StoredRange-shaped entries (title, subtitle,
-│                                type: 'cEV'|'ICM', stack, position, actions) with per-action combo:freq
-│                                strings; ICM entries land in the same file. Neutral home read by the
-│                                app. Edit here.
-│   ├── scripts/               — import-wizard.py (GTO Wizard paste -> store entry, see Wizard imports)
+│   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/), one JSON per preflop
+│                                line: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json.
+│                                StoredRange-shaped entries (title, subtitle, type: 'cEV'|'ICM', stack,
+│                                position, actions) with per-action combo:freq strings; ICM entries land
+│                                in the same file, and postflop solutions nest under the preflop entry
+│                                they derive from as its `postflop` array (the S1 c-bet spots sit on the
+│                                40bb UTG RFI entry). Neutral home read by the app. Edit here.
 │   └── imports/                — raw pastes / fetches (gitignored: licensed data)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
@@ -127,19 +127,13 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 - **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `compact`.
-- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). one JSON per spot (e.g. `utg/rfi.json`, `bb/vs-btn.json`, `utg/cbet-vs-bb.json`) holds that spot's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Edit these files; new stack depths are new entries in the JSON arrays.
+- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). one JSON per preflop line (e.g. `utg/rfi.json`, `bb/vs-btn.json`) holds that line's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Postflop solutions are `StoredRange`-shaped children nested under the preflop entry they derive from (`postflop` array, matched by `id`). Edit these files; new stack depths are new entries in the JSON arrays.
 - **`data/ranges/*.ts` (design-system)** — thin typed loaders over the store, re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here.
 - **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells.
 
-### Wizard imports (`packages/ranges/scripts/import-wizard.py`)
+### Wizard data
 
-Postflop solutions come from GTO Wizard — there is no local solver. The script turns a Wizard range-view paste into a store entry: it detects weighted (open-weight-scaled) vs conditional pastes, divides out the stored open weights (`data/utg/rfi.json`, stack 40, action raise), validates (dupes, board-blocked combos, coverage vs the open range minus board), and updates the store JSON in place:
-
-```
-python3 packages/ranges/scripts/import-wizard.py packages/ranges/imports/kk3-20.txt --board KdKh3c --action bet --id kk3 --sizing 0.9
-```
-
-`--sizing` is the bet size in bb; `--pure` clamps frequencies >= 0.999 to 1.0 and drops the other action. Raw pastes live in `packages/ranges/imports/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Solved spots link out to GTO Wizard from the S1 page (`wizardUrl` in `S1.tsx`).
+Postflop solutions come from GTO Wizard — there is no local solver or import script. Wizard range-view copies are open-weight-scaled (open proportion x conditional strategy): to store one, divide each frequency by the open weight from the parent entry (`actions.raise` in the same file), round to 4dp conditional frequencies that sum to 1 per combo, and update the matching `postflop` child. Raw pastes live in `packages/ranges/imports/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Solved spots link out to GTO Wizard from the S1 page (`wizardUrl` in `S1.tsx`).
 
 ### Card string format
 

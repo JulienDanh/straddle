@@ -20,6 +20,10 @@ export interface StoredRange {
   actions: Partial<Record<RangeAction, string>>
   /** Bet/raise sizes in bb per action, shown in the grid legend (e.g. raise: 2.2) */
   sizings?: Partial<Record<RangeAction, number>>
+  /** Stable id for lookup, e.g. "k83" (postflop children) */
+  id?: string
+  /** Postflop solutions derived from this preflop range; nested in the same store file */
+  postflop?: StoredRange[]
 }
 
 /** Pick a single stack depth out of a group (e.g. for single-range display) */

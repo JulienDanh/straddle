@@ -1,23 +1,27 @@
 // System 1 solved flop spots for the
-// UTG c-bet decision after BB checks. Data lives in data/utg/cbet-vs-bb.json — the
-// single machine-readable store; this file maps ids back to named exports for
+// UTG c-bet decision after BB checks. They nest as `postflop` children of the
+// stack-40 UTG RFI entry in ranges/data/utg/rfi.json — the same file as the
+// open range they derive from; this file maps ids back to named exports for
 // the app. Ranges come from the stored preflop solutions (UTG 40bb open, BB
 // 40bb call vs the 2bb open). The doc comments carry per-board provenance.
 import type { StoredRange } from './types'
-import data from '../../../../ranges/data/utg/cbet-vs-bb.json'
+import rfi from '../../../../ranges/data/utg/rfi.json'
 
-const byId = new Map(data.map((entry) => [entry.id, entry as StoredRange]))
+const utg40 = (rfi.find((entry) => entry.stack === 40) ?? rfi[0]) as StoredRange
+const byId = new Map(
+  (utg40.postflop ?? []).filter((entry) => entry.id).map((entry) => [entry.id!, entry as StoredRange]),
+)
 
 /** UTG c-bet strategy on Kh8h3c — 40bb SRP (UTG opens 2bb, BB calls, BB checks).
  *  Source: GTO Wizard (MTT 8-max, 40bb), 20% pot c-bet (0.9bb), imported from a
- *  range-view paste via import-wizard.py.
+ *  range-view paste.
  *  At this size the solver c-bets 100% of the opening range — the bet line is
  *  the full 40bb open (239 unblocked combos), no check action at all. */
 export const S1_FLOP_K83: StoredRange = byId.get('k83')!
 
 /** UTG c-bet strategy on KdKh3c (high-high-low paired board) — same spot.
  *  Source: GTO Wizard (MTT 8-max, 40bb), 20% pot c-bet (0.9bb), imported from a
- *  range-view paste via import-wizard.py.
+ *  range-view paste.
  *  High-high-low is NOT a risk factor: ~99.9% c-bet at the smaller size —
  *  checks are noise-level and sit on the big pairs (KK 0.3%, AA 0.3%). */
 export const S1_FLOP_KK3: StoredRange = byId.get('kk3')!
