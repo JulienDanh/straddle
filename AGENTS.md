@@ -40,6 +40,11 @@ packages/
 │                                server.rs (HTTP API: POST /solve -> JSON strategy; serialized,
 │                                blocking; Dockerfile next to it builds gto-server with the range
 │                                store baked in: docker build -f packages/gto/Dockerfile -t gto-server .)
+│                                Deployed: CI builds the amd64 image to ghcr.io/juliendanh/gto-server;
+│                                it runs in Docker on the Ryzen desktop (Tailscale: desktop-3120na2),
+│                                the primary compute for solves (~2:45/spot). TexasSolver GPU on the
+│                                same desktop gets spot files from export-texassolver.py (exploration
+│                                only; published data stays from this reproducible pipeline)
 │   ├── spots.json             — recompute manifest for every solved spot (the solver recipe is the storage; outputs are regenerated, not committed)
 │   └── scripts/               — replay-spots.py (re-solve every spot in spots.json)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
