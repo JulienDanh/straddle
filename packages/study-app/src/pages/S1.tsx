@@ -2,7 +2,7 @@ import { Section, Callout, Tag, Action, Board, RandomBoard, Tabs, Collapsible, D
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { RangeGrid } from '@poker/design-system/src/components/RangeGrid'
-import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_MONOTONE, S1_FLOP_J66 } from '@poker/design-system/src/data/ranges'
+import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_FLOP_MONOTONE, S1_FLOP_J66 } from '@poker/design-system/src/data/ranges'
 import type { StoredRange } from '@poker/design-system/src/data/ranges'
 import type { ReactNode } from 'react'
 
@@ -184,6 +184,19 @@ export function S1Page() {
                 solve={{ betPct: 97.8, checkPct: 2.2, range: S1_FLOP_KK3 }}
               >
                 KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.
+              </BoardExample>
+
+              <BoardExample
+                board="AsKh2c"
+                spot="AK2 (AKx family)"
+                action="Mix"
+                actionVariant="check"
+                takeaway="Bet drops to 83% (from 98% on clean K-high). The checks are the middle: weak-kicker Kx (K7s-K8s), QQ (73%), JJ (54%)."
+                solve={{ betPct: 82.6, checkPct: 17.4, range: S1_FLOP_AK2 }}
+              >
+                AKx is a risk factor: BB connects with every Ax/Kx too, so the overpair
+                advantage that powers 100% c-bets on clean boards is gone. Slow down —
+                not 100%.
               </BoardExample>
 
               <BoardExample

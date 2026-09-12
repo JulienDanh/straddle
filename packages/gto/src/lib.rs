@@ -178,6 +178,51 @@ pub fn strategy_text(game: &PostFlopGame, player_name: &str) -> String {
     text
 }
 
+/// Structured strategy at the current node: (player index, position, one
+/// entry per action with per-combo frequencies). The server's JSON response
+/// is built from this.
+pub fn strategy_data(
+    game: &PostFlopGame,
+) -> (usize, &'static str, Vec<(String, Vec<(String, f32)>)>) {
+    let actions = game.available_actions();
+    let player = game.current_player();
+    let position = if player == 0 { "OOP" } else { "IP" };
+    let names = holes_to_strings(game.private_cards(player)).expect("hole cards");
+    let strategy = game.strategy();
+
+    let num_hands = names.len();
+    let mut out = Vec::new();
+    for (i, action) in actions.iter().enumerate() {
+        let combos = (0..num_hands)
+            .map(|h| (names[h].clone(), strategy[i * num_hands + h]))
+            .collect();
+        out.push((action_label(action), combos));
+    }
+    (player, position, out)
+}
+
+/// Walk an action path by label (e.g. "check", "bet180") after solving,
+/// landing on the node whose strategy should be returned.
+pub fn play_path(game: &mut PostFlopGame, path: &[String]) -> Result<(), String> {
+    for label in path {
+        let index = game
+            .available_actions()
+            .iter()
+            .position(|a| action_label(a) == *label)
+            .ok_or_else(|| {
+                format!(
+                    "action {label:?} not available here (have {:?})",
+                    game.available_actions()
+                        .iter()
+                        .map(action_label)
+                        .collect::<Vec<_>>()
+                )
+            })?;
+        game.play(index);
+    }
+    Ok(())
+}
+
 /// Print the current node's strategy to stdout.
 pub fn dump_strategy(game: &PostFlopGame, player_name: &str) {
     print!("{}", strategy_text(game, player_name));

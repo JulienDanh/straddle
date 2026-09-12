@@ -1,9 +1,9 @@
 {
-  "comment": "Every solved spot, stored as the exact recompute recipe (the solver is deterministic: repo state + spot = output). Replay with scripts/replay-spots.py. Output goes to target/solves/, not git — the app data in design-system/src/data/ranges is the committed artifact.",
+  "comment": "Every solved spot, stored as the exact recompute recipe (the solver is deterministic: repo state + spot = output). Replay with scripts/replay-spots.py. Output goes to target/solves/, not git \u2014 the app data in design-system/src/data/ranges is the committed artifact.",
   "spots": [
     {
       "id": "s1-40bb-cbet",
-      "description": "System 1: UTG opens 2bb, SB folds, BB calls, BB checks — UTG flop c-bet",
+      "description": "System 1: UTG opens 2bb, SB folds, BB calls, BB checks \u2014 UTG flop c-bet",
       "bin": "s1-cbet",
       "pot_chips": 450,
       "stack_chips": 3800,
@@ -13,14 +13,38 @@
       "compressed": true,
       "exploitability_target": 0.005,
       "ranges": [
-        { "json": "../ranges/data/utg/rfi.json", "stack": 40, "action": "raise" },
-        { "json": "../ranges/data/bb/vs-utg.json", "stack": 40, "action": "call" }
+        {
+          "json": "../ranges/data/utg/rfi.json",
+          "stack": 40,
+          "action": "raise"
+        },
+        {
+          "json": "../ranges/data/bb/vs-utg.json",
+          "stack": 40,
+          "action": "call"
+        }
       ],
       "boards": [
-        { "id": "k83", "board": "Kh8h3c" },
-        { "id": "kk3", "board": "KdKh3c" },
-        { "id": "aj5", "board": "AhJh5h" },
-        { "id": "j66", "board": "Jh6d6s" }
+        {
+          "id": "k83",
+          "board": "Kh8h3c"
+        },
+        {
+          "id": "kk3",
+          "board": "KdKh3c"
+        },
+        {
+          "id": "aj5",
+          "board": "AhJh5h"
+        },
+        {
+          "id": "j66",
+          "board": "Jh6d6s"
+        },
+        {
+          "id": "ak2",
+          "board": "AsKh2c"
+        }
       ]
     }
   ]

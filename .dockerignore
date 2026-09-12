@@ -1,0 +1,11 @@
+# Docker build context (context is the repo root, see packages/gto/Dockerfile)
+
+.git
+node_modules
+**/node_modules
+.vibe
+transcripts
+packages/*/target
+packages/ranges/imports
+packages/design-system
+packages/study-app

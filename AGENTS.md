@@ -36,8 +36,10 @@ packages/
 │   └── imports/                — raw pastes / fetches (gitignored: licensed data)
 ├── gto/             — Rust solver scripts (cargo package, not an npm workspace)
 │   ├── Cargo.toml            — postflop-solver git dependency, serde_json (parses the shared range store)
-│   ├── src/lib.rs            — SpotConfig + solve/dump helpers shared by the scripts
-│   ├── src/bin/              — solve.rs (generic spot CLI), s1-cbet.rs (System 1 spot)
+│   ├── src/bin/              — solve.rs (generic spot CLI), s1-cbet.rs (System 1 spot),
+│                                server.rs (HTTP API: POST /solve -> JSON strategy; serialized,
+│                                blocking; Dockerfile next to it builds gto-server with the range
+│                                store baked in: docker build -f packages/gto/Dockerfile -t gto-server .)
 │   ├── spots.json             — recompute manifest for every solved spot (the solver recipe is the storage; outputs are regenerated, not committed)
 │   └── scripts/               — replay-spots.py (re-solve every spot in spots.json)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)

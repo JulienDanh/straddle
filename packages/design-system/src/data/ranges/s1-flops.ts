@@ -29,4 +29,10 @@ export const S1_FLOP_MONOTONE: StoredRange = byId.get('monotone')!
  *  heaviest mix of the solved boards, as the system predicts. */
 export const S1_FLOP_J66: StoredRange = byId.get('j66')!
 
-export const S1_FLOP_SOLUTIONS: StoredRange[] = [S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_MONOTONE, S1_FLOP_J66]
+/** UTG c-bet strategy on AsKh2c (AKx risk-factor board) — same spot.
+ *  Solver: postflop-solver, exploitability 2.13/450 pot, 40% pot c-bet.
+ *  The slowdown the system prescribes: bet 83% (vs 98% on clean K-high).
+ *  Checks are the middle — weak-kicker Kx (K7s-K8s) and QQ/JJ underpairs. */
+export const S1_FLOP_AK2: StoredRange = byId.get('ak2')!
+
+export const S1_FLOP_SOLUTIONS: StoredRange[] = [S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_FLOP_MONOTONE, S1_FLOP_J66]
