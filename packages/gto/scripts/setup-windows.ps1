@@ -3,7 +3,7 @@
 setup-windows.ps1 — solver appliance setup for the Windows desktop.
 
 Idempotent: safe to re-run anytime. Pulls the latest CI-published image,
-(re)creates the solver and Watchtower containers, opens the firewall port,
+(re)creates the solver container, opens the firewall port,
 and publishes the solver at a named HTTPS URL on the tailnet.
 
 Run from an ELEVATED PowerShell (firewall rule needs admin):
