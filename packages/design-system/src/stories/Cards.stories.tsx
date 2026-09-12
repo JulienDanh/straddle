@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { HoleCards, Board, BoardType, RandomBoard, H as Heart } from '../components/ui-parts/cards'
-import { Action } from '../components/ui-parts/primitives'
 
 const meta = {
   title: 'Cards/Playing Cards',

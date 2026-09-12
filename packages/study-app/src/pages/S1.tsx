@@ -1,5 +1,7 @@
 import { Section, Callout, Tag, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { UTG_RFI_CEV, BB_VS_UTG_CEV } from '@poker/design-system/src/data/ranges'
 
 export function S1Page() {
   return (
@@ -96,6 +98,24 @@ export function S1Page() {
               <HandExample spot="KK3 rainbow (high-high-low)" action="C-bet 100%" actionVariant="bet">KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.</HandExample>
               <HandExample spot="AJ5 monotone (ace-high monotone)" action="Mix" actionVariant="check">Risk factor. Bet flushes/sets/trash, check medium (pocket Ks no heart, ATs, weak aces).</HandExample>
               <HandExample spot="J66 (high-low-low, paired)" action="Mix 50%" actionVariant="check">Bet trips (6x) + trash, check underpairs (TT-77) and medium aces (AT, AK).</HandExample>
+            </>
+          ),
+        },
+        {
+          label: 'UTG RFI',
+          content: (
+            <>
+              <p>UTG's opening range — the starting point of this system. ChipEV solutions at 6-40bb: pure 2bb opens at 20bb+, a raise/jam mix at 10-15bb, all-in below that. Switch stacks with the selector.</p>
+              <RangeBrowser ranges={UTG_RFI_CEV} />
+            </>
+          ),
+        },
+        {
+          label: 'BB vs UTG',
+          content: (
+            <>
+              <p>BB's defense vs the UTG open — raise (3-bet) and call frequencies.</p>
+              <RangeBrowser ranges={BB_VS_UTG_CEV} />
             </>
           ),
         },

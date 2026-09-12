@@ -7,7 +7,6 @@
     ".": "./src/components/ui.tsx",
     "./RangeGrid": "./src/components/RangeGrid.tsx",
     "./PracticeFlow": "./src/components/PracticeFlow.tsx",
-    "./RangeBadge": "./src/components/RangePreview.tsx",
     "./styles": "./src/styles/tailwind.css",
     "./solutionParser": "./src/components/solutionParser.ts"
   },

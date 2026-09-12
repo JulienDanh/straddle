@@ -23,8 +23,6 @@ packages/
 │       │   ├── PracticeFlow.tsx   — unified quiz + Q&A with mode toggle
 │       │   ├── quiz-shared.ts      — shared helpers for quiz components
 │       │   ├── RangeGrid.tsx       — 13x13 combo grid (GTO Wizard format)
-│       │   ├── RangePreview.tsx    — RangeBadge component (manual poker notation)
-│       │   ├── hand-notation.ts    — poker notation parser (used by RangeBadge)
 │       │   └── solutionParser.ts   — parses GTO Wizard JSON solution files
 │       ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
 │       └── stories/               — Storybook stories for all components
@@ -119,8 +117,9 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 ### Range components (for future use in courses)
 
-- **`RangeGrid`** — 13x13 combo grid rendered from GTO Wizard action data. Props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check` (comma-separated combo strings), `compact`.
-- **`RangeBadge`** — compact range display from `RangePreview.tsx`. Takes manual poker notation strings. Click to expand full grid.
+- **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
+- **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check` (comma-separated combo strings), `compact`.
+- **`data/ranges.ts`** — typed store for hardcoded solution exports. Exports the `StoredRange` interface (`title`, `subtitle`, `stack`, `position`, `actions` map of combo:freq strings, optional `sizings` map of bb sizes per action shown in the grid legend) plus `byStack(ranges, stack)` to pick one depth. Each spot is one grouped array (e.g. `UTG_RFI_CEV`) built from small `utg(stack, actions, sizings?)` calls — append new stack depths as new entries there.
 - **`solutionParser.ts`** — parses GTO Wizard JSON solution exports into `RangeGrid`-compatible combo data. Exports `parseComboData()`, `RANKS`, `HAND_GRID`, and types.
 
 ### Card string format

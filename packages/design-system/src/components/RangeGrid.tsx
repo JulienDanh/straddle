@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useMemo } from 'react'
 import { RANKS, HAND_GRID } from './solutionParser'
 
 // RangeGrid — 13x13 hand grid with fixed action props.
@@ -18,8 +18,8 @@ import { RANKS, HAND_GRID } from './solutionParser'
 // Fixed color per action.
 const COLORS = {
   fold: '#3a4453',
-  call: '#6aa6ff',
-  raise: '#ef6f6f',
+  call: '#5fd0a8',
+  raise: '#ff5c5c',
   allIn: '#c83838',
   check: '#5fd0a8',
 } as const
@@ -28,6 +28,10 @@ const COLORS = {
 const ACTION_ORDER = ['fold', 'call', 'raise', 'allIn', 'check'] as const
 
 const RANK_ORDER = 'AKQJT98765432'
+
+// Total combos in a deck: 169 hand classes = 13 pairs x 6 + 78 suited x 4 +
+// 78 offsuit x 12 = 1326. Action shares are weighted by these counts.
+const TOTAL_COMBOS = 1326
 
 function comboToHandClass(combo: string): string | null {
   if (combo.length !== 4) return null
@@ -58,7 +62,9 @@ function parseComboData(raw: string): Record<string, number> {
   return out
 }
 
-// Build a multi-color vertical gradient for a cell.
+// Build a multi-color horizontal gradient for a cell. Each action fills its
+// raw frequency share of the cell width (a 40% raise = 40% fill), like
+// GTO Wizard; unfilled width shows the cell background.
 function cellGradient(freqs: number[], colors: string[]): string {
   const total = freqs.reduce((s, v) => s + v, 0)
   if (total <= 0) return ''
@@ -66,21 +72,24 @@ function cellGradient(freqs: number[], colors: string[]): string {
   const stops: string[] = []
   for (let i = 0; i < freqs.length; i++) {
     if (freqs[i] <= 0) continue
-    const pct = (freqs[i] / total) * 100
+    const pct = Math.min(freqs[i], 100 - pos)
+    if (pct <= 0) break
     const color = colors[i] || '#666'
     stops.push(`${color} ${pos.toFixed(1)}%`)
     pos += pct
     stops.push(`${color} ${pos.toFixed(1)}%`)
   }
-  return `linear-gradient(to bottom, ${stops.join(', ')})`
+  // Gradients extend the last stop's color to 100%, so cap the fill with an
+  // explicit transparent tail — otherwise a 40% fill paints the whole cell.
+  if (pos < 100) {
+    stops.push(`transparent ${pos.toFixed(1)}%`)
+    stops.push('transparent 100%')
+  }
+  return `linear-gradient(to right, ${stops.join(', ')})`
 }
 
-function freqTextColor(freqs: number[]): string {
-  const total = freqs.reduce((s, v) => s + v, 0)
-  if (total <= 0) return '#8499b5'
-  const foldPct = (freqs[0] || 0) / total
-  return foldPct > 0.5 ? '#8499b5' : '#0c1117'
-}
+// Cell text is white with a dark halo — readable over both the unfilled
+// panel background and bright action fills. Hands at 0 are greyed out.
 
 export interface RangeGridProps {
   title?: string
@@ -90,19 +99,42 @@ export interface RangeGridProps {
   raise?: string
   allIn?: string
   check?: string
+  // Bet/raise sizes in bb per action — shown in the legend and hand panel
+  // (e.g. sizings={{ raise: 2.2 }} renders "Raise 2.2bb").
+  sizings?: Partial<Record<(typeof ACTION_ORDER)[number], number>>
   // compact: small grid for inline use in course content — no numbers, no
   // legend, no click-to-lock panel. Just colored cells.
   compact?: boolean
 }
 
-export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', compact = false }: RangeGridProps) {
-  const [lockedHand, setLockedHand] = useState<string | null>(null)
+// Human label for an action, annotating the size when provided.
+function actionLabel(a: string, sizing?: number): string {
+  if (a === 'allIn') return 'All-in'
+  const base = a.charAt(0).toUpperCase() + a.slice(1)
+  return sizing !== undefined ? `${base} ${sizing}bb` : base
+}
 
-  const { perHand, activeActions, colors } = useMemo(() => {
+export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', sizings, compact = false }: RangeGridProps) {
+  const { perHand, activeActions, colors, actionPcts } = useMemo(() => {
     const data: Record<string, string> = { fold, call, raise, allIn, check }
     const active = ACTION_ORDER.filter(a => data[a].length > 0)
     const parsed = active.map(a => parseComboData(data[a]))
     const cols = active.map(a => COLORS[a])
+
+    // Share of all 1326 combos an action covers, combo-weighted: every listed
+    // combo is one specific combo contributing its own frequency.
+    const pcts = active.map(a => {
+      let sum = 0
+      for (const entry of data[a].split(',')) {
+        const parts = entry.trim().split(':')
+        if (parts.length !== 2) continue
+        const hc = comboToHandClass(parts[0].trim())
+        const f = parseFloat(parts[1].trim())
+        if (!hc || isNaN(f)) continue
+        sum += f
+      }
+      return (sum / TOTAL_COMBOS) * 100
+    })
 
     const handFreqs: Record<string, number[]> = {}
     for (const row of HAND_GRID) {
@@ -110,10 +142,8 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
         handFreqs[cell.hand] = active.map((_, i) => (parsed[i][cell.hand] ?? 0) * 100)
       }
     }
-    return { perHand: handFreqs, activeActions: active, colors: cols }
+    return { perHand: handFreqs, activeActions: active, colors: cols, actionPcts: pcts }
   }, [fold, call, raise, allIn, check])
-
-  const lockedFreqs = lockedHand ? (perHand[lockedHand] ?? []) : null
 
   // Compact mode: small inline grid, no numbers, no legend, no panel.
   if (compact) {
@@ -154,27 +184,23 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
         )}
         <div className="rv-grid-wrap">
           <table className="rv-grid">
-            <thead><tr><th></th>{RANKS.map(r => <th key={r}>{r}</th>)}</tr></thead>
             <tbody>
               {HAND_GRID.map((rowCells, ri) => (
                 <tr key={ri}>
-                  <th className="rv-rowhead">{RANKS[ri]}</th>
                   {rowCells.map((cell, ci) => {
                     const freqs = perHand[cell.hand] ?? []
                     const total = freqs.reduce((s, v) => s + v, 0)
-                    const isLocked = lockedHand === cell.hand
                     return (
                       <td key={ci}
-                        className={`rv-cell ${total > 0 ? 'in-range' : ''} ${isLocked ? 'locked' : ''}`}
+                        className={`rv-cell ${total > 0 ? 'in-range' : ''}`}
                         style={{
                           background: cellGradient(freqs, colors),
-                          color: freqTextColor(freqs),
+                          color: total > 0 ? '#fff' : '#8499b5',
+                          ...(total > 0 ? { textShadow: '0 1px 2px rgba(12,17,23,0.7)' } : null),
                           fontWeight: total > 50 ? 700 : 400,
                         }}
-                        title={`${cell.hand}: ${activeActions.map((a, i) => `${a} ${freqs[i].toFixed(1)}%`).join(' · ')}`}
-                        onClick={() => setLockedHand(isLocked ? null : cell.hand)}>
+                        title={`${cell.hand}: ${activeActions.map((a, i) => `${a} ${freqs[i].toFixed(1)}%`).join(' · ')}`}>
                         <span className="rv-cell-hand">{cell.hand}</span>
-                        {total > 0 && <span className="rv-cell-freq">{Math.round(total)}</span>}
                       </td>
                     )
                   })}
@@ -187,32 +213,12 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
           {activeActions.map((a, i) => (
             <span key={a} className="rv-legend-item">
               <span className="rv-legend-dot" style={{ background: colors[i] }} />
-              {a === 'allIn' ? 'All-in' : a.charAt(0).toUpperCase() + a.slice(1)}
+              {actionLabel(a, sizings?.[a])}
+              <span className="rv-legend-pct">{actionPcts[i].toFixed(1)}%</span>
             </span>
           ))}
         </div>
       </div>
-
-      {lockedHand && lockedFreqs && (
-        <div className="rv-hand-panel">
-          <div className="rv-hand-panel-title">{lockedHand}</div>
-          {subtitle && <div className="rv-hand-panel-context">{subtitle}</div>}
-          <div className="rv-actions">
-            {activeActions.map((a, i) => {
-              const f = lockedFreqs[i] || 0
-              return (
-                <div key={a} className="rv-action-row">
-                  <span className="rv-action-label" style={{ color: colors[i] }}>{a === 'allIn' ? 'All-in' : a.charAt(0).toUpperCase() + a.slice(1)}</span>
-                  <div className="rv-action-bar">
-                    <div className="rv-action-fill" style={{ width: `${f}%`, background: colors[i] }} />
-                  </div>
-                  <span className="rv-action-pct">{f.toFixed(1)}%</span>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
     </div>
   )
 }

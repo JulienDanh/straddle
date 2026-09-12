@@ -123,7 +123,9 @@
 }
 .rv-grid {
   width: auto;
-  border-collapse: collapse;
+  /* separate + spacing: visible gutters between cells for clear delimitation */
+  border-collapse: separate;
+  border-spacing: 1px;
   margin: 0 auto;
   font-size: 10px;
   table-layout: fixed;
@@ -155,6 +157,9 @@
 }
 
 /* Compact grid — small cells for inline use in course content */
+.rv-grid-sm {
+  border-spacing: 1px;
+}
 .rv-grid-sm th,
 .rv-grid-sm td {
   width: 18px;
@@ -198,89 +203,12 @@
   color: var(--muted);
   font-family: monospace;
   user-select: none;
-  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   line-height: 1.15;
 }
 .rv-cell-hand {
-  font-size: 9px;
+  font-size: 15px;
   display: block;
-}
-.rv-cell-freq {
-  font-size: 8px;
-  opacity: 0.85;
-  font-weight: 600;
-  display: block;
-}
-.rv-cell.locked {
-  outline: 2px solid var(--accent2);
-  outline-offset: -2px;
-  position: relative;
-}
-
-/* Hand detail panel — absolute so it overlays without layout shift */
-.rv-hand-panel {
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: var(--panel);
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 14px;
-  min-width: 280px;
-  max-width: 340px;
-  z-index: 20;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-}
-.rv-hand-panel-title {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--txt);
-  margin-bottom: 2px;
-}
-.rv-hand-panel-context {
-  font-size: 11px;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-.rv-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.rv-action-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.rv-action-label {
-  width: 92px;
-  font-size: 11px;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-.rv-action-bar {
-  flex: 1;
-  height: 18px;
-  background: var(--panel2);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.rv-action-fill {
-  height: 100%;
-  background: var(--accent);
-  border-radius: 4px;
-}
-.rv-action-pct {
-  width: 44px;
-  text-align: right;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--txt);
-  font-variant-numeric: tabular-nums;
 }
 
 /* Mobile */
@@ -288,7 +216,6 @@
   .rv-grid th, .rv-grid td { width: 32px; height: 34px; min-width: 32px; font-size: 8px; }
   .rv-content { flex-direction: column; }
   .rv-grid-area { min-width: 0; }
-  .rv-hand-panel { min-width: 0; max-width: none; }
 }
 .rv-legend {
   display: flex;
@@ -310,20 +237,12 @@
   height: 12px;
   border-radius: 3px;
 }
-
-/* Spot-level action summary (headline mix) */
-
-/* Hand panel additions: meta, EV, best-action */
-.rv-action-row.best {
-  background: rgba(95, 208, 168, 0.08);
-  border-radius: 4px;
-  padding: 2px 0;
+.rv-legend-pct {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--txt);
+  font-variant-numeric: tabular-nums;
 }
-.rv-action-row.best .rv-action-label {
-  color: var(--accent);
-}
-
-/* Grid cell: partial-weight indicator */
 
 /* Mobile responsive for page content */
 @media (max-width: 760px) {
