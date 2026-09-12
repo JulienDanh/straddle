@@ -94,10 +94,10 @@ lines.
 
 - Solver is postflop-only. Preflop spots (BB-vs-UTG depth charts) need flop
   enumeration and are out of scope for these binaries.
-- The embedded ranges come from `packages/gto/ranges/*.txt`, derived from the
-  JSON range store (`data/ranges/data/*.json`) by
-  `packages/gto/scripts/extract_ranges.py`. Re-run it when the JSON range
-  data changes.
+- The embedded ranges are read directly from the shared range store
+  (`packages/ranges/data/*.json`) — `s1-cbet` embeds the files via
+  `include_str!` and picks the (stack, action) string at runtime. JSON
+  edits go live on the next `cargo build`.
 - Money is integer chips: bb*100 keeps blind fractions integral (40bb =
   4000, 4.5bb pot = 450).
 - Bet size args like `"40%,e,a"`: `e` = geometric, `a` = all-in. S1 dropped

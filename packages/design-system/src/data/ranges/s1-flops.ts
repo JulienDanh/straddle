@@ -4,7 +4,7 @@
 // the app. Ranges come from the stored preflop solutions (UTG 40bb open, BB
 // 40bb call vs the 2bb open). The doc comments carry per-board provenance.
 import type { StoredRange } from './types'
-import data from './data/s1-flops.json'
+import data from '../../../../ranges/data/s1-flops.json'
 
 const byId = new Map(data.map((entry) => [entry.id, entry as StoredRange]))
 

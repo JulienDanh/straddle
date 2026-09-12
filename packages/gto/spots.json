@@ -12,7 +12,10 @@
       "iterations": 200,
       "compressed": true,
       "exploitability_target": 0.005,
-      "ranges": ["ranges/utg-40bb-open.txt", "ranges/bb-40bb-call.txt"],
+      "ranges": [
+        { "json": "../ranges/data/utg-rfi-cev.json", "stack": 40, "action": "raise" },
+        { "json": "../ranges/data/bb-vs-utg-cev.json", "stack": 40, "action": "call" }
+      ],
       "boards": [
         { "id": "k83", "board": "Kh8h3c" },
         { "id": "kk3", "board": "KdKh3c" },

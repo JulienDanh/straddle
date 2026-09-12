@@ -7,3 +7,6 @@ edition = "2021"
 # bincode feature is off: it pins a pre-release bincode (2.0.0-rc.3) and the
 # stable 2.0.1 release changed the Decode trait. We don't save/load game trees.
 postflop-solver = { git = "https://github.com/b-inary/postflop-solver", default-features = false, features = ["rayon"] }
+# Parses the shared range store (packages/ranges/data/) that
+# s1-cbet embeds at compile time.
+serde_json = "1"
