@@ -64,38 +64,13 @@ Write-Host "tailscale serve: $serve"
 Write-Host "tailnet serve status:" (tailscale serve status 2>&1)
 
 # --- ssh access for the agent (Mac) -----------------------------------------------
-# Enables the Windows OpenSSH server and installs the study laptop's key,
-# so the Mac can run remote commands (docker, solves) over the tailnet.
-$AgentKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDXkCuBpzEyHPPuitJw3R45BZOL0TK2zi537azoYHFuk agent-mac"
-
-$cap = Get-WindowsCapability -Online -Name "OpenSSH.Server*"
-if ($cap.State -ne "Installed") {
-    Add-WindowsCapability -Online -Name "OpenSSH.Server~~~~0.0.1.0" | Out-Null
-    Write-Host "ssh: OpenSSH server installed"
-}
-if ((Get-Service sshd -ErrorAction SilentlyContinue).Status -ne "Running") {
-    Start-Service sshd
-}
-Set-Service -Name sshd -StartupType Automatic
-
-$isAdmin = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-if ($isAdmin) {
-    # sshd routes admin accounts here by default
-    $keyFile = "C:\ProgramData\ssh\administrators_authorized_keys"
-    if (-not (Test-Path $keyFile) -or -not (Select-String -Path $keyFile -SimpleMatch $AgentKey -Quiet)) {
-        Add-Content -Path $keyFile -Value $AgentKey
-        icacls $keyFile /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F" | Out-Null
-        Write-Host "ssh: agent key added (admin)"
-    }
+# Delegates to setup-ssh.ps1 (same directory or the raw repo URL) so the
+# logic lives in one place.
+if (Test-Path "$PSScriptRoot/setup-ssh.ps1") {
+    & "$PSScriptRoot/setup-ssh.ps1"
 } else {
-    New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.ssh" | Out-Null
-    $keyFile = "$env:USERPROFILE\.ssh\authorized_keys"
-    if (-not (Test-Path $keyFile) -or -not (Select-String -Path $keyFile -SimpleMatch $AgentKey -Quiet)) {
-        Add-Content -Path $keyFile -Value $AgentKey
-        Write-Host "ssh: agent key added (user)"
-    }
+    irm https://raw.githubusercontent.com/JulienDanh/straddle/main/packages/gto/scripts/setup-ssh.ps1 | iex
 }
-Write-Host "ssh: server $(Get-Service sshd).Status; log in as $env:USERNAME"
 
 # --- summary ----------------------------------------------------------------------
 $ip = tailscale ip -4
