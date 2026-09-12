@@ -35,4 +35,3 @@ export const S1_FLOP_J66: StoredRange = byId.get('j66')!
  *  Checks are the middle — weak-kicker Kx (K7s-K8s) and QQ/JJ underpairs. */
 export const S1_FLOP_AK2: StoredRange = byId.get('ak2')!
 
-export const S1_FLOP_SOLUTIONS: StoredRange[] = [S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_FLOP_MONOTONE, S1_FLOP_J66]

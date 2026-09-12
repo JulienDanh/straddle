@@ -1,5 +1,15 @@
 import { useMemo } from 'react'
-import { RANKS, HAND_GRID } from './solutionParser'
+// 13x13 grid layout: A-high at top-left, pairs on the diagonal, suited above,
+// offsuit below.
+const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const
+const HAND_GRID: { hand: string }[][] = RANKS.map((row, ri) =>
+  RANKS.map((col, ci) => {
+    if (row === col) return { hand: `${row}${col}` }
+    const idx1 = RANKS.indexOf(row), idx2 = RANKS.indexOf(col)
+    const [hi, lo] = idx1 < idx2 ? [row, col] : [col, row]
+    return { hand: ci > ri ? `${hi}${lo}s` : `${hi}${lo}o` }
+  })
+)
 
 // RangeGrid — 13x13 hand grid with fixed action props.
 //

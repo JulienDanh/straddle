@@ -223,7 +223,3 @@ pub fn play_path(game: &mut PostFlopGame, path: &[String]) -> Result<(), String>
     Ok(())
 }
 
-/// Print the current node's strategy to stdout.
-pub fn dump_strategy(game: &PostFlopGame, player_name: &str) {
-    print!("{}", strategy_text(game, player_name));
-}

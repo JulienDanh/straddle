@@ -22,12 +22,11 @@ packages/
 │       │   ├── ui-shadcn/          — shadcn/ui components (button, card, accordion)
 │       │   ├── PracticeFlow.tsx   — unified quiz + Q&A with mode toggle
 │       │   ├── quiz-shared.ts      — shared helpers for quiz components
-│       │   ├── RangeGrid.tsx       — 13x13 combo grid (GTO Wizard format)
-│       │   └── solutionParser.ts   — parses GTO Wizard JSON solution files
-│       ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
+│       │   ├── RangeGrid.tsx       — 13x13 combo grid (GTO Wizard format); owns the RANKS/HAND_GRID layout constants
+│       │   ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
 │       └── stories/               — Storybook stories for all components
 ├── ranges/          — the shared range store (not an npm workspace; data only)
-│   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/, s1/), one JSON per spot
+│   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/), one JSON per spot
 │                                inside it: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json,
 │                                utg/cbet-vs-bb.json. StoredRange-shaped entries (title, subtitle,
 │                                type: 'cEV'|'ICM', stack, position, actions) with per-action combo:freq
@@ -142,7 +141,7 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `compact`.
 - **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by both the app and the solver). one JSON per spot (e.g. `utg/rfi.json`, `bb/vs-btn.json`, `utg/cbet-vs-bb.json`) holds that spot's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Edit these files; new stack depths are new entries in the JSON arrays.
 - **`data/ranges/*.ts` (design-system)** — thin typed loaders over the store, re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here. The solver reads the store directly — `s1-cbet` embeds it with `include_str!` and pulls the (stack, action) string at runtime, so JSON edits are live on the next `cargo build`.
-- **`solutionParser.ts`** — parses GTO Wizard JSON solution exports into `RangeGrid`-compatible combo data. Exports `parseComboData()`, `RANKS`, `HAND_GRID`, and types.
+- **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells.
 
 ### Solver scripts (`packages/gto`)
 
