@@ -30,22 +30,10 @@ packages/
 │                                inside it: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json,
 │                                utg/cbet-vs-bb.json. StoredRange-shaped entries (title, subtitle,
 │                                type: 'cEV'|'ICM', stack, position, actions) with per-action combo:freq
-│                                strings; ICM entries land in the same file. Neutral home read by both
-│                                the app and the solver (s1-cbet embeds it via include_str!). Edit here.
+│                                strings; ICM entries land in the same file. Neutral home read by the
+│                                app. Edit here.
+│   ├── scripts/               — import-wizard.py (GTO Wizard paste -> store entry, see Wizard imports)
 │   └── imports/                — raw pastes / fetches (gitignored: licensed data)
-├── gto/             — Rust solver scripts (cargo package, not an npm workspace)
-│   ├── Cargo.toml            — postflop-solver git dependency, serde_json (parses the shared range store)
-│   ├── src/bin/              — solve.rs (generic spot CLI), s1-cbet.rs (System 1 spot),
-│                                server.rs (HTTP API: POST /solve -> JSON strategy; serialized,
-│                                blocking; Dockerfile next to it builds gto-server with the range
-│                                store baked in: docker build -f packages/gto/Dockerfile -t gto-server .)
-│                                Deployed: CI builds the amd64 image to ghcr.io/juliendanh/gto-server;
-│                                it runs in Docker on the Ryzen desktop (Tailscale: desktop-3120na2),
-│                                the primary compute for solves (~2:45/spot). TexasSolver GPU on the
-│                                same desktop gets spot files from export-texassolver.py (exploration
-│                                only; published data stays from this reproducible pipeline)
-│   ├── spots.json             — recompute manifest for every solved spot (the solver recipe is the storage; outputs are regenerated, not committed)
-│   └── scripts/               — replay-spots.py (re-solve every spot in spots.json)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
         ├── App.tsx                — hash-based router, PAGES record
@@ -139,18 +127,19 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 - **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `compact`.
-- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by both the app and the solver). one JSON per spot (e.g. `utg/rfi.json`, `bb/vs-btn.json`, `utg/cbet-vs-bb.json`) holds that spot's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Edit these files; new stack depths are new entries in the JSON arrays.
-- **`data/ranges/*.ts` (design-system)** — thin typed loaders over the store, re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here. The solver reads the store directly — `s1-cbet` embeds it with `include_str!` and pulls the (stack, action) string at runtime, so JSON edits are live on the next `cargo build`.
+- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). one JSON per spot (e.g. `utg/rfi.json`, `bb/vs-btn.json`, `utg/cbet-vs-bb.json`) holds that spot's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Edit these files; new stack depths are new entries in the JSON arrays.
+- **`data/ranges/*.ts` (design-system)** — thin typed loaders over the store, re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here.
 - **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells.
 
-### Solver scripts (`packages/gto`)
+### Wizard imports (`packages/ranges/scripts/import-wizard.py`)
 
-Rust crate wrapping [postflop-solver](https://github.com/b-inary/postflop-solver) (Discounted CFR, no abstraction). Not an npm workspace — build with cargo from the repo root:
+Postflop solutions come from GTO Wizard — there is no local solver. The script turns a Wizard range-view paste into a store entry: it detects weighted (open-weight-scaled) vs conditional pastes, divides out the stored open weights (`data/utg/rfi.json`, stack 40, action raise), validates (dupes, board-blocked combos, coverage vs the open range minus board), and updates the store JSON in place:
 
-- `cargo run --release -p gto --bin solve -- --board Kh9s5c --pot 550 --stack 3750 --oop-range "..." --ip-range "..."` — solve any spot (3-5 card board) and dump the root player's strategy. Optional: `--bet-sizes "40%,e,a"`, `--raise-sizes "2.5x"`, `--max-iterations`, `--target` (pot fraction), `--compressed` (halve memory, 16-bit storage), `--out <path>` (write the strategy to a file instead of stdout).
-- `cargo run --release -p gto --bin s1-cbet` — System 1 spot (UTG opens 2.5bb, BB calls, BB checks): dumps the BB flop strategy, then UTG's c-bet strategy after a check. Optional iteration count argument and `--out <path>`. Ranges are placeholder constants at the top of the file — replace with the stored `data/ranges` exports when solving for real.
+```
+python3 packages/ranges/scripts/import-wizard.py packages/ranges/imports/kk3-20.txt --board KdKh3c --action bet --id kk3 --sizing 0.9
+```
 
-Money amounts are integer chips; use bb*100 so blind fractions stay integral (40bb stack = 4000, 5.5bb pot = 550). Strategy output is one paste-ready line per action in the `data/ranges` combo format (`check 4c3c:0.0009,...`), with bet/raise sizes suffixed (`bet220`). The solver is postflop-only — preflop spots (the BB-vs-UTG stack-depth data) need flop enumeration and are not covered by these scripts.
+`--sizing` is the bet size in bb; `--pure` clamps frequencies >= 0.999 to 1.0 and drops the other action. Raw pastes live in `packages/ranges/imports/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Solved spots link out to GTO Wizard from the S1 page (`wizardUrl` in `S1.tsx`).
 
 ### Card string format
 
