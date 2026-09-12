@@ -1,29 +1,47 @@
 #!/usr/bin/env python3
 """Export the shared range store into TexasSolver GPU's native data format.
 
-Generates (into packages/ranges/imports/texassolver/, for scp to the app's
-install folder on the desktop):
+Generates (into packages/ranges/imports/texassolver/):
 
   ranges/straddle/<OPEN>/<size>bb/BB/Call/<POS>_range.txt   class-notation ranges
   quick_start/straddle.jsonl                               spot catalog entries
+  parameters/parameter_straddle_<board>.json               full predefined trees:
+    sizing template + exact-combo 1326-arrays + board, one per solved board.
+    The board list comes from the store (utg/cbet-vs-bb.json), so newly
+    solved boards flow in automatically.
 
-Range conversion: the store holds exact combos (AsKh:0.99); TexasSolver's
-shipped range files use 169-class notation (AKs:1.0). Each class's weight is
-the average of its combos' weights — a small fidelity loss (suit-specific
-nuances average out) that only shows in 4th-decimal weights.
+Range conversion note: the class-notation range files average suit-specific
+weights within each of the 169 classes; the parameter files use the app's
+1326-combo arrays and keep full exact-combo fidelity (no averaging).
 
-Spots covered: the two solved flop spots — UTG 2bb open / BB call (S1) and
-BTN 2bb open / BB call (S2), both at 40bb.
+The sizing template (packages/ranges/texassolver-template.json, committed)
+was captured from one GUI session; re-save in the app if sizings ever change.
+
+Usage:
+  python3 packages/ranges/scripts/export-texassolver.py            # generate
+  python3 packages/ranges/scripts/export-texassolver.py --deploy   # + scp to
+    the desktop app install (host via GTO_DESKTOP, default
+    danhj@100.76.177.7, path via GTO_DESKTOP_DIR)
 """
 
+import glob
 import json
 import os
+import re
+import subprocess
+import sys
 
 RANKS = ["A", "K", "Q", "J", "T", "9", "8", "7", "6", "5", "4", "3", "2"]
 SUITS = ["c", "d", "h", "s"]
 OUT = "packages/ranges/imports/texassolver"
+TEMPLATE = "packages/ranges/texassolver-template.json"
 
 RANGE_STORE = "packages/ranges/data"
+
+DESKTOP_HOST = os.environ.get("GTO_DESKTOP", "danhj@100.76.177.7")
+DESKTOP_DIR = os.environ.get(
+    "GTO_DESKTOP_DIR", "Downloads/TexasSolverGpu-v0.2.0-windows-x64"
+)
 
 # TexasSolver GPU order: cards 2c,2d,2h,2s,3c,...,As (ascending rank, cdhs),
 # all unordered pairs (i,j) with i<j sorted by i then j.
@@ -98,7 +116,34 @@ def write_range_file(relpath, combos):
         f.write(to_class_notation(combos))
 
 
+def solved_boards():
+    """Boards from the store's utg/cbet-vs-bb.json — (id, cards) pairs."""
+    entries = json.load(open(f"{RANGE_STORE}/utg/cbet-vs-bb.json"))
+    boards = []
+    for e in entries:
+        m = re.search(r"\(((?:[AKQJT2-9][cdhs]){3})\)", e["subtitle"])
+        boards.append((e["id"], m.group(1)))
+    return boards
+
+
+def validate_parameter(cfg, board):
+    assert len(cfg["ipRange"]) == len(cfg["oopRange"]) == 1326, "range arrays"
+    assert cfg["boardText"].split() == [
+        board[i:i + 2] for i in range(0, 6, 2)
+    ] or sorted(cfg["boardText"].split()) == sorted(
+        board[i:i + 2] for i in range(0, 6, 2)
+    ), f"board mismatch: {cfg['boardText']}"
+    for key in ("startingPot", "effectiveStack", "ipFlopBet", "oopFlopBet",
+                "maxRaiseNumber"):
+        assert key in cfg, f"missing sizing key {key}"
+    for name in ("ipRange", "oopRange"):
+        arr = cfg[name]
+        assert all(0.0 <= x <= 1.0 for x in arr), f"{name} out of [0,1]"
+
+
 def main():
+    deploy = "--deploy" in sys.argv
+
     spots = [
         {  # System 1: UTG opens 2bb, BB calls; UTG is IP postflop
             "open": "UTG",
@@ -144,39 +189,46 @@ def main():
     with open(f"{OUT}/quick_start/straddle.jsonl", "w") as f:
         for entry in catalog:
             f.write(json.dumps(entry) + "\n")
+    print(f"spots: {[e['scenario_id'] for e in catalog]}")
 
-    # Parameter files: the full predefined tree — sizing template + our
-    # exact-combo ranges (1326-arrays) + one file per solved S1 board.
-    # The sizing template is the GUI-saved config (copied here once);
-    # only boardText varies between files.
-    template_path = f"{OUT}/parameter_template.json"
-    if os.path.exists(template_path):
-        template = json.load(open(template_path))["config"]
-        boards = [
-            ("k83", "Kh8h3c"), ("kk3", "KdKh3c"), ("monotone", "AhJh5h"),
-            ("j66", "Jh6d6s"), ("ak2", "AsKh2c"),
-        ]
-        os.makedirs(f"{OUT}/parameters", exist_ok=True)
-        ip = load_action(f"{RANGE_STORE}/utg/rfi.json", 40, "raise")
-        oop = load_action(f"{RANGE_STORE}/bb/vs-utg.json", 40, "call")
-        ip_array = to_range_array(ip)
-        oop_array = to_range_array(oop)
-        for board_id, board in boards:
-            cfg = dict(template)
-            cfg["boardText"] = " ".join(
-                sorted((board[i:i + 2] for i in range(0, 6, 2)),
-                       key=lambda c: RANKS.index(c[0]))
-            )
-            cfg["ipRange"] = ip_array
-            cfg["oopRange"] = oop_array
-            path = f"{OUT}/parameters/parameter_straddle_{board_id}.json"
-            with open(path, "w") as f:
-                json.dump({"config": cfg}, f)
-            print(f"  parameter_straddle_{board_id}.json ({cfg['boardText']})")
+    # Parameter files — the full predefined trees.
+    if not os.path.exists(TEMPLATE):
+        sys.exit(f"sizing template missing: {TEMPLATE}\n"
+                 "re-save one config from the app's GUI and copy its config "
+                 "(without boardText/ranges) to that path")
+    template = json.load(open(TEMPLATE))["config"]
 
-    print(f"generated {len(catalog)} spots:")
-    for entry in catalog:
-        print(f"  {entry['scenario_id']}")
+    boards = solved_boards()
+    ip = load_action(f"{RANGE_STORE}/utg/rfi.json", 40, "raise")
+    oop = load_action(f"{RANGE_STORE}/bb/vs-utg.json", 40, "call")
+    ip_array = to_range_array(ip)
+    oop_array = to_range_array(oop)
+
+    os.makedirs(f"{OUT}/parameters", exist_ok=True)
+    for board_id, board in boards:
+        cfg = dict(template)
+        cfg["boardText"] = " ".join(
+            board[i:i + 2] for i in range(0, 6, 2)
+        )
+        cfg["ipRange"] = ip_array
+        cfg["oopRange"] = oop_array
+        validate_parameter(cfg, board)
+        path = f"{OUT}/parameters/parameter_straddle_{board_id}.json"
+        with open(path, "w") as f:
+            json.dump({"config": cfg}, f)
+        print(f"  parameter_straddle_{board_id}.json ({cfg['boardText']})")
+
+    if deploy:
+        run = lambda *cmd: subprocess.run(list(cmd), check=True)
+        print(f"deploying to {DESKTOP_HOST}:{DESKTOP_DIR} ...")
+        run("scp", "-o", "BatchMode=yes", "-r",
+            f"{OUT}/ranges/straddle", f"{DESKTOP_HOST}:{DESKTOP_DIR}/ranges/")
+        run("scp", "-o", "BatchMode=yes",
+            f"{OUT}/quick_start/straddle.jsonl", f"{DESKTOP_HOST}:{DESKTOP_DIR}/quick_start/")
+        params = sorted(glob.glob(f"{OUT}/parameters/parameter_straddle_*.json"))
+        run("scp", "-o", "BatchMode=yes", *params,
+            f"{DESKTOP_HOST}:{DESKTOP_DIR}/parameters/")
+        print(f"deployed {len(params)} parameter files")
 
 
 if __name__ == "__main__":
