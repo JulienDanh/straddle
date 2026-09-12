@@ -1,0 +1,42 @@
+name: Solver API image
+
+# Build the gto-solver container (linux/amd64) and push it to the GitHub
+# Container Registry. Rebuilds when the solver or the range store changes;
+# also runnable manually (Actions tab > Solver API image > Run workflow).
+# First run creates the package (private by default) — set it public in
+# package settings for no-auth pulls: github.com/users/JulienDanh/packages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/gto/**'
+      - 'packages/ranges/data/**'
+      - '.dockerignore'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: packages/gto/Dockerfile
+          platforms: linux/amd64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/gto-server:latest
+            ghcr.io/${{ github.repository_owner }}/gto-server:${{ github.sha }}
