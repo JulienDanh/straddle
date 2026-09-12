@@ -1,0 +1,24 @@
+{
+  "comment": "Every solved spot, stored as the exact recompute recipe (the solver is deterministic: repo state + spot = output). Replay with scripts/replay-spots.py. Output goes to target/solves/, not git — the app data in design-system/src/data/ranges is the committed artifact.",
+  "spots": [
+    {
+      "id": "s1-40bb-cbet",
+      "description": "System 1: UTG opens 2bb, SB folds, BB calls, BB checks — UTG flop c-bet",
+      "bin": "s1-cbet",
+      "pot_chips": 450,
+      "stack_chips": 3800,
+      "bet_sizes": "40%,a",
+      "raise_sizes": "2.5x",
+      "iterations": 200,
+      "compressed": true,
+      "exploitability_target": 0.005,
+      "ranges": ["ranges/utg-40bb-open.txt", "ranges/bb-40bb-call.txt"],
+      "boards": [
+        { "id": "k83", "board": "Kh8h3c" },
+        { "id": "kk3", "board": "KdKh3c" },
+        { "id": "aj5", "board": "AhJh5h" },
+        { "id": "j66", "board": "Jh6d6s" }
+      ]
+    }
+  ]
+}

@@ -7,3 +7,6 @@ packages/*/dist/
 packages/*/storybook-static/
 # Rust
 packages/*/target/
+
+# Python
+__pycache__/
