@@ -13,11 +13,16 @@ on:
       - 'packages/gto/**'
       - 'packages/ranges/data/**'
       - '.dockerignore'
+      - '.github/workflows/solver-image.yml'
   workflow_dispatch:
 
 permissions:
   contents: read
   packages: write
+
+env:
+  # docker tags must be lowercase; the owner name may not be
+  IMAGE: ghcr.io/juliendanh/gto-server
 
 jobs:
   build-push:
@@ -38,5 +43,5 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/gto-server:latest
-            ghcr.io/${{ github.repository_owner }}/gto-server:${{ github.sha }}
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
