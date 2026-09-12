@@ -20,7 +20,7 @@ const COLORS = {
   fold: '#3a4453',
   call: '#5fd0a8',
   raise: '#ff5c5c',
-  allIn: '#c83838',
+  allIn: '#a855f7',
   check: '#5fd0a8',
   bet: '#ff5c5c',
 } as const

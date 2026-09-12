@@ -37,7 +37,7 @@ export function Action({ variant = 'fold', children }: { variant?: 'fold' | 'cal
     fold: 'bg-[#3a4453] text-muted',
     call: 'bg-[#6aa6ff] text-[#0c1117]',
     raise: 'bg-[#ef6f6f] text-[#0c1117]',
-    allIn: 'bg-[#c83838] text-white',
+    allIn: 'bg-[#a855f7] text-white',
     check: 'bg-[#5fd0a8] text-[#0c1117]',
     bet: 'bg-[#ef6f6f] text-[#0c1117]',
   }

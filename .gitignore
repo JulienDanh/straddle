@@ -10,3 +10,6 @@ packages/*/target/
 
 # Python
 __pycache__/
+
+# Raw imports (licensed GTO Wizard data, never committed)
+packages/ranges/imports/

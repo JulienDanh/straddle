@@ -20,9 +20,9 @@ const BOARD: &str = "Kh8h3c";
 /// The shared range store — the single source of truth for all stored
 /// ranges (the app's typed loaders read the same files).
 const UTG_RFI_JSON: &str =
-    include_str!("../../../ranges/data/utg-rfi-cev.json");
+    include_str!("../../../ranges/data/utg/rfi.json");
 const BB_VS_UTG_JSON: &str =
-    include_str!("../../../ranges/data/bb-vs-utg-cev.json");
+    include_str!("../../../ranges/data/bb/vs-utg.json");
 
 /// Pull one stack depth's action string out of a stored-range JSON array.
 fn stored_range(json: &str, stack: i32, action: &str) -> String {

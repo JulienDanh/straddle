@@ -27,10 +27,13 @@ packages/
 │       ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
 │       └── stories/               — Storybook stories for all components
 ├── ranges/          — the shared range store (not an npm workspace; data only)
-│   └── data/                  — utg-rfi-cev.json, bb-vs-utg-cev.json, s1-flops.json: every
-│                                stored range as StoredRange-shaped entries, per-action
-│                                combo:freq strings. Neutral home read by both the app and
-│                                the solver (s1-cbet embeds it via include_str!). Edit here.
+│   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/, s1/), one JSON per spot
+│                                inside it: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json,
+│                                utg/cbet-vs-bb.json. StoredRange-shaped entries (title, subtitle,
+│                                type: 'cEV'|'ICM', stack, position, actions) with per-action combo:freq
+│                                strings; ICM entries land in the same file. Neutral home read by both
+│                                the app and the solver (s1-cbet embeds it via include_str!). Edit here.
+│   └── imports/                — raw pastes / fetches (gitignored: licensed data)
 ├── gto/             — Rust solver scripts (cargo package, not an npm workspace)
 │   ├── Cargo.toml            — postflop-solver git dependency, serde_json (parses the shared range store)
 │   ├── src/lib.rs            — SpotConfig + solve/dump helpers shared by the scripts
@@ -130,7 +133,7 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 - **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `compact`.
-- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by both the app and the solver). `utg-rfi-cev.json`, `bb-vs-utg-cev.json` and `s1-flops.json` hold every stored range as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Edit these files; new stack depths are new entries in the JSON arrays.
+- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by both the app and the solver). one JSON per spot (e.g. `utg/rfi.json`, `bb/vs-btn.json`, `utg/cbet-vs-bb.json`) holds that spot's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Edit these files; new stack depths are new entries in the JSON arrays.
 - **`data/ranges/*.ts` (design-system)** — thin typed loaders over the store, re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here. The solver reads the store directly — `s1-cbet` embeds it with `include_str!` and pulls the (stack, action) string at runtime, so JSON edits are live on the next `cargo build`.
 - **`solutionParser.ts`** — parses GTO Wizard JSON solution exports into `RangeGrid`-compatible combo data. Exports `parseComboData()`, `RANKS`, `HAND_GRID`, and types.
 

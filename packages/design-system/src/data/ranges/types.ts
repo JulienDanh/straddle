@@ -2,11 +2,16 @@
 
 export type RangeAction = 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'
 
+/** Solution type: cEV (chip-EV) or ICM (tournament equity) */
+export type SolutionType = 'cEV' | 'ICM'
+
 export interface StoredRange {
   /** Spot label, e.g. "UTG RFI" */
   title: string
-  /** Solution category, e.g. "ChipEV" or "ICM 83% left" */
+  /** Solution variant, e.g. "ChipEV" or "ICM 83% left" */
   subtitle: string
+  /** Solution type — cEV (chip-EV) or ICM (tournament equity) */
+  type: SolutionType
   /** Effective stack in bb */
   stack: number
   /** Hero position, e.g. "UTG" */

@@ -13,8 +13,8 @@
       "compressed": true,
       "exploitability_target": 0.005,
       "ranges": [
-        { "json": "../ranges/data/utg-rfi-cev.json", "stack": 40, "action": "raise" },
-        { "json": "../ranges/data/bb-vs-utg-cev.json", "stack": 40, "action": "call" }
+        { "json": "../ranges/data/utg/rfi.json", "stack": 40, "action": "raise" },
+        { "json": "../ranges/data/bb/vs-utg.json", "stack": 40, "action": "call" }
       ],
       "boards": [
         { "id": "k83", "board": "Kh8h3c" },

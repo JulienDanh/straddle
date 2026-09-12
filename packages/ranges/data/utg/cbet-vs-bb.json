@@ -1,8 +1,8 @@
 [
   {
-    "id": "k83",
     "title": "UTG c-bet vs BB check",
-    "subtitle": "K83 two-tone (Kh8h3c) · solver",
+    "subtitle": "K83 two-tone (Kh8h3c) \u00b7 solver",
+    "type": "cEV",
     "stack": 40,
     "position": "UTG",
     "actions": {
@@ -11,12 +11,13 @@
     },
     "sizings": {
       "bet": 1.8
-    }
+    },
+    "id": "k83"
   },
   {
-    "id": "kk3",
     "title": "UTG c-bet vs BB check",
-    "subtitle": "KK3 rainbow (KdKh3c) · solver",
+    "subtitle": "KK3 rainbow (KdKh3c) \u00b7 solver",
+    "type": "cEV",
     "stack": 40,
     "position": "UTG",
     "actions": {
@@ -25,12 +26,13 @@
     },
     "sizings": {
       "bet": 1.8
-    }
+    },
+    "id": "kk3"
   },
   {
-    "id": "monotone",
     "title": "UTG c-bet vs BB check",
-    "subtitle": "AJ5 monotone (AhJh5h) · solver",
+    "subtitle": "AJ5 monotone (AhJh5h) \u00b7 solver",
+    "type": "cEV",
     "stack": 40,
     "position": "UTG",
     "actions": {
@@ -39,12 +41,13 @@
     },
     "sizings": {
       "bet": 1.8
-    }
+    },
+    "id": "monotone"
   },
   {
-    "id": "j66",
     "title": "UTG c-bet vs BB check",
-    "subtitle": "J66 rainbow (Jh6d6s) · solver",
+    "subtitle": "J66 rainbow (Jh6d6s) \u00b7 solver",
+    "type": "cEV",
     "stack": 40,
     "position": "UTG",
     "actions": {
@@ -53,6 +56,7 @@
     },
     "sizings": {
       "bet": 1.8
-    }
+    },
+    "id": "j66"
   }
 ]

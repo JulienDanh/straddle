@@ -1,5 +1,7 @@
 import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { BTN_RFI_CEV, BB_VS_BTN_CEV } from '@poker/design-system/src/data/ranges'
 
 
 export function S2Page() {
@@ -106,6 +108,24 @@ export function S2Page() {
                 <HandExample spot="KJ2 (king-high with deuce)" action="C-bet 100%" actionVariant="bet">Solver shows 14% check — simplification to 100% costs ~0% EV.</HandExample>
                 <HandExample spot="543 two-tone (no 8+, BTN misses)" action="Check" actionVariant="check">Must check. Bet top (66+, 87s), check middle (A8, KQ, pairs), bet some bottom (J8s with BDFD).</HandExample>
                 <HandExample spot="K63 (two low cards)" action="Mix" actionVariant="check">Risk factor. Not 100%. Check medium (QQ, JJ, 9x). Bet strong + weak.</HandExample>
+            </>
+          ),
+        },
+        {
+          label: 'BTN RFI',
+          content: (
+            <>
+              <p>BTN's opening range — the starting point of this system. ChipEV solutions at 15-40bb: the open tightens as stacks shorten (52% → 38%) and the jam mix grows below 20bb. Switch stacks with the selector.</p>
+              <RangeBrowser ranges={BTN_RFI_CEV} />
+            </>
+          ),
+        },
+        {
+          label: 'BB vs BTN',
+          content: (
+            <>
+              <p>BB's defense vs the BTN open — raise, call, and all-in frequencies at 30-40bb. The 3-bet shrinks as stacks shorten (9bb → 7.5bb sizing) and the all-in slice grows (3% → 8%); calls stay ~71% of all hands. Switch stacks with the selector.</p>
+              <RangeBrowser ranges={BB_VS_BTN_CEV} />
             </>
           ),
         },

@@ -27,7 +27,7 @@ export interface DecisionLeaf {
 }
 
 const LEAF_COLOR: Record<string, string> = {
-  bet: '#ef6f6f', check: '#5fd0a8', fold: '#8499b5', call: '#6aa6ff', raise: '#ef6f6f', allIn: '#c83838',
+  bet: '#ef6f6f', check: '#5fd0a8', fold: '#8499b5', call: '#6aa6ff', raise: '#ef6f6f', allIn: '#a855f7',
 }
 
 // --- Custom nodes ---

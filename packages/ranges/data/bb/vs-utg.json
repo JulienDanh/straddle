@@ -2,6 +2,7 @@
   {
     "title": "BB vs UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 40,
     "position": "BB",
     "actions": {
@@ -15,6 +16,7 @@
   {
     "title": "BB vs UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 30,
     "position": "BB",
     "actions": {
@@ -28,6 +30,7 @@
   {
     "title": "BB vs UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 20,
     "position": "BB",
     "actions": {
@@ -42,6 +45,7 @@
   {
     "title": "BB vs UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 15,
     "position": "BB",
     "actions": {
@@ -55,6 +59,7 @@
   {
     "title": "BB vs UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 10,
     "position": "BB",
     "actions": {

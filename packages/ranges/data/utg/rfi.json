@@ -2,6 +2,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 40,
     "position": "UTG",
     "actions": {
@@ -14,6 +15,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 20,
     "position": "UTG",
     "actions": {
@@ -26,6 +28,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 30,
     "position": "UTG",
     "actions": {
@@ -38,6 +41,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 15,
     "position": "UTG",
     "actions": {
@@ -51,6 +55,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 10,
     "position": "UTG",
     "actions": {
@@ -64,6 +69,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 8,
     "position": "UTG",
     "actions": {
@@ -76,6 +82,7 @@
   {
     "title": "UTG RFI",
     "subtitle": "ChipEV",
+    "type": "cEV",
     "stack": 6,
     "position": "UTG",
     "actions": {
