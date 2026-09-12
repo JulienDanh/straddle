@@ -25,6 +25,31 @@ OUT = "packages/ranges/imports/texassolver"
 
 RANGE_STORE = "packages/ranges/data"
 
+# TexasSolver GPU order: cards 2c,2d,2h,2s,3c,...,As (ascending rank, cdhs),
+# all unordered pairs (i,j) with i<j sorted by i then j.
+CARD_ORDER = [r + s for r in reversed(RANKS) for s in SUITS]
+PAIR_ORDER = [
+    (CARD_ORDER[i], CARD_ORDER[j])
+    for i in range(len(CARD_ORDER))
+    for j in range(i + 1, len(CARD_ORDER))
+]
+assert len(PAIR_ORDER) == 1326
+
+
+def to_range_array(combo_freq):
+    """Exact-combo {combo: freq} -> the app's 1326-float array."""
+    array = []
+    for a, b in PAIR_ORDER:
+        combo = a + b
+        # store pair combos use descending suit order (AdAc); try both orders
+        if combo in combo_freq:
+            array.append(combo_freq[combo])
+        elif b + a in combo_freq:
+            array.append(combo_freq[b + a])
+        else:
+            array.append(0.0)
+    return array
+
 
 def class_combos(cls):
     """All exact combos of a 169-class like 'AA', 'AKs', 'AKo'."""
@@ -119,6 +144,35 @@ def main():
     with open(f"{OUT}/quick_start/straddle.jsonl", "w") as f:
         for entry in catalog:
             f.write(json.dumps(entry) + "\n")
+
+    # Parameter files: the full predefined tree — sizing template + our
+    # exact-combo ranges (1326-arrays) + one file per solved S1 board.
+    # The sizing template is the GUI-saved config (copied here once);
+    # only boardText varies between files.
+    template_path = f"{OUT}/parameter_template.json"
+    if os.path.exists(template_path):
+        template = json.load(open(template_path))["config"]
+        boards = [
+            ("k83", "Kh8h3c"), ("kk3", "KdKh3c"), ("monotone", "AhJh5h"),
+            ("j66", "Jh6d6s"), ("ak2", "AsKh2c"),
+        ]
+        os.makedirs(f"{OUT}/parameters", exist_ok=True)
+        ip = load_action(f"{RANGE_STORE}/utg/rfi.json", 40, "raise")
+        oop = load_action(f"{RANGE_STORE}/bb/vs-utg.json", 40, "call")
+        ip_array = to_range_array(ip)
+        oop_array = to_range_array(oop)
+        for board_id, board in boards:
+            cfg = dict(template)
+            cfg["boardText"] = " ".join(
+                sorted((board[i:i + 2] for i in range(0, 6, 2)),
+                       key=lambda c: RANKS.index(c[0]))
+            )
+            cfg["ipRange"] = ip_array
+            cfg["oopRange"] = oop_array
+            path = f"{OUT}/parameters/parameter_straddle_{board_id}.json"
+            with open(path, "w") as f:
+                json.dump({"config": cfg}, f)
+            print(f"  parameter_straddle_{board_id}.json ({cfg['boardText']})")
 
     print(f"generated {len(catalog)} spots:")
     for entry in catalog:
