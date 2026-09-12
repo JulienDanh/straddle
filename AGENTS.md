@@ -29,7 +29,9 @@ packages/
 ├── gto/             — Rust solver scripts (cargo package, not an npm workspace)
 │   ├── Cargo.toml            — postflop-solver git dependency
 │   ├── src/lib.rs            — SpotConfig + solve/dump helpers shared by the scripts
-│   └── src/bin/              — solve.rs (generic spot CLI), s1-cbet.rs (System 1 spot)
+│   ├── src/bin/              — solve.rs (generic spot CLI), s1-cbet.rs (System 1 spot)
+│   ├── spots.json             — recompute manifest for every solved spot (the solver recipe is the storage; outputs are regenerated, not committed)
+│   └── scripts/               — extract_ranges.py (JSON store → solver .txt), replay-spots.py (re-solve every spot in spots.json)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
         ├── App.tsx                — hash-based router, PAGES record
@@ -122,16 +124,16 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 ### Range components (for future use in courses)
 
 - **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
-- **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check` (comma-separated combo strings), `compact`.
-- **`data/ranges.ts`** — typed store for hardcoded solution exports. Exports the `StoredRange` interface (`title`, `subtitle`, `stack`, `position`, `actions` map of combo:freq strings, optional `sizings` map of bb sizes per action shown in the grid legend) plus `byStack(ranges, stack)` to pick one depth. Each spot is one grouped array (e.g. `UTG_RFI_CEV`) built from small `utg(stack, actions, sizings?)` calls — append new stack depths as new entries there.
+- **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `compact`.
+- **`data/ranges/`** — the single machine-readable range store plus typed loaders. `data/*.json` (utg-rfi-cev, bb-vs-utg-cev, s1-flops) hold every stored range as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). The sibling `.ts` files are thin typed loaders re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Edit the JSON, not the loaders; new stack depths are new entries in the JSON arrays. The solver scripts read the same JSON (`packages/gto/scripts/extract_ranges.py` derives the solver's flat `.txt` from it — re-run after JSON edits).
 - **`solutionParser.ts`** — parses GTO Wizard JSON solution exports into `RangeGrid`-compatible combo data. Exports `parseComboData()`, `RANKS`, `HAND_GRID`, and types.
 
 ### Solver scripts (`packages/gto`)
 
 Rust crate wrapping [postflop-solver](https://github.com/b-inary/postflop-solver) (Discounted CFR, no abstraction). Not an npm workspace — build with cargo from the repo root:
 
-- `cargo run --release -p gto --bin solve -- --board Kh9s5c --pot 550 --stack 3750 --oop-range "..." --ip-range "..."` — solve any spot (3-5 card board) and dump the root player's strategy. Optional: `--bet-sizes "40%,e,a"`, `--raise-sizes "2.5x"`, `--max-iterations`, `--target` (pot fraction), `--compressed` (halve memory, 16-bit storage).
-- `cargo run --release -p gto --bin s1-cbet` — System 1 spot (UTG opens 2.5bb, BB calls, BB checks): dumps the BB flop strategy, then UTG's c-bet strategy after a check. Ranges are placeholder constants at the top of the file — replace with the stored `data/ranges` exports when solving for real.
+- `cargo run --release -p gto --bin solve -- --board Kh9s5c --pot 550 --stack 3750 --oop-range "..." --ip-range "..."` — solve any spot (3-5 card board) and dump the root player's strategy. Optional: `--bet-sizes "40%,e,a"`, `--raise-sizes "2.5x"`, `--max-iterations`, `--target` (pot fraction), `--compressed` (halve memory, 16-bit storage), `--out <path>` (write the strategy to a file instead of stdout).
+- `cargo run --release -p gto --bin s1-cbet` — System 1 spot (UTG opens 2.5bb, BB calls, BB checks): dumps the BB flop strategy, then UTG's c-bet strategy after a check. Optional iteration count argument and `--out <path>`. Ranges are placeholder constants at the top of the file — replace with the stored `data/ranges` exports when solving for real.
 
 Money amounts are integer chips; use bb*100 so blind fractions stay integral (40bb stack = 4000, 5.5bb pot = 550). Strategy output is one paste-ready line per action in the `data/ranges` combo format (`check 4c3c:0.0009,...`), with bet/raise sizes suffixed (`bet220`). The solver is postflop-only — preflop spots (the BB-vs-UTG stack-depth data) need flop enumeration and are not covered by these scripts.
 

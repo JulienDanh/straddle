@@ -12,7 +12,7 @@
 //!   --bet-sizes "40%,e,a" --raise-sizes "2.5x"
 //! ```
 
-use gto::{build_game, dump_strategy, solve_game, SpotConfig};
+use gto::{build_game, solve_game, strategy_text, SpotConfig};
 
 fn main() {
     let args: Vec<String> = std::env::args().skip(1).collect();
@@ -26,8 +26,14 @@ fn main() {
     let flag = |name: &str| args.iter().any(|a| a == name);
 
     let board = value("--board").expect("--board is required");
-    let oop_range = value("--oop-range").expect("--oop-range is required");
-    let ip_range = value("--ip-range").expect("--ip-range is required");
+    let oop_range = match value("--oop-file") {
+        Some(path) => std::fs::read_to_string(&path).expect("failed to read --oop-file"),
+        None => value("--oop-range").expect("--oop-range or --oop-file is required"),
+    };
+    let ip_range = match value("--ip-file") {
+        Some(path) => std::fs::read_to_string(&path).expect("failed to read --ip-file"),
+        None => value("--ip-range").expect("--ip-range or --ip-file is required"),
+    };
     let pot: i32 = value("--pot")
         .expect("--pot is required")
         .parse()
@@ -48,6 +54,7 @@ fn main() {
         .parse()
         .expect("invalid --target");
     let compressed = flag("--compressed");
+    let out_path = value("--out");
 
     let cfg = SpotConfig::new(
         &oop_range,
@@ -61,5 +68,13 @@ fn main() {
 
     let mut game = build_game(&cfg);
     solve_game(&mut game, max_iterations, target, compressed);
-    dump_strategy(&game, "root");
+
+    let text = strategy_text(&game, "root");
+    match &out_path {
+        Some(path) => {
+            std::fs::write(path, text).expect("failed to write output file");
+            println!("Strategy written to {path}");
+        }
+        None => print!("{text}"),
+    }
 }

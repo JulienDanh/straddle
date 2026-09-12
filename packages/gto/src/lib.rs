@@ -156,23 +156,29 @@ pub fn action_label(action: &Action) -> String {
     }
 }
 
-/// Print the current node's strategy, one paste-ready line per action:
-/// `check 4c3c:0.0009,...`. The header names the acting player and the
-/// available actions with their exact amounts.
-pub fn dump_strategy(game: &PostFlopGame, player_name: &str) {
+/// Build the current node's strategy as text: a header naming the acting
+/// player and available actions, then one paste-ready line per action:
+/// `check 4c3c:0.0009,...`.
+pub fn strategy_text(game: &PostFlopGame, player_name: &str) -> String {
     let actions = game.available_actions();
     let player = game.current_player();
     let position = if player == 0 { "OOP" } else { "IP" };
     let names = holes_to_strings(game.private_cards(player)).expect("hole cards");
     let strategy = game.strategy();
 
-    println!("\n# {player_name} ({position}): {actions:?}");
+    let mut text = format!("\n# {player_name} ({position}): {actions:?}\n");
 
     let num_hands = names.len();
     for (i, action) in actions.iter().enumerate() {
         let combos: Vec<String> = (0..num_hands)
             .map(|h| format!("{}:{:.4}", names[h], strategy[i * num_hands + h]))
             .collect();
-        println!("{} {}", action_label(action), combos.join(","));
+        text.push_str(&format!("{} {}\n", action_label(action), combos.join(",")));
     }
+    text
+}
+
+/// Print the current node's strategy to stdout.
+pub fn dump_strategy(game: &PostFlopGame, player_name: &str) {
+    print!("{}", strategy_text(game, player_name));
 }

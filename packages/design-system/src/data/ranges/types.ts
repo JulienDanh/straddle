@@ -1,6 +1,6 @@
 // Stored range types and helpers shared by all solution groups.
 
-export type RangeAction = 'fold' | 'call' | 'raise' | 'allIn' | 'check'
+export type RangeAction = 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'
 
 export interface StoredRange {
   /** Spot label, e.g. "UTG RFI" */

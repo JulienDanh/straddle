@@ -1,7 +1,75 @@
-import { Section, Callout, Tag, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Tag, Action, Board, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { UTG_RFI_CEV, BB_VS_UTG_CEV } from '@poker/design-system/src/data/ranges'
+import { RangeGrid } from '@poker/design-system/src/components/RangeGrid'
+import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_MONOTONE, S1_FLOP_J66 } from '@poker/design-system/src/data/ranges'
+import type { StoredRange } from '@poker/design-system/src/data/ranges'
+import type { ReactNode } from 'react'
+
+/** One board group in the Examples tab, rendered as a single card: the board
+ *  and the system's decision in the header, the walkthrough reasoning below,
+ *  and — when the board has been solved — a solver strip with verdict badges
+ *  and the full strategy grid in the same panel. */
+function BoardExample({
+  board,
+  spot,
+  action,
+  actionVariant,
+  takeaway,
+  solve,
+  children,
+}: {
+  /** Board cards shown in the header, e.g. "Kh8h3c" */
+  board: string
+  spot: string
+  action: ReactNode
+  actionVariant: 'bet' | 'check' | 'fold' | 'call' | 'raise' | 'allIn'
+  /** One-line solver takeaway, shown only when the board is solved */
+  takeaway?: string
+  /** Solver data; omit for walkthrough-only boards */
+  solve?: {
+    betPct: number
+    checkPct: number
+    range: StoredRange
+  }
+  /** Reasoning — why this is the correct play */
+  children: ReactNode
+}) {
+  return (
+    <div className="my-4 rounded-xl border border-line bg-panel overflow-hidden">
+      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 bg-panel2 border-b border-line">
+        <div className="flex items-center gap-3.5 min-w-0">
+          <Board cards={board} size="md" />
+          <div className="min-w-0">
+            <div className="text-[13px] font-semibold text-txt leading-snug">{spot}</div>
+            {solve && (
+              <div className="text-xs text-muted mt-0.5">UTG opens 2bb · BB calls · 40bb · c-bet 1.8bb (40% pot)</div>
+            )}
+          </div>
+        </div>
+        <span className="mt-0.5">
+          <Action variant={actionVariant}>{action}</Action>
+        </span>
+      </div>
+      <p className="px-4 py-3 text-[12.5px] text-muted leading-snug border-b border-line">{children}</p>
+      {solve && takeaway && (
+        <>
+          <div className="flex flex-wrap items-center justify-between gap-2.5 px-4 py-2.5 bg-panel2 border-b border-line">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted">Solver</span>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <Action variant="bet">Bet {solve.betPct.toFixed(1)}%</Action>
+              <Action variant="check">Check {solve.checkPct.toFixed(1)}%</Action>
+            </div>
+          </div>
+          <div className="px-4 py-2.5 text-[12.5px] text-muted leading-snug border-b border-line">{takeaway}</div>
+          <div className="p-3.5">
+            <RangeGrid {...solve.range.actions} sizings={solve.range.sizings} />
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
 
 export function S1Page() {
   return (
@@ -94,10 +162,51 @@ export function S1Page() {
           label: 'Examples',
           content: (
             <>
-              <HandExample spot="K83 two-tone (king-high, disconnected, 40bb)" action="C-bet 100%" actionVariant="bet">Solver agrees — 0% check. Player checked, costing EV.</HandExample>
-              <HandExample spot="KK3 rainbow (high-high-low)" action="C-bet 100%" actionVariant="bet">KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.</HandExample>
-              <HandExample spot="AJ5 monotone (ace-high monotone)" action="Mix" actionVariant="check">Risk factor. Bet flushes/sets/trash, check medium (pocket Ks no heart, ATs, weak aces).</HandExample>
-              <HandExample spot="J66 (high-low-low, paired)" action="Mix 50%" actionVariant="check">Bet trips (6x) + trash, check underpairs (TT-77) and medium aces (AT, AK).</HandExample>
+              <p className="mt-5">The system applied, board by board — each walkthrough followed by the solver's answer where that board has been solved (postflop-solver, stored preflop ranges, 40bb, converged to 0.5% of pot).</p>
+
+              <BoardExample
+                board="Kh8h3c"
+                spot="K83 two-tone (king-high, disconnected, 40bb)"
+                action="C-bet 100%"
+                actionVariant="bet"
+                takeaway="Near-100% small c-bet; the few checks are underpairs 44-77."
+                solve={{ betPct: 96.6, checkPct: 3.4, range: S1_FLOP_K83 }}
+              >
+                Solver agrees — checks under 4% (underpairs only). Player checked, costing EV.
+              </BoardExample>
+
+              <BoardExample
+                board="KdKh3c"
+                spot="KK3 rainbow (high-high-low)"
+                action="C-bet 100%"
+                actionVariant="bet"
+                takeaway="Near-100% small c-bet; the few checks are underpairs QQ/JJ and weak-kicker trips (K7s)."
+                solve={{ betPct: 97.8, checkPct: 2.2, range: S1_FLOP_KK3 }}
+              >
+                KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.
+              </BoardExample>
+
+              <BoardExample
+                board="AhJh5h"
+                spot="AJ5 monotone (ace-high monotone)"
+                action="Mix"
+                actionVariant="check"
+                takeaway="Sets and heart draws bet; QQ/KK without the heart check."
+                solve={{ betPct: 70.1, checkPct: 29.9, range: S1_FLOP_MONOTONE }}
+              >
+                Risk factor. Bet flushes/sets/trash, check medium (pocket Ks no heart, ATs, weak aces).
+              </BoardExample>
+
+              <BoardExample
+                board="Jh6d6s"
+                spot="J66 (high-low-low, paired)"
+                action="Mix 50%"
+                actionVariant="check"
+                takeaway="Heaviest mix of the four — underpairs check (TT near-100%), top pair Jx and Ax/Kx bet."
+                solve={{ betPct: 39.8, checkPct: 60.2, range: S1_FLOP_J66 }}
+              >
+                Bet trips (6x) + trash, check underpairs (TT-77) and medium aces (AT, AK).
+              </BoardExample>
             </>
           ),
         },

@@ -22,10 +22,11 @@ const COLORS = {
   raise: '#ff5c5c',
   allIn: '#c83838',
   check: '#5fd0a8',
+  bet: '#ff5c5c',
 } as const
 
 // Order for the legend and gradient segments (fold first = bottom).
-const ACTION_ORDER = ['fold', 'call', 'raise', 'allIn', 'check'] as const
+const ACTION_ORDER = ['fold', 'call', 'raise', 'allIn', 'check', 'bet'] as const
 
 const RANK_ORDER = 'AKQJT98765432'
 
@@ -99,6 +100,7 @@ export interface RangeGridProps {
   raise?: string
   allIn?: string
   check?: string
+  bet?: string
   // Bet/raise sizes in bb per action — shown in the legend and hand panel
   // (e.g. sizings={{ raise: 2.2 }} renders "Raise 2.2bb").
   sizings?: Partial<Record<(typeof ACTION_ORDER)[number], number>>
@@ -114,9 +116,9 @@ function actionLabel(a: string, sizing?: number): string {
   return sizing !== undefined ? `${base} ${sizing}bb` : base
 }
 
-export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', sizings, compact = false }: RangeGridProps) {
+export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, compact = false }: RangeGridProps) {
   const { perHand, activeActions, colors, actionPcts } = useMemo(() => {
-    const data: Record<string, string> = { fold, call, raise, allIn, check }
+    const data: Record<string, string> = { fold, call, raise, allIn, check, bet }
     const active = ACTION_ORDER.filter(a => data[a].length > 0)
     const parsed = active.map(a => parseComboData(data[a]))
     const cols = active.map(a => COLORS[a])
@@ -143,7 +145,7 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
       }
     }
     return { perHand: handFreqs, activeActions: active, colors: cols, actionPcts: pcts }
-  }, [fold, call, raise, allIn, check])
+  }, [fold, call, raise, allIn, check, bet])
 
   // Compact mode: small inline grid, no numbers, no legend, no panel.
   if (compact) {
