@@ -49,10 +49,12 @@ docker run -d --restart unless-stopped -p 8080:8080 --name gto-solver $Image | O
 Write-Host "solver: $(docker ps --filter name=gto-solver --format '{{.Status}}')"
 
 # --- watchtower (auto-pull CI updates) ------------------------------------------
+# DOCKER_API_VERSION: containrrr/watchtower ships an old docker client (API
+# 1.25) that modern daemons reject; pinning 1.40 fixes the crash loop.
 if (docker ps -a --format "{{.Names}}" | Where-Object { $_ -eq "watchtower" }) {
     docker rm -f watchtower | Out-Null
 }
-docker run -d --restart unless-stopped --name watchtower -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --interval 300 --cleanup | Out-Null
+docker run -d --restart unless-stopped --name watchtower -e DOCKER_API_VERSION=1.40 -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --interval 300 --cleanup | Out-Null
 Write-Host "watchtower: $(docker ps --filter name=watchtower --format '{{.Status}}')"
 
 # --- named HTTPS URL on the tailnet ----------------------------------------------
