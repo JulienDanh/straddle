@@ -48,14 +48,14 @@ if (docker ps -a --format "{{.Names}}" | Where-Object { $_ -eq "gto-solver" }) {
 docker run -d --restart unless-stopped -p 8080:8080 --name gto-solver $Image | Out-Null
 Write-Host "solver: $(docker ps --filter name=gto-solver --format '{{.Status}}')"
 
-# --- watchtower (auto-pull CI updates) ------------------------------------------
-# DOCKER_API_VERSION: containrrr/watchtower ships an old docker client (API
-# 1.25) that modern daemons reject; pinning 1.40 fixes the crash loop.
+# --- watchtower removal (abandoned) ------------------------------------------------
+# containrrr/watchtower crash-loops on modern daemons (old client API) and the
+# image is unmaintained. Updates are manual: re-run this script — it pulls the
+# latest CI image and recreates the solver.
 if (docker ps -a --format "{{.Names}}" | Where-Object { $_ -eq "watchtower" }) {
     docker rm -f watchtower | Out-Null
+    Write-Host "watchtower: removed"
 }
-docker run -d --restart unless-stopped --name watchtower -e DOCKER_API_VERSION=1.40 -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower --interval 300 --cleanup | Out-Null
-Write-Host "watchtower: $(docker ps --filter name=watchtower --format '{{.Status}}')"
 
 # --- named HTTPS URL on the tailnet ----------------------------------------------
 # https://<machine>.<tailnet>.ts.net — re-running when already serving is fine
@@ -68,4 +68,4 @@ $ip = tailscale ip -4
 Write-Host ""
 Write-Host "solver HTTP   : http://${ip}:8080/health"
 Write-Host "solver HTTPS  : see serve status above"
-Write-Host "watchtower    : checks for new images every 5 min"
+Write-Host "updates       : re-run this script (pulls latest image, recreates solver)"
