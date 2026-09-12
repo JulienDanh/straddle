@@ -1,0 +1,9 @@
+[package]
+name = "gto"
+version = "0.0.0"
+edition = "2021"
+
+[dependencies]
+# bincode feature is off: it pins a pre-release bincode (2.0.0-rc.3) and the
+# stable 2.0.1 release changed the Decode trait. We don't save/load game trees.
+postflop-solver = { git = "https://github.com/b-inary/postflop-solver", default-features = false, features = ["rayon"] }
