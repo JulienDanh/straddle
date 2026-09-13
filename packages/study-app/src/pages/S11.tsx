@@ -1,5 +1,4 @@
 import { Section, Callout, H, Tabs, Collapsible, DataTable, HandExample } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S11Page() {
   return (
@@ -61,36 +60,6 @@ export function S11Page() {
                 <HandExample spot="A9s on 9642A (4-way, 7bb into 28bb)" action="Fold" actionVariant="fold">No natural bluffs in villain's range. They need 25% bluffs — no suited connectors called multi-way. Range is all value.</HandExample>
                 <HandExample spot="K7 on A73 2 K (BTN vs BB, 1/2 pot)" action="Call" actionVariant="call">Villain checked turn → no AK, AQ, sets. K7 blocks KX value, unblocks 8x/9x bluffs. 87 is a bad call (blocks 8x bluffs).</HandExample>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="System 11 — Practice"
-              quiz={{
-                options: [
-                  { label: 'Call', variant: 'call' },
-                  { label: 'Fold', variant: 'fold' },
-                ],
-                scenarios: [
-                  { board: { high: 'T', variant: 'green', label: 'T-high, opp checked turn' }, correct: { label: 'Call', variant: 'call' }, explanation: 'T6o blocks opponent from having Tx (their thin value). After turn check-back, their range is weak. Blocker effect makes this superior.' },
-                  { board: { high: 'K', variant: 'green', label: 'K7/K3/K2' }, correct: { label: 'Call', variant: 'call' }, explanation: 'King-high blockers block KK/KQ (value region) AND unblock bluffs (BTN opens suited 5+, offsuit 8+). Excellent hero call.' },
-                  { board: { high: '9', variant: 'green', label: '92/93/97' }, correct: { label: 'Fold', variant: 'fold' }, explanation: '9-x blocks where bluffs come from (offsuit 8+ opens). Doesn\'t block value. Bad bluff catcher — fold.' },
-                  { board: { high: '9', variant: 'green', label: '42/43/74 (low cards)' }, correct: { label: 'Call', variant: 'call' }, explanation: '4-x unblocks bluffs (BTN doesn\'t open suited 4s, offsuit 7s). Makes more bluffs available. Attractive hero call.' },
-                  { board: { high: 'T', suit: 'two-tone', label: '78s blocks pocket 7s' }, correct: { label: 'Call', variant: 'call' }, explanation: '78s blocks 2/3 of opponent\'s value (pocket 7s). Worth ~27% of pot. Not all bluff catchers are worth 0 — 78s is worth a lot.' },
-                  { board: { high: 'T', variant: 'green', label: 'Pocket 8s (no blocker)' }, correct: { label: 'Fold', variant: 'fold' }, explanation: 'Pocket 8s doesn\'t block value or unblock bluffs — worth 0, indifferent. 78s is far superior because it blocks where value comes from.' },
-                ],
-              }}
-              questions={[
-                { question: 'What are the three keys to hero calling?', options: ['Range awareness, unblock bluffs, block value', 'Bet sizing, pot odds, blockers', 'Hand strength, position, stack depth', 'Board texture, draws, fold equity'], correct: 0, explanation: '1) Range awareness (know what you arrive with), 2) Unblock bluffs (don\'t block their bluffing region), 3) Block value (block their value region).' },
-                { question: 'When the value range is wide, what do you focus on?', options: ['Unblock bluffs (#2)', 'Block value (#3)', 'Both equally', 'Neither'], correct: 0, explanation: 'Value range wide → focus on #2 (unblock bluffs). Narrow → focus on #3 (block value).' },
-                { question: 'Which cards are GOOD bluff catchers (unblock bluffs)?', options: ['4, 3, deuce (not in opponent\'s open range)', '8, 9, T (in their range)', 'Ace, King', 'Paired cards'], correct: 0, explanation: 'BTN opens suited 5+ and offsuit 8+. 4-x/3-x unblock bluffs (not opened); 8-x/9-x block bluffs (opened).' },
-                { question: 'Which cards BLOCK value well?', options: ['King (blocks KK, KQ)', '8, 9 (blocks nothing valuable)', 'Deuce', '4'], correct: 0, explanation: 'King blocks KK, KQ (value). 8/9 block nothing valuable. Good catchers block value AND unblock bluffs.' },
-                { question: 'What is the "no natural bluffs" exception?', options: ['If no draws missed, opponent won\'t convert Ax to bluff → fold even if MDF says call', 'Always call if MDF says call', 'Bluff more', 'Check-raise'], correct: 0, explanation: 'If no draws missed, opponent has no natural bluffs → won\'t convert Ax to bluff → fold even if MDF says call.' },
-                { question: 'What is the opponent\'s required bluff frequency?', options: ['Your pot odds', 'Their bet size', 'Always 50%', 'The MDF'], correct: 0, explanation: 'Opponent\'s required bluff frequency = your pot odds. Need 25% → they must bluff 25% of betting range. Better catchers = worth significant EV.' },
-              ]}
-            />
           ),
         },
       ]} />

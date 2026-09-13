@@ -1,5 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { SB_RFI, BB_VS_SB_LIMP, BB_VS_SB_RAISE } from '@poker/design-system/src/data/ranges'
 
@@ -8,11 +7,7 @@ export function BM4Page() {
     <Section title="Blind vs Blind on the Bubble">
       <p>SB vs BB, one stack covers the other. The covered stack plays very tight (shove/fold, almost no limping short); the covering stack leverages chip advantage with aggressive open-shoving and raising to deny free equity. Limping only reappears at ~18bb+ effective and especially deeper.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <StackMatrix
                 colAxisLabel="Who covers"
                 rowAxisLabel="Stack depth"
@@ -61,25 +56,6 @@ export function BM4Page() {
                 <p>Short covered: pure shove/fold. Close stacks: more open-shoving. Deeper covered (~18bb+): limping begins. Deep (37+bb): pure limp, no limp-shove — limp-call pairs. BB ISO ~49.5% (vs 42% chips) when SB is covered deep.</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="Blind vs Blind — Practice"
-              questions={[
-                { question: 'Why is limping a mistake when you cover a short BB on the bubble?', options: ['BB overfolds ~85% — limping gives free equity to folders', 'BB calls too much', 'You lose the pot', 'Limping is always bad'], correct: 0, explanation: 'BB overfolds ~85% vs ~37% in chip model. Limping gives free equity realization to hands that would fold to a shove. Shove/raise instead.' },
-                { question: 'What does the covering short stack do vs a short BB?', options: ['Pure shove/raise, no limps', 'Limp everything', 'Min-raise only', 'Fold'], correct: 0, explanation: 'Covering short stack: aggressive shove/raise. No limps. BB overfolds ~85%.' },
-                { question: 'What does the covered short stack do on the direct bubble?', options: ['Tight shove/fold (~33% VPID), no limps', 'Limp wide', 'Open shove 70%', 'Fold everything'], correct: 0, explanation: 'Covered short: no limps, tight shove/fold ~33% VPID. Limping reappears at 25% field left, gone on direct bubble.' },
-                { question: 'At what stack depth does limping begin (covered)?', options: ['~18bb', '~10bb', '~25bb', '~40bb'], correct: 0, explanation: '~18bb is the threshold. Limping begins; raise-fold marginal. Deeper = more limping.' },
-                { question: 'What happens at 37+bb covered (deep)?', options: ['Pure limp, no limp-shove — limp-call pairs', 'Open shove', 'Min-raise fold', '3-bet'], correct: 0, explanation: 'Deep: pure limp. BB ISO ~49.5%. No limp-shove at 40+bb — limp-call pairs. BB can\'t pile vs uncapped, trapping range.' },
-                { question: 'How does ICM pressure affect BB fold frequency in BvB?', options: ['BB calls only ~10-22% in ICM vs ~37% in chip model', 'No effect', 'BB calls less', 'BB never folds'], correct: 0, explanation: 'BB calls only ~10-22% when covered (78-90% fold), vs ~37% call rate in chip model. ICM pressure roughly halves BB call frequency.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

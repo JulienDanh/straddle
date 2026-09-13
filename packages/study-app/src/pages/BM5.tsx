@@ -1,5 +1,4 @@
-import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Code, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { SB_VS_UTG, SB_VS_BTN, BB_VS_UTG, BB_VS_BTN } from '@poker/design-system/src/data/ranges'
 
@@ -8,11 +7,7 @@ export function BM5Page() {
     <Section title="Blinds Facing an Open on the Bubble">
       <p>Defense from SB and BB versus EP (UTG) and LP (BTN) opens. Short blind stacks (sub ~20bb) play almost pure raise/fold (no cold calls). Deeper stacks and covering stacks introduce cold calls. The BB re-steals aggressively when covered by a wide opener.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <StackMatrix
                 colAxisLabel="Opener position"
                 rowAxisLabel="Defender"
@@ -64,25 +59,6 @@ export function BM5Page() {
                 <p>3-bet sizing increases in high ICM from the blinds. Size up — deny equity to speculative calls and lower SPR for your narrow value range. BTN open ~71% when BB is short (vs ~53% equal 50bb). BB 3-bet value threshold covered vs EP: <Code>Kings+, AK</Code> (Queens mix).</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="Blinds Facing Open — Practice"
-              questions={[
-                { question: 'What is the SB cold-call threshold?', options: ['~20bb. Below: ~0% cold calls, raise/fold only', '~10bb', '~30bb', 'No threshold'], correct: 0, explanation: 'Below ~20bb, SB has essentially zero cold-call range. Raise/fold only.' },
-                { question: 'Why does SB cold-call wider when BB is short?', options: ['BB is handcuffed (can\'t squeeze/lead). SB "almost in the BB"', 'SB has more equity', 'BTN opens tighter', 'ICM pressure drops'], correct: 0, explanation: 'BB can\'t squeeze/lead. SB "almost in the BB" — realizes more equity. BTN opens way wider than expected (~71%).' },
-                { question: 'Why re-steal MORE (not less) when covered and short?', options: ['Win outright more often AND avoid losing postflop ~50%+', 'You have more fold equity', 'Calling is +EV', 'ICM favors calling'], correct: 0, explanation: 'Calling loses ~50%+ postflop. Re-steal shove with Ax blocker wins outright more often. Think dollar EV, not binary cash/fail.' },
-                { question: 'What does BB do when covering a short opener?', options: ['Defend wide; call suited, fold dominated offsuit; donk-lead low/mid', 'Play tight', '3-bet everything', 'Fold'], correct: 0, explanation: 'BB can donk-lead low/mid boards that miss UTG\'s tight range. Call everything suited; fold dominated offsuit (King-X offsuit ~0 EV).' },
-                { question: 'What happens to 3-bet sizing in high ICM from the blinds?', options: ['Size UP — deny equity to speculative calls, lower SPR for narrow value', 'Size down', 'No change', 'Always jam'], correct: 0, explanation: '3-bet sizing increases in high ICM. Larger 3-bets deny equity to speculative calls and lower SPR for your narrow value range.' },
-                { question: 'What is the BB 3-bet value threshold (covered vs EP)?', options: ['Kings+, AK (Queens mix)', 'JJ+, AQ', 'Any pair', 'AK only'], correct: 0, explanation: 'BB 3-bet value threshold covered vs EP: Kings+, AK (Queens mix). Tighter than chipEV.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

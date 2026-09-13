@@ -1,5 +1,4 @@
 import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S4Page() {
   return (
@@ -103,36 +102,6 @@ export function S4Page() {
                 <HandExample spot="J9s on AKQ J T board (EP vs CO)" action="Bluff" actionVariant="bet">Three Broadway — no offsuit air in EP range. Bluffs are scarce. System 1 overrides System 2.</HandExample>
                 <HandExample spot="82s on Q106 → J → A river (BB vs SB)" action="Bluff" actionVariant="bet">2x combos are ideal System 2 bluffs — villain folded 2x preflop, so having a deuce unblocks their folding range.</HandExample>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="System 4 — Practice"
-              quiz={{
-                options: [
-                  { label: 'Bluff (System 1)', variant: 'bet' },
-                  { label: 'Bluff (System 2)', variant: 'raise' },
-                  { label: "Don't bluff", variant: 'fold' },
-                ],
-                scenarios: [
-                  { board: { high: 'K', suit: 'monotone', variant: 'green', streets: 5 }, correct: { label: 'Bluff (System 2)', variant: 'raise' }, explanation: '3-flush on river → obvious blocking effect. One card of the flush suit blocks flushes AND hero calls. Use System 2 first.' },
-                  { board: { high: 'A', variant: 'green', streets: 5 }, correct: { label: 'Bluff (System 1)', variant: 'bet' }, explanation: 'Wide ranges, no obvious suit blanked → too hard for System 2. Bluff weakest hands first; prioritize the LOW card.' },
-                  { board: { high: 'K', variant: 'green', streets: 5 }, correct: { label: 'Bluff (System 1)', variant: 'bet' }, explanation: 'Wide ranges, no suit blanked → System 1. Bluff from the bottom of range up.' },
-                  { board: { high: 'A', variant: 'green', label: 'Three Broadway · EP', streets: 5 }, correct: { label: 'Bluff (System 1)', variant: 'bet' }, explanation: 'Three Broadway + EP opener = no offsuit air. Only suited hands can bluff — scarce. Pure bluff them all.' },
-                  { board: { high: 'A', suit: 'monotone', variant: 'red', label: 'Busted straight + flush', streets: 5 }, correct: { label: "Don't bluff", variant: 'fold' }, explanation: 'QJ♥ blocks both busted straights AND flush draws. Blocking both folding regions is terrible. Prefer hands that block only one.' },
-                ],
-              }}
-              questions={[
-                { question: 'What is System 1 for river bluffs?', options: ['Bluff weakest hands first (bottom of range up)', 'Block opponent calls', 'Always shove', 'Only bluff suited hands'], correct: 0, explanation: 'Bottom of range up: bluff with weakest hands first — lowest EV when checking, lowest opportunity cost. Prioritize the LOW card.' },
-                { question: 'What is System 2 for river bluffs?', options: ['Bluff combos that block calls/raises and unblock folds', 'Bluff the weakest hand', 'Bluff with high cards', 'Never bluff'], correct: 0, explanation: 'Block opponent calls/raises, unblock their folds. Very hard to manage all three — System 1 is default.' },
-                { question: 'Which system should you prioritize?', options: ['System 1 (easier), acknowledge System 2', 'System 2 only', 'Neither', 'Both equally'], correct: 0, explanation: 'Prioritize System 1 (easier) while acknowledging System 2 (solvers use it more).' },
-                { question: 'On a 3-flush river, what is the ideal bluff?', options: ['One card of the flush suit', 'No card of the flush suit', 'Two cards of the flush suit', 'A high card'], correct: 0, explanation: 'One card of the flush suit blocks flushes AND hero calls. Obvious blocking effect — use System 2 first.' },
-                { question: 'Why is QJ♥ a terrible bluff on a heart board with busted straights?', options: ['Blocks both busted straights AND flushes', 'Not weak enough', 'Blocks nothing', 'Too strong to bluff'], correct: 0, explanation: 'QJ♥ blocks both folding regions (busted straights + busted flushes). Intersection of blocking both is very bad. Prefer 67♥/78♥ (block flush only).' },
-                { question: 'What sizing for river bluffs?', options: ['~65% pot', 'Pot-sized', '1/4 pot', 'Overbet'], correct: 0, explanation: '~65% pot for river bluffs.' },
-              ]}
-            />
           ),
         },
       ]} />

@@ -1,18 +1,13 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { BTN_RFI_COVERED, CO_RFI_COVERED } from '@poker/design-system/src/data/ranges'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM2Page() {
   return (
     <Section title="Opening Into Covered Stacks (You Are Covered)">
       <p>A stack (or several) behind covers you. You open much tighter than baseline, with the degree of tightness driven by how much the BB covers you, position of covering stacks, and presence of shorter stacks elsewhere.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <StackMatrix
                 colAxisLabel="BB stack relationship"
                 rowAxisLabel="Your stack"
@@ -71,25 +66,6 @@ export function BM2Page() {
                 <p>Min-raise dominant when covered (preserve tournament life, fold to reshoves). Open shoves drop sharply — and shift stronger (AQ, not AJ) when they do appear. BB 3-bet size vs a covering opener can be large/polar (~14bb) to deny price with Ax.</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="Opening Covered — Practice"
-              questions={[
-                { question: 'What drives your open range when covered?', options: ['How much the BB covers you, position of covering stacks, shorter stacks elsewhere', 'Your absolute stack only', 'Your hand strength only', 'The blinds'], correct: 0, explanation: 'Same stack, different range. 12bb BTN into 53bb BB → ~20%; into 16bb BB → ~28%. The BB\'s depth drives your range.' },
-                { question: 'What VPIP do you open at 12bb BTN into a 53bb BB (covered by heaps)?', options: ['~20% — almost no open shoves, offsuit Ax very poor', '~35%', '~9%', '~50%'], correct: 0, explanation: 'Covered by heaps → ~20%. Cut low pairs, worst Ax. Common leak: autopilot shoving K7s/T9s/KTo.' },
-                { question: 'What happens at 30-40bb covered?', options: ['Don\'t over-tighten — ~35%. BB must risk a lot to pressure you', 'Play very tight ~9%', 'Open shove everything', 'Fold most hands'], correct: 0, explanation: 'Common leak: way too tight at 30-40bb covered. Losing a raise-fold costs <10% of stack. Still ~35%.' },
-                { question: 'What is the "game of chicken" dynamic?', options: ['Close stacks → BB handicapped by risk → you open wider (~28%)', 'You fold everything', 'You jam every hand', 'You limp'], correct: 0, explanation: 'BTN 12bb vs BB 16bb: BB risks tournament life playing back. You open wider with more open-shoving.' },
-                { question: 'What is the common leak at 12bb covered?', options: ['Autopilot shoving K7s/T9s/KTo (too wide for covered stacks)', 'Over-tightening', 'Limping too much', 'Not shoving enough'], correct: 0, explanation: 'Covered short → offsuit Ax very poor, almost no open shoves. Autopilot shoving suited connectors/broadways is a leak.' },
-                { question: 'What is the dominant sizing when covered?', options: ['Min-raise (preserve tournament life, fold to reshoves)', 'Open-shove', 'Limp', '3x raise'], correct: 0, explanation: 'Min-raise dominant when covered. Open shoves drop sharply and shift stronger (AQ, not AJ) when they appear.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

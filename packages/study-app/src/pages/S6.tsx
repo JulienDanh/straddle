@@ -1,5 +1,4 @@
 import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S6Page() {
   return (
@@ -106,36 +105,6 @@ export function S6Page() {
                 <HandExample spot="K3♣ on K94 (HJ, 15bb)" action="Check-call (trap)" actionVariant="call">Flush draw hands trap, non-flush-draw top pairs CR. K7 no club = check-raise (protection).</HandExample>
                 <HandExample spot="65o on 864r (CO, 25bb)" action="Check-raise" actionVariant="raise">Pure check-raise (top pair + gut shot). Need protection. 85, 87 with gut shots = good CR.</HandExample>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="System 6 \u2014 Check-Raising Top Pair (Short Stacks) — Practice"
-              quiz={{
-                options: [
-                  { label: 'Check-raise top pair', variant: 'raise' },
-                  { label: 'Check-call (BDFD)', variant: 'call' },
-                  { label: 'Trap (check-call)', variant: 'check' },
-                ],
-                scenarios: [
-                  { board: { high: 'Q', variant: 'green' }, correct: { label: 'Check-raise top pair', variant: 'raise' }, explanation: '≤35bb: top pair = pure CR. KQ/QJ/QT pure CR; taper to Q2 pure call. Shorter = more CR.' },
-                  { board: { high: 'K', variant: 'green' }, correct: { label: 'Check-raise top pair', variant: 'raise' }, explanation: '≤35bb: top pair = pure CR. Shorter = more aggressive. Most players under-CR top pair when short.' },
-                  { board: { high: 'Q', suit: 'two-tone', variant: 'orange' }, correct: { label: 'Check-call (BDFD)', variant: 'call' }, explanation: 'Backdoor FD prefers check-call to realize the flush draw. Q9♥ calls more than Q9o. CR gives up flush equity.' },
-                  { board: { high: 'J', paired: true, variant: 'red' }, correct: { label: 'Trap (check-call)', variant: 'check' }, explanation: 'Two pair / sets / pockets trap (check-call). SPR short enough to shove river without raising flop.' },
-                  { board: { high: 'K', variant: 'red' }, correct: { label: 'Trap (check-call)', variant: 'check' }, explanation: 'Two pair / sets trap. Check-call — short SPR lets you shove river for value.' },
-                ],
-              }}
-              questions={[
-                { question: 'What is the inflection point for aggressive top-pair CR?', options: ['35bb — at/below, aggressive top-pair CR', '50bb', '20bb', 'No inflection'], correct: 0, explanation: 'Above 35bb → nuts-oriented CR (sets, two pair, TPTK mix). At/below → aggressive top-pair CR. Shorter = more CR.' },
-                { question: 'What is the common leak System 6 corrects?', options: ['Under-CR top pair when short', 'Over-CR top pair when deep', 'CR too small', 'Never CR'], correct: 0, explanation: 'Most players under-CR top pair when short. Shorter = more CR, not less.' },
-                { question: 'What does a backdoor flush draw prefer?', options: ['Check-call (realize the flush draw)', 'Check-raise', 'Fold', 'Donk-lead'], correct: 0, explanation: 'BDFD prefers check-call to realize the flush draw. CR gives up flush equity. Q9♥ calls more than Q9o.' },
-                { question: 'What do two pair / sets / pockets do on short stacks?', options: ['Trap (check-call)', 'Check-raise', 'Donk-lead', 'Fold'], correct: 0, explanation: 'SPR is short enough to shove river without raising flop. Two pair/sets/pockets trap (check-call).' },
-                { question: 'On Q-high, what determines CR frequency?', options: ['Kicker (KQ pure CR → Q2 pure call)', 'Stack depth only', 'Suit', 'Board pairing'], correct: 0, explanation: 'KQ/QJ/QT pure CR; Q9 heavy (offsuit); Q8 medium mix; Q7-Q4 tapering; Q2 pure call.' },
-                { question: 'What is the CR sizing for short stacks?', options: ['Small (~3x the c-bet)', 'Pot-sized', 'Min-raise', 'All-in'], correct: 0, explanation: 'CR to small size (~3x the c-bet). Short stacks = 2-street game.' },
-              ]}
-            />
           ),
         },
       ]} />

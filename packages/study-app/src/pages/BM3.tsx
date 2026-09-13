@@ -1,5 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { UTG_RFI_COVERING } from '@poker/design-system/src/data/ranges'
 
@@ -8,11 +7,7 @@ export function BM3Page() {
     <Section title="Opening Into Covering Stacks (You Cover)">
       <p>You cover most/all stacks behind. Open significantly wider than the ICM equal-stack baseline — often 2x+ from EP. Key adjustments: how much you cover and whether the blinds are deep or very short.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <StackMatrix
                 colAxisLabel="BB stack depth"
                 rowAxisLabel="Your cover ratio"
@@ -61,25 +56,6 @@ export function BM3Page() {
                 <p>Min-raise when blinds are 30bb+ (fold to reshoves, preserve optionality). Open shove a heavy chunk when blinds are sub-20-25bb — BB calls &lt;10%. UTG baseline ~16.5%; covering by 2x+ expands to ~35%.</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="Opening Covering — Practice"
-              questions={[
-                { question: 'What VPIP do you open when covering by 2x+ on BTN with deep blinds?', options: ['~75% (2x+ the baseline)', '~53%', '~16.5%', '~35%'], correct: 0, explanation: 'Covering by 2x+ → open ~75%. More of everything vs 53% baseline. Low suited connectors, low pairs all OK.' },
-                { question: 'What is the commonly missed leak when covering short blinds?', options: ['Heavy open shoves are underused (BB calls <10%)', 'Opening too wide', 'Limping too much', 'Not raising enough'], correct: 0, explanation: 'When blinds are sub-20-25bb and you cover, open-shove a huge chunk. Defaulting to min-raise/fold with 70-85% of hands leaves raise-fold equity on the table.' },
-                { question: 'What happens when stacks are close (covering but not by much)?', options: ['Dial back (~68%) — losing leaves you short (7bb)', 'Open wider (~80%)', 'No change', 'Open shove everything'], correct: 0, explanation: 'Covering but close: dial to ~68%. Closer stacks hurt more if you lose. Stack gap matters.' },
-                { question: 'Does being covered by one or two mean play tight?', options: ['No — if you cover the rest (especially BB), still open wider than baseline', 'Yes — play very tight', 'Always fold', 'Only open premiums'], correct: 0, explanation: 'Covering player folds ~80%; you then pressure everyone you cover. Still wider than baseline.' },
-                { question: 'How does BB depth shift composition when you cover?', options: ['Deep BB → playability (suited connectors); very short BB → raw equity (Ax-heavy)', 'Always want playability', 'Always want raw equity', 'No composition shift'], correct: 0, explanation: 'Deep BB: low suited connectors, suited high-low, low pairs. Very short BB: high-card dense, Ax-heavy, drop speculative.' },
-                { question: 'What is the UTG baseline when covering by 2x+?', options: ['~35% (like a 30bb CO open in chips)', '~16.5%', '~75%', '~9%'], correct: 0, explanation: 'UTG covering by 2x+ → ~35%. UTG baseline ~16.5%; covering expands it.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

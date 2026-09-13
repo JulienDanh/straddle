@@ -21,7 +21,7 @@ const studyContent = (
 
 const practiceContent = (
   <p className="text-[13px] text-muted leading-relaxed">
-    Practice tab content — quiz and Q&A live here via <Code>PracticeFlow</Code>.
+    Second tab content.
   </p>
 )
 

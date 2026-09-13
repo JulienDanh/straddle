@@ -1,18 +1,13 @@
-import { Section, Callout, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Action, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 
 export function BM9Page() {
   return (
     <Section title="BB Covers BTN — Postflop">
       <p>BB is the big/covering stack, BTN is the shorter/covered stack. Two sides: BB defense (module 13) and BTN c-betting (modules 13-14). The dynamic flips from BTN-covers-BB: BB donk-leads low and paired boards; BTN c-bets far less and develops real check-back ranges.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <Callout variant="warn"><strong>Stacks reversed, actions reversed.</strong> Boards that are range-bet for BTN when BTN covers become range-CHECK when BB covers BTN. The side with the connecting hands flips.</Callout>
-              
+
                       <h3>Board class × side</h3>
 <DataTable columns={[{ header: 'Board class' }, { header: 'BB defense (covering)' }, { header: 'BTN c-bet (covered)' }]} rows={[[<><strong>Low / paired (5-5-4, 6-6-2)</strong></>, <><Action variant="bet">Lead near-range</Action> — Covering by ~1.5-2x+. Doesn't exist in chip-EV.</>, <><Action variant="check">Check back high freq (&gt;50%)</Action> — BB has the low cards; BTN lacks backup.</>],
                   [<><strong>High paired (J-J-2 / A-K-K)</strong></>, <><Action variant="raise">Check-raise heavy</Action> — Minimal check-call. Near CR-or-fold.</>, <><Action variant="check">Check back ~70%</Action> — BB check-raises ~10.5% aggressively.</>],
@@ -40,41 +35,6 @@ export function BM9Page() {
               <p>BB donk lead ~50% pot (can go range on extreme low boards). BB lead turn: ~50%. BB value bet river: block ~25%, never shove. BTN c-bet default ~B40 / small. BTN front-load overbet ~105% pot. BTN protection shove ~4x pot on low disconnected. River raise (value or bluff): non-all-in (~50% of remaining).</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="BB Covers BTN — Practice"
-              quiz={{
-                options: [
-                  { label: 'BB leads / check-raise', variant: 'raise' },
-                  { label: 'BTN range bet', variant: 'bet' },
-                  { label: 'BTN check back', variant: 'check' },
-                  { label: 'BTN front-load overbet', variant: 'bet' },
-                ],
-                scenarios: [
-                  { board: { high: '9', paired: true, variant: 'green', label: 'Low paired (554)' }, correct: { label: 'BB leads / check-raise', variant: 'raise' }, explanation: 'Low paired (554, 662): BB leads near-range when covering by ~1.5-2x+. Stacks reversed, actions reversed.' },
-                  { board: { high: 'J', paired: true, variant: 'green' }, correct: { label: 'BB leads / check-raise', variant: 'raise' }, explanation: 'High paired (JJ2): heavy check-raise, minimal check-call. Near CR-or-fold.' },
-                  { board: { high: 'A', connected: true, variant: 'green' }, correct: { label: 'BTN range bet', variant: 'bet' }, explanation: 'Ace-Broadway-Broadway (AKQ, AKJ, AKT, AQT, AJT): BTN still range-bets. BB doesn\'t have the connecting hands.' },
-                  { board: { high: '9', variant: 'red' }, correct: { label: 'BTN check back', variant: 'check' }, explanation: 'Low boards → BTN checks back high freq (>50%). BB has the low cards; BTN lacks backup.' },
-                  { board: { high: 'A', suit: 'monotone', variant: 'orange' }, correct: { label: 'BTN check back', variant: 'check' }, explanation: 'Monotone when covered → ~50% check. OOP check-raises aggressively (BB can have any flush); BTN also lacks flushes (shoves suited pre).' },
-                  { board: { high: 'A', variant: 'green', label: 'AQ2 · no OESD, no FD' }, correct: { label: 'BTN front-load overbet', variant: 'bet' }, explanation: 'A-Q-2-type disconnected with gutshots but no OESD/FD: polar ~105% overbet + check. Folds out 5-4/4-3.' },
-                ],
-              }}
-              questions={[
-                { question: 'What is the key principle when stacks are reversed?', options: ['Stacks reversed, actions reversed — boards that are range-bet for BTN when BTN covers become range-CHECK when BB covers', 'No change from chip EV', 'BTN bets more', 'BB plays passive'], correct: 0, explanation: 'The side with the connecting hands flips. BB donk-leads low/paired; BTN c-bets far less and develops check-back ranges.' },
-                { question: 'What does BB do on low/paired boards when covering?', options: ['Lead near-range (~85%) when covering by ~1.5-2x+', 'Check-fold', 'Check-call', 'Donk-shove'], correct: 0, explanation: 'Low/paired (554, 662): BB leads near-range. Doesn\'t exist in chip-EV. Stacks reversed → actions reversed.' },
-                { question: 'What is the front-load overbet and when does it apply?', options: ['~105% pot on AQ2-type boards with gutshots but no OESD/FD', 'Always overbet', 'Quarter pot on dry boards', 'Only on monotone'], correct: 0, explanation: 'Polar ~105% overbet + check (no small bet). Folds out 5-4/4-3 so turns are clean value bets. Counter-intuitive vs chip-EV "small range-bet."' },
-                { question: 'What kills the front-load overbet?', options: ['Flush draw / two-tone (don\'t want bet-call vs FD stacks-in)', 'Rainbow', 'Disconnected board', 'Low card'], correct: 0, explanation: 'Flush draw / two-tone kills the front-load. Open-ended straight draws also kill it. Reverts to small/check.' },
-                { question: 'What is the river raise rule on the bubble?', options: ['Non-all-in (~50% of remaining) — leave chips behind, never jam', 'Always shove', 'Min-raise', 'Check-raise'], correct: 0, explanation: 'Never all-in on the river when you can avoid it. Raise to ~50% of remaining, non-all-in. Maximizing tournament equity, not chips.' },
-                { question: 'What still gets range-bet by BTN when BB covers?', options: ['Ace-Broadway-Broadway (AKQ, AKJ, AKT, AQT, AJT)', 'Low boards', 'Monotone', 'Middling Broadway'], correct: 0, explanation: 'Still range-bet: AKQ, AKJ, AKT, AQT, AJT. BB doesn\'t have the connecting hands on these boards.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

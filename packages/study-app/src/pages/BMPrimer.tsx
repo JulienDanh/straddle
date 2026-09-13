@@ -1,16 +1,11 @@
-import { Section, Callout, Code, Action, DataTable, Tabs } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Code, Action, DataTable } from '@poker/design-system/src/components/ui'
 
 export function BMPrimerPage() {
   return (
     <Section title="Bubble Mastery — ICM & FGS Foundations">
       <p>The bubble is where MTT ROI lives. You see it far more often than the final table, and mastering it lets you extrapolate to near-bubble and post-bubble spots.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <Callout><strong>Study the perimeters.</strong> ChipEV (first hand) and the direct bubble are the two extremes. Spend ~40% on each, ~20% in the middle. Everything stems from the extremes.</Callout>
 
               <h3>The three models</h3>
@@ -44,25 +39,6 @@ export function BMPrimerPage() {
                   [<>1000 players</>, <>152 left, 150 paid (2 to bust)</>, <>1.3%</>, <><strong>More extreme</strong></>]]} />
               <p>The 1000-player near-bubble ≈ direct bubble of a smaller field. Use the 1000-player model for direct-bubble study.</p>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="ICM & FGS Foundations — Practice"
-              questions={[
-                { question: 'What does ICM mean for chip equity?', options: ['Doubling your stack does not double your equity', 'Chips scale linearly', 'Equity is always 1:1 with chips', 'ICM doesn\'t affect equity'], correct: 0, explanation: 'Under ICM, chips do not scale linearly. Doubling from 5,000 to 10,000 chips might take you from $100 to $195, not $200.' },
-                { question: 'What does FGS add beyond ICM?', options: ['Future hands — blind cycles, forced all-ins, who busts next', 'Nothing', 'Only skill edge', 'Only position'], correct: 0, explanation: 'FGS = ICM + N future hands. It captures the cost of posting blinds, the benefit of others busting before you, and forced all-in situations.' },
-                { question: 'What is the hierarchy for applying these models?', options: ['ICM baseline → FGS direction → table logic magnitude', 'FGS first then ICM', 'ChipEV only', 'Table logic only'], correct: 0, explanation: 'ICM gives the baseline strategy. FGS tells you which direction to deviate. Table/stack/position logic tells you how much to deviate.' },
-                { question: 'What happens to your shove range when you post BB next (4.5bb) under FGS?', options: ['Wider — blind cost + fold equity now', 'Tighter', 'No change', 'Fold everything'], correct: 0, explanation: 'FGS says shove ~25% vs ICM\'s ~18%. The blind cost (~112bb/100) plus having fold equity now means you should shove wider.' },
-                { question: 'What is a key ICM pitfall?', options: ['No skill edge, no future hands, no position/blind accounting, computational breakdown at scale', 'It\'s always wrong', 'It only works for cash games', 'It requires too much computation'], correct: 0, explanation: 'ICM doesn\'t account for skill edge, future hands, or position. It also breaks down computationally with 50-500+ players (output may be 10-15% off).' },
-                { question: 'Why is open shoving 15bb on the bubble with a shorter stack present a massive leak?', options: ['Min-raising is 4-5x better in tournament equity. Open shoving AJo loses ~$17.70', 'You might get called', 'You should limp instead', 'It\'s not a leak'], correct: 0, explanation: 'FGS says preserve tournament life. Min-raise only. Open shoving loses ~$18-35 in equity vs min-raising.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

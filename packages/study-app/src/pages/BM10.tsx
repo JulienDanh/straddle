@@ -1,18 +1,13 @@
-import { Section, Callout, Code, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Code, Action, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 
 export function BM10Page() {
   return (
     <Section title="UTG Covers BB — Postflop">
       <p>UTG covers BB on the bubble. Two sides: BB defense (module 15) and UTG c-betting (module 16). UTG c-bets at very high frequency (~90%+) when covering by 2x+, because BB's tight defense range lacks low-board coverage. Checking ranges develop as stacks get deeper or closer.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <Callout variant="warn"><strong>The stack gap matters more than the fact that you cover.</strong> Covering by 2x+ → range bet. Stacks within ~8-10bb → check 50% on mid connected boards. "I cover" is not enough information.</Callout>
-              
+
                       <h3>Board class × side</h3>
 <DataTable columns={[{ header: 'Board class' }, { header: 'BB defense (covered)' }, { header: 'UTG c-bet (covering)' }]} rows={[[<><strong>Low disconnected (854, 752, A44)</strong></>, <><Action variant="call">Mostly check-call</Action> — Tight range lacks connection.</>, <><Action variant="bet">Range bet</Action> — BB folds offsuit connectors — can't connect.</>],
                   [<><strong>Mid connected (977, 764, J97)</strong></>, <><Action variant="call">Check-call / check-raise (deep)</Action> — Range composition overrides texture.</>, <><Action variant="check">Range bet (2x+); ~50% (close)</Action> — Stack gap determines.</>],
@@ -38,41 +33,6 @@ export function BM10Page() {
               <p>River polar bet: <Code>~13.5bb</Code> leaving 1-3bb behind — never shove. Block-bet thin value ~40% pot. Check-raise short: ~4.3bb (no leverage); deep: ~6.5bb (turn/river threat). Check-shove needs &gt;75% fold; UTG folds only ~60% → mistake.</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="UTG Covers BB — Practice"
-              quiz={{
-                options: [
-                  { label: 'Range bet (cover 2x+)', variant: 'bet' },
-                  { label: 'Check ~50% (close stacks)', variant: 'check' },
-                  { label: 'Big bet/check split (40bb+ BB)', variant: 'bet' },
-                  { label: 'BB check-call (KQ raises)', variant: 'call' },
-                ],
-                scenarios: [
-                  { board: { high: '9', variant: 'green' }, correct: { label: 'Range bet (cover 2x+)', variant: 'bet' }, explanation: 'Low disconnected (854, 752, A44): range bet when covering by 2x+. BB folds offsuit connectors — can\'t connect.' },
-                  { board: { high: '9', paired: true, variant: 'green' }, correct: { label: 'Range bet (cover 2x+)', variant: 'bet' }, explanation: '977-type: range bet. BB\'s tight defense lacks 7x. Cover by 2x+ → ~90%+ c-bet.' },
-                  { board: { high: '9', connected: true, variant: 'orange', label: 'Mid connected (764)' }, correct: { label: 'Check ~50% (close stacks)', variant: 'check' }, explanation: 'Mid connected (764, J97) with close stacks → ~50% check. Stack gap matters more than coverage.' },
-                  { board: { high: 'A', variant: 'orange' }, correct: { label: 'Big bet/check split (40bb+ BB)', variant: 'bet' }, explanation: 'AK7, AQ2 with 40bb+ BB covered: big bet/check split. Check QQ/JJ/TT/weak Ax/Kx; bet large (67-80%) strong.' },
-                  { board: { high: 'K', variant: 'green' }, correct: { label: 'BB check-call (KQ raises)', variant: 'call' }, explanation: 'BB defense (covered, short): K84 → check-call. ICM threshold: KQ only. KJ/KT/K9 and below = pure check-call.' },
-                  { board: { high: 'A', paired: true, variant: 'green' }, correct: { label: 'Range bet (cover 2x+)', variant: 'bet' }, explanation: 'Ace-low paired (A88, A77, A66): range bet (short BB). ICM pressure overrides; checks develop deeper.' },
-                ],
-              }}
-              questions={[
-                { question: 'What matters more than "I cover"?', options: ['The stack gap — covering by 2x+ → range bet; close stacks → check 50%', 'Absolute stack size', 'Board texture', 'Your hand'], correct: 0, explanation: 'Cover by 2x+ → range bet (~90%+). Stacks within ~8-10bb → check 50% on mid connected. "I cover" is not enough info.' },
-                { question: 'Why is check-shove a mistake for BB vs UTG?', options: ['UTG folds only ~60%; need >75% for check-jam. UTG range too strong', 'BB has no equity', 'It\'s too small', 'It\'s too big'], correct: 0, explanation: 'No check-shove vs UTG. IP folds only ~60%; need >75% for check-jam. UTG range too strong (sets, overpairs, TPTK).' },
-                { question: 'What is the BB check-raise threshold under ICM (short)?', options: ['KQ only on K84. KJ/KT/K9 and below = pure check-call', 'Any top pair', 'KJ+', 'Any king'], correct: 0, explanation: 'ICM threshold: KQ only. ChipEV: KJ/KT/K9 pure check-raise. ICM threshold much stronger.' },
-                { question: 'Why leave 1-3bb behind on the river (never shove)?', options: ['Those 2bb are worth ~$200 in a $100 tourney. Shoving when called+lose = zero equity', 'It\'s a mistake', 'You lose fold equity', 'Pot odds'], correct: 0, explanation: 'Bet ~13.5bb leaving 1-3bb behind. NEVER shove. 1-3bb worth ~$200 in $100 tourney. Shoving when called+lose = zero tournament equity.' },
-                { question: 'What happens on flush-completing turns?', options: ['Short BB leads more (17.8% flushes vs deep 12.5%)', 'Deep BB leads more', 'No one leads', 'UTG leads'], correct: 0, explanation: 'Short BB: flushes 17.8% of range (suited-heavy). Deep: 12.5%. Short leads more on flush turns. A♠ turn > 4♠ turn for BB (removes IP suited aces).' },
-                { question: 'What is the river polar sizing?', options: ['~13.5bb leaving 1-3bb behind — never shove', 'All-in', 'Half pot', 'Quarter pot'], correct: 0, explanation: 'River polar bet: ~13.5bb leaving 1-3bb behind. Block-bet thin value ~40% pot. Check-raise short: ~4.3bb (no leverage).' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

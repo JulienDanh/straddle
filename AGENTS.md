@@ -13,15 +13,13 @@ packages/
 │       │   ├── ui-parts/
 │       │   │   ├── primitives.tsx   — Section, Callout, Tag, Action, Small, Code
 │       │   │   ├── cards.tsx        — H, HoleCards, Board, BoardType, RandomBoard
-│       │   │   ├── tabs.tsx         — Study/Practice tab switcher
+│       │   │   ├── tabs.tsx         — tab switcher (Study / Examples / range panels)
 │       │   │   ├── collapsible.tsx  — Collapsible detail sections
 │       │   │   ├── pyramid.tsx      — Hand-strength pyramid visual
 │       │   │   ├── stack-matrix.tsx — Preflop ICM stack-depth grid
 │       │   │   ├── data-table.tsx   — Styled table component
 │       │   │   └── decision-tree.tsx— React Flow decision tree (with dagre layout)
 │       │   ├── ui-shadcn/          — shadcn/ui components (button, card, accordion)
-│       │   ├── PracticeFlow.tsx   — unified quiz + Q&A with mode toggle
-│       │   ├── quiz-shared.ts      — shared helpers for quiz components
 │       │   ├── RangeGrid.tsx       — 13x13 combo grid (GTO Wizard format); owns the RANKS/HAND_GRID layout constants
 │       │   ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
 │       └── stories/               — Storybook stories for all components
@@ -55,45 +53,41 @@ packages/
 
 ## Three system types
 
-Not all poker systems are the same. The transcript teaches three different kinds, and each needs a different Study tab layout. Don't force every system into the same template.
+Not all poker systems are the same. The transcript teaches three different kinds, and each needs a different Study layout. Don't force every system into the same template.
 
 ### 1. Board-texture systems (S1-S4, S6, S7, S9, S12, BM8-BM11)
 
 The core skill: see a board → classify into a bucket → check risk factors → execute action.
 
 - **Study tab:** `DecisionTree` (React Flow canvas, left-to-right flow, dagre auto-layout). The tree shows the classification *process*, not just the answers. Each leaf has collapsible example boards. Key callouts visible below the tree. Risk factor details, sizing in `Collapsible`.
-- **Practice tab:** `PracticeFlow` with both board-spot quiz (visual board → action) and rule Q&A.
 
 ### 2. Hand-strength systems (S5, S8, S10, S11)
 
 The core skill: know your hand's tier in a hierarchy → bet/check/raise based on tier.
 
 - **Study tab:** `Pyramid` (for S5 — vertical tier diagram, medium highlighted) or visible `DataTable` (for S8, S10, S11 — sizing/blocker tables). Key callouts visible. Details in `Collapsible`.
-- **Practice tab:** `PracticeFlow` with both quiz + Q&A (S5, S8, S11 have board-spot quizzes; S10 is Q&A only).
 
 ### 3. Preflop ICM systems (BM1-BM7)
 
 The core skill: know your stack vs their stack → adjust open/defend range.
 
 - **Study tab:** `StackMatrix` (color-coded grid: your stack × opponent stack, cells show VPIP% + action). Key callouts visible. Details in `Collapsible`.
-- **Practice tab:** `PracticeFlow` with Q&A only (no board-spot quiz — these are preflop decisions with no board to show).
 
 ## Content structure (per system)
 
-Every system page follows the same template, with the Study tab varying by system type.
+Every system page follows the same template, with the Study content varying by system type.
 
-1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always before the Tabs** so it's visible without clicking.
-2. **Tabs** — Study / Practice tab switcher.
-3. **Study tab:**
+1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always visible without clicking.**
+2. **Tabs** (only when a page has multiple panels — Examples, range browsers); most pages render the Study content directly.
+3. **Study content:**
    - Core visual (DecisionTree / Pyramid / StackMatrix / DataTable) — **always visible, never in Collapsible**
    - 1-2 key callouts — **always visible**
    - Detail sections (risk factors, sizing, exceptions) — **in Collapsible**
-4. **Practice tab:** `PracticeFlow` with quiz (if board-dependent) and/or questions.
 
 ### Anti-duplication rules
 
 - **Each rule lives in exactly one place.** The visual shows the decision; callouts show the key insight; Collapsibles show the detail. Never repeat the same information across sections.
-- **Core concept is never in Collapsible.** The DecisionTree/Pyramid/StackMatrix is the system — it must be visible when the Study tab opens. Only detail goes in Collapsible.
+- **Core concept is never in Collapsible.** The DecisionTree/Pyramid/StackMatrix is the system — it must be visible when the page opens. Only detail goes in Collapsible.
 - **No standalone Decision Matrix or Risk Factors sections.** The visual replaces them.
 
 ## Component library
@@ -103,7 +97,7 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 ### Page structure components
 
 - **`Section`** — wraps a page. Props: `title`, `children`.
-- **`Tabs`** — Study/Practice tab switcher. Props: `tabs` (array of `{ label, content }`), `defaultIndex`.
+- **`Tabs`** — tab switcher for multi-panel pages (Examples, range browsers). Props: `tabs` (array of `{ label, content }`), `defaultIndex`.
 - **`Collapsible`** — expandable detail section. Props: `title`, `children`, `defaultOpen`. Use for risk factors, sizing, exceptions — anything that's detail, not core.
 - **`Callout`** — high-impact highlight. Props: `variant` (`'default' | 'warn' | 'bad' | 'good'`), `children`.
 - **`DataTable`** — styled table. Props: `columns` (array of `{ header, width? }`), `rows` (array of `ReactNode[]`), `compact?`.
@@ -124,10 +118,6 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`RandomBoard`** — generates a random flop matching constraints and renders it as a `BoardType`. Props: `high` (`'A' | 'K' | 'Q' | 'J' | 'T' | '9'`), `suit` (`'monotone' | 'two-tone' | 'rainbow'`), `paired`, `connected`, `lowCard` (rank index), `akx`, `label?`, `variant?`, `size?`, `streets?` (3/4/5).
 - **`Action`** — inline colored badge for poker actions. Props: `variant` (`'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'`), children = label text.
 - **`H`** — colored heart suit symbol for inline text. Only `H` exists; no `S`/`D`/`C` suit components.
-
-### Practice component
-
-- **`PracticeFlow`** — unified quiz + Q&A with mode toggle. Props: `title?`, `quiz?` (with `options` and `scenarios`), `questions?` (array of `{ question, options, correct, explanation }`). When both quiz and questions are provided, a toggle lets the user switch between "Board spots" and "Rules Q&A". Single score counter shared across both modes. When only questions are provided, no toggle shows.
 
 ### Range components (for future use in courses)
 
@@ -178,7 +168,6 @@ When building a `DecisionTree` for a board-texture system:
 - **Contrast pairs explicitly.** "High-high-low is NOT a risk factor; high-low-low (paired low under high) IS." The distinction is the lesson. Don't state one without the other.
 - **State the counter-intuitive rule boldly.** "Bet MORE when shallow, not less." Most players get this wrong — that's why it's a system. Call out the leak it corrects.
 - **Use callouts for the highest-impact points.** Green for insights, orange for warnings/leaks, red for critical distinctions. Don't overuse them — reserve for the 2-3 things per system that a student must not miss.
-- **Quiz questions apply, don't recite.** Give a new board/hand and ask for the action. The student has to run the system, not remember a slide.
 
 ## What to avoid
 

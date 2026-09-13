@@ -1,5 +1,4 @@
 import { Section, Callout, Action, Tabs, Collapsible, DataTable, HandExample } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function S8Page() {
   return (
@@ -65,37 +64,6 @@ export function S8Page() {
                 <HandExample spot="K8 on Q72 → Q turn (BTN vs BB, 50bb)" action="Overbet pot" actionVariant="bet">Villain check-called flop, checked turn. Nut ratio is low. Should overbet pot to set up river shove. Betting 1/3 loses 270bb/100 EV.</HandExample>
                 <HandExample spot="JT on KKT → Q river (EP vs BB, 50bb)" action="Check" actionVariant="check">Don't reopen with Jx — villain can have quads. Check Jx. Bet QQ+ for value to 3/4 pot.</HandExample>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="System 8 — Practice"
-              quiz={{
-                options: [
-                  { label: 'Bet big (pot+)', variant: 'bet' },
-                  { label: 'Bet ~70%', variant: 'bet' },
-                  { label: 'Check', variant: 'check' },
-                ],
-                scenarios: [
-                  { board: { high: 'Q', suit: 'two-tone', label: 'Villain capped' }, correct: { label: 'Bet big (pot+)', variant: 'bet' }, explanation: 'Villain capped — no straights/flushes, few sets. Geometric sizing gets stack in. Fold% rises slower than bet size → bigger bets profit more.' },
-                  { board: { high: 'A', suit: 'monotone', label: 'Both have nuts' }, correct: { label: 'Bet ~70%', variant: 'bet' }, explanation: 'Both players can have flushes/straights. Nut ratio high → large but not overbet. ~70% pot constrains sizing.' },
-                  { board: { high: 'K', variant: 'green', label: 'Thin value (QJ) on river' }, correct: { label: 'Check', variant: 'check' }, explanation: 'QJ on river is too thin to bet small. You need to win a lot — thin hands check. Don\'t bet thin hands small IP.' },
-                  { board: { high: 'Q', suit: 'two-tone', label: 'Villain checked turn' }, correct: { label: 'Bet big (pot+)', variant: 'bet' }, explanation: 'Villain checked turn = inflection point, weak range. Your medium hands are now strong. Bet big.' },
-                  { board: { high: 'J', connected: true, suit: 'two-tone' }, correct: { label: 'Bet big (pot+)', variant: 'bet' }, explanation: 'Connected flop with straight draws. Larger sizing denies draw equity. Bet big.' },
-                  { board: { high: 'Q', suit: 'two-tone', label: 'Merge (pocket Queens)' }, correct: { label: 'Bet big (pot+)', variant: 'bet' }, explanation: 'Pocket Queens as merge: gets folds from flushes (better) AND calls from pairs/Jx (worse). Both properties = merge bet. Pot-sized.' },
-                ],
-              }}
-              questions={[
-                { question: 'What is the core mistake System 8 corrects?', options: ['Betting too small in position', 'Betting too large', 'Checking too much', 'Not bluffing enough'], correct: 0, explanation: 'IP player deciding bet sizing. Core mistake: betting too small. Fold% rises slower than bet size → bigger bets profit more.' },
-                { question: 'When villain is capped (low nut ratio), what sizing?', options: ['Overbet / pot (geometric to get stacks in)', '~70% pot', 'Quarter pot', 'Check'], correct: 0, explanation: 'Villain capped → overbet/pot geometric. Fold% rises slower than bet size, so bigger bets profit more.' },
-                { question: 'When both players can have nuts, what sizing?', options: ['~70% pot (large but not overbet)', 'Overbet', 'Quarter pot', 'Min-bet'], correct: 0, explanation: 'Both have nuts possible → ~70% pot. Nuts frequency constrains sizing.' },
-                { question: 'When is sub-half-pot correct IP?', options: ['Almost NEVER', 'Always on dry boards', 'With strong hands', 'On the river'], correct: 0, explanation: '<50% pot IP almost never correct. Small bets don\'t justify the CR risk. Reopening action risks being CR\'d off equity.' },
-                { question: 'What does a thin value hand do IP?', options: ['Check (don\'t bet thin hands small)', 'Bet small', 'Overbet', 'Shove'], correct: 0, explanation: 'Thin value hands check. Don\'t bet thin hands small — <50% pot almost never correct IP.' },
-                { question: 'What is geometric betting?', options: ['~pot on both streets to get stacks in over 2', 'Quarter pot on both streets', 'Overbet then check', 'Min-bet then shove'], correct: 0, explanation: 'To get stack in over 2 streets: ~pot on both (equal fractions). E.g. 50bb: ~11bb turn → ~34bb river shove.' },
-              ]}
-            />
           ),
         },
       ]} />

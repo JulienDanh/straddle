@@ -1,5 +1,4 @@
 import { Section, Callout, Tag, Action, Board, RandomBoard, Tabs, Collapsible, DecisionTree } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { RangeGrid } from '@poker/design-system/src/components/RangeGrid'
 import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_FLOP_MONOTONE, S1_FLOP_J66 } from '@poker/design-system/src/data/ranges'
@@ -254,42 +253,6 @@ export function S1Page() {
               <p>BB's defense vs the UTG open — raise (3-bet) and call frequencies.</p>
               <RangeBrowser ranges={BB_VS_UTG_CEV} />
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="System 1 — Practice"
-              quiz={{
-                options: [
-                  { label: 'C-bet 100%', variant: 'bet' },
-                  { label: 'Mix', variant: 'check' },
-                ],
-                scenarios: [
-                  { board: { high: 'T', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'T-high+ clean → c-bet 100%. No risk factor present.' },
-                  { board: { high: 'J', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'J-high clean → c-bet 100%. No risk factor present.' },
-                  { board: { high: 'K', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'K-high clean → c-bet 100%. No risk factor present.' },
-                  { board: { high: 'A', variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: 'A-high clean → c-bet 100%. Highest frequency bucket.' },
-                  { board: { high: 'Q', connected: true, variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: '1 straight possible → still bet frequently. 3 straights would slow down.' },
-                  { board: { high: 'K', connected: true, variant: 'green' }, correct: { label: 'C-bet 100%', variant: 'bet' }, explanation: '1 straight possible → still bet frequently.' },
-                  { board: { high: 'A', suit: 'monotone', variant: 'red' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'Ace-monotone is a risk factor. Bet strong + weak, check medium.' },
-                  { board: { high: 'J', paired: true, lowCard: 6, variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'High-low-low (paired low card under high). Bet trips + weak, check underpairs.' },
-                  { board: { high: 'T', paired: true, lowCard: 5, variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'T55: even though T-high+, paired-low overrides → mix.' },
-                  { board: { akx: true, variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: 'AKx family (AK2/AK3/AK4). Slow down — not 100%.' },
-                  { board: { high: '9', variant: 'orange' }, correct: { label: 'Mix', variant: 'check' }, explanation: '9-high & below → always mix (~70/30). No 100% exists.' },
-                  { board: { high: 'J', connected: true, variant: 'red' }, correct: { label: 'Mix', variant: 'check' }, explanation: '3 straights possible → slow down. Bet strong + weak, check medium.' },
-                ],
-              }}
-              questions={[
-                { question: 'What are the two flop buckets for System 1?', options: ['T-high+ and 9-high & below', 'Ace-high and everything else', 'Paired and unpaired', 'Wet and dry'], correct: 0, explanation: 'Bucket 1: T-high+ → c-bet 100%. Bucket 2: 9-high & below → mix ~70/30.' },
-                { question: 'What is the primary risk factor for c-betting 100%?', options: ['Paired boards', 'Monotone boards', 'Straights possible', 'Stack depth'], correct: 2, explanation: 'Straights possible is primary. 1 straight → still bet. 3 straights → slow down heavily.' },
-                { question: 'What adaptation when shallow (20bb)?', options: ['C-bet less — less risk', 'C-bet more — overpair asymmetry amplified', 'No change', 'Check everything'], correct: 1, explanation: 'Shallow amplifies overpair advantage. Bet MORE, not less. Most players do the opposite — correct the leak.' },
-                { question: 'Is KK3 (high-high-low) a risk factor?', options: ['Yes — two high cards', 'No — only paired low under high counts', 'Sometimes', 'Only if monotone'], correct: 1, explanation: 'KK3 is high-high-low, NOT high-low-low. Only paired low under high (like K33, J66, T55) is a risk factor.' },
-                { question: 'On a risk board, which hands do you CHECK?', options: ['Very strong and very weak', 'Medium-strength only', 'Everything', 'Only sets'], correct: 1, explanation: 'Bet top (strong) + bottom (trash), check middle (underpairs, medium aces, AK/AQ/AT).' },
-                { question: 'What is the default c-bet sizing for System 1?', options: ['1/4 to 1/3 pot', '~40% pot', 'Pot-sized', '1/5 pot'], correct: 3, explanation: 'The GTO Wizard re-solves c-bet 20% pot on four of five boards (73% on AK2). The transcript does not prescribe a specific size for this system.' },
-              ]}
-            />
           ),
         },
       ]} />

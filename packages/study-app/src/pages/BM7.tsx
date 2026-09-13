@@ -1,5 +1,4 @@
-import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { UTG_RFI } from '@poker/design-system/src/data/ranges'
 
@@ -8,11 +7,7 @@ export function BM7Page() {
     <Section title="Identifying Bubble Impact">
       <p>How to gauge ICM pressure before looking at ranges. Pressure is driven by what % of the field the remaining players-to-bust represent, plus table-stack positions, blind increases, and other-table dynamics the solver can't fully model.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <StackMatrix
                 colAxisLabel="Pressure level"
                 rowAxisLabel="Factor"
@@ -69,25 +64,6 @@ export function BM7Page() {
                 <p>You must reason about these yourself. The sim gives you a baseline; FGS + table logic gives you the directional shifts at the margins.</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="Identifying Bubble Impact — Practice"
-              questions={[
-                { question: 'Why is "one player left to bust" not one answer?', options: ['The % of the field matters: 1/8 = 12.5% (tight), 1/16 = 6.25% (looser), 2/152 = 1.3% (extreme)', 'It is always the same', 'Only the absolute number matters', 'It depends on your hand'], correct: 0, explanation: '1/8 = 12.5% → tighter. 1/16 = 6.25% → looser. 2/152 = 1.3% → extreme. The absolute number is meaningless without the %.' },
-                { question: 'What is the higher-pressure bubble scenario?', options: ['1/8 = 12.5% of field to bust', '1/16 = 6.25%', '2/152 = 1.3%', '100/152'], correct: 0, explanation: 'Higher % (12.5%) → tighter. Each player matters more → tighten.' },
-                { question: 'How does a short stack\'s position at another table affect you?', options: ['4bb posting BB next → tighten; full orbit left → closer to default', 'Always tighten', 'Always loosen', 'No effect'], correct: 0, explanation: '4bb stack posting BB next hand → tighten (nearly locked to cash). Full orbit left → closer to default.' },
-                { question: 'Why does short-stack range precision matter more?', options: ['A 1-2% open-freq error costs a short stack 10-20% of their stack; chip leader only 1-2%', 'Short stacks play more hands', 'Chip leaders make more errors', 'It doesn\'t'], correct: 0, explanation: 'Spend study time on short-stack ranges. A 1-2% error costs the short stack 10-20% of stack; the same error costs the chip leader 1-2%.' },
-                { question: 'What can the sim NOT capture that you must reason about yourself?', options: ['Stack positions at other tables, who posts blinds next, blind increases, someone already busting', 'Hand ranges', 'Pot odds', 'Bet sizing'], correct: 0, explanation: 'The sim gives a baseline. FGS + table logic gives directional shifts at the margins. Stack positions, blind posts, increases, other-table busts are yours to reason about.' },
-                { question: 'What happens when someone at another table busts a player you cover?', options: ['You\'re now a lock to cash → play tighter to protect it', 'Nothing changes', 'You should loosen up', 'You should shove everything'], correct: 0, explanation: 'Other table busts a player you cover → you\'re now a lock to cash → play tighter, not looser. Protect your guaranteed ITM status.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

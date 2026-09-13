@@ -1,5 +1,4 @@
 import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { SB_RFI, BB_VS_SB_LIMP } from '@poker/design-system/src/data/ranges'
 
@@ -99,36 +98,6 @@ export function S3Page() {
                 <HandExample spot="KQ8 rainbow" action="Fold double-unders" actionVariant="fold">Key card = 8. Double-unders (65, 54, 53) = pure folds. 97 with three-to-straight = pure play. All BDFDs playable (scarce).</HandExample>
                 <HandExample spot="JJ3 two-tone" action="Defend (straights)" actionVariant="call">Key card = 3 (very low). Anything with a deuce = death sentence. T9 with three-to-straight = pure play.</HandExample>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="System 3 — Practice"
-              quiz={{
-                options: [
-                  { label: 'Defend ~75%', variant: 'call' },
-                  { label: 'Fold more', variant: 'fold' },
-                ],
-                scenarios: [
-                  { board: { high: 'K', variant: 'green' }, correct: { label: 'Defend ~75%', variant: 'call' }, explanation: 'High key card (8) → double-overs rare and valuable. Rarely fold. (KQ8-type: key=8, high.)' },
-                  { board: { high: 'Q', variant: 'green' }, correct: { label: 'Defend ~75%', variant: 'call' }, explanation: 'High key card (8) → double-overs rare. Defend wide. Worst = double-unders to key card.' },
-                  { board: { high: 'A', lowCard: 4, variant: 'orange' }, correct: { label: 'Fold more', variant: 'fold' }, explanation: 'Low key card (4) → double-overs common → fold more. Over-unders (73, 83, 93) fold.' },
-                  { board: { high: 'K', lowCard: 6, variant: 'orange' }, correct: { label: 'Fold more', variant: 'fold' }, explanation: 'Low key card (6) → double-overs common → fold more. Worst = over-unders to 6.' },
-                  { board: { high: 'K', paired: true, variant: 'orange' }, correct: { label: 'Defend ~75%', variant: 'call' }, explanation: 'Paired board → organize around the unpaired high card. High-card defending dominates.' },
-                  { board: { high: 'J', paired: true, variant: 'orange' }, correct: { label: 'Defend ~75%', variant: 'call' }, explanation: 'Paired board → evaluate around the unpaired high card (J). Overcards to J (A/Q/K-high) pure, undercards (T-high and below) start folding.' },
-                ],
-              }}
-              questions={[
-                { question: 'What is the fold target for SB 1bb stabs?', options: ['~25% (1/4)', '~50%', '~10%', '~75%'], correct: 0, explanation: 'SB bets 1bb into ~3.7bb. Risk/reward = 1/4 ≈ 25% fold. Defend ~75%.' },
-                { question: 'Which board cards should you IGNORE strategically?', options: ['The ace and the deuce', 'The highest card', 'The lowest card', 'The middle card'], correct: 0, explanation: 'Ace and deuce are not strategically relevant. Everything has over/undercards to them. Ignore them.' },
-                { question: 'What determines whether you defend wide or fold more?', options: ['The key card (second-highest) — high vs low', 'Whether the board is paired', 'The suit', 'Your stack depth'], correct: 0, explanation: 'High key card (8) → double-overs rare → defend ~75%. Low key card (5) → double-overs common → fold more.' },
-                { question: 'What are the three defending mechanisms?', options: ['High-card defending, 3-straight, BDFD', 'Check-raise, donk-lead, call', 'Fold, call, raise', 'Value, bluff, trap'], correct: 0, explanation: 'High-card defending (A-high pure → J-high folds), three to a straight (98/86/65 pure), backdoor flush draw (high card > low).' },
-                { question: 'What is the worst hand category on low key-card boards?', options: ['Over-unders (73, 83, 93)', 'Double-overs', 'Paired hands', 'Suited connectors'], correct: 0, explanation: 'Over-unders to a low key card are the worst — fold unless BDFD rescues them.' },
-                { question: 'Why is BB defense the highest-impact scenario?', options: ['92 points of opportunity (−112 → −20 bb/100)', 'It happens most often', 'It has the biggest pots', 'UTG has no edge'], correct: 0, explanation: 'Skilled BB goes from −112 bb/100 (walk-away) to −20. UTG only has 27 points. BB skill is definitively most important.' },
-              ]}
-            />
           ),
         },
       ]} />

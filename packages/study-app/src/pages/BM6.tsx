@@ -1,5 +1,4 @@
-import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
-import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { Section, Callout, Code, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { HJ_VS_UTG, BTN_VS_UTG, UTG_VS_3BET_BTN } from '@poker/design-system/src/data/ranges'
 
@@ -8,11 +7,7 @@ export function BM6Page() {
     <Section title="Dealing With 3-Bets & Misc Preflop">
       <p>UTG opens versus each position's defense, dealing with 3-bets, and open-vs-defense from each seat. The directional-shift framework: who covers whom, how deep, and opener's range tightness determine your defense. Short stacks lean raise/fold versus 3-bets; covering stacks can cold call.</p>
 
-      <Tabs tabs={[
-        {
-          label: 'Study',
-          content: (
-            <>
+      <>
               <StackMatrix
                 colAxisLabel="Cover relationship"
                 rowAxisLabel="Your stack"
@@ -60,25 +55,6 @@ export function BM6Page() {
                 <p>3-bet sizing varies by stack depth (~5-8.5bb) but matters less than matching range construction to size. Larger 3-bet = more polar value. UTG+1 3-bet vs UTG deep: <Code>Jax+, AQ</Code> (Tens ~0 EV). Raise to <Code>~5bb</Code> (not 7.9bb) so you can fold to a jam + call behind.</p>
               </Collapsible>
             </>
-          ),
-        },
-        {
-          label: 'Practice',
-          content: (
-            <PracticeFlow
-              title="3-Bets & Misc Preflop — Practice"
-              questions={[
-                { question: 'What determines whether you can cold-call a 3-bet?', options: ['Your stack relationship to the 3-bettor (cover vs covered), not absolute depth', 'Your absolute stack depth', 'Your hand strength', 'The opener\'s position'], correct: 0, explanation: '50bb vs 25bb 3-bet → 24% calls (you cover). 25bb vs 50bb 3-bet → 0% calls (covered). Same hand, different stack dynamic.' },
-                { question: 'What happens when covered by the 3-bettor?', options: ['~0% cold calls; raise/fold only', 'Cold call wide', 'Always jam', 'Fold everything'], correct: 0, explanation: 'Covered by the 3-bettor → can\'t cold call. Short + covered = pure raise/fold.' },
-                { question: 'What is the SB "protected" dynamic vs UTG?', options: ['BB very short → UTG too tight for BB to squeeze → SB can cold-call narrow value', 'SB should fold everything', 'SB should jam', 'SB should 3-bet light'], correct: 0, explanation: 'SB 17bb, UTG open, BB 10bb: SB is protected. UTG\'s tight range + short BB = can\'t squeeze. SB cold calls a narrow value range (KQs, A9s, mid pairs).' },
-                { question: 'Why is leaving 0.1bb behind (raise to 7.9bb with 8bb stack) a leak?', options: ['No fold option preserved — raise to ~5bb to fold to jam+call behind', 'It\'s too small', 'It gives pot odds', 'It\'s fine'], correct: 0, explanation: 'Leaving 0.1bb behind is a leak — no fold option preserved. Raise to ~5bb so you can fold to a jam + call behind (caller shows QQ+).' },
-                { question: 'What is the UTG+1 3-bet range vs UTG deep (50bb)?', options: ['Jax+, AQ (Tens ~0 EV). Very thin bluffs only', 'Any pair', 'AK only', 'Suited connectors'], correct: 0, explanation: 'UTG+1 3-bet vs UTG deep: Jax+, AQ (Tens ~0 EV). Very thin bluffs only.' },
-                { question: 'Why is over-exploiting on the bubble doubly costly?', options: ['In ICM, equity stolen from you spreads to ALL players, not just the exploiter', 'It costs chips', 'It\'s not costly', 'Only the exploiter gains'], correct: 0, explanation: 'In ICM, equity stolen from you spreads to ALL players. Exploits happen at the fringes, not the core.' },
-              ]}
-            />
-          ),
-        },
-      ]} />
     </Section>
   )
 }

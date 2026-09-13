@@ -6,9 +6,7 @@
   "exports": {
     ".": "./src/components/ui.tsx",
     "./RangeGrid": "./src/components/RangeGrid.tsx",
-    "./PracticeFlow": "./src/components/PracticeFlow.tsx",
-    "./styles": "./src/styles/tailwind.css",
-    "./solutionParser": "./src/components/solutionParser.ts"
+    "./styles": "./src/styles/tailwind.css"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006",
