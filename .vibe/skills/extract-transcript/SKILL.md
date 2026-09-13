@@ -24,7 +24,7 @@ speech-to-text. One transcript file may cover one system, part of a system
 
 One `.md` file per transcript (or per logical system if multiple transcript
 files cover the same system — merge them). Write to a destination the user
-specifies, or default to `extracted/` at the repo root.
+specifies, or default to `extracted/` inside the private straddle-solutions submodule (`packages/ranges/imports/extracted/`).
 
 ## Frontmatter
 

@@ -2,19 +2,19 @@
 name: generate-flashcards
 description: >
   Load when generating flashcards from extracted poker study content.
-  Reads .md files from extracted/ and outputs a single flashcards.txt file
+  Reads .md files from the private submodule's extracted/ (packages/ranges/imports/extracted/) and outputs a single flashcards.txt file
   with question;answer pairs. Use when the user asks to generate, create,
   or build flashcards from the extracted transcripts.
 ---
 
 # Generate Flashcards
 
-Convert the structured `.md` files in `extracted/` into a single
+Convert the structured `.md` files in `packages/ranges/imports/extracted/` into a single
 `flashcards.txt` file using `question;answer` format (semicolon separator).
 
 ## Source
 
-The extracted `.md` files in `extracted/` — frontmatter + structured
+The extracted `.md` files in `packages/ranges/imports/extracted/` — frontmatter + structured
 sections (Buckets, Decision Rules, Risk Factors, Sizing, Common Leaks,
 Hand Examples, Heuristics, Quiz Spots, Rules Q&A, Key Concepts, etc.).
 
@@ -172,7 +172,7 @@ SB limps, BB checks. Flop is A42 two-tone, SB stabs. What hands are pure calls?;
 
 ## Process
 
-1. Read all `.md` files in `extracted/` (there are 28).
+1. Read all `.md` files in `packages/ranges/imports/extracted/` (there are 28).
 2. For each file, generate 8-15 flashcards from its sections.
 3. Deduplicate across files — keep the broadest context version.
 4. Write all cards to `flashcards.txt` in the repo root.
