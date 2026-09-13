@@ -28,11 +28,14 @@ packages/
 ├── ranges/          — the shared range store (not an npm workspace; data only)
 │   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/), one JSON per preflop
 │                                line: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json.
-│                                StoredRange-shaped entries (title, subtitle, type: 'cEV'|'ICM', stack,
-│                                position, actions) with per-action combo:freq strings; ICM entries land
-│                                in the same file, and postflop solutions nest under the preflop entry
-│                                they derive from as its `postflop` array (the S1 c-bet spots sit on the
-│                                40bb UTG RFI entry). Neutral home read by the app. Edit here.
+│                                Shared title/position at the top of the file; `stacks` holds one entry
+│                                per depth (type, subtitle, stack, actions, sizings, wizardUrl); ICM
+│                                entries land in the same stacks array, and postflop solutions nest
+│                                under the preflop entry they derive from as its `postflop` array —
+│                                minimal children (id, label, line, actions, sizings), with
+│                                title/subtitle/type/stack/position and the GTO Wizard link
+│                                derived at load (the S1 c-bet spots
+│                                sit on the 40bb UTG RFI entry). Neutral home read by the app. Edit here.
 │   └── imports/                — raw pastes / fetches (gitignored: licensed data)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
@@ -125,15 +128,19 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 ### Range components (for future use in courses)
 
-- **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
-- **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `compact`.
-- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). one JSON per preflop line (e.g. `utg/rfi.json`, `bb/vs-btn.json`) holds that line's stored ranges as `StoredRange`-shaped entries — per-action combo:freq strings preserved (raise/call/allIn separately). Postflop solutions are `StoredRange`-shaped children nested under the preflop entry they derive from (`postflop` array, matched by `id`). Edit these files; new stack depths are new entries in the JSON arrays.
-- **`data/ranges/*.ts` (design-system)** — thin typed loaders over the store, re-exporting the same constants as before (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here.
+- **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Entries with `postflop` children get a board selector under the header (preflop open plus the solved flops grouped by the child's `line`, e.g. "Cbet vs BB call", switching the grid to that child's strategy). Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
+- **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `base`, `compact`. `base` (combo:freq line of the parent open) makes legend percentages weighted shares of that range instead of all 1326 combos — used for postflop children.
+- **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). One JSON per preflop line (e.g. `utg/rfi.json`, `bb/vs-btn.json`): shared `title`/`position` at the top, `stacks` with one entry per depth — per-action combo:freq strings preserved (raise/call/allIn separately). Postflop solutions are minimal children nested under the preflop entry they derive from (`postflop` array, matched by `id`); the loaders materialize the full `StoredRange` display shape (`materializeLine`/`materializeChild` in design-system `data/ranges/types.ts`). Edit these files; new stack depths are new `stacks` entries.
+- **`data/ranges/*.ts` (design-system)** — thin loaders that materialize the store into `StoredRange`s (injecting the shared title/position and converting postflop pastes to conditional), re-exporting the constants (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here.
 - **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells.
 
-### Wizard data
+### Range store updates
 
-Postflop solutions come from GTO Wizard — there is no local solver or import script. Wizard range-view copies are open-weight-scaled (open proportion x conditional strategy): to store one, divide each frequency by the open weight from the parent entry (`actions.raise` in the same file), round to 4dp conditional frequencies that sum to 1 per combo, and update the matching `postflop` child. Raw pastes live in `packages/ranges/imports/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Solved spots link out to GTO Wizard from the S1 page (`wizardUrl` in `S1.tsx`).
+Postflop children store the **raw GTO Wizard range-view copy verbatim** — no math at import time. The app converts to conditional strategies at load (`toConditional` in design-system `data/ranges/types.ts`): divides out the parent open weights, rounds to 4dp, clamps >= 0.9995 to 1, and synthesizes the missing bet/check complement, so a bet-only paste still displays the checks. Children are minimal (`id`, `label`, `line`, `wizardUrl`, `actions`, `sizings`) — the context (title/subtitle/type/stack/position) is derived at load by `materializeChild`.
+
+Adding or updating solved spots (flops, preflop stack entries) is the `add-range` skill's job (`.vibe/skills/add-range/`) — it carries the validation procedure (coverage vs the open range minus board-blocked combos, weighted-format check), the metadata derivation (id/label/subtitle), and the weighted-% formula for page takeaways. Load it whenever a Wizard paste needs storing.
+
+Raw pastes live in `packages/ranges/imports/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the S1 example strips.
 
 ### Card string format
 

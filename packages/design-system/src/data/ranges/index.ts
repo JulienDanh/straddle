@@ -1,7 +1,7 @@
 // Barrel — import spot groups and types from '../data/ranges'.
 
 export type { RangeAction, StoredRange } from './types'
-export { byStack } from './types'
+export { byStack, boardSubtitle, boardTexture, materializeLine, materializeChild, preflopUrl, flopUrl, toConditional } from './types'
 export { UTG_RFI_CEV } from './utg-rfi'
 export { BTN_RFI_CEV } from './btn-rfi'
 export { BB_VS_UTG_CEV } from './bb-vs-utg'

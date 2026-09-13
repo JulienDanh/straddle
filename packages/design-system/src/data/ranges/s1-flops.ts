@@ -1,15 +1,21 @@
 // System 1 solved flop spots for the
 // UTG c-bet decision after BB checks. They nest as `postflop` children of the
 // stack-40 UTG RFI entry in ranges/data/utg/rfi.json — the same file as the
-// open range they derive from; this file maps ids back to named exports for
-// the app. Ranges come from the stored preflop solutions (UTG 40bb open, BB
-// 40bb call vs the 2bb open). The doc comments carry per-board provenance.
+// open range they derive from — storing the raw open-weighted GTO Wizard
+// paste verbatim. This file materializes the children (materializeChild:
+// injects the parent context, converts to conditional frequencies) and maps
+// ids to named exports for the app.
+// The doc comments carry per-board provenance and the weighted bet shares.
 import type { StoredRange } from './types'
+import { materializeChild, materializeLine, preflopUrl } from './types'
 import rfi from '../../../../ranges/data/utg/rfi.json'
 
-const utg40 = (rfi.find((entry) => entry.stack === 40) ?? rfi[0]) as StoredRange
+const line = materializeLine(rfi, (stack) => preflopUrl(stack, '', 1))
+const utg40 = line.find((entry) => entry.stack === 40) ?? line[0]
 const byId = new Map(
-  (utg40.postflop ?? []).filter((entry) => entry.id).map((entry) => [entry.id!, entry as StoredRange]),
+  (utg40.postflop ?? [])
+    .filter((entry) => entry.id)
+    .map((entry) => [entry.id!, materializeChild(utg40, entry as StoredRange)]),
 )
 
 /** UTG c-bet strategy on Kh8h3c — 40bb SRP (UTG opens 2bb, BB calls, BB checks).
@@ -27,18 +33,20 @@ export const S1_FLOP_K83: StoredRange = byId.get('k83')!
 export const S1_FLOP_KK3: StoredRange = byId.get('kk3')!
 
 /** UTG c-bet strategy on AhJh5h (ace-high monotone risk-factor board) — same
- *  spot. Solver: postflop-solver, exploitability 2.00/450 pot. Mix as the
- *  system predicts: sets and flushes bet, no-heart overpairs check. */
-export const S1_FLOP_MONOTONE: StoredRange = byId.get('monotone')!
+ *  spot. Source: GTO Wizard (MTT 8-max, 40bb), 20% pot c-bet (0.9bb), imported
+ *  from a range-view paste. 89% bet: sets and Kh draws near 100%, the checks
+ *  are the no-heart overpairs — KK heaviest (35% check). */
+export const S1_FLOP_MONOTONE: StoredRange = byId.get('aj5')!
 
 /** UTG c-bet strategy on Jh6d6s (high-low-low paired risk-factor board) —
- *  same spot. Solver: postflop-solver, exploitability 2.02/450 pot. The
- *  heaviest mix of the solved boards, as the system predicts. */
+ *  same spot. Source: GTO Wizard (MTT 8-max, 40bb), 20% pot c-bet (0.9bb),
+ *  imported from a range-view paste. 79% bet: trips and Ax near 100%, QJo
+ *  checks most (77%), TT/99 split ~50/50. */
 export const S1_FLOP_J66: StoredRange = byId.get('j66')!
 
 /** UTG c-bet strategy on AsKh2c (AKx risk-factor board) — same spot.
- *  Solver: postflop-solver, exploitability 2.13/450 pot, 40% pot c-bet.
- *  The slowdown the system prescribes: bet 83% (vs 98% on clean K-high).
- *  Checks are the middle — weak-kicker Kx (K7s-K8s) and QQ/JJ underpairs. */
+ *  Source: GTO Wizard (MTT 8-max, 40bb), 73% pot c-bet (3.3bb), imported from
+ *  a range-view paste. 79% bet: AK/AQ near 100%, the checks are the overpairs
+ *  (AA bets 41-68%, QQ 21-35%) and weak-kicker Kx. */
 export const S1_FLOP_AK2: StoredRange = byId.get('ak2')!
 

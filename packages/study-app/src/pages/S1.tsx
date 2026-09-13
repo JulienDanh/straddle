@@ -6,22 +6,6 @@ import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_F
 import type { StoredRange } from '@poker/design-system/src/data/ranges'
 import type { ReactNode } from 'react'
 
-/** GTO Wizard solution link for a solved S1 board, opened at UTG's c-bet
- *  decision. The spot is fixed (MTT 8-max 40.125bb, UTG 2bb open, folds, BB
- *  call, BB checks); the board param picks the flop. history_spot is the node
- *  index (1 + all prior actions: 7 preflop + BB's flop check = 9), and
- *  repfloptab only selects the report tab it opens on. High-card boards use
- *  the swv_high_cards tab (verified); other textures fall back to the generic
- *  swv_flops tab. */
-function wizardUrl(board: string, repfloptab = 'swv_flops'): string {
-  const q =
-    'solution_type=gwiz&soltab=range&gmfs_solution_tab=ai_sols&gametype=MTTGeneral_8m' +
-    '&depth=40.125&stacks=40.125-40.125-40.125-40.125-40.125-40.125-40.125-40.125' +
-    '&gmfft_sort_key=0&gmfft_sort_order=desc&history_spot=9&legacy_postflop_sizings=true' +
-    `&preflop_actions=R2-F-F-F-F-F-F-C&flop_actions=X&repfloptab=${repfloptab}`
-  return `https://app.gtowizard.com/solutions?${q}&board=${board}`
-}
-
 /** One board group in the Examples tab, rendered as a single card: the board
  *  and the system's decision in the header, the walkthrough reasoning below,
  *  and — when the board has been solved — a solver strip with verdict badges
@@ -42,13 +26,12 @@ function BoardExample({
   actionVariant: 'bet' | 'check' | 'fold' | 'call' | 'raise' | 'allIn'
   /** One-line solver takeaway, shown only when the board is solved */
   takeaway?: string
-  /** Solver data; omit for walkthrough-only boards */
+  /** Solver data; omit for walkthrough-only boards. The GTO Wizard link is
+   *  read from the stored range's wizardUrl. */
   solve?: {
     betPct: number
     checkPct: number
     range: StoredRange
-    /** GTO Wizard share link for the spot (opens the solution there) */
-    wizardUrl?: string
   }
   /** Reasoning — why this is the correct play */
   children: ReactNode
@@ -80,9 +63,9 @@ function BoardExample({
             <div className="flex items-center gap-1.5 flex-wrap">
               <Action variant="bet">Bet {solve.betPct.toFixed(1)}%</Action>
               <Action variant="check">Check {solve.checkPct.toFixed(1)}%</Action>
-              {solve.wizardUrl && (
+              {solve.range.wizardUrl && (
                 <a
-                  href={solve.wizardUrl}
+                  href={solve.range.wizardUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="text-[10px] font-bold uppercase tracking-wider hover:underline"
@@ -185,7 +168,7 @@ export function S1Page() {
               </Collapsible>
 
               <Collapsible title="Sizing">
-                <p>Solver examples land at 20-40% pot: the clean K-high boards (K83, KK3) are solved at 20% (0.9bb), the risk-factor boards at ~40%. The transcript does not prescribe a specific size for this system.</p>
+                <p>Solver examples land at 20-73% pot: K83, KK3, AJ5 and J66 are solved at 20% (0.9bb), AK2 at 73% (3.3bb). The transcript does not prescribe a specific size for this system.</p>
               </Collapsible>
             </>
           ),
@@ -202,7 +185,7 @@ export function S1Page() {
                 action="C-bet 100%"
                 actionVariant="bet"
                 takeaway="100% c-bet at 20% pot — the solver bets the entire opening range; no checks at all."
-                solve={{ betPct: 100, checkPct: 0, range: S1_FLOP_K83, wizardUrl: wizardUrl('Kh8h3c', 'swv_high_cards') }}
+                solve={{ betPct: 100, checkPct: 0, range: S1_FLOP_K83 }}
               >
                 Solver agrees — at 20% pot it c-bets 100% of the opening range. Player checked, costing EV.
               </BoardExample>
@@ -213,7 +196,7 @@ export function S1Page() {
                 action="C-bet 100%"
                 actionVariant="bet"
                 takeaway="At 20% pot the solver bets 99.9% — checks are a 0.2-0.3% sliver on the big pairs (KK, AA, QQ)."
-                solve={{ betPct: 99.9, checkPct: 0.1, range: S1_FLOP_KK3, wizardUrl: wizardUrl('KdKh3c') }}
+                solve={{ betPct: 99.9, checkPct: 0.1, range: S1_FLOP_KK3 }}
               >
                 KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.
               </BoardExample>
@@ -223,8 +206,8 @@ export function S1Page() {
                 spot="AK2 (AKx family)"
                 action="Mix"
                 actionVariant="check"
-                takeaway="Bet drops to 83% (from 98% on clean K-high). The checks are the middle: weak-kicker Kx (K7s-K8s), QQ (73%), JJ (54%)."
-                solve={{ betPct: 82.6, checkPct: 17.4, range: S1_FLOP_AK2, wizardUrl: wizardUrl('AsKh2c', 'swv_high_cards') }}
+                takeaway="At 73% pot it bets 79% — AK/AQ near 100%; AA and QQ check most (QQ bets only 21-35%), weak-kicker Kx checks."
+                solve={{ betPct: 78.8, checkPct: 21.2, range: S1_FLOP_AK2 }}
               >
                 AKx is a risk factor: BB connects with every Ax/Kx too, so the overpair
                 advantage that powers 100% c-bets on clean boards is gone. Slow down —
@@ -236,21 +219,21 @@ export function S1Page() {
                 spot="AJ5 monotone (ace-high monotone)"
                 action="Mix"
                 actionVariant="check"
-                takeaway="Sets and heart draws bet; QQ/KK without the heart check."
-                solve={{ betPct: 70.1, checkPct: 29.9, range: S1_FLOP_MONOTONE, wizardUrl: wizardUrl('AhJh5h') }}
+                takeaway="At 20% pot it bets 89% — sets (55) and Kh draws near 100%; the checks are the no-heart overpairs, KK heaviest (35%)."
+                solve={{ betPct: 89.0, checkPct: 11.0, range: S1_FLOP_MONOTONE }}
               >
-                Risk factor. Bet flushes/sets/trash, check medium (pocket Ks no heart, ATs, weak aces).
+                Risk factor, softened by the small size. Bet sets, heart draws and trash; check the no-heart overpairs (KK most, then 99/TT/QQ).
               </BoardExample>
 
               <BoardExample
                 board="Jh6d6s"
                 spot="J66 (high-low-low, paired)"
-                action="Mix 50%"
+                action="Mix"
                 actionVariant="check"
-                takeaway="Heaviest mix of the four — underpairs check (TT near-100%), top pair Jx and Ax/Kx bet."
-                solve={{ betPct: 39.8, checkPct: 60.2, range: S1_FLOP_J66, wizardUrl: wizardUrl('Jh6d6s') }}
+                takeaway="At 20% pot it bets 79% — trips (6x) and Ax near 100%, QJo checks most (77%), TT/99 split ~50/50."
+                solve={{ betPct: 78.8, checkPct: 21.2, range: S1_FLOP_J66 }}
               >
-                Bet trips (6x) + trash, check underpairs (TT-77) and medium aces (AT, AK).
+                Risk factor, softened by the small size. Bet trips (6x), JJ and Ax; check QJo — the middle pairs (TT-88) are near 50/50 splits.
               </BoardExample>
             </>
           ),
@@ -304,7 +287,7 @@ export function S1Page() {
                 { question: 'What adaptation when shallow (20bb)?', options: ['C-bet less — less risk', 'C-bet more — overpair asymmetry amplified', 'No change', 'Check everything'], correct: 1, explanation: 'Shallow amplifies overpair advantage. Bet MORE, not less. Most players do the opposite — correct the leak.' },
                 { question: 'Is KK3 (high-high-low) a risk factor?', options: ['Yes — two high cards', 'No — only paired low under high counts', 'Sometimes', 'Only if monotone'], correct: 1, explanation: 'KK3 is high-high-low, NOT high-low-low. Only paired low under high (like K33, J66, T55) is a risk factor.' },
                 { question: 'On a risk board, which hands do you CHECK?', options: ['Very strong and very weak', 'Medium-strength only', 'Everything', 'Only sets'], correct: 1, explanation: 'Bet top (strong) + bottom (trash), check middle (underpairs, medium aces, AK/AQ/AT).' },
-                { question: 'What is the default c-bet sizing for System 1?', options: ['1/4 to 1/3 pot', '~40% pot', 'Pot-sized', '1/5 pot'], correct: 1, explanation: 'Solver examples land at ~40% pot. The transcript does not prescribe a specific size for this system.' },
+                { question: 'What is the default c-bet sizing for System 1?', options: ['1/4 to 1/3 pot', '~40% pot', 'Pot-sized', '1/5 pot'], correct: 3, explanation: 'The GTO Wizard re-solves c-bet 20% pot on four of five boards (73% on AK2). The transcript does not prescribe a specific size for this system.' },
               ]}
             />
           ),
