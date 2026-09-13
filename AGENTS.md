@@ -1,6 +1,6 @@
 # AGENTS.md — Building Learning Content from Source Transcripts
 
-The course transcripts and their structured extracts (licensed, **private** — they live in the nested `straddle-solutions` submodule: `packages/ranges/imports/transcripts/` for the raw files, `packages/ranges/imports/extracted/` for the structured .md) are converted into a React + Vite study guide built as a monorepo under `packages/`. Follow these principles when extending or revising content.
+The course transcripts and their structured extracts (licensed, **private** — they live in the nested `straddle-solutions` submodule: `straddle-solutions/transcripts/` for the raw files, `straddle-solutions/extracted/` for the structured .md) are converted into a React + Vite study guide built as a monorepo under `packages/`. Follow these principles when extending or revising content.
 
 ## Monorepo structure
 
@@ -37,7 +37,9 @@ packages/
 │                                title/subtitle/type/stack/position and the GTO Wizard link
 │                                derived at load (the S1 c-bet spots
 │                                sit on the 40bb UTG RFI entry). Neutral home read by the app. Edit here.
-│   └── imports/ (SUBMODULE)    — private straddle-solutions repo (gitlink pinned in this repo, never committed here): raw solution captures in solutions/, the retrieval pipeline in scripts/ (fetch_browser/gw_to_store/gw_order/gw_catalog — see add-range skill), and the course transcripts in transcripts/ (licensed)
+│   └── see below (SUBMODULE) — the private straddle-solutions submodule lives at the repo root:
+
+`straddle-solutions/` (root, gitlink pinned in this repo, never committed here): raw solution captures in solutions/, the retrieval pipeline in scripts/ (fetch_browser/gw_to_store/gw_order/gw_catalog — see add-range skill), and the course transcripts in transcripts/ (licensed)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
         ├── App.tsx                — hash-based router, PAGES record
@@ -141,7 +143,7 @@ Postflop children store the **raw GTO Wizard range-view copy verbatim** — no m
 
 Adding or updating solved spots (flops, preflop stack entries) is the `add-range` skill's job (`.vibe/skills/add-range/`) — it carries the validation procedure (coverage vs the open range minus board-blocked combos, weighted-format check), the metadata derivation (id/label/subtitle), and the weighted-% formula for page takeaways. Load it whenever a Wizard paste needs storing.
 
-Raw pastes live in `packages/ranges/imports/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the S1 example strips.
+Raw pastes live in `straddle-solutions/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the S1 example strips.
 
 ### Card string format
 

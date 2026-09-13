@@ -1,4 +1,4 @@
-[submodule "packages/ranges/imports"]
-	path = packages/ranges/imports
+[submodule "straddle-solutions"]
+	path = straddle-solutions
 	url = git@github.com:JulienDanh/straddle-solutions.git
 	branch = main

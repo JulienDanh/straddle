@@ -88,7 +88,7 @@ spot per request, driven by an actual user ask.
 The app's own `/v4/game-modes/` response is the solutions library catalog —
 1101 gametypes, each with its exact depth/stack configs. `fetch_browser.py`
 captures it on page load and caches it at
-`packages/ranges/imports/catalog.json` (gitignored). Every fetch is
+`straddle-solutions/catalog.json` (gitignored). Every fetch is
 validated against it BEFORE navigating, because for a nonexistent spot the
 app silently falls back to an unrelated solution:
 
@@ -99,7 +99,7 @@ app silently falls back to an unrelated solution:
   anything else is refused with a list of what does exist, no request made
 
 Query the cached catalog locally (no network):
-`python3 packages/ranges/imports/scripts/gw_catalog.py gametypes mtt | depths <gametype> | configs <gametype> [--all]`
+`python3 straddle-solutions/scripts/gw_catalog.py gametypes mtt | depths <gametype> | configs <gametype> [--all]`
 Refresh it: `fetch_browser.py --refresh-catalog` (auto-refreshes after 14
 days). Asymmetric configs (e.g. ICM) are fetched with
 `--stacks 40.125-35.125-...` (8 dash-joined values).
@@ -126,7 +126,7 @@ one-off nodes not covered by a walk; params mirror the app's share URLs.
 
 Every capture is archived automatically (full payload: strategy,
 per-combo EVs, hand categories, blockers) under
-`packages/ranges/imports/solutions/<gametype>/<stacks>/<category>/`
+`straddle-solutions/solutions/<gametype>/<stacks>/<category>/`
 (gitignored, licensed data):
 
 ```
@@ -151,7 +151,7 @@ The archive is checked and reused before re-fetching a spot (`--refetch`
 bypasses).
 
 2. Convert:
-   `python3 packages/ranges/imports/scripts/gw_to_store.py flop packages/ranges/imports/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c-x.json --parent utg/rfi.json --stack 40`
+   `python3 straddle-solutions/scripts/gw_to_store.py flop straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c-x.json --parent utg/rfi.json --stack 40`
    (or `preflop <archive>.json`) — prints actions lines, the betsize and
    the weighted stats.
 3. Validate and store per the procedures above (coverage, weighted lines
@@ -215,7 +215,7 @@ check-or-donk decision (the AI sims DO donk: K83+2s shows X / R8.7).
   Advancing streets opens a card-picker dialog (`brdpckr` cards) — click
   the turn card the same way.
 
-## Archive contents (packages/ranges/imports/solutions/)
+## Archive contents (straddle-solutions/solutions/)
 
 Raw spot-solution payloads, organized
 `solutions/<gametype>/<stacks>/<category>/<name>.json` (see the layout
@@ -245,5 +245,5 @@ fetching).
   weighted shares, and the provenance comment in design-system
   `src/data/ranges/s1-flops.ts` ("Source: GTO Wizard (MTT 8-max, 40bb),
   <size> pot c-bet (<bb>bb), imported from a range-view paste").
-- Save the raw paste to `packages/ranges/imports/` (gitignored, licensed
+- Save the raw paste to `straddle-solutions/` (gitignored, licensed
   data). BB flop-node pastes are exploration only — never enter the store.

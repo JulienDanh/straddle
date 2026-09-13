@@ -9,7 +9,7 @@ packages/*/storybook-static/
 __pycache__/
 
 # Raw imports live in the private straddle-solutions submodule at
-# packages/ranges/imports/ (gitlink — contents are never committed here)
+# straddle-solutions/ (gitlink — contents are never committed here)
 
 # Local scratch (Chrome profile for scraping sessions)
 .scratch/
