@@ -88,7 +88,7 @@ spot per request, driven by an actual user ask.
 The app's own `/v4/game-modes/` response is the solutions library catalog —
 1101 gametypes, each with its exact depth/stack configs. `fetch_browser.py`
 captures it on page load and caches it at
-`straddle-solutions/catalog.json` (gitignored). Every fetch is
+`straddle-solutions/catalog.json` (tracked in the private repo). Every fetch is
 validated against it BEFORE navigating, because for a nonexistent spot the
 app silently falls back to an unrelated solution:
 
@@ -127,7 +127,7 @@ one-off nodes not covered by a walk; params mirror the app's share URLs.
 Every capture is archived automatically (full payload: strategy,
 per-combo EVs, hand categories, blockers) under
 `straddle-solutions/solutions/<gametype>/<stacks>/<category>/`
-(gitignored, licensed data):
+(private submodule, licensed data):
 
 ```
 solutions/cev/40/rfi/btn.json                      position RFI
@@ -245,5 +245,5 @@ fetching).
   weighted shares, and the provenance comment in design-system
   `src/data/ranges/s1-flops.ts` ("Source: GTO Wizard (MTT 8-max, 40bb),
   <size> pot c-bet (<bb>bb), imported from a range-view paste").
-- Save the raw paste to `straddle-solutions/` (gitignored, licensed
-  data). BB flop-node pastes are exploration only — never enter the store.
+- Save the raw paste to `straddle-solutions/imports/` (private submodule,
+  licensed data). BB flop-node pastes are exploration only — never enter the store.

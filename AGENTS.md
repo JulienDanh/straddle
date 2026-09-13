@@ -143,7 +143,7 @@ Postflop children store the **raw GTO Wizard range-view copy verbatim** — no m
 
 Adding or updating solved spots (flops, preflop stack entries) is the `add-range` skill's job (`.vibe/skills/add-range/`) — it carries the validation procedure (coverage vs the open range minus board-blocked combos, weighted-format check), the metadata derivation (id/label/subtitle), and the weighted-% formula for page takeaways. Load it whenever a Wizard paste needs storing.
 
-Raw pastes live in `straddle-solutions/` (gitignored, licensed data); pasted BB flop-node data is exploration only and never enters the store. Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the S1 example strips.
+Raw pastes live in `straddle-solutions/imports/` (private submodule, licensed data); pasted BB flop-node data is exploration only and never enters the store. Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the S1 example strips.
 
 ### Card string format
 
