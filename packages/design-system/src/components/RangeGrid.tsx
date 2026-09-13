@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 // 13x13 grid layout: A-high at top-left, pairs on the diagonal, suited above,
 // offsuit below.
 const RANKS = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'] as const
@@ -14,8 +14,12 @@ const HAND_GRID: { hand: string }[][] = RANKS.map((row, ri) =>
 // RangeGrid — 13x13 hand grid with fixed action props.
 //
 // Each action is a named combo-data string (Pio/GTO Wizard export format,
-// 0-1 scale: "Ac2c:1,Ac4d:0.0006,KcTd:0.2073,..."). Pass an empty string
+// 0-1 scale: "Ac2c:1,Ac4d:0.0006,KcTd:0.2073,...\"). Pass an empty string
 // for actions that don't apply to this spot. Colors are fixed per action.
+//
+// Interactive: click a legend action to solo it (grid shows only that
+// strategy), click a cell for a per-hand breakdown (action bars + the
+// combos behind them).
 //
 // Usage:
 //   <RangeGrid
@@ -27,16 +31,18 @@ const HAND_GRID: { hand: string }[][] = RANKS.map((row, ri) =>
 
 // Fixed color per action.
 const COLORS = {
-  fold: '#3a4453',
-  call: '#5fd0a8',
-  raise: '#ff5c5c',
-  allIn: '#a855f7',
-  check: '#5fd0a8',
-  bet: '#ff5c5c',
+  fold: '#2f2f4a',
+  call: '#00f0ff',
+  raise: '#ff5470',
+  allIn: '#b44cff',
+  check: '#39ff88',
+  bet: '#ff5470',
 } as const
 
 // Order for the legend and gradient segments (fold first = bottom).
 const ACTION_ORDER = ['fold', 'call', 'raise', 'allIn', 'check', 'bet'] as const
+
+type Actions = Partial<Record<(typeof ACTION_ORDER)[number], string>>
 
 const RANK_ORDER = 'AKQJT98765432'
 
@@ -70,6 +76,59 @@ function parseComboData(raw: string): Record<string, number> {
     counts[hc] = (counts[hc] || 0) + 1
   }
   for (const hc of Object.keys(sums)) out[hc] = sums[hc] / counts[hc]
+  return out
+}
+
+// Per-combo frequencies (0-1), summed over duplicate entries.
+function parseComboFreqs(raw: string): Record<string, number> {
+  const out: Record<string, number> = {}
+  for (const entry of raw.split(',')) {
+    const parts = entry.trim().split(':')
+    if (parts.length !== 2) continue
+    const f = parseFloat(parts[1].trim())
+    if (isNaN(f)) continue
+    out[parts[0].trim()] = (out[parts[0].trim()] || 0) + f
+  }
+  return out
+}
+
+// Weighted share of an action's combo string: of all 1326 combos by default,
+// or of the base range when given (postflop children are conditional on the
+// open, so shares read as "of range"). denomCombos is the union of all
+// displayed actions' combos — the child's combo set (open minus board).
+function actionShare(freqs: Record<string, number>, base: string, denomCombos: Set<string>): number {
+  if (!base) {
+    const total = Object.values(freqs).reduce((s, v) => s + v, 0)
+    return (total / TOTAL_COMBOS) * 100
+  }
+  const bw = parseComboFreqs(base)
+  let total = 0
+  for (const c of denomCombos) total += bw[c] ?? 1
+  let num = 0
+  for (const [c, f] of Object.entries(freqs)) num += (bw[c] ?? 1) * f
+  return total > 0 ? (num / total) * 100 : 0
+}
+
+/** Share (%, 0-100) of hands playing any non-fold action — "opens 15.2%" /
+ *  "defends 8.4%" preflop, or "c-bets 58%" of the base range postflop. */
+export function strategyShare(actions: Actions, base = ''): number {
+  const active = ACTION_ORDER.filter(a => a !== 'fold' && actions[a])
+  const freqs = active.map(a => parseComboFreqs(actions[a]!))
+  const denom = new Set<string>()
+  for (const f of freqs) for (const c of Object.keys(f)) denom.add(c)
+  return freqs.reduce((s, f) => s + actionShare(f, base, denom), 0)
+}
+
+/** Total non-fold frequency (%, 0-100) per hand class — input for diffing
+ *  two solutions of the same spot (e.g. cEV vs ICM at the same stack). */
+export function handClassTotals(actions: Actions): Record<string, number> {
+  const out: Record<string, number> = {}
+  for (const a of ACTION_ORDER) {
+    if (a === 'fold' || !actions[a]) continue
+    for (const [hc, f] of Object.entries(parseComboData(actions[a]))) {
+      out[hc] = (out[hc] ?? 0) + f * 100
+    }
+  }
   return out
 }
 
@@ -122,6 +181,15 @@ export interface RangeGridProps {
   // compact: small grid for inline use in course content — no numbers, no
   // legend, no click-to-lock panel. Just colored cells.
   compact?: boolean
+  // Diff view: per-hand-class frequency delta (%, target − reference).
+  // Negative = the target folds more (green), positive = it plays more (red).
+  // When set, action strings are ignored and the grid renders the delta.
+  diff?: Record<string, number>
+  // Diff labels: cell tooltip reads "pts vs <diffRefLabel>"; the legend rows
+  // read "<diffNegLabel> / <diffPosLabel>".
+  diffRefLabel?: string
+  diffNegLabel?: string
+  diffPosLabel?: string
 }
 
 // Human label for an action, annotating the size when provided.
@@ -131,48 +199,21 @@ function actionLabel(a: string, sizing?: number): string {
   return sizing !== undefined ? `${base} ${sizing}bb` : base
 }
 
-export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false }: RangeGridProps) {
-  const { perHand, activeActions, colors, actionPcts } = useMemo(() => {
+export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false, diff, diffRefLabel = 'cEV', diffNegLabel = 'ICM folds more', diffPosLabel = 'ICM plays more' }: RangeGridProps) {
+  const { perHand, activeActions, colors, actionPcts, actionCombos } = useMemo(() => {
     const data: Record<string, string> = { fold, call, raise, allIn, check, bet }
     const active = ACTION_ORDER.filter(a => data[a].length > 0)
     const parsed = active.map(a => parseComboData(data[a]))
     const cols = active.map(a => COLORS[a])
 
-    // Per-combo frequencies per action.
-    const actionCombos: Record<string, number>[] = active.map(a => {
-      const out: Record<string, number> = {}
-      for (const entry of data[a].split(',')) {
-        const parts = entry.trim().split(':')
-        if (parts.length !== 2) continue
-        const f = parseFloat(parts[1].trim())
-        if (!isNaN(f)) out[parts[0].trim()] = f
-      }
-      return out
-    })
+    // Per-combo frequencies per action (0-1), for the hand detail panel.
+    const combos = active.map(a => parseComboFreqs(data[a]))
 
-    // Legend share per action. Default: share of all 1326 combos, combo-
-    // weighted. With a base range: weighted share of that range — postflop
-    // strategies are conditional on the open, so board-blocked combos are
-    // excluded from the denominator (the child's combo set is the open minus
-    // the board) and a pure strategy reads 100%.
-    const baseWeights: Record<string, number> = {}
-    for (const entry of base.split(',')) {
-      const parts = entry.trim().split(':')
-      if (parts.length !== 2) continue
-      const f = parseFloat(parts[1].trim())
-      if (!isNaN(f)) baseWeights[parts[0].trim()] = (baseWeights[parts[0].trim()] || 0) + f
-    }
+    // Legend share per action: of all 1326 combos by default, weighted share
+    // of the base range when given (see actionShare).
     const denomCombos = new Set<string>()
-    for (const ac of actionCombos) for (const c of Object.keys(ac)) denomCombos.add(c)
-    const baseTotal = [...denomCombos].reduce((s, c) => s + (baseWeights[c] ?? 1), 0)
-    const pcts = actionCombos.map(ac => {
-      if (base) {
-        let num = 0
-        for (const [c, f] of Object.entries(ac)) num += (baseWeights[c] ?? 1) * f
-        return baseTotal > 0 ? (num / baseTotal) * 100 : 0
-      }
-      return (Object.values(ac).reduce((s, v) => s + v, 0) / TOTAL_COMBOS) * 100
-    })
+    for (const ac of combos) for (const c of Object.keys(ac)) denomCombos.add(c)
+    const pcts = combos.map(ac => actionShare(ac, base, denomCombos))
 
     const handFreqs: Record<string, number[]> = {}
     for (const row of HAND_GRID) {
@@ -180,8 +221,38 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
         handFreqs[cell.hand] = active.map((_, i) => (parsed[i][cell.hand] ?? 0) * 100)
       }
     }
-    return { perHand: handFreqs, activeActions: active, colors: cols, actionPcts: pcts }
+    return { perHand: handFreqs, activeActions: active, colors: cols, actionPcts: pcts, actionCombos: combos }
   }, [fold, call, raise, allIn, check, bet, base])
+
+  // Legend action solo: click to view a single strategy; grid fills only
+  // that action's share. Derived so a stale pick (actions changed) clears.
+  const [soloPick, setSoloPick] = useState<string | null>(null)
+  const solo = activeActions.includes(soloPick as never) ? soloPick : null
+
+  // Clicked cell → per-hand breakdown panel.
+  const [selected, setSelected] = useState<string | null>(null)
+
+  // Combos behind the selected hand class, with their per-action frequencies
+  // (%, same scale as the cells).
+  const comboDetail = useMemo(() => {
+    if (!selected) return []
+    const rows: { combo: string; freqs: number[] }[] = []
+    const byCombo = new Map<string, { combo: string; freqs: number[] }>()
+    activeActions.forEach((_, i) => {
+      for (const [combo, f] of Object.entries(actionCombos[i])) {
+        if (comboToHandClass(combo) !== selected) continue
+        let row = byCombo.get(combo)
+        if (!row) {
+          row = { combo, freqs: activeActions.map(() => 0) }
+          byCombo.set(combo, row)
+          rows.push(row)
+        }
+        row.freqs[i] = f * 100
+      }
+    })
+    return rows.sort((a, b) =>
+      Math.max(...b.freqs) - Math.max(...a.freqs) || a.combo.localeCompare(b.combo))
+  }, [selected, activeActions, actionCombos])
 
   // Compact mode: small inline grid, no numbers, no legend, no panel.
   if (compact) {
@@ -211,6 +282,53 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
     )
   }
 
+  // Diff view: one signed value per hand class, colored by sign/intensity.
+  if (diff) {
+    return (
+      <div className="rv-grid-area">
+        <div className="rv-grid-wrap">
+          <table className="rv-grid">
+            <tbody>
+              {HAND_GRID.map((rowCells, ri) => (
+                <tr key={ri}>
+                  {rowCells.map((cell, ci) => {
+                    const v = diff[cell.hand] ?? 0
+                    const alpha = v === 0 ? 0 : Math.min(0.85, Math.abs(v) / 55 + 0.08)
+                    const bg = v < 0
+                      ? `rgba(57,255,136,${alpha.toFixed(2)})`
+                      : v > 0 ? `rgba(255,84,112,${alpha.toFixed(2)})` : undefined
+                    return (
+                      <td key={ci}
+                        className="rv-cell"
+                        style={{
+                          ...(bg ? { background: bg } : null),
+                          color: v === 0 ? '#8080a4' : '#fff',
+                          textShadow: v === 0 ? undefined : '0 1px 2px rgba(6,6,14,0.7)',
+                        }}
+                        title={`${cell.hand}: ${v > 0 ? '+' : ''}${v.toFixed(1)} pts vs ${diffRefLabel}`}
+                      >
+                        <span className="rv-cell-hand">{cell.hand}</span>
+                        {v !== 0 && (
+                          <span className="block text-[8.5px] font-bold leading-none tabular-nums">
+                            {v > 0 ? '+' : '−'}{Math.abs(v) < 1 ? '<1' : Math.round(Math.abs(v))}
+                          </span>
+                        )}
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="rv-legend">
+          <span className="rv-legend-item"><span className="rv-legend-dot" style={{ background: '#39ff88' }} />{diffNegLabel}</span>
+          <span className="rv-legend-item"><span className="rv-legend-dot" style={{ background: '#ff5470' }} />{diffPosLabel}</span>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="rv-content">
       <div className="rv-grid-area">
@@ -227,17 +345,20 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
                 <tr key={ri}>
                   {rowCells.map((cell, ci) => {
                     const freqs = perHand[cell.hand] ?? []
-                    const total = freqs.reduce((s, v) => s + v, 0)
+                    const view = solo ? freqs.map((f, i) => (activeActions[i] === solo ? f : 0)) : freqs
+                    const total = view.reduce((s, v) => s + v, 0)
                     return (
                       <td key={ci}
-                        className={`rv-cell ${total > 0 ? 'in-range' : ''}`}
+                        className={`rv-cell ${total > 0 ? 'in-range' : ''} cursor-pointer ${selected === cell.hand ? 'outline outline-2 outline-accent -outline-offset-2' : ''}`}
                         style={{
-                          background: cellGradient(freqs, colors),
-                          color: total > 0 ? '#fff' : '#8499b5',
-                          ...(total > 0 ? { textShadow: '0 1px 2px rgba(12,17,23,0.7)' } : null),
+                          background: cellGradient(view, colors),
+                          color: total > 0 ? '#fff' : '#8080a4',
+                          ...(total > 0 ? { textShadow: '0 1px 2px rgba(6,6,14,0.7)' } : null),
                           fontWeight: total > 50 ? 700 : 400,
                         }}
-                        title={`${cell.hand}: ${activeActions.map((a, i) => `${a} ${freqs[i].toFixed(1)}%`).join(' · ')}`}>
+                        title={`${cell.hand}: ${activeActions.map((a, i) => `${a} ${freqs[i].toFixed(1)}%`).join(' · ')}`}
+                        onClick={() => setSelected(selected === cell.hand ? null : cell.hand)}
+                      >
                         <span className="rv-cell-hand">{cell.hand}</span>
                       </td>
                     )
@@ -249,13 +370,59 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
         </div>
         <div className="rv-legend">
           {activeActions.map((a, i) => (
-            <span key={a} className="rv-legend-item">
+            <button
+              key={a}
+              onClick={() => setSoloPick(solo === a ? null : a)}
+              className={`rv-legend-item cursor-pointer transition-colors ${solo === a ? 'text-txt' : ''}`}
+              title={solo === a ? 'Show all actions' : `Show only ${actionLabel(a, sizings?.[a])}`}
+            >
               <span className="rv-legend-dot" style={{ background: colors[i] }} />
               {actionLabel(a, sizings?.[a])}
               <span className="rv-legend-pct">{actionPcts[i].toFixed(1)}%</span>
-            </span>
+            </button>
           ))}
         </div>
+        {selected && (
+          <div className="mt-3 rounded-lg border border-line bg-panel2 px-4 py-3">
+            <div className="flex items-center justify-between mb-2.5">
+              <span className="text-sm font-bold text-txt">{selected}</span>
+              <button onClick={() => setSelected(null)} className="text-[11px] text-muted cursor-pointer hover:text-txt">close</button>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {activeActions.map((a, i) => {
+                const f = perHand[selected]?.[i] ?? 0
+                return (
+                  <div key={a} className="flex items-center gap-2.5">
+                    <span className="w-20 shrink-0 text-[11px] font-semibold text-muted truncate">{actionLabel(a, sizings?.[a])}</span>
+                    <div className="flex-1 h-2 rounded-full bg-dark overflow-hidden border border-line/50">
+                      <div className="h-full rounded-full transition-all" style={{ width: `${Math.min(100, f)}%`, background: colors[i] }} />
+                    </div>
+                    <span className="w-12 text-right text-[11px] font-bold tabular-nums" style={{ color: colors[i] }}>{f.toFixed(1)}%</span>
+                  </div>
+                )
+              })}
+            </div>
+            <div className="flex flex-wrap gap-1 mt-3 pt-2.5 border-t border-line/60">
+              {comboDetail.length === 0 && (
+                <span className="text-[11px] text-muted">Not in range.</span>
+              )}
+              {comboDetail.map(({ combo, freqs }) => {
+                const topIdx = freqs.reduce((best, v, i) => (v > freqs[best] ? i : best), 0)
+                const top = freqs[topIdx]
+                return (
+                  <span
+                    key={combo}
+                    className="text-[10.5px] font-mono px-1.5 py-0.5 rounded border-l-2 bg-dark tabular-nums text-txt"
+                    style={{ borderLeftColor: colors[topIdx] }}
+                    title={activeActions.map((a, i) => `${actionLabel(a, sizings?.[a])} ${freqs[i].toFixed(1)}%`).join(' · ')}
+                  >
+                    {combo} {top < 0.05 ? '~0' : top.toFixed(0) + '%'}
+                  </span>
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
