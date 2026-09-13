@@ -1,5 +1,7 @@
 import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { HJ_VS_UTG, BTN_VS_UTG, UTG_VS_3BET_BTN } from '@poker/design-system/src/data/ranges'
 
 export function BM6Page() {
   return (
@@ -31,7 +33,12 @@ export function BM6Page() {
                 ]}
               />
 
-              <Callout variant="bad"><strong>When covering the 3-bettor, you can cold call; when covered by the 3-bettor, you can't.</strong> Same hand, different stack dynamic. 50bb vs 25bb 3-bet → 24% calls. 25bb vs 50bb 3-bet → 0% calls. Stack relationship to the 3-bettor, not absolute depth, is the key variable.</Callout>
+              <Callout variant="bad"><strong>When covering the 3-bettor, you can cold call; when covered by the 3-bettor, you can't.</strong>
+
+<p className="mt-6 mb-1 text-sm text-muted">UTG's open versus each position's defense — HJ and BTN here (the blinds are in the Range Library) — and UTG's decision facing the 3-bet itself. The seats between UTG and the 3-bettor act first, so these are the fold-back-around nodes:</p>
+              <RangeBrowser ranges={HJ_VS_UTG} />
+              <RangeBrowser ranges={BTN_VS_UTG} />
+              <RangeBrowser ranges={UTG_VS_3BET_BTN} /> Same hand, different stack dynamic. 50bb vs 25bb 3-bet → 24% calls. 25bb vs 50bb 3-bet → 0% calls. Stack relationship to the 3-bettor, not absolute depth, is the key variable.</Callout>
 
               <Collapsible title="Core rules">
                 <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>BB stack dictates opener width</strong></>, <>UTG opens wider when BB short/covered; tighter when BB has big covering stack.</>],

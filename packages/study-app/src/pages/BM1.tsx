@@ -1,5 +1,7 @@
 import { Section, Callout, Code, Action, Tabs, Collapsible, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { UTG_RFI, BTN_RFI } from '@poker/design-system/src/data/ranges'
 
 export function BM1Page() {
   return (
@@ -18,7 +20,11 @@ export function BM1Page() {
                   [<><strong>Cold calling</strong></>, <>Wide; speculative hands, suited aces, mid pairs</>, <><Action variant="call">Narrower; cold-call strong (AQo, AJs, KQ)</Action></>],
                   [<><strong>Shoving (mid stacks)</strong></>, <>Common for AK, QQ/JJ</>, <><Action variant="fold">Shoves fade; min-raise or non-all-in 3-bet</Action> — preserve tournament life</>]]} />
 
-              <Callout variant="warn"><strong>Blockers become MORE valuable than playability in ICM.</strong> A2s opens where Q9s folds. A9o opens where T9s folds. You're blocking 3-bet bluffs, not playing postflop — because opponents 3-bet/fold, not cold call.</Callout>
+              <Callout variant="warn"><strong>Blockers become MORE valuable than playability in ICM.</strong>
+
+<p className="mt-6 mb-1 text-sm text-muted">Solver versions of the shift — each panel carries both solutions; toggle cEV / ICM to see the bubble tighten the open (UTG drops suited connectors and low pairs for ace blockers; BTN opens 49% under ICM vs wider in chips):</p>
+              <RangeBrowser ranges={UTG_RFI} />
+              <RangeBrowser ranges={BTN_RFI} /> A2s opens where Q9s folds. A9o opens where T9s folds. You're blocking 3-bet bluffs, not playing postflop — because opponents 3-bet/fold, not cold call.</Callout>
 
               <Collapsible title="The five shifts">
                 <DataTable columns={[{ header: 'Shift' }, { header: 'Rule' }]} rows={[[<><strong>1. Blockers up, playability down</strong></>, <>Ace-X blockers gain value; suited connectors and low pairs lose it.</>],

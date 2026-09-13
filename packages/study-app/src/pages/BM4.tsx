@@ -1,5 +1,7 @@
 import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { SB_RFI, BB_VS_SB_LIMP, BB_VS_SB_RAISE } from '@poker/design-system/src/data/ranges'
 
 export function BM4Page() {
   return (
@@ -35,7 +37,12 @@ export function BM4Page() {
                 ]}
               />
 
-              <Callout variant="bad"><strong>Limping is a MISTAKE when you cover a short stack on the bubble.</strong> BB overfolds ~85%. Limping gives free equity realization to hands that would fold to a shove. Shove/raise instead.</Callout>
+              <Callout variant="bad"><strong>Limping is a MISTAKE when you cover a short stack on the bubble.</strong>
+
+<p className="mt-6 mb-1 text-sm text-muted">The blind-vs-blind decisions, solved — SB's first-in (limp or raise), BB's iso-or-check vs the limp, and BB's defense vs the 3bb raise. Toggle cEV / ICM to see bubble pressure halve BB's call frequency:</p>
+              <RangeBrowser ranges={SB_RFI} />
+              <RangeBrowser ranges={BB_VS_SB_LIMP} />
+              <RangeBrowser ranges={BB_VS_SB_RAISE} /> BB overfolds ~85%. Limping gives free equity realization to hands that would fold to a shove. Shove/raise instead.</Callout>
 
               <Collapsible title="Core rules">
                 <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>BB calls only ~10-22%</strong></>, <>vs ~37% call rate in chip model. ICM pressure roughly halves BB call frequency.</>],

@@ -1,5 +1,7 @@
 import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { UTG_RFI_COVERING } from '@poker/design-system/src/data/ranges'
 
 export function BM3Page() {
   return (
@@ -35,7 +37,10 @@ export function BM3Page() {
                 ]}
               />
 
-              <Callout variant="warn"><strong>Open shoves are heavily underused by regs when covering on the bubble.</strong> When blinds are sub-20-25bb and you cover, open-shove a huge chunk of your range. Defaulting to min-raise/fold with 70-85% of hands leaves massive raise-fold equity on the table.</Callout>
+              <Callout variant="warn"><strong>Open shoves are heavily underused by regs when covering on the bubble.</strong>
+
+<p className="mt-6 mb-1 text-sm text-muted">Solved covering opens — UTG at 50bb covering 12&ndash;24bb stacks (BB 4bb) opens ~28%, and at 100bb covering the table ~32%, roughly double the equal-stack bubble baseline. These nodes also carry a half-stack raise option; the panels show the primary 2bb open:</p>
+              <RangeBrowser ranges={UTG_RFI_COVERING} /> When blinds are sub-20-25bb and you cover, open-shove a huge chunk of your range. Defaulting to min-raise/fold with 70-85% of hands leaves massive raise-fold equity on the table.</Callout>
               <Callout variant="good"><strong>Being covered by one or two players does NOT mean play tight.</strong> If you cover the rest (especially the BB), you still open wider than baseline. The covering player folds ~80%; you then pressure everyone you cover.</Callout>
 
               <Collapsible title="Composition by BB depth (when you cover)">

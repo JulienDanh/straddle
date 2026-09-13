@@ -1,5 +1,7 @@
 import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { UTG_RFI } from '@poker/design-system/src/data/ranges'
 
 export function BM7Page() {
   return (
@@ -35,7 +37,10 @@ export function BM7Page() {
                 ]}
               />
 
-              <Callout variant="warn"><strong>One player left to bust is not one answer.</strong> 1/8 = 12.5% (tight), 1/16 = 6.25% (looser), 2/152 = 1.3% (extreme). The absolute number is meaningless without the %.</Callout>
+              <Callout variant="warn"><strong>One player left to bust is not one answer.</strong>
+
+<p className="mt-6 mb-1 text-sm text-muted">Bubble pressure made concrete — the same UTG open in chips and under bubble ICM (toggle the panel's solution type):</p>
+              <RangeBrowser ranges={UTG_RFI} /> 1/8 = 12.5% (tight), 1/16 = 6.25% (looser), 2/152 = 1.3% (extreme). The absolute number is meaningless without the %.</Callout>
 
               <Collapsible title="Bubble-impact buckets">
                 <DataTable columns={[{ header: 'Bucket' }, { header: 'Direction' }]} rows={[[<><strong>% of field left to bust</strong></>, <>Higher % (12.5%) → tighter; lower % (1.3%) → slightly looser.</>],

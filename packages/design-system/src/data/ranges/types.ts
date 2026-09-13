@@ -2,8 +2,17 @@
 
 export type RangeAction = 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'
 
-/** Solution type: cEV (chip-EV) or ICM (tournament equity) */
-export type SolutionType = 'cEV' | 'ICM'
+/** Solution type: cEV (chip-EV), ICM (equal-stack tournament equity),
+ *  or its asymmetric-stack variants (covered/covering configs) */
+export type SolutionType =
+  | 'cEV'
+  | 'ICM'
+  | 'ICM-FT'              // final table (200-man FT payouts), equal stacks
+  | 'ICM-FT-covered-deep' // final table, covered by much bigger stacks
+  | 'ICM-FT-covering'     // final table, covers the table
+  | 'ICM-covered-deep'    // covered by a much bigger stack (BM2 "covered by heaps")
+  | 'ICM-covered-similar' // covered but close ("game of chicken")
+  | 'ICM-covering'
 
 export interface StoredRange {
   /** Spot label, e.g. "UTG RFI" */
@@ -28,6 +37,9 @@ export interface StoredRange {
   line?: string
   /** GTO Wizard share link for the spot (preflop entries: their decision node; postflop children: the flop node) */
   wizardUrl?: string
+  /** Asymmetric entries only: the eight stacks in seat order UTG..BB (bb).
+   *  Equal-stack entries omit it — their config is stack x8. */
+  config?: number[]
   /** Postflop solutions derived from this preflop range; nested in the same store file */
   postflop?: StoredRange[]
 }
@@ -61,26 +73,45 @@ export function boardSubtitle(board: string): string {
 }
 
 const WIZARD = ('https://app.gtowizard.com/solutions?solution_type=gwiz&soltab=range'
-  + '&gmfs_solution_tab=ai_sols&gametype=MTTGeneral_8m')
+  + '&gmfs_solution_tab=ai_sols')
 
-/** Equal-stack MTTGeneral_8m depth/stack params (stack in bb + 0.125). */
+/** Equal-stack depth/stack params (stack in bb + 0.125). */
 function wizardParams(stack: number): string {
   const d = stack + 0.125
   const stacks = Array(8).fill(d).join('-')
   return `&depth=${d}&stacks=${stacks}`
 }
 
+/** The app's gametypes: cEV MTT 8-max and the ICM structures used by the
+ *  ranges — the 200-man bubble (33 left, preflop-only) and its final table. */
+export const CEV_GAMETYPE = 'MTTGeneral_8m'
+export const ICM_GAMETYPE = 'MTTGeneral_ICM8m200PTBUBBLEMID'
+export const ICM_FT_GAMETYPE = 'MTTGeneral_ICM8m200PTFT'
+
 /** Wizard link to a preflop decision node (an entry's own spot):
  *  preflopActions = the line before the entry acts, historySpot = 1 + its length. */
-export function preflopUrl(stack: number, preflopActions: string, historySpot: number): string {
-  let url = WIZARD + wizardParams(stack)
+export function preflopUrl(stack: number, preflopActions: string, historySpot: number,
+                           gametype: string = CEV_GAMETYPE): string {
+  let url = `${WIZARD}&gametype=${gametype}${wizardParams(stack)}`
+  if (preflopActions) url += `&preflop_actions=${preflopActions}`
+  return `${url}&history_spot=${historySpot}`
+}
+
+/** Wizard link to a preflop node on an explicit asymmetric stack config:
+ *  stacks are the eight stacks in seat order UTG..BB (bb). Used by the
+ *  covered-stack BM spots, where the stack config IS the lesson. */
+export function preflopUrlStacks(stacks: number[], preflopActions: string,
+                                 historySpot: number,
+                                 gametype: string = CEV_GAMETYPE): string {
+  const d = stacks.map(s => s + 0.125)
+  let url = `${WIZARD}&gametype=${gametype}&depth=${d[0]}&stacks=${d.join('-')}`
   if (preflopActions) url += `&preflop_actions=${preflopActions}`
   return `${url}&history_spot=${historySpot}`
 }
 
 /** Wizard link to the flop c-bet node of an open-vs-BB-call line (flop spots
  *  are solved at 40bb; repfloptab follows the board texture). */
-export function flopUrl(openPosition: string, openSize: number, board: string): string {
+export function flopUrl(openPosition: string, openSize: number, board: string, stack = 40): string {
   const open = openPosition === 'BTN' ? `F-F-F-F-F-R${openSize}` : `R${openSize}`
   const folds = openPosition === 'BTN' ? 1 : 6
   const preflop = [open, ...Array(folds).fill('F'), 'C'].join('-')
@@ -89,7 +120,7 @@ export function flopUrl(openPosition: string, openSize: number, board: string): 
   const high = [...ranks].sort((a, b) => 'AKQJT98765432'.indexOf(a) - 'AKQJT98765432'.indexOf(b))[0]
   const tab = !paired && boardTexture(board) !== 'monotone' && 'AKQJT'.includes(high)
     ? 'swv_high_cards' : 'swv_flops'
-  return `${WIZARD}${wizardParams(40)}&gmfft_sort_key=0&gmfft_sort_order=desc`
+  return `${WIZARD}&gametype=${CEV_GAMETYPE}${wizardParams(stack)}&gmfft_sort_key=0&gmfft_sort_order=desc`
     + `&history_spot=9&legacy_postflop_sizings=true&preflop_actions=${preflop}`
     + `&flop_actions=X&repfloptab=${tab}&board=${board}`
 }
@@ -99,14 +130,13 @@ export function flopUrl(openPosition: string, openSize: number, board: string): 
  *  entry's decision node is built by urlFor. */
 export function materializeLine(
   meta: { title: string; position: string; stacks: unknown[] },
-  urlFor: (stack: number) => string,
+  urlFor: (stack: number, entry: StoredRange) => string,
 ): StoredRange[] {
-  return meta.stacks.map((entry) => ({
-    ...entry as StoredRange,
-    title: meta.title,
-    position: meta.position,
-    wizardUrl: urlFor((entry as StoredRange).stack),
-  }))
+  return meta.stacks.map((entry) => {
+    const range = { ...entry as StoredRange, title: meta.title, position: meta.position }
+    range.wizardUrl = urlFor(range.stack, range)
+    return range
+  })
 }
 
 /** Materialize a raw postflop child against its parent entry: injects the
@@ -122,7 +152,7 @@ export function materializeChild(parent: StoredRange, child: StoredRange): Store
     stack: parent.stack,
     position: parent.position,
     wizardUrl: child.label
-      ? flopUrl(parent.position, parent.sizings?.raise ?? 2, child.label)
+      ? flopUrl(parent.position, parent.sizings?.raise ?? 2, child.label, parent.stack)
       : child.wizardUrl,
   } as StoredRange, parent.actions.raise ?? '')
 }

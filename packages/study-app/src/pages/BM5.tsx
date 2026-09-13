@@ -1,5 +1,7 @@
 import { Section, Callout, Code, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { SB_VS_UTG, SB_VS_BTN, BB_VS_UTG, BB_VS_BTN } from '@poker/design-system/src/data/ranges'
 
 export function BM5Page() {
   return (
@@ -35,7 +37,13 @@ export function BM5Page() {
                 ]}
               />
 
-              <Callout variant="warn"><strong>Re-steal MORE, not less, when covered and short.</strong> It feels terrible to shove A5s and bust on the bubble. But playing too passive reduces dollar EV — you cash slightly more often but never double. Think dollar EV, not binary cash/fail.</Callout>
+              <Callout variant="warn"><strong>Re-steal MORE, not less, when covered and short.</strong>
+
+<p className="mt-6 mb-1 text-sm text-muted">The four solved blind defenses the matrix describes — SB and BB versus an EP (UTG) and LP (BTN) open. Short stacks shift to pure raise/fold; toggle cEV / ICM and step the stack ladder to watch cold calls appear:</p>
+              <RangeBrowser ranges={SB_VS_UTG} />
+              <RangeBrowser ranges={SB_VS_BTN} />
+              <RangeBrowser ranges={BB_VS_UTG} />
+              <RangeBrowser ranges={BB_VS_BTN} /> It feels terrible to shove A5s and bust on the bubble. But playing too passive reduces dollar EV — you cash slightly more often but never double. Think dollar EV, not binary cash/fail.</Callout>
 
               <Collapsible title="Core rules">
                 <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>SB cold-call threshold</strong></>, <>~20bb. Below: ~0% cold calls, raise/fold only.</>],

@@ -1,5 +1,7 @@
 import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { UTG_VS_3BET_HJ, UTG_VS_3BET_BTN, UTG_VS_3BET_BB } from '@poker/design-system/src/data/ranges'
 
 export function S12Page() {
   return (
@@ -11,7 +13,12 @@ export function S12Page() {
           label: 'Study',
           content: (
             <>
-              <Callout variant="bad"><strong>Key thesis:</strong> 3-bettor is ahead preflop. High boards favor them; low boards favor caller. <em>Fold far more than MDF on high boards; defend robustly on low.</em></Callout>
+              <Callout variant="bad"><strong>Key thesis:</strong> 3-bettor is ahead preflop.
+
+<p className="mt-6 mb-1 text-sm text-muted">The preflop shape of this exact spot — UTG's 2bb open facing a 3-bet from HJ, BTN, and the BB, with the call and 4-bet options (at 20bb the 4-bet collapses to a pure jam). Toggle cEV / ICM and step depths to watch the defense tighten on the bubble:</p>
+              <RangeBrowser ranges={UTG_VS_3BET_HJ} />
+              <RangeBrowser ranges={UTG_VS_3BET_BTN} />
+              <RangeBrowser ranges={UTG_VS_3BET_BB} /> High boards favor them; low boards favor caller. <em>Fold far more than MDF on high boards; defend robustly on low.</em></Callout>
 
               <Callout variant="warn"><strong>Common Leaks:</strong> Over-defending pocket pairs on ace/king high — 77, 88, 99 look playable but are heavy folds. Over-defending ace-high with BDFD — AJs with BDFD is worth zero on AJ4 vs a 3-bet. Under-defending low boards — folding pairs and high cards that are actually profitable. Applying MDF blindly — the 3-bettor's range is too strong on high boards for basic MDF to work.</Callout>
 

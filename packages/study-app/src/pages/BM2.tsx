@@ -1,4 +1,6 @@
 import { Section, Callout, Action, Tabs, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { BTN_RFI_COVERED, CO_RFI_COVERED } from '@poker/design-system/src/data/ranges'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
 
 export function BM2Page() {
@@ -36,6 +38,10 @@ export function BM2Page() {
               />
 
               <Callout variant="bad"><strong>Same stack, different range.</strong> 12bb on the button is not static. Into a 53bb BB you open ~20%; into a 16bb BB you open ~28%. The BB's depth, not just yours, drives your range.</Callout>
+
+              <p className="mt-6 mb-1 text-sm text-muted">Solved bubble opens for the same dynamic — the 13bb BTN covered by a 75bb BB opens ~26%, the 12bb BTN with a close 16bb BB opens ~39%, and a 10bb CO covered by 50/40bb stacks behind opens ~24%:</p>
+              <RangeBrowser ranges={BTN_RFI_COVERED} />
+              <RangeBrowser ranges={CO_RFI_COVERED} />
 
               <Collapsible title="What tightens you">
                 <ul>

@@ -1,5 +1,7 @@
 import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, DataTable, HandExample } from '@poker/design-system/src/components/ui'
 import { PracticeFlow } from '@poker/design-system/src/components/PracticeFlow'
+import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
+import { SB_RFI, BB_VS_SB_LIMP } from '@poker/design-system/src/data/ranges'
 
 export function S3Page() {
   return (
@@ -14,7 +16,11 @@ export function S3Page() {
             <>
               <Callout variant="good"><strong>Why BB matters:</strong> Skilled player goes from −112 bb/100 (walk-away) to −20 — 92 points of opportunity. UTG only has 27. BB skill is <em>definitively</em> most important.</Callout>
 
-              <Callout variant="warn"><strong>Common Leaks:</strong> Overfolding — BB win rate is the most important in all of NLHE (92 points of opportunity). Folding too much vs stab = giving money away. Defending every BDFD blindly — the worst hands with BDFDs still fold (42o with a spade on K72 is a fold). Not identifying the worst hand on the board — critical skill. Underestimating three-to-a-straight value.</Callout>
+              <Callout variant="warn"><strong>Common Leaks:</strong> Overfolding — BB win rate is the most important in all of NLHE
+
+<p className="mt-4 mb-1 text-sm text-muted">The preflop shape of this exact spot — SB's first-in decision (the limp) and BB's iso-or-check response, at every stack depth:</p>
+              <RangeBrowser ranges={SB_RFI} />
+              <RangeBrowser ranges={BB_VS_SB_LIMP} /> (92 points of opportunity). Folding too much vs stab = giving money away. Defending every BDFD blindly — the worst hands with BDFDs still fold (42o with a spade on K72 is a fold). Not identifying the worst hand on the board — critical skill. Underestimating three-to-a-straight value.</Callout>
 
                             <Collapsible title="Heuristics">
                 <ul>

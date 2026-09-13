@@ -26,17 +26,19 @@ packages/
 │       │   ├── styles/tailwind.css     — Tailwind v4 theme tokens + base styles
 │       └── stories/               — Storybook stories for all components
 ├── ranges/          — the shared range store (not an npm workspace; data only)
-│   ├── data/<position>/       — one folder per hero position (utg/, btn/, bb/), one JSON per preflop
-│                                line: utg/rfi.json, btn/rfi.json, bb/vs-utg.json, bb/vs-btn.json.
+│   ├── data/<position>/       — one folder per hero position (utg/, utg1/, lj/, hj/, co/, btn/, sb/, bb/),
+│                                one JSON per preflop line (rfi.json, vs-utg.json, vs-btn.json).
 │                                Shared title/position at the top of the file; `stacks` holds one entry
-│                                per depth (type, subtitle, stack, actions, sizings, wizardUrl); ICM
-│                                entries land in the same stacks array, and postflop solutions nest
+│                                per depth (type, subtitle, stack, actions, sizings) — cEV, ICM and the
+│                                asymmetric ICM-covered/ICM-covering entries all live here
+│                                (loaders split and combine them by type); postflop nest
 │                                under the preflop entry they derive from as its `postflop` array —
 │                                minimal children (id, label, line, actions, sizings), with
 │                                title/subtitle/type/stack/position and the GTO Wizard link
 │                                derived at load (the S1 c-bet spots
 │                                sit on the 40bb UTG RFI entry). Neutral home read by the app. Edit here.
-│   └── imports/                — raw pastes / fetches (gitignored: licensed data)
+│   ├── scripts/               — fetch_browser/gw_to_store/gw_order/gw_catalog: autonomous GTO Wizard retrieval via the logged-in debug Chrome, aware of the solutions library catalog (see add-range skill)
+│   └── imports/                — raw pastes + raw solution captures in solutions/ (gitignored: licensed data)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
         ├── App.tsx                — hash-based router, PAGES record
