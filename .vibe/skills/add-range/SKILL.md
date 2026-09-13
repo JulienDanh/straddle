@@ -99,7 +99,7 @@ app silently falls back to an unrelated solution:
   anything else is refused with a list of what does exist, no request made
 
 Query the cached catalog locally (no network):
-`python3 packages/ranges/scripts/gw_catalog.py gametypes mtt | depths <gametype> | configs <gametype> [--all]`
+`python3 packages/ranges/imports/scripts/gw_catalog.py gametypes mtt | depths <gametype> | configs <gametype> [--all]`
 Refresh it: `fetch_browser.py --refresh-catalog` (auto-refreshes after 14
 days). Asymmetric configs (e.g. ICM) are fetched with
 `--stacks 40.125-35.125-...` (8 dash-joined values).
@@ -151,7 +151,7 @@ The archive is checked and reused before re-fetching a spot (`--refetch`
 bypasses).
 
 2. Convert:
-   `python3 packages/ranges/scripts/gw_to_store.py flop packages/ranges/imports/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c-x.json --parent utg/rfi.json --stack 40`
+   `python3 packages/ranges/imports/scripts/gw_to_store.py flop packages/ranges/imports/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c-x.json --parent utg/rfi.json --stack 40`
    (or `preflop <archive>.json`) — prints actions lines, the betsize and
    the weighted stats.
 3. Validate and store per the procedures above (coverage, weighted lines

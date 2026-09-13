@@ -37,7 +37,7 @@ packages/
 │                                title/subtitle/type/stack/position and the GTO Wizard link
 │                                derived at load (the S1 c-bet spots
 │                                sit on the 40bb UTG RFI entry). Neutral home read by the app. Edit here.
-│   ├── scripts/               — fetch_browser/gw_to_store/gw_order/gw_catalog: autonomous GTO Wizard retrieval via the logged-in debug Chrome, aware of the solutions library catalog (see add-range skill)
+│   ├── scripts/ → imports/scripts/  — the retrieval pipeline lives in the private straddle-solutions repo (nested checkout at imports/): fetch_browser/gw_to_store/gw_order/gw_catalog, autonomous GTO Wizard retrieval via the logged-in debug Chrome (see add-range skill)
 │   └── imports/                — raw pastes + raw solution captures in solutions/ (gitignored: licensed data)
 └── study-app/       — pages, App, Sidebar (npm workspace: @poker/study-app)
     └── src/
