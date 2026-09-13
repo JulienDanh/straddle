@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@poker/design-system/src/components/ui-shadcn/accordion'
 
 interface SidebarProps {
@@ -97,6 +98,10 @@ function courseOfPage(pageId: string): string {
 
 export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
   const activeCourse = courseOfPage(activePage)
+  // controlled so the accordion always reveals the active page's course,
+  // even when navigation happens outside the sidebar (prev/next, keys)
+  const [openCourse, setOpenCourse] = useState(activeCourse)
+  useEffect(() => setOpenCourse(activeCourse), [activeCourse])
 
   return (
     <aside
@@ -106,7 +111,7 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         <h1 className="text-[15px] tracking-wide">Poker Study Guide</h1>
         <div className="text-[11px] text-muted mt-0.5">{COURSES.length} courses · {COURSES.reduce((n, c) => n + c.groups.reduce((m, g) => m + g.pages.length, 0), 0)} pages</div>
       </div>
-      <Accordion type="single" defaultValue={activeCourse} collapsible className="w-full">
+      <Accordion type="single" value={openCourse} onValueChange={setOpenCourse} collapsible className="w-full">
         {COURSES.map((course) => {
           const isActiveCourse = course.id === activeCourse
           return (
@@ -114,6 +119,7 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
               <AccordionTrigger className="flex items-center gap-2 px-[18px] py-3 cursor-pointer hover:bg-panel2 hover:no-underline [&>svg]:hidden">
                 <span className={`flex-1 text-[13px] font-semibold tracking-tight ${isActiveCourse ? 'text-accent' : 'text-txt'}`}>{course.label}</span>
                 <span className="text-[10px] text-muted bg-dark border border-line rounded-full px-1.5 py-px">{course.groups.reduce((n, g) => n + g.pages.length, 0)}</span>
+                <span className="text-[9px] text-muted transition-transform [[data-state=open]>&]:rotate-90">▶</span>
               </AccordionTrigger>
               <AccordionContent className="py-0.5 pb-2.5">
                 {course.groups.map((group) => (
@@ -122,10 +128,16 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
                     {group.pages.map((p) => (
                       <div
                         key={p.id}
-                        className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === p.id ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
+                        className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
+                          activePage === p.id
+                            ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
+                            : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
+                        }`}
                         onClick={() => onNavigate(p.id)}
                       >
-                        <span className={`text-[10px] w-5 text-center bg-dark border rounded px-0 py-px ${activePage === p.id ? 'text-accent border-accent' : 'text-muted border-line'}`}>{p.num}</span>
+                        {/^\d+$/.test(p.num) && (
+                          <span className={`text-[10px] w-5 text-center bg-dark border rounded px-0 py-px ${activePage === p.id ? 'text-accent border-accent' : 'text-muted border-line'}`}>{p.num}</span>
+                        )}
                         {p.label}
                       </div>
                     ))}
@@ -139,7 +151,21 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
       <div className="px-2.5 mt-4 border-t border-line pt-3">
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         <div
-          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border border-transparent transition-colors select-none ${activePage === 'sandbox' ? 'bg-panel2 text-accent border-line' : 'text-muted hover:bg-panel2 hover:text-txt'}`}
+          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
+            activePage === 'ranges'
+              ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
+              : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
+          }`}
+          onClick={() => onNavigate('ranges')}
+        >
+          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Range Library
+        </div>
+        <div
+          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
+            activePage === 'sandbox'
+              ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
+              : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
+          }`}
           onClick={() => onNavigate('sandbox')}
         >
           <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Design System

@@ -5,23 +5,23 @@
 @source "../";
 
 @theme {
-  /* Surfaces — match :root in global.css */
-  --color-bg: #0f1419;
-  --color-panel: #1a2230;
-  --color-panel2: #222c3d;
-  --color-line: #2e3a4d;
-  --color-dark: #0c1117;
+  /* Surfaces — deep purple-black */
+  --color-bg: #0a0a14;
+  --color-panel: #12121f;
+  --color-panel2: #1a1a2e;
+  --color-line: #2a2a44;
+  --color-dark: #06060e;
 
   /* Text */
-  --color-txt: #d8e2ee;
-  --color-muted: #8499b5;
+  --color-txt: #e2e2f0;
+  --color-muted: #8080a4;
 
-  /* Accents */
-  --color-accent: #5fd0a8;
-  --color-accent2: #6aa6ff;
-  --color-warn: #f0b86e;
-  --color-bad: #ef6f6f;
-  --color-good: #5fd0a8;
+  /* Accents — neon cyan / magenta */
+  --color-accent: #00f0ff;
+  --color-accent2: #ff2ec4;
+  --color-warn: #f0c04a;
+  --color-bad: #ff5470;
+  --color-good: #39ff88;
 
   /* Suits */
   --color-spade: #b8c0cc;
@@ -30,23 +30,23 @@
   --color-club: #2f8f5b;
 
   /* shadcn semantic tokens */
-  --color-background: #0f1419;
-  --color-foreground: #d8e2ee;
-  --color-card: #1a2230;
-  --color-card-foreground: #d8e2ee;
-  --color-popover: #1a2230;
-  --color-popover-foreground: #d8e2ee;
-  --color-primary: #5fd0a8;
-  --color-primary-foreground: #0c1117;
-  --color-secondary: #222c3d;
-  --color-secondary-foreground: #d8e2ee;
-  --color-muted-foreground: #8499b5;
-  --color-accent-foreground: #d8e2ee;
-  --color-destructive: #ef6f6f;
-  --color-destructive-foreground: #d8e2ee;
-  --color-border: #2e3a4d;
-  --color-input: #2e3a4d;
-  --color-ring: #5fd0a8;
+  --color-background: #0a0a14;
+  --color-foreground: #e2e2f0;
+  --color-card: #12121f;
+  --color-card-foreground: #e2e2f0;
+  --color-popover: #12121f;
+  --color-popover-foreground: #e2e2f0;
+  --color-primary: #00f0ff;
+  --color-primary-foreground: #06060e;
+  --color-secondary: #1a1a2e;
+  --color-secondary-foreground: #e2e2f0;
+  --color-muted-foreground: #8080a4;
+  --color-accent-foreground: #e2e2f0;
+  --color-destructive: #ff5470;
+  --color-destructive-foreground: #e2e2f0;
+  --color-border: #2a2a44;
+  --color-input: #2a2a44;
+  --color-ring: #00f0ff;
   --color-radius: 0.5rem;
 }
 
@@ -55,24 +55,43 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body {
-    background: radial-gradient(1200px 800px at 70% -10%, #172033 0, #0f1419 60%);
-    color: #d8e2ee;
+    background:
+      radial-gradient(900px 600px at 85% -10%, rgba(255,46,196,0.16), transparent 60%),
+      radial-gradient(1100px 700px at -10% 115%, rgba(180,76,255,0.10), transparent 55%),
+      #050506;
+    color: #e2e2f0;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     line-height: 1.55;
   }
 
   /* Section content typography */
-  .section h2 { font-size: 20px; border-left: 3px solid #5fd0a8; padding-left: 10px; margin-bottom: 14px; }
-  .section h3 { margin: 18px 0 8px; font-size: 15px; color: #6aa6ff; }
+  .section h2 { font-size: 20px; border-left: 3px solid #00f0ff; padding-left: 10px; margin-bottom: 14px; }
+  .section h3 { margin: 18px 0 8px; font-size: 15px; color: #ff2ec4; }
   .section p { margin: 10px 0; }
   .section ul { margin: 8px 0; padding-left: 22px; }
   .section li { margin: 5px 0; }
 
   /* Tables inside sections */
   table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 13px; }
-  th, td { border: 1px solid #2e3a4d; padding: 7px 9px; text-align: left; vertical-align: top; }
-  th { background: #222c3d; color: #6aa6ff; font-weight: 600; }
-  code { background: #0c1117; border: 1px solid #2e3a4d; padding: 1px 6px; border-radius: 5px; font-size: 13px; }
+  th, td { border: 1px solid #2a2a44; padding: 7px 9px; text-align: left; vertical-align: top; }
+  th { background: #1a1a2e; color: #ff2ec4; font-weight: 600; }
+  code { background: #06060e; border: 1px solid #2a2a44; padding: 1px 6px; border-radius: 5px; font-size: 13px; }
+
+  /* Cyberpunk polish */
+  ::selection { background: rgba(0, 240, 255, 0.25); color: #e2e2f0; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #0a0a14; }
+  ::-webkit-scrollbar-thumb { background: #2a2a44; border-radius: 5px; border: 2px solid #0a0a14; }
+  ::-webkit-scrollbar-thumb:hover { background: #3a3a5e; }
+  * { scrollbar-width: thin; scrollbar-color: #2a2a44 #0a0a14; }
+  /* neon glow on accent surfaces (active pills, hero seat, badges) */
+  .bg-accent { box-shadow: 0 0 14px rgba(0, 240, 255, 0.18); }
+  /* keyboard focus in accent */
+  :focus-visible { outline: 2px solid rgba(0, 240, 255, 0.7); outline-offset: 2px; }
+
+  /* Page prose rhythm (Section content sits directly on the canvas) */
+  .section-content > p { margin: 12px 0 10px; font-size: 14px; line-height: 1.65; }
+  .section-content > p:first-child { margin-top: 2px; color: var(--color-muted); }
 
   /* Touch targets */
   .nav-item, .btn, .flip { -webkit-tap-highlight-color: transparent; }
@@ -101,7 +120,7 @@
 }
 .rv-grid-area {
   flex: 1;
-  min-width: 560px;
+  min-width: 0;
 }
 .rv-grid-header {
   display: flex;
@@ -113,53 +132,55 @@
 .rv-grid-spot {
   font-size: 14px;
   font-weight: 700;
-  color: var(--txt);
+  color: var(--color-txt);
 }
 .rv-grid-sol {
   font-size: 12px;
-  color: var(--muted);
+  color: var(--color-muted);
 }
 .rv-grid-wrap {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 .rv-grid {
-  width: auto;
+  /* fluid: columns share the container width (fixed layout, no cell
+     minimums) so the grid never overflows into a horizontal scroll */
+  width: 100%;
   /* separate + spacing: visible gutters between cells for clear delimitation */
   border-collapse: separate;
   border-spacing: 1px;
-  margin: 0 auto;
+  margin: 0;
   font-size: 10px;
   table-layout: fixed;
 }
 .rv-grid th,
 .rv-grid td {
-  border: 1px solid var(--line);
+  border: 1px solid var(--color-line);
   text-align: center;
   vertical-align: middle;
   font-size: 10px;
   padding: 2px 0;
-  width: 46px;
   height: 44px;
-  min-width: 46px;
 }
 .rv-grid thead th {
-  color: var(--muted);
+  color: var(--color-muted);
   font-weight: 600;
   font-size: 11px;
-  background: var(--panel);
-  border-color: var(--line);
+  background: var(--color-panel);
+  border-color: var(--color-line);
   height: 22px;
 }
 .rv-rowhead {
-  color: var(--muted);
+  color: var(--color-muted);
   font-weight: 600;
   font-size: 11px;
-  background: var(--panel);
+  background: var(--color-panel);
 }
 
 /* Compact grid — small cells for inline use in course content */
 .rv-grid-sm {
+  /* inline grids keep their natural fixed-cell size */
+  width: auto;
   border-spacing: 1px;
 }
 .rv-grid-sm th,
@@ -179,6 +200,7 @@
   font-size: 8px;
 }
 /* Medium grid — cells with hand labels for range previews */
+.rv-grid-md { width: auto; }
 .rv-grid-md th,
 .rv-grid-md td {
   width: 28px;
@@ -201,8 +223,8 @@
   overflow-x: auto;
 }
 .rv-cell {
-  background: var(--panel);
-  color: var(--muted);
+  background: var(--color-panel);
+  color: var(--color-muted);
   font-family: monospace;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
@@ -221,7 +243,7 @@
 
 /* Mobile */
 @media (max-width: 640px) {
-  .rv-grid th, .rv-grid td { width: 32px; height: 34px; min-width: 32px; font-size: 8px; }
+  .rv-grid th, .rv-grid td { height: 34px; font-size: 8px; }
   .rv-content { flex-direction: column; }
   .rv-grid-area { min-width: 0; }
 }
@@ -237,7 +259,7 @@
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: var(--muted);
+  color: var(--color-muted);
 }
 .rv-legend-dot {
   display: inline-block;
@@ -248,7 +270,7 @@
 .rv-legend-pct {
   font-size: 11px;
   font-weight: 700;
-  color: var(--txt);
+  color: var(--color-txt);
   font-variant-numeric: tabular-nums;
 }
 

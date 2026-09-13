@@ -32,7 +32,7 @@ export function PlayingCard({ card, size = 'md' }: { card: string; size?: 'sm' |
   const s = card[1]?.toLowerCase() ?? ''
   const suit = SUIT_SYMBOL[s] ?? ''
   return (
-    <span className={`inline-flex flex-col items-center justify-center bg-[#f4f1ea] border border-[#888] rounded-[5px] leading-none font-bold align-middle ${PCARD_SIZE[size]} ${SUIT_TEXT[s] ?? ''}`}>
+    <span className={`inline-flex flex-col items-center justify-center bg-[#f4f1ea] border border-[#7a7163] rounded-[5px] leading-none font-bold align-middle shadow-[0_2px_5px_rgba(0,0,0,0.45)] ${PCARD_SIZE[size]} ${SUIT_TEXT[s] ?? ''}`}>
       <span className={PCARD_R_SIZE[size]}>{r}</span>
       <span className={PCARD_S_SIZE[size]}>{suit}</span>
     </span>
@@ -77,9 +77,9 @@ export function BoardType({
 }) {
   const VARIANT_STYLES: Record<string, string> = {
     default: 'border-line bg-panel2',
-    green: 'border-good bg-[rgba(95,208,168,0.1)]',
-    orange: 'border-warn bg-[rgba(240,184,110,0.08)]',
-    red: 'border-bad bg-[rgba(239,111,111,0.08)]',
+    green: 'border-good bg-[rgba(57,255,136,0.1)]',
+    orange: 'border-warn bg-[rgba(240,192,74,0.08)]',
+    red: 'border-bad bg-[rgba(255,84,112,0.08)]',
   }
   return (
     <span className={`inline-flex items-center gap-2 border rounded-lg px-2.5 py-1.5 align-middle ${VARIANT_STYLES[variant]}`}>

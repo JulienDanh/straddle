@@ -27,35 +27,35 @@ export interface DecisionLeaf {
 }
 
 const LEAF_COLOR: Record<string, string> = {
-  bet: '#ef6f6f', check: '#5fd0a8', fold: '#8499b5', call: '#6aa6ff', raise: '#ef6f6f', allIn: '#a855f7',
+  bet: '#ff5470', check: '#39ff88', fold: '#8080a4', call: '#00f0ff', raise: '#ff5470', allIn: '#b44cff',
 }
 
 // --- Custom nodes ---
 
 function QuestionNode({ data }: { data: { question: string; hint?: string } }) {
   return (
-    <div className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 text-center min-w-[160px] max-w-[220px] shadow-lg" style={{ border: '1.5px solid rgba(106,166,255,0.4)' }}>
-      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
-      <span className="text-[13px] font-semibold text-[#d8e2ee]">{data.question}</span>
-      {data.hint && <span className="text-[11px] text-[#8499b5] block mt-1 leading-tight">{data.hint}</span>}
-      <Handle type="source" id="yes" position={Position.Right} style={{ background: '#5fd0a8', width: 8, height: 8, border: 'none', top: '35%' }} />
-      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ef6f6f', width: 8, height: 8, border: 'none', top: '65%' }} />
+    <div className="bg-panel rounded-lg px-3.5 py-2.5 text-center min-w-[160px] max-w-[220px] shadow-lg" style={{ border: '1.5px solid rgba(255,46,196,0.45)', boxShadow: '0 0 18px rgba(255,46,196,0.15)' }}>
+      <Handle type="target" position={Position.Left} style={{ background: '#2a2a44', width: 8, height: 8, border: 'none' }} />
+      <span className="text-[13px] font-semibold text-txt">{data.question}</span>
+      {data.hint && <span className="text-[11px] text-muted block mt-1 leading-tight">{data.hint}</span>}
+      <Handle type="source" id="yes" position={Position.Right} style={{ background: '#39ff88', width: 8, height: 8, border: 'none', top: '35%' }} />
+      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ff5470', width: 8, height: 8, border: 'none', top: '65%' }} />
     </div>
   )
 }
 
 function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant: string; boards?: ReactNode[] } }) {
-  const color = LEAF_COLOR[data.variant] || '#8499b5'
+  const color = LEAF_COLOR[data.variant] || '#8080a4'
   return (
     <div
-      className="bg-[#1a2230] rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
-      style={{ border: `1px solid #2e3a4d`, borderLeft: `3px solid ${color}` }}
+      className="bg-panel rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
+      style={{ border: `1px solid #2a2a44`, borderLeft: `3px solid ${color}`, boxShadow: `0 0 14px ${color}29` }}
     >
-      <Handle type="target" position={Position.Left} style={{ background: '#2e3a4d', width: 8, height: 8, border: 'none' }} />
+      <Handle type="target" position={Position.Left} style={{ background: '#2a2a44', width: 8, height: 8, border: 'none' }} />
       <div className="flex items-center gap-2">
         {data.action}
       </div>
-      <span className="text-[12px] font-medium text-[#d8e2ee] leading-snug block mt-0.5">{data.reason}</span>
+      <span className="text-[12px] font-medium text-txt leading-snug block mt-0.5">{data.reason}</span>
     </div>
   )
 }
@@ -122,13 +122,13 @@ function layoutTree(root: DecisionNode): { nodes: Node[]; edges: Edge[] } {
     target: f.id,
     sourceHandle: f.branch,
     label: f.branch === 'yes' ? 'YES' : 'NO',
-    labelStyle: { fontSize: 11, fontWeight: 700, fill: f.branch === 'yes' ? '#5fd0a8' : '#ef6f6f' },
-    labelBgStyle: { fill: '#0f1419' },
+    labelStyle: { fontSize: 11, fontWeight: 700, fill: f.branch === 'yes' ? '#39ff88' : '#ff5470' },
+    labelBgStyle: { fill: '#0a0a14' },
     labelBgPadding: [4, 2] as [number, number],
     labelBgBorderRadius: 4,
-    style: { stroke: f.branch === 'yes' ? '#5fd0a8' : '#ef6f6f', strokeWidth: 2 },
+    style: { stroke: f.branch === 'yes' ? '#39ff88' : '#ff5470', strokeWidth: 2 },
     type: 'smoothstep',
-    markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: f.branch === 'yes' ? '#5fd0a8' : '#ef6f6f' },
+    markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: f.branch === 'yes' ? '#39ff88' : '#ff5470' },
   }))
 
   return { nodes, edges }
@@ -138,7 +138,7 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
   const { nodes, edges } = useMemo(() => layoutTree(root), [root])
 
   return (
-    <div className="my-4 border border-[#2e3a4d] rounded-xl overflow-hidden relative bg-[#0f1419]" style={{ height: '400px' }}>
+    <div className="my-4 border border-line rounded-xl overflow-hidden relative bg-bg" style={{ height: '400px' }}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -157,7 +157,7 @@ export function DecisionTree({ root }: { root: DecisionNode }) {
         maxZoom={1}
         proOptions={{ hideAttribution: true }}
       >
-        <Background variant={BackgroundVariant.Dots} color="#2e3a4d" gap={20} size={2} />
+        <Background variant={BackgroundVariant.Dots} color="#2a2a44" gap={20} size={2} />
       </ReactFlow>
     </div>
   )

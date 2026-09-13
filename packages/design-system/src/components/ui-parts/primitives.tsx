@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react'
-import { Card, CardHeader, CardTitle, CardContent } from '../ui-shadcn/card'
 
 export function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <Card className="bg-panel border-line rounded-[14px] p-[22px] my-4 shadow-lg gap-0">
-      <CardHeader className="p-0 pb-3.5">
-        <CardTitle className="text-xl border-l-[3px] border-accent pl-2.5">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="p-0">{children}</CardContent>
-    </Card>
+    <div className="my-6">
+      <h2 className="text-[24px] font-bold text-txt border-l-[3px] border-accent pl-3 leading-tight">{title}</h2>
+      <div className="mt-5 section-content">{children}</div>
+    </div>
   )
 }
 
@@ -34,12 +31,12 @@ export function Tag({ variant = 'default', children }: { variant?: 'default' | '
 
 export function Action({ variant = 'fold', children }: { variant?: 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'; children: ReactNode }) {
   const styles: Record<string, string> = {
-    fold: 'bg-[#3a4453] text-muted',
-    call: 'bg-[#6aa6ff] text-[#0c1117]',
-    raise: 'bg-[#ef6f6f] text-[#0c1117]',
-    allIn: 'bg-[#a855f7] text-white',
-    check: 'bg-[#5fd0a8] text-[#0c1117]',
-    bet: 'bg-[#ef6f6f] text-[#0c1117]',
+    fold: 'bg-[#2f2f4a] text-muted',
+    call: 'bg-accent text-dark',
+    raise: 'bg-[#ff5470] text-dark',
+    allIn: 'bg-[#b44cff] text-white',
+    check: 'bg-[#39ff88] text-dark',
+    bet: 'bg-[#ff5470] text-dark',
   }
   return <span className={`inline-block text-[11px] font-bold px-2 py-0.5 rounded whitespace-nowrap align-middle ${styles[variant]}`}>{children}</span>
 }

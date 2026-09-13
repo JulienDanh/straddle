@@ -27,6 +27,7 @@ import { BM9Page } from './pages/BM9'
 import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
 import { DesignSystemPage } from './pages/DesignSystem'
+import { RangesPage } from './pages/Ranges'
 
 const navTitles: Record<string, { course: string; title: string }> = {
   primer: { course: 'No-Limit Systems', title: 'Preflop Primer' },
@@ -55,6 +56,7 @@ const navTitles: Record<string, { course: string; title: string }> = {
   bm9: { course: 'Bubble Mastery', title: 'BB Covers BTN (Postflop)' },
   bm10: { course: 'Bubble Mastery', title: 'UTG Covers BB (Postflop)' },
   bm11: { course: 'Bubble Mastery', title: 'Polar Opens · Split Range' },
+  ranges: { course: '', title: 'Range Library' },
   sandbox: { course: '', title: 'Design System' },
 }
 
@@ -64,15 +66,24 @@ const PAGES = {
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage,
   bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
-  sandbox: DesignSystemPage,
+  ranges: RangesPage, sandbox: DesignSystemPage,
 } as const
 
 type PageId = keyof typeof PAGES
 
 const VALID_PAGES = new Set(Object.keys(PAGES))
 
+// reading flow for prev/next navigation and arrow keys (tools excluded)
+const READING_ORDER: PageId[] = [
+  'primer', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
+  's9', 's10', 's11', 's12', 'conclusion',
+  'bmprimer', 'bm1', 'bm2', 'bm3', 'bm4', 'bm5', 'bm6',
+  'bm7', 'bm8', 'bm9', 'bm10', 'bm11',
+]
+
 function pageFromHash(): PageId {
-  const hash = window.location.hash.replace(/^#/, '')
+  // hash can carry a tab suffix (#s1/practice) — the page is the first segment
+  const hash = window.location.hash.replace(/^#/, '').split('/')[0]
   return (VALID_PAGES.has(hash) ? hash : 's1') as PageId
 }
 
@@ -96,6 +107,25 @@ function App() {
   const PageComponent = PAGES[page]
   const nav = navTitles[page]
 
+  // prev/next along the reading order
+  const idx = READING_ORDER.indexOf(page)
+  const prev = idx > 0 ? READING_ORDER[idx - 1] : null
+  const next = idx >= 0 && idx < READING_ORDER.length - 1 ? READING_ORDER[idx + 1] : null
+
+  // arrow keys page through the reading order
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return
+      const t = e.target as HTMLElement | null
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      const i = READING_ORDER.indexOf(page)
+      if (e.key === 'ArrowLeft' && i > 0) { e.preventDefault(); navigate(READING_ORDER[i - 1]) }
+      if (e.key === 'ArrowRight' && i >= 0 && i < READING_ORDER.length - 1) { e.preventDefault(); navigate(READING_ORDER[i + 1]) }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [page])
+
   return (
     <div className="flex min-h-screen">
       <div
@@ -109,13 +139,41 @@ function App() {
             className="hidden border border-line bg-panel text-txt px-2.5 py-1.5 rounded-lg text-lg cursor-pointer [@media(max-width:760px)]:block"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >≡</button>
-          <div className="text-xs text-muted">
-            {nav?.course && <>{nav.course} <span className="text-txt">&rsaquo;</span> </>}
-            <b className="text-txt">{nav?.title}</b>
-          </div>
-          <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">React + Vite · 2 courses</span>
+          <div className="text-xs text-muted tracking-wide">{nav?.course}</div>
+          <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">GTO Wizard · MTT 8-max</span>
         </div>
         <PageComponent />
+        {(prev || next) && (
+          <div className="mt-8">
+            <div className="flex items-stretch justify-between gap-3">
+              {prev ? (
+                <button
+                  onClick={() => navigate(prev)}
+                  className="group flex-1 flex items-center gap-3 text-left bg-panel border border-line rounded-lg px-4 py-3 cursor-pointer transition-colors hover:border-accent/50"
+                >
+                  <span className="text-muted text-sm group-hover:text-accent transition-colors">&larr;</span>
+                  <span className="min-w-0">
+                    <span className="block text-[10px] uppercase tracking-wider text-muted">Previous</span>
+                    <span className="block text-[13px] font-semibold text-txt truncate">{navTitles[prev].title}</span>
+                  </span>
+                </button>
+              ) : <div className="flex-1" />}
+              {next ? (
+                <button
+                  onClick={() => navigate(next)}
+                  className="group flex-1 flex items-center justify-end gap-3 text-right bg-panel border border-line rounded-lg px-4 py-3 cursor-pointer transition-colors hover:border-accent/50"
+                >
+                  <span className="min-w-0">
+                    <span className="block text-[10px] uppercase tracking-wider text-muted">Next</span>
+                    <span className="block text-[13px] font-semibold text-txt truncate">{navTitles[next].title}</span>
+                  </span>
+                  <span className="text-muted text-sm group-hover:text-accent transition-colors">&rarr;</span>
+                </button>
+              ) : <div className="flex-1" />}
+            </div>
+            <div className="text-center text-[10px] text-muted mt-2.5">or page through with the &larr; &rarr; arrow keys</div>
+          </div>
+        )}
         <footer className="text-center text-muted text-xs mt-8">No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
       </main>
     </div>

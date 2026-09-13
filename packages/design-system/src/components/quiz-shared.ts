@@ -1,15 +1,15 @@
 // Shared helpers for StrategyQuiz and StrategyQuestions
 
 export function revealOptionClass(isCorrect: boolean, isPicked: boolean): string {
-  if (isCorrect) return 'border-good bg-[rgba(95,208,168,0.15)] text-good'
-  if (isPicked && !isCorrect) return 'border-bad bg-[rgba(239,111,111,0.15)] text-bad'
+  if (isCorrect) return 'border-good bg-[rgba(57,255,136,0.15)] text-good'
+  if (isPicked && !isCorrect) return 'border-bad bg-[rgba(255,84,112,0.15)] text-bad'
   return 'opacity-50'
 }
 
 export function feedbackBoxClass(isCorrect: boolean): string {
   return isCorrect
-    ? 'border-good bg-[rgba(95,208,168,0.08)]'
-    : 'border-bad bg-[rgba(239,111,111,0.08)]'
+    ? 'border-good bg-[rgba(57,255,136,0.08)]'
+    : 'border-bad bg-[rgba(255,84,112,0.08)]'
 }
 
 export function shuffle<T>(arr: T[]): T[] {

@@ -14,12 +14,12 @@ export interface StackMatrixProps {
 
 export function StackMatrix({ rows, colLabels, rowAxisLabel, colAxisLabel }: StackMatrixProps) {
   const cellBg: Record<string, string> = {
-    fold: 'bg-[rgba(239,111,111,0.06)] border-bad/30',
-    call: 'bg-[rgba(106,166,255,0.06)] border-accent2/30',
-    bet: 'bg-[rgba(95,208,168,0.06)] border-good/30',
-    raise: 'bg-[rgba(239,111,111,0.06)] border-bad/30',
-    allIn: 'bg-[rgba(200,56,56,0.08)] border-bad/40',
-    check: 'bg-[rgba(95,208,168,0.06)] border-good/30',
+    fold: 'bg-[rgba(255,84,112,0.06)] border-bad/30',
+    call: 'bg-[rgba(0,240,255,0.06)] border-accent/30',
+    bet: 'bg-[rgba(57,255,136,0.06)] border-good/30',
+    raise: 'bg-[rgba(255,84,112,0.06)] border-bad/30',
+    allIn: 'bg-[rgba(180,76,255,0.08)] border-bad/40',
+    check: 'bg-[rgba(57,255,136,0.06)] border-good/30',
     default: 'bg-panel2 border-line',
   }
 

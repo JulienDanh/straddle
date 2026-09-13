@@ -10,3 +10,6 @@ __pycache__/
 
 # Raw imports (licensed GTO Wizard data, never committed)
 packages/ranges/imports/
+
+# Local scratch (Chrome profile for scraping sessions)
+.scratch/

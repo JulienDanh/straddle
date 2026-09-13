@@ -17,9 +17,9 @@ export function Pyramid({ tiers, highlight }: { tiers: PyramidTier[]; highlight?
       {tiers.map((tier, i) => {
         const width = 45 + (i * (55 / (n - 1))) // 45% to 100%
         const isHighlight = highlight === i
-        const bg = tier.variant === 'bet' ? 'bg-[rgba(239,111,111,0.08)] border-bad'
-          : tier.variant === 'check' ? 'bg-[rgba(95,208,168,0.08)] border-good'
-          : tier.variant === 'fold' ? 'bg-[rgba(58,68,83,0.5)] border-line'
+        const bg = tier.variant === 'bet' ? 'bg-[rgba(255,84,112,0.08)] border-bad'
+          : tier.variant === 'check' ? 'bg-[rgba(57,255,136,0.08)] border-good'
+          : tier.variant === 'fold' ? 'bg-[rgba(47,47,74,0.5)] border-line'
           : 'bg-panel2 border-line'
         return (
           <div

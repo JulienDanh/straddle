@@ -111,7 +111,15 @@ export function PracticeFlow({ title = 'Practice', quiz, questions }: PracticeFl
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold border-l-[3px] border-accent pl-2.5">{title}</h2>
-        <span className="text-sm text-muted tabular-nums">{score}/{attempts}</span>
+        <div className="flex items-center gap-2.5">
+          <div className="w-24 h-1.5 rounded-full bg-panel2 overflow-hidden border border-line/50">
+            <div
+              className="h-full rounded-full bg-accent transition-all"
+              style={{ width: attempts ? `${Math.round((score / attempts) * 100)}%` : '0%' }}
+            />
+          </div>
+          <span className="text-sm text-muted tabular-nums">{score}/{attempts}</span>
+        </div>
       </div>
 
       {/* Mode toggle */}
@@ -120,7 +128,7 @@ export function PracticeFlow({ title = 'Practice', quiz, questions }: PracticeFl
           <button
             onClick={() => switchMode('quiz')}
             className={`px-3 py-1 text-[12px] font-semibold rounded-md cursor-pointer transition-colors ${
-              mode === 'quiz' ? 'bg-accent text-[#0c1117]' : 'text-muted hover:text-txt'
+              mode === 'quiz' ? 'bg-accent text-dark' : 'text-muted hover:text-txt'
             }`}
           >
             Board spots
@@ -128,7 +136,7 @@ export function PracticeFlow({ title = 'Practice', quiz, questions }: PracticeFl
           <button
             onClick={() => switchMode('questions')}
             className={`px-3 py-1 text-[12px] font-semibold rounded-md cursor-pointer transition-colors ${
-              mode === 'questions' ? 'bg-accent text-[#0c1117]' : 'text-muted hover:text-txt'
+              mode === 'questions' ? 'bg-accent text-dark' : 'text-muted hover:text-txt'
             }`}
           >
             Rules Q&A
@@ -205,7 +213,7 @@ export function PracticeFlow({ title = 'Practice', quiz, questions }: PracticeFl
               {currentQ.options.map((opt, i) => (
                 <button
                   key={i}
-                  className="text-left text-sm bg-panel2 border border-line text-txt px-4 py-2.5 rounded-lg cursor-pointer transition-colors hover:border-accent2 hover:bg-[#1d2738]"
+                  className="text-left text-sm bg-panel2 border border-line text-txt px-4 py-2.5 rounded-lg cursor-pointer transition-colors hover:border-accent2 hover:bg-[#20203a]"
                   onClick={() => handleQPick(i)}
                 >
                   {opt}
