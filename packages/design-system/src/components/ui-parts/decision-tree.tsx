@@ -1,4 +1,4 @@
-import { useMemo, type ReactNode } from 'react'
+import { useMemo, useState, type ReactNode } from 'react'
 import ReactFlow, {
   type Node,
   type Edge,
@@ -46,9 +46,10 @@ function QuestionNode({ data }: { data: { question: string; hint?: string } }) {
 
 function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant: string; boards?: ReactNode[] } }) {
   const color = LEAF_COLOR[data.variant] || '#8080a4'
+  const [open, setOpen] = useState(false)
   return (
     <div
-      className="bg-panel rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg"
+      className="bg-panel rounded-lg px-3.5 py-2.5 min-w-[170px] max-w-[220px] shadow-lg relative"
       style={{ border: `1px solid #2a2a44`, borderLeft: `3px solid ${color}`, boxShadow: `0 0 14px ${color}29` }}
     >
       <Handle type="target" position={Position.Left} style={{ background: '#2a2a44', width: 8, height: 8, border: 'none' }} />
@@ -56,6 +57,23 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
         {data.action}
       </div>
       <span className="text-[12px] font-medium text-txt leading-snug block mt-0.5">{data.reason}</span>
+      {data.boards && data.boards.length > 0 && (
+        <>
+          <button
+            onClick={() => setOpen(!open)}
+            className="mt-1 block text-[10px] font-bold uppercase tracking-wider text-muted hover:text-txt hover:underline"
+          >
+            {open ? 'Hide boards' : `${data.boards.length} example boards`}
+          </button>
+          {open && (
+            <div className="absolute left-full top-0 ml-2 z-20 flex flex-col gap-1.5 bg-panel2 border border-line rounded-lg p-2 shadow-xl">
+              {data.boards.map((b, i) => (
+                <span key={i}>{b}</span>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
   )
 }
@@ -89,7 +107,7 @@ function layoutTree(root: DecisionNode): { nodes: Node[]; edges: Edge[] } {
   // Add nodes with estimated sizes
   for (const f of flat) {
     const w = isLeaf(f.node) ? 190 : 200
-    const h = isLeaf(f.node) ? 50 : (f.node.hint ? 60 : 40)
+    const h = isLeaf(f.node) ? (f.node.boards?.length ? 76 : 50) : (f.node.hint ? 60 : 40)
     g.setNode(f.id, { width: w, height: h })
   }
 

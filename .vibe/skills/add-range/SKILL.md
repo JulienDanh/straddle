@@ -51,7 +51,7 @@ Then, with python3 (run via bash):
    Wizard link is built at load — never store it); `sizings` = {"bet": <bb>}.
 5. Write with `json.dumps(indent=2, ensure_ascii=True) + "\n"` so re-running
    is a byte-identical no-op.
-6. Report the weighted shares for page takeaways:
+6. Report the weighted shares (verification of what the card badges render):
    sum(weight x conditional) / sum(weight) over the pasted combos, where
    conditional = paste/weight (clamped >= 0.9995 to 1). NOT the share of 1326.
 
@@ -199,9 +199,17 @@ check-or-donk decision (the AI sims DO donk: K83+2s shows X / R8.7).
 - Node ordinal: `spot = 1 + preflop actions + max(0, flop actions - 1)`
   (X -> 9, X-R1.1 -> 10, X-R1.1-C -> 11 on the 8-action UTG-vs-BB line).
   `flop_node_spot()` in fetch_browser computes it.
-- Turn/river: the BOARD param grows to 4/5 cards (Kh8h3c2s) and
-  flop_actions keeps the whole flop history — no separate turn param is
-  needed in the app URL (the API carries an empty turn_actions).
+- Turn/river: the BOARD param grows to 4/5 cards (Kh8h3c2s) and the
+  histories are STREET-SPLIT in the URL — `flop_actions` = flop history
+  only, `turn_actions` = turn history, `river_actions` = river history
+  (verified: flop X-R1.1-C, turn X-R8.7-C, river X -> UTG's river node at
+  spot 15, pot 25.1). The node ordinal counts EVERY action across streets:
+  1 + preflop actions + max(0, total history actions - 1). Stacking turn/
+  river actions into flop_actions does NOT resolve (the app falls back).
+- Preflop lines in URLs need the LEADING folds for every non-UTG opener
+  (CO's line is F-F-F-F-R2.2-F-F-C, not R2.2-F-F-C — verified), and an
+  SB-call line ends with the BB's fold (R2.1-F-F-F-F-F-C-F). SB-open lines
+  are F-F-F-F-F-F-R3-C (six leading folds).
 - NEVER lowercase the board in the URL: `kh8h3c2s` silently falls back to
   an unrelated node; `Kh8h3c2s` resolves. Archive FILE names are
   lowercase; URLs are not.
@@ -241,8 +249,10 @@ fetching).
 ## After storing
 
 - Run `npm run build` to verify.
-- Update the S1 example (betPct/checkPct, takeaway, sizing note) with the
-  weighted shares, and the provenance comment in design-system
+- Update the page's BoardExample card with the new `solve=` constant (no
+  solver prose — the badges and grid render the shares; sizing notes go in
+  the reasoning or the page's Sizing Collapsible), and the provenance
+  comment in design-system
   `src/data/ranges/s1-flops.ts` ("Source: GTO Wizard (MTT 8-max, 40bb),
   <size> pot c-bet (<bb>bb), imported from a range-view paste").
 - Save the raw paste to `straddle-solutions/imports/` (private submodule,

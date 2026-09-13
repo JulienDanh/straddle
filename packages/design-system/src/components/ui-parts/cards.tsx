@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useMemo, type ReactNode } from 'react'
 
 // ---- Suit component (only H is used externally) ----
 export function H({ children }: { children: ReactNode }) { return <span className="text-heart">{children}</span> }
@@ -214,17 +214,23 @@ export function RandomBoard({
   high, suit, paired, connected, lowCard, akx,
   label, size = 'sm', variant = 'default', streets = 3,
 }: RandomBoardProps) {
-  const flop = generateFlop({ high, suit, paired, connected, lowCard, akx })
-  let cards = flop
-  const avoidSuit = suit === 'monotone' ? flop[1] : undefined
-  if (streets >= 4) {
-    const used = new Set(flop.match(/.{2}/g) || [])
-    cards += randomExtraCard(used, avoidSuit)
-  }
-  if (streets >= 5) {
-    const used = new Set(cards.match(/.{2}/g) || [])
-    cards += randomExtraCard(used, avoidSuit)
-  }
+  // memoized so the board is stable across re-renders (only a remount
+  // generates a new one) — trees would otherwise reshuffle on every tick
+  const cards = useMemo(() => {
+    const flop = generateFlop({ high, suit, paired, connected, lowCard, akx })
+    let c = flop
+    const avoidSuit = suit === 'monotone' ? flop[1] : undefined
+    if (streets >= 4) {
+      const used = new Set(flop.match(/.{2}/g) || [])
+      c += randomExtraCard(used, avoidSuit)
+    }
+    if (streets >= 5) {
+      const used = new Set(c.match(/.{2}/g) || [])
+      c += randomExtraCard(used, avoidSuit)
+    }
+    return c
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [high, suit, paired, connected, lowCard, akx, streets])
   const text = label ?? describeBoard({ high, suit, paired, connected, lowCard, akx })
   return <BoardType cards={cards} label={text} size={size === 'lg' ? 'md' : size} variant={variant} />
 }

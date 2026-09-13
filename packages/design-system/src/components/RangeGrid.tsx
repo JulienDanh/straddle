@@ -119,6 +119,20 @@ export function strategyShare(actions: Actions, base = ''): number {
   return freqs.reduce((s, f) => s + actionShare(f, base, denom), 0)
 }
 
+/** Per-action shares (%, 0-100) of the base range — e.g. { bet: 89, check: 11 }
+ *  for a c-bet child weighted by the parent open. All actions share one
+ *  denominator (the union of their combos, i.e. the parent open minus the
+ *  board), so the shares sum to the strategy share. */
+export function actionShares(actions: Actions, base = ''): Partial<Record<(typeof ACTION_ORDER)[number], number>> {
+  const active = ACTION_ORDER.filter(a => actions[a])
+  const freqs = active.map(a => parseComboFreqs(actions[a]!))
+  const denom = new Set<string>()
+  for (const f of freqs) for (const c of Object.keys(f)) denom.add(c)
+  const out: Partial<Record<(typeof ACTION_ORDER)[number], number>> = {}
+  active.forEach((a, i) => { out[a] = actionShare(freqs[i], base, denom) })
+  return out
+}
+
 /** Total non-fold frequency (%, 0-100) per hand class — input for diffing
  *  two solutions of the same spot (e.g. cEV vs ICM at the same stack). */
 export function handClassTotals(actions: Actions): Record<string, number> {
@@ -174,9 +188,12 @@ export interface RangeGridProps {
   // (e.g. sizings={{ raise: 2.2 }} renders "Raise 2.2bb").
   sizings?: Partial<Record<(typeof ACTION_ORDER)[number], number>>
   // Base range (combo:freq line, several may be joined) the displayed strategy
-  // is conditional on — a postflop child's parent open. When set, legend
-  // percentages become weighted shares of this range (sum(base*freq) /
-  // sum(base)) instead of shares of all 1326 combos, so a pure c-bet reads 100%.
+  // is conditional on — a postflop child's parent reach (the open, call or
+  // preflop check line). When set: legend percentages become weighted shares
+  // of this range (sum(base*freq) / sum(base)) so a pure c-bet reads 100%,
+  // AND the cell fills are scaled by each hand class's weight in the base —
+  // a hand the hero rarely reaches shows as a thin fill, not a full box (the
+  // same weighted display preflop ranges use).
   base?: string
   // compact: small grid for inline use in course content — no numbers, no
   // legend, no click-to-lock panel. Just colored cells.
@@ -200,7 +217,7 @@ function actionLabel(a: string, sizing?: number): string {
 }
 
 export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false, diff, diffRefLabel = 'cEV', diffNegLabel = 'ICM folds more', diffPosLabel = 'ICM plays more' }: RangeGridProps) {
-  const { perHand, activeActions, colors, actionPcts, actionCombos } = useMemo(() => {
+  const { perHand, activeActions, colors, actionPcts, actionCombos, baseByCombo } = useMemo(() => {
     const data: Record<string, string> = { fold, call, raise, allIn, check, bet }
     const active = ACTION_ORDER.filter(a => data[a].length > 0)
     const parsed = active.map(a => parseComboData(data[a]))
@@ -208,6 +225,25 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
 
     // Per-combo frequencies per action (0-1), for the hand detail panel.
     const combos = active.map(a => parseComboFreqs(data[a]))
+
+    // Per-class weight in the base range — the hero's reach share of the
+    // class (averaged over ALL the class's combos; combos absent from the
+    // base are 0). No base = full weight (preflop / standalone grids).
+    const classWeights: Record<string, number> = {}
+    const baseByCombo: Record<string, number> = {}
+    if (base) {
+      const bw = parseComboFreqs(base)
+      const sizes: Record<string, number> = {}
+      const sums: Record<string, number> = {}
+      for (const row of HAND_GRID) for (const cell of row) {
+        sizes[cell.hand] = cell.hand.length === 2 ? 6 : cell.hand.endsWith('s') ? 4 : 12
+      }
+      for (const [combo, w] of Object.entries(bw)) {
+        const hc = comboToHandClass(combo)
+        if (hc) { sums[hc] = (sums[hc] ?? 0) + w; baseByCombo[combo] = w }
+      }
+      for (const [hc, n] of Object.entries(sizes)) classWeights[hc] = (sums[hc] ?? 0) / n
+    }
 
     // Legend share per action: of all 1326 combos by default, weighted share
     // of the base range when given (see actionShare).
@@ -218,10 +254,11 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
     const handFreqs: Record<string, number[]> = {}
     for (const row of HAND_GRID) {
       for (const cell of row) {
-        handFreqs[cell.hand] = active.map((_, i) => (parsed[i][cell.hand] ?? 0) * 100)
+        const w = classWeights[cell.hand] ?? 1
+        handFreqs[cell.hand] = active.map((_, i) => (parsed[i][cell.hand] ?? 0) * 100 * w)
       }
     }
-    return { perHand: handFreqs, activeActions: active, colors: cols, actionPcts: pcts, actionCombos: combos }
+    return { perHand: handFreqs, activeActions: active, colors: cols, actionPcts: pcts, actionCombos: combos, baseByCombo }
   }, [fold, call, raise, allIn, check, bet, base])
 
   // Legend action solo: click to view a single strategy; grid fills only
@@ -247,7 +284,7 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
           byCombo.set(combo, row)
           rows.push(row)
         }
-        row.freqs[i] = f * 100
+        row.freqs[i] = f * 100 * (baseByCombo[combo] ?? 1)
       }
     })
     return rows.sort((a, b) =>

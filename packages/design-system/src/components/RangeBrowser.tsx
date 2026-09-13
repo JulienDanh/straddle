@@ -1,7 +1,7 @@
 import { Fragment, useMemo, useState } from 'react'
 import { RangeGrid, strategyShare, handClassTotals } from './RangeGrid'
 import { Board } from './ui-parts/cards'
-import { materializeChild } from '../data/ranges'
+import { lineContext, materializeChild } from '../data/ranges'
 import type { StoredRange } from '../data/ranges'
 
 // RangeBrowser — renders StoredRange data as a chart panel, for one stack
@@ -133,7 +133,10 @@ export function RangeBrowser({ ranges, defaultStack, hashPrefix }: RangeBrowserP
   // materializeChild injects the parent context and converts on display
   const child = boards.find(b => b.id === board)
   const shown = child ? materializeChild(current, child) : current
-  const baseStr = child ? Object.values(current.actions).join(',') : ''
+  const ctx = child ? lineContext(child.line) : null
+  const baseStr = child
+    ? (child.reach ?? current.actions[ctx!.parentAction] ?? Object.values(current.actions).join(','))
+    : ''
   // range summary: % of hands preflop, % of the parent open postflop
   const share = useMemo(() => strategyShare(shown.actions, baseStr), [shown, baseStr])
   const diff = useMemo(() => {

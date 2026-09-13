@@ -48,3 +48,7 @@ export function Small({ children }: { children: ReactNode }) {
 export function Code({ children }: { children: ReactNode }) {
   return <code className="bg-dark border border-line px-1.5 py-0.5 rounded text-[13px]">{children}</code>
 }
+
+export function Subhead({ children }: { children: ReactNode }) {
+  return <h3 className="text-[15px] font-bold text-txt border-l-[3px] border-accent2 pl-2.5 mt-7 mb-1 leading-tight">{children}</h3>
+}

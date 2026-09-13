@@ -18,6 +18,8 @@ packages/
 │       │   │   ├── pyramid.tsx      — Hand-strength pyramid visual
 │       │   │   ├── stack-matrix.tsx — Preflop ICM stack-depth grid
 │       │   │   ├── data-table.tsx   — Styled table component
+│       │   │   ├── hand-example.tsx — Walkthrough example card
+│       │   │   ├── board-example.tsx— Walkthrough card wired to a solved postflop range
 │       │   │   └── decision-tree.tsx— React Flow decision tree (with dagre layout)
 │       │   ├── ui-shadcn/          — shadcn/ui components (button, card, accordion)
 │       │   ├── RangeGrid.tsx       — 13x13 combo grid (GTO Wizard format); owns the RANKS/HAND_GRID layout constants
@@ -59,30 +61,31 @@ Not all poker systems are the same. The transcript teaches three different kinds
 
 The core skill: see a board → classify into a bucket → check risk factors → execute action.
 
-- **Study tab:** `DecisionTree` (React Flow canvas, left-to-right flow, dagre auto-layout). The tree shows the classification *process*, not just the answers. Each leaf has collapsible example boards. Key callouts visible below the tree. Risk factor details, sizing in `Collapsible`.
+- **Board-texture systems (S1-S4, S6, S7, S9, S12, BM8-BM11)** — `DecisionTree` (React Flow canvas, left-to-right flow, dagre auto-layout). The tree shows the classification *process*, not just the answers. Each leaf has collapsible example boards. Key callouts visible below the tree. Risk factor details, sizing in `Collapsible`.
 
 ### 2. Hand-strength systems (S5, S8, S10, S11)
 
 The core skill: know your hand's tier in a hierarchy → bet/check/raise based on tier.
 
-- **Study tab:** `Pyramid` (for S5 — vertical tier diagram, medium highlighted) or visible `DataTable` (for S8, S10, S11 — sizing/blocker tables). Key callouts visible. Details in `Collapsible`.
+- **Hand-strength systems (S5, S8, S10, S11)** — `Pyramid` (for S5 — vertical tier diagram, medium highlighted) or visible `DataTable` (for S8, S10, S11 — sizing/blocker tables). Key callouts visible. Details in `Collapsible`.
 
 ### 3. Preflop ICM systems (BM1-BM7)
 
 The core skill: know your stack vs their stack → adjust open/defend range.
 
-- **Study tab:** `StackMatrix` (color-coded grid: your stack × opponent stack, cells show VPIP% + action). Key callouts visible. Details in `Collapsible`.
+- **Preflop ICM systems (BM1-BM7)** — `StackMatrix` (color-coded grid: your stack × opponent stack, cells show VPIP% + action). Key callouts visible. Details in `Collapsible`.
 
 ## Content structure (per system)
 
-Every system page follows the same template, with the Study content varying by system type.
+Every system page is a single continuous page (no Study/Examples tabs) — study material and worked examples read as one experience.
 
-1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always visible without clicking.**
-2. **Tabs** (only when a page has multiple panels — Examples, range browsers); most pages render the Study content directly.
-3. **Study content:**
+1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always visible.**
+2. **Study content:**
    - Core visual (DecisionTree / Pyramid / StackMatrix / DataTable) — **always visible, never in Collapsible**
    - 1-2 key callouts — **always visible**
    - Detail sections (risk factors, sizing, exceptions) — **in Collapsible**
+3. **`<Subhead>Examples</Subhead>` + `ExampleBrowser`** — the worked examples, master-detail (left list of boards, selected card on the right). Cards are `BoardExample` (side-by-side example/solution columns) or `HandExample` walkthroughs.
+4. **`<Subhead>Ranges</Subhead>` + `Tabs`** (S1/S2 only) — the preflop range browsers behind a small tab switcher. `Tabs` is for reference panels, never for Study/Examples.
 
 ### Anti-duplication rules
 
@@ -101,7 +104,10 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`Collapsible`** — expandable detail section. Props: `title`, `children`, `defaultOpen`. Use for risk factors, sizing, exceptions — anything that's detail, not core.
 - **`Callout`** — high-impact highlight. Props: `variant` (`'default' | 'warn' | 'bad' | 'good'`), `children`.
 - **`DataTable`** — styled table. Props: `columns` (array of `{ header, width? }`), `rows` (array of `ReactNode[]`), `compact?`.
-- **`HandExample`** — a single hand walkthrough with visual structure. Props: `spot` (board/position/stack description), `action` (label text), `actionVariant` (`'bet' | 'check' | 'fold' | 'call' | 'raise' | 'allIn'`), `children` (reasoning). Use inside a `Collapsible title="Hand Examples"` to show 3-4 real hand walkthroughs per system.
+- **`HandExample`** — a single hand walkthrough with visual structure. Props: `spot` (board/position/stack description), `action` (label text), `actionVariant` (`'bet' | 'check' | 'fold' | 'call' | 'raise' | 'allIn'`), `children` (reasoning). Use for walkthrough-only examples — buckets with no solved board in the store, or spots without a board to render.
+- **`BoardExample`** — a hand walkthrough connected to its solved postflop strategy, stacked: the **Example** header on top (spot, `ActionTrail` — the preflop line that led to the spot as chips: position-labelled `Action` badges, muted arrows — SYSTEM action badge, reasoning) and, when solved, the **Solution** section below it at full card width (GTO action shares of the parent open computed from the stored range at render — never hardcoded numbers — the GTO Wizard link, and the full strategy grid weighted by the open). No prose restating solver numbers — the badges and grid ARE the solver's description. The board is NOT rendered in the card — `ExampleBrowser` shows it in its list; the `board` prop exists for the browser to read. Use it for every example board that has a solved spot in the range store.
+- **`ActionTrail`** — the preflop line leading to a spot, as chips. Props: `steps` (`TrailStep[]` from a `SolvedFlop.trail`): `{ pos, act, variant }` where `variant` is an `Action` color. Trails carry only the preflop actions (e.g. "UTG Raise 2bb → BB Call"); the depth lives in the spot label, flop sizings in the GTO badges.
+- **`ExampleBrowser`** — the master-detail wrapper for a system's Examples tab. Takes `BoardExample`/`HandExample` cards as `children` and renders a left-hand list (mini board + spot label + `Solved`/`Walk` tag) with the selected card on the right; below `lg` the list becomes a horizontal scroll strip above the card. Only the selected card renders, so a page of examples no longer stacks a wall of grids. Non-card children are ignored — keep intro/caveat paragraphs outside the wrapper.
 
 ### Visual system components
 
@@ -124,16 +130,16 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Entries with `postflop` children get a board selector under the header (preflop open plus the solved flops grouped by the child's `line`, e.g. "Cbet vs BB call", switching the grid to that child's strategy). Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `base`, `compact`. `base` (combo:freq line of the parent open) makes legend percentages weighted shares of that range instead of all 1326 combos — used for postflop children.
 - **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). One JSON per preflop line (e.g. `utg/rfi.json`, `bb/vs-btn.json`): shared `title`/`position` at the top, `stacks` with one entry per depth — per-action combo:freq strings preserved (raise/call/allIn separately). Postflop solutions are minimal children nested under the preflop entry they derive from (`postflop` array, matched by `id`); the loaders materialize the full `StoredRange` display shape (`materializeLine`/`materializeChild` in design-system `data/ranges/types.ts`). Edit these files; new stack depths are new `stacks` entries.
-- **`data/ranges/*.ts` (design-system)** — thin loaders that materialize the store into `StoredRange`s (injecting the shared title/position and converting postflop pastes to conditional), re-exporting the constants (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`, `S1_FLOP_*`); the barrel is `data/ranges/index.ts`. Don't put range data here.
+- **`data/ranges/*.ts` (design-system)** — thin loaders that materialize the store into `StoredRange`s (injecting the shared title/position and converting postflop pastes to conditional), re-exporting the constants (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`); solved flops are bundled as `SolvedFlop`s (`solvedFlop` in `data/ranges/types.ts`: child + parent reach line + action trail) for the `BoardExample` cards — one loader file per system (`s1-flops.ts` ... `s12-flops.ts`), with per-board provenance comments carrying the weighted shares. The barrel is `data/ranges/index.ts`. Don't put range data here.
 - **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells.
 
 ### Range store updates
 
 Postflop children store the **raw GTO Wizard range-view copy verbatim** — no math at import time. The app converts to conditional strategies at load (`toConditional` in design-system `data/ranges/types.ts`): divides out the parent open weights, rounds to 4dp, clamps >= 0.9995 to 1, and synthesizes the missing bet/check complement, so a bet-only paste still displays the checks. Children are minimal (`id`, `label`, `line`, `wizardUrl`, `actions`, `sizings`) — the context (title/subtitle/type/stack/position) is derived at load by `materializeChild`.
 
-Adding or updating solved spots (flops, preflop stack entries) is the `add-range` skill's job (`.vibe/skills/add-range/`) — it carries the validation procedure (coverage vs the open range minus board-blocked combos, weighted-format check), the metadata derivation (id/label/subtitle), and the weighted-% formula for page takeaways. Load it whenever a Wizard paste needs storing.
+Adding or updating solved spots (flops, preflop stack entries) is the `add-range` skill's job (`.vibe/skills/add-range/`) — it carries the validation procedure (coverage vs the open range minus board-blocked combos, weighted-format check), the metadata derivation (id/label/subtitle), and the weighted-% formula used to verify the shares the card badges render. Load it whenever a Wizard paste needs storing.
 
-Raw pastes live in `straddle-solutions/imports/` (private submodule, licensed data); pasted BB flop-node data is exploration only and never enters the store. Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the S1 example strips.
+Raw pastes live in `straddle-solutions/imports/` (private submodule, licensed data). BB-facing-bet flop nodes (defend lines) are now a supported store line: `Defend vs {OP} c-bet`, `Defend vs SB stab`, `Defend vs {OP} 3-bet c-bet`, `vs BB check-raise` — children weighted by the parent's call/check line, carrying the villain's bet in `node` (the flop history, e.g. "X-R1.5"), materialized via the line context map (`lineContext` in `data/ranges/types.ts`). Wizard links are NOT stored — the loaders build them from the entry's own data (`preflopUrl`/`flopUrl` in design-system `data/ranges/types.ts`: stack+0.125 depth, the line's preflop actions and node index, and for flops the board texture picking the report tab). Rendered by RangeBrowser's header and the `BoardExample` solved cards.
 
 ### Card string format
 
