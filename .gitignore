@@ -8,8 +8,8 @@ packages/*/storybook-static/
 # Python
 __pycache__/
 
-# Raw imports (licensed GTO Wizard data, never committed)
-packages/ranges/imports/
+# Raw imports live in the private straddle-solutions submodule at
+# packages/ranges/imports/ (gitlink — contents are never committed here)
 
 # Local scratch (Chrome profile for scraping sessions)
 .scratch/
