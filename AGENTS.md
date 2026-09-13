@@ -1,6 +1,6 @@
 # AGENTS.md — Building Learning Content from Source Transcripts
 
-This repo contains poker training transcripts (`transcripts/Simple Poker Systems/*.txt` and `transcripts/Bubble Mastery/*.txt`) converted into a React + Vite study guide built as a monorepo under `packages/`. Follow these principles when extending or revising content.
+The course transcripts (licensed, **private** — they live in the nested `straddle-solutions` checkout at `packages/ranges/imports/transcripts/Simple Poker Systems/` and `.../Bubble Mastery/`) are converted into a React + Vite study guide built as a monorepo under `packages/`. Follow these principles when extending or revising content.
 
 ## Monorepo structure
 

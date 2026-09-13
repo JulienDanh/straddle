@@ -2,7 +2,7 @@
 name: extract-transcript
 description: >
   Load when extracting a poker training transcript (.txt, raw speech-to-text
-  monologue from transcripts/Simple Poker Systems/ or transcripts/Bubble Mastery/)
+  monologue from the private transcripts (packages/ranges/imports/transcripts/Simple Poker Systems/ or .../Bubble Mastery/)
   into a structured .md file with defined sections. Use when the user asks to
   extract, parse, structure, or convert a transcript into study content.
   Also use when defining or reviewing the extraction format.
@@ -15,7 +15,7 @@ structured `.md` file that can later feed into building study-app pages.
 
 ## Source material
 
-Transcripts live under `transcripts/Simple Poker Systems/` and
+Transcripts live under `packages/ranges/imports/transcripts/Simple Poker Systems/` and `packages/ranges/imports/transcripts/Bubble Mastery/` (private `straddle-solutions` repo; previously `transcripts/Simple Poker Systems/` and
 `transcripts/Bubble Mastery/`. They are raw, unpunctuated, single-paragraph
 speech-to-text. One transcript file may cover one system, part of a system
 (split across files), a primer, an intro, a takeaways summary, or a conclusion.
@@ -38,7 +38,7 @@ type: board-texture                      # see Type values below
 course: No-Limit Systems                 # No-Limit Systems | Bubble Mastery
 scenario: UTG opens, BB calls, BB checks. Hero decides flop c-bet.
 source_files:                            # list of source transcript files merged
-  - transcripts/Simple Poker Systems/Simple_Poker_Systems_03_System_1_UTG_vs_BB_Call_–_C-betting_Flops.txt
+  - packages/ranges/imports/transcripts/Simple Poker Systems/Simple_Poker_Systems_03_System_1_UTG_vs_BB_Call_–_C-betting_Flops.txt
 stack_depth: 20-150bb                    # relevant stack depth range (omit if N/A)
 positions: [UTG, BB]                     # hero/villain positions (omit if N/A)
 street: flop                             # preflop | flop | turn | river (omit if N/A)
@@ -311,7 +311,7 @@ type: board-texture
 course: No-Limit Systems
 scenario: UTG opens, BB calls, BB checks. Hero decides flop c-bet.
 source_files:
-  - transcripts/Simple Poker Systems/Simple_Poker_Systems_03_System_1_UTG_vs_BB_Call_–_C-betting_Flops.txt
+  - packages/ranges/imports/transcripts/Simple Poker Systems/Simple_Poker_Systems_03_System_1_UTG_vs_BB_Call_–_C-betting_Flops.txt
 stack_depth: 20-150bb
 positions: [UTG, BB]
 street: flop
