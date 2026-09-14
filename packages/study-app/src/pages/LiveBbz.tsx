@@ -3,8 +3,10 @@
 // the standard RangeBrowser. The store is generated from the scraped BBZ
 // solutions by straddle-solutions/scripts/bbz_to_store.py (wizard schema)
 // and lives at straddle-solutions/bbz/store/, served by the dev-only
-// bbz-data middleware. Production builds have no copy of it, so the page
-// falls back to an unavailable notice there.
+// bbz-data middleware. The deploy ships a copy mirrored by the root
+// `npm run sync-bbz` script into public/bbz/ (vite copies public/ into
+// the build) — the notice below only shows if the store is genuinely
+// missing (bad checkout, stale mirror).
 import { useEffect, useMemo, useState } from "react";
 import { RangeBrowser } from "@poker/design-system/src/components/RangeBrowser";
 import {
@@ -123,10 +125,9 @@ export function LiveBbzPage() {
       <div className="max-w-xl m-auto pt-16 text-center">
         <div className="text-lg font-bold text-txt pb-2">BBZ data not available</div>
         <div className="text-[13px] text-muted">
-          The BBZ range store lives in the private <code>straddle-solutions/bbz/store/</code>{" "}
-          submodule and is served only by the dev server (<code>npm run dev</code>). Regenerate it
-          with <code>straddle-solutions/scripts/bbz_to_store.py</code>. It is never part of the
-          deployed build.
+          The BBZ range store could not be loaded. Regenerate it with{" "}
+          <code>straddle-solutions/scripts/bbz_to_store.py</code> and mirror it for the deploy
+          with <code>npm run sync-bbz</code>.
         </div>
       </div>
     );
