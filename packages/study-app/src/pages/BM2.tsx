@@ -9,8 +9,8 @@ export function BM2Page() {
       <p>A stack (or several) behind covers you. You open much tighter than baseline, with the degree of tightness driven by how much the BB covers you, position of covering stacks, and presence of shorter stacks elsewhere.</p>
 
       <Leak items={[
-        ['Autopilot shoving K7s/T9s/KTo at 12bb covered', 'offsuit Ax very poor and almost no open shoves — cut low pairs and the worst Ax'],
-        ['Being way too tight at 30-40bb covered', "losing a raise-fold costs <10% of your stack — still open ~35%"],
+        ['Autopilot open-shoving hands like K7s/T9s/KTo at 12bb covered', 'covered-short opens ~20% with min-raise or fold — almost no open shoves; low pairs and the worst offsuit Ax are the first cuts'],
+        ['Being way too tight at 30-40bb covered', "a raise-fold costs <10% of your stack — still open ~35%"],
       ]} />
 
       <>
