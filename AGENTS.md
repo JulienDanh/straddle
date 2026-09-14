@@ -12,9 +12,8 @@ packages/
 │       │   ├── ui.tsx              — barrel re-export (import from here)
 │       │   ├── ui-parts/
 │       │   │   ├── primitives.tsx   — Section, Callout, Tag, Action, Small, Code
-│       │   │   ├── cards.tsx        — H, HoleCards, Board, BoardType, RandomBoard
+│       │   │   ├── cards.tsx        — H, HoleCards, Board, BoardType
 │       │   │   ├── tabs.tsx         — tab switcher (Study / Examples / range panels)
-│       │   │   ├── collapsible.tsx  — Collapsible detail sections
 │       │   │   ├── pyramid.tsx      — Hand-strength pyramid visual
 │       │   │   ├── stack-matrix.tsx — Preflop ICM stack-depth grid
 │       │   │   ├── data-table.tsx   — Styled table component
@@ -61,36 +60,35 @@ Not all poker systems are the same. The transcript teaches three different kinds
 
 The core skill: see a board → classify into a bucket → check risk factors → execute action.
 
-- **Board-texture systems (S1-S4, S6, S7, S9, S12, BM8-BM11)** — `DecisionTree` (React Flow canvas, left-to-right flow, dagre auto-layout). The tree shows the classification *process*, not just the answers. Each leaf has collapsible example boards. Key callouts visible below the tree. Risk factor details, sizing in `Collapsible`.
+- **Board-texture systems (S1-S4, S6, S7, S9, S12, BM8-BM11)** — `DecisionTree` (React Flow canvas, left-to-right flow, dagre auto-layout). The tree shows the classification *process*, not just the answers; each leaf carries a boards toggle — the selected leaf's example boards render in a strip below the tree (never a popover: the scroll-clipped canvas would crop it). The canvas sizes itself to the tree. Key callouts visible below the tree. Risk factor details, sizing as visible compact sections (`Subhead` + tight prose or a `DataTable`) — no dropdowns.
 
 ### 2. Hand-strength systems (S5, S8, S10, S11)
 
 The core skill: know your hand's tier in a hierarchy → bet/check/raise based on tier.
 
-- **Hand-strength systems (S5, S8, S10, S11)** — `Pyramid` (for S5 — vertical tier diagram, medium highlighted) or visible `DataTable` (for S8, S10, S11 — sizing/blocker tables). Key callouts visible. Details in `Collapsible`.
+- **Hand-strength systems (S5, S8, S10, S11)** — `Pyramid` (for S5 — vertical tier diagram, medium highlighted) or visible `DataTable` (for S8, S10, S11 — sizing/blocker tables). Key callouts visible. Details as visible compact sections (`Subhead` + tight prose or a `DataTable`) — no dropdowns.
 
 ### 3. Preflop ICM systems (BM1-BM7)
 
 The core skill: know your stack vs their stack → adjust open/defend range.
 
-- **Preflop ICM systems (BM1-BM7)** — `StackMatrix` (color-coded grid: your stack × opponent stack, cells show VPIP% + action). Key callouts visible. Details in `Collapsible`.
+- **Preflop ICM systems (BM1-BM7)** — `StackMatrix` (color-coded grid: your stack × opponent stack, cells show VPIP% + action). Key callouts visible. Details as visible compact sections (`Subhead` + tight prose or a `DataTable`) — no dropdowns.
 
 ## Content structure (per system)
 
 Every system page is a single continuous page (no Study/Examples tabs) — study material and worked examples read as one experience.
 
-1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always visible.**
+1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always visible.** Immediately followed by the `Leak` panel — the mistakes the system corrects frame the page before the visual does.
 2. **Study content:**
-   - Core visual (DecisionTree / Pyramid / StackMatrix / DataTable) — **always visible, never in Collapsible**
+   - Core visual (DecisionTree / Pyramid / StackMatrix / DataTable) — **always visible**
    - 1-2 key callouts — **always visible**
-   - Detail sections (risk factors, sizing, exceptions) — **in Collapsible**
+   - Detail sections (heuristics, risk factors, sizing, exceptions) — **visible compact sections**: small `Subhead` + tight prose or a `DataTable`; **no dropdowns**
 3. **`<Subhead>Examples</Subhead>` + `ExampleBrowser`** — the worked examples, master-detail (left list of boards, selected card on the right). Cards are `BoardExample` (side-by-side example/solution columns) or `HandExample` walkthroughs.
 4. **`<Subhead>Ranges</Subhead>` + `Tabs`** (S1/S2 only) — the preflop range browsers behind a small tab switcher. `Tabs` is for reference panels, never for Study/Examples.
 
 ### Anti-duplication rules
 
-- **Each rule lives in exactly one place.** The visual shows the decision; callouts show the key insight; Collapsibles show the detail. Never repeat the same information across sections.
-- **Core concept is never in Collapsible.** The DecisionTree/Pyramid/StackMatrix is the system — it must be visible when the page opens. Only detail goes in Collapsible.
+- **Each rule lives in exactly one place.** The visual shows the decision; callouts show the key insight; compact sections show the detail. Never repeat the same information across sections.
 - **No standalone Decision Matrix or Risk Factors sections.** The visual replaces them.
 
 ## Component library
@@ -101,8 +99,8 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 - **`Section`** — wraps a page. Props: `title`, `children`.
 - **`Tabs`** — tab switcher for multi-panel pages (Examples, range browsers). Props: `tabs` (array of `{ label, content }`), `defaultIndex`.
-- **`Collapsible`** — expandable detail section. Props: `title`, `children`, `defaultOpen`. Use for risk factors, sizing, exceptions — anything that's detail, not core.
 - **`Callout`** — high-impact highlight. Props: `variant` (`'default' | 'warn' | 'bad' | 'good'`), `children`.
+- **`Leak`** — the "most players do X, should do Y" panel: red accent, one row per leak with the correction in green after an arrow. Props: `title?` (default "Common leaks"), `items` (`[leak, fix?][]` — the mistake, then the correction). Use it for every common-leaks list; reserve `Callout` for insights.
 - **`DataTable`** — styled table. Props: `columns` (array of `{ header, width? }`), `rows` (array of `ReactNode[]`), `compact?`.
 - **`HandExample`** — a single hand walkthrough with visual structure. Props: `spot` (board/position/stack description), `action` (label text), `actionVariant` (`'bet' | 'check' | 'fold' | 'call' | 'raise' | 'allIn'`), `children` (reasoning). Use for walkthrough-only examples — buckets with no solved board in the store, or spots without a board to render.
 - **`BoardExample`** — a hand walkthrough connected to its solved postflop strategy, stacked: the **Example** header on top (spot, `ActionTrail` — the preflop line that led to the spot as chips: position-labelled `Action` badges, muted arrows — SYSTEM action badge, reasoning) and, when solved, the **Solution** section below it at full card width (GTO action shares of the parent open computed from the stored range at render — never hardcoded numbers — the GTO Wizard link, and the full strategy grid weighted by the open). No prose restating solver numbers — the badges and grid ARE the solver's description. The board is NOT rendered in the card — `ExampleBrowser` shows it in its list; the `board` prop exists for the browser to read. Use it for every example board that has a solved spot in the range store.
@@ -111,7 +109,7 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 
 ### Visual system components
 
-- **`DecisionTree`** — React Flow canvas showing the classification process. Uses dagre for auto-layout (left-to-right). Props: `root` (nested `DecisionNode` with `question`, `hint?`, `yes?`/`no?` leading to either sub-nodes or `DecisionLeaf` with `action`, `actionVariant`, `reason`, `boards?`). Each leaf has collapsible example boards. Includes MiniMap, dot background, arrow markers. No zoom (auto-fit on load).
+- **`DecisionTree`** — React Flow canvas showing the classification process. Uses dagre for auto-layout (left-to-right). Props: `root` (nested `DecisionNode` with `question`, `hint?`, `yes?`/`no?` leading to either sub-nodes or `DecisionLeaf` with `action`, `actionVariant`, `reason`, `boards?`). Each leaf has a boards toggle; the boards render in a strip below the canvas. Includes MiniMap, dot background, arrow markers. No zoom (auto-fit on load).
 - **`Pyramid`** — vertical tier diagram for hand-strength systems. Props: `tiers` (array of `{ label, action, why, variant }`), `highlight?` (index of highlighted tier).
 - **`StackMatrix`** — color-coded grid for preflop ICM. Props: `rows` (array of `{ label, cells }` where each cell has `content` and `variant?`), `colLabels`, `rowAxisLabel?`, `colAxisLabel?`.
 
@@ -121,13 +119,12 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`HoleCards`** — renders two hole cards as visual card faces. Prop: `cards` as a 4-char string (e.g. `"AsKd"`), optional `size`.
 - **`PlayingCard`** — single card face. Props: `card` (e.g. `"As"`), `size`.
 - **`BoardType`** — a pill showing a visual board + a texture label. Props: `cards?`, `label`, `variant` (`'default' | 'green' | 'orange' | 'red'`), `size`.
-- **`RandomBoard`** — generates a random flop matching constraints and renders it as a `BoardType`. Props: `high` (`'A' | 'K' | 'Q' | 'J' | 'T' | '9'`), `suit` (`'monotone' | 'two-tone' | 'rainbow'`), `paired`, `connected`, `lowCard` (rank index), `akx`, `label?`, `variant?`, `size?`, `streets?` (3/4/5).
 - **`Action`** — inline colored badge for poker actions. Props: `variant` (`'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'`), children = label text.
 - **`H`** — colored heart suit symbol for inline text. Only `H` exists; no `S`/`D`/`C` suit components.
 
 ### Range components (for future use in courses)
 
-- **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`. Renders a bordered chart panel: header strip with spot name and a stack selector (hidden when there's only one range), range grid inside. Entries with `postflop` children get a board selector under the header (preflop open plus the solved flops grouped by the child's `line`, e.g. "Cbet vs BB call", switching the grid to that child's strategy). Pass grouped constants from `data/ranges.ts` (e.g. `UTG_RFI_CEV`).
+- **`RangeBrowser`** — the standard way to display stored ranges, single stack or many. Props: `ranges` (array of `StoredRange`), `defaultStack?`, `defaultType?` (the scenario a teaching page opens on when passed the full line). Renders a bordered chart panel: header strip with spot name and a depth ladder, range grid inside. Multiple solution types render as scenario groups — `Equal stacks` (ChipEV/ICM/final table), `You cover them`, `They cover you (deep)`/`(similar)` — the group label carries the direction, the pill the model; with a single group it collapses to the plain pill row. The depth ladder shows only the active scenario's depths (every pill live, no cross-type support map); switching scenario snaps to the nearest solved depth. Entries with `postflop` children get a board selector under the header (preflop open plus the solved flops grouped by the child's `line`, e.g. "Cbet vs BB call", switching the grid to that child's strategy). Pass grouped constants from `data/ranges.ts` — **curated per page**: chip-EV system pages pass the `_CEV` slices; BM pages pass the scenario they teach (`_EQUAL` = cEV + ICM equal-stacks, `_COVERED`/`_COVERING`, `_BUBBLE` = bubble solutions incl. asymmetric, no final table). The FULL lines (`UTG_RFI`, `SB_RFI`, …) belong to the Range Library page, not system pages.
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `base`, `compact`. `base` (combo:freq line of the parent open) makes legend percentages weighted shares of that range instead of all 1326 combos — used for postflop children.
 - **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). One JSON per preflop line (e.g. `utg/rfi.json`, `bb/vs-btn.json`): shared `title`/`position` at the top, `stacks` with one entry per depth — per-action combo:freq strings preserved (raise/call/allIn separately). Postflop solutions are minimal children nested under the preflop entry they derive from (`postflop` array, matched by `id`); the loaders materialize the full `StoredRange` display shape (`materializeLine`/`materializeChild` in design-system `data/ranges/types.ts`). Edit these files; new stack depths are new `stacks` entries.
 - **`data/ranges/*.ts` (design-system)** — thin loaders that materialize the store into `StoredRange`s (injecting the shared title/position and converting postflop pastes to conditional), re-exporting the constants (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`); solved flops are bundled as `SolvedFlop`s (`solvedFlop` in `data/ranges/types.ts`: child + parent reach line + action trail) for the `BoardExample` cards — one loader file per system (`s1-flops.ts` ... `s12-flops.ts`), with per-board provenance comments carrying the weighted shares. The barrel is `data/ranges/index.ts`. Don't put range data here.

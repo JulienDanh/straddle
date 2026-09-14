@@ -287,3 +287,8 @@
   .section { padding: 14px 10px; }
   .section h2 { font-size: 16px; }
 }
+
+/* DecisionTree: pan/drag are disabled — the pane must not show
+   React Flow's grab cursor */
+.react-flow__pane { cursor: default; }
+.react-flow__node { cursor: auto; }

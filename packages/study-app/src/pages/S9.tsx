@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Collapsible, DecisionTree, DataTable, BoardExample, ExampleBrowser, Subhead } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
 import { S9_FLOP_J105, S9_FLOP_T72, S9_FLOP_T52, S9_FLOP_Q62 } from '@poker/design-system/src/data/ranges'
 
 export function S9Page() {
@@ -6,20 +6,24 @@ export function S9Page() {
     <Section title="System 9 — Defending Flops (Calls and Raises)">
       <p>We defended preflop, face flop c-bet. Call, raise, or fold? Primarily BB vs RFI.</p>
 
+      <Leak items={[
+      ['Folding bottom pair to small bets', 'bottom pair with a BDFD is a "super pair," worth hundreds of bb/100'],
+      ['Not recognizing when all three inputs align (small bet + weak opener + weak hero range)', 'must defend very wide'],
+      ['Folding gut shots with BDFDs', 'these are "super gut shots," much more resilient'],
+      ['Not differentiating between similar-looking hands', '97♦ (gut shot + BDFD = play) vs 97o (gut shot, double unders = fold vs big bet)'],
+      ]} />
+
       
       <Callout><strong>Weak own range + Weak opponent range + Small bet → defend very wide.</strong></Callout>
 
-      <Callout variant="warn"><strong>Common Leaks:</strong> Folding bottom pair to small bets — bottom pair with a BDFD is a "super pair," worth hundreds of bb/100. Not recognizing when all three inputs (small bet + weak opener + weak hero range) align → must defend very wide. Folding gut shots with BDFDs — these are "super gut shots," much more resilient. Not differentiating between similar-looking hands: 97♦ (gut shot + BDFD = play) vs 97o (gut shot, double unders = fold vs big bet).</Callout>
-
-                    <Collapsible title="Heuristics">
-        <ul>
-          <li>"Three inputs: small bet + weak opener + weak hero range = defend wide"</li>
-          <li>"Compare hands to themselves — a super gut shot beats a naked gut shot"</li>
-          <li>"BDFD &gt; good kicker"</li>
-          <li>"High card of the suit &gt; low card"</li>
-          <li>"Rainbow = creative defense; two-tone = clean defense"</li>
-        </ul>
-      </Collapsible>
+                    <Subhead>Heuristics</Subhead>
+      <ul>
+        <li>"Three inputs: small bet + weak opener + weak hero range = defend wide"</li>
+        <li>"Compare hands to themselves — a super gut shot beats a naked gut shot"</li>
+        <li>"BDFD &gt; good kicker"</li>
+        <li>"High card of the suit &gt; low card"</li>
+        <li>"Rainbow = creative defense; two-tone = clean defense"</li>
+      </ul>
 
       <DecisionTree
         root={{
@@ -29,8 +33,8 @@ export function S9Page() {
             actionVariant: 'call',
             reason: 'BDFD > good kicker almost always. High Card of suit > low card.',
             boards: [
-              <RandomBoard high="T" suit="two-tone" variant="green" />,
-              <RandomBoard high="J" suit="two-tone" variant="green" />,
+              <BoardType cards="Td8h4h" label="T84 — two-tone" variant="green" />,
+              <BoardType cards="Jc9d5d" label="J95 — two-tone" variant="green" />,
             ],
           },
           no: {
@@ -40,8 +44,8 @@ export function S9Page() {
               actionVariant: 'call',
               reason: 'Turns combo draws on suit cards. Gut shot + overcard also calls.',
               boards: [
-                <RandomBoard high="J" connected variant="green" />,
-                <RandomBoard high="T" connected variant="green" />,
+                <BoardType cards="Jh9c8d" label="J98" variant="green" />,
+                <BoardType cards="Td9s7c" label="T97" variant="green" />,
               ],
             },
             no: {
@@ -51,8 +55,8 @@ export function S9Page() {
                 actionVariant: 'call',
                 reason: 'Pure call (vs small bet). 3-straight + 3-flush = call or CR.',
                 boards: [
-                  <RandomBoard high="K" suit="two-tone" variant="green" />,
-                  <RandomBoard high="Q" suit="two-tone" variant="green" />,,
+                  <BoardType cards="Kc9h5h" label="K95 — two-tone" variant="green" />,
+                  <BoardType cards="Qh7d2d" label="Q72 — two-tone" variant="green" />,
                 ],
               },
               no: {
@@ -60,8 +64,8 @@ export function S9Page() {
                 actionVariant: 'fold',
                 reason: 'Naked gut shot (double unders, no BDFD) = fold. Naked high card = fold.',
                 boards: [
-                  <RandomBoard high="K" variant="red" />,
-                  <RandomBoard high="Q" variant="red" />,
+                  <BoardType cards="Kh7c2d" label="K72" variant="red" />,
+                  <BoardType cards="Qh6d3c" label="Q63" variant="red" />,
                 ],
               },
             },
@@ -69,28 +73,25 @@ export function S9Page() {
         }}
       />
 
-      <Collapsible title="Check-raise criteria">
-        <ul>
-          <li>Direct equity vs opponent's top pair (gut shot, overcard)</li>
-          <li>Backdoor straight draw potential</li>
-          <li>Backdoor flush draw (3-to-flush)</li>
-          <li>Opponent missed the board frequently</li>
-          <li>Opponent bet small</li>
-          <li>High card of suit &gt; low card (blocks linear RFI more effectively)</li>
-        </ul>
-      </Collapsible>
+      <Subhead>Check-raise criteria</Subhead>
+      <ul>
+        <li>Direct equity vs opponent's top pair (gut shot, overcard)</li>
+        <li>Backdoor straight draw potential</li>
+        <li>Backdoor flush draw (3-to-flush)</li>
+        <li>Opponent missed the board frequently</li>
+        <li>Opponent bet small</li>
+        <li>High card of suit &gt; low card (blocks linear RFI more effectively)</li>
+      </ul>
 
-      <Collapsible title="Risk factors">
-        <DataTable columns={[{header:'Factor'},{header:'Effect'}]} rows={[
-          [<><strong>Bet sizing</strong></>, <>Scale up → fold more pairs. Q-J/K-J without ♦: call vs 30% → fold vs 83%</>],
-          [<><strong>Rainbow vs two-tone</strong></>, <>Rainbow = messier (fewer BDFDs). Two-tone cleaner (flush draws supplement).</>],
-          [<><strong>Blind vs blind</strong></>, <>Ranges too wide — never fold pairs (even pocket 4s with BDFD)</>],
-        ]} />
-      </Collapsible>
+      <Subhead>Risk factors</Subhead>
+      <DataTable columns={[{header:'Factor'},{header:'Effect'}]} rows={[
+        [<><strong>Bet sizing</strong></>, <>Scale up → fold more pairs. Q-J/K-J without ♦: call vs 30% → fold vs 83%</>],
+        [<><strong>Rainbow vs two-tone</strong></>, <>Rainbow = messier (fewer BDFDs). Two-tone cleaner (flush draws supplement).</>],
+        [<><strong>Blind vs blind</strong></>, <>Ranges too wide — never fold pairs (even pocket 4s with BDFD)</>],
+      ]} />
 
-      <Collapsible title="Sizing">
-        <p>Against 25–33% defend wide; against 50%+ fold bottom of marginal.</p>
-      </Collapsible>
+      <Subhead>Sizing</Subhead>
+      <p>Against 25–33% defend wide; against 50%+ fold bottom of marginal.</p>
 
       <Subhead>Examples</Subhead>
 

@@ -1,4 +1,4 @@
-import { Section, Callout, Tag, Action, BoardType, Tabs, Collapsible, DecisionTree, BoardExample, ExampleBrowser, Subhead } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, BoardType, Tabs, Subhead, DataTable, DecisionTree, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_FLOP_MONOTONE, S1_FLOP_J66 } from '@poker/design-system/src/data/ranges'
 
@@ -6,6 +6,11 @@ export function S1Page() {
   return (
     <Section title="System 1 — UTG RFI vs BB Call · C-betting">
       <p>UTG opens, BB calls, BB checks. We decide our flop c-bet.</p>
+
+      <Leak items={[
+      ['Betting less when shallow', 'bet more — overpair asymmetry is amplified at shallow depth'],
+      ['Checking medium-strength hands', 'the range becomes vulnerable to aggression — pros routinely check back T-high+ clean boards, a systematic error this system corrects'],
+      ]} />
 
       
       <DecisionTree
@@ -52,35 +57,35 @@ export function S1Page() {
       />
 
       <Callout>Bucket 1 (T-high+) occurs far more often — one ace makes a flop ace-high. Highest-ROI piece.</Callout>
-      <Callout variant="warn"><strong>Bet MORE when shallow, not less.</strong> Most players do the opposite — correct the leak.</Callout>
 
-      <Callout variant="warn"><strong>Common Leaks:</strong> Most players bet LESS when shallow — should bet MORE (overpair asymmetry amplified at shallow depth). Checking medium-strength hands makes range vulnerable to aggression. Professional players routinely check back T-high+ clean boards — a systematic error this system corrects.</Callout>
+      <Subhead>Heuristics</Subhead>
+      <ul className="list-disc pl-5 text-[13px] text-txt space-y-0.5">
+        <li>"Bet top, bet bottom, check middle"</li>
+        <li>"Bet MORE when shallow, not less"</li>
+        <li>"High-low-low IS a risk factor; high-high-low is NOT"</li>
+      </ul>
 
-      <Collapsible title="Heuristics">
-        <ul>
-          <li>"Bet top, bet bottom, check middle"</li>
-          <li>"Bet MORE when shallow, not less"</li>
-          <li>"High-low-low IS a risk factor; high-high-low is NOT"</li>
-        </ul>
-      </Collapsible>
+      <Subhead>Why bet 100% on T-high+?</Subhead>
+      <p className="text-[13px] text-muted leading-snug"><strong className="text-txt">Overpair asymmetry</strong> — UTG has far more strong pairs than the BB caller. Shorter stacks amplify it (bet more); deeper stacks demand more caution.</p>
 
-      <Collapsible title="Why bet 100% on T-high+?">
-        <p><strong>Overpair asymmetry</strong>: UTG has far more strong pairs than BB caller. Shorter stacks amplify → bet more. Deeper → more caution.</p>
-      </Collapsible>
+      <Subhead>Risk factors</Subhead>
+      <DataTable
+        compact
+        columns={[{ header: 'Factor' }, { header: 'Response' }]}
+        rows={[
+          ['Monotone (ace-high)', 'Bet strong + weak, check medium'],
+          ['AKx family — AK2/AK3/AK4', 'Slow down — not 100%'],
+          ['High-low-low — paired low under high (T55, J66, K33)', 'Bet trips + weak, check underpairs'],
+          ['Straights — 1 straight', 'Bet frequently'],
+          ['Straights — 3+ straights', 'Slow down heavily'],
+          ['Stack depth (secondary)', 'Deeper (→150bb) caution · shallower (→20bb) lean into 100%'],
+          ['Blocker nuance (high-low-low)', 'AT with the backdoor-flush-blocking ace bets more; without it, check'],
+        ]}
+      />
+      <Callout variant="bad"><strong>Not High-High-Low.</strong> KK3 rainbow is <em>not</em> a risk factor — c-bet 100%. Only paired low under high counts.</Callout>
 
-      <Collapsible title="Risk factor details">
-        <p><strong>Monotone</strong> — Ace-monotone is a risk factor. Bet strong + weak, check medium.</p>
-        <p><strong>AKx family</strong> — AK2/AK3/AK4. Slow down — not 100%.</p>
-        <p><strong>High-low-low (paired low under high)</strong> — T55, J66, K33. Bet trips + weak, check underpairs.</p>
-        <Callout variant="bad"><strong>Not High-High-Low.</strong> KK3 rainbow is <em>not</em> a risk factor — c-bet 100%. Only paired low under high counts.</Callout>
-        <p><strong>Straights possible</strong> — 1 straight → still bet frequently. 3 straights → slow down heavily.</p>
-        <p><strong>Stack depth</strong> <Tag variant="risk">secondary</Tag> — deeper (→150bb) → caution. Shallower (→20bb) → lean into 100%.</p>
-        <p><strong>Blocker nuance (high-low-low):</strong> AT with an ace that blocks backdoor flush draws bets more; AT without that blocker checks more.</p>
-      </Collapsible>
-
-      <Collapsible title="Sizing">
-        <p>Solver examples land at 20-73% pot: K83, KK3, AJ5 and J66 are solved at 20% (1.1bb), AK2 at 73% (4bb). The transcript does not prescribe a specific size for this system.</p>
-      </Collapsible>
+      <Subhead>Sizing</Subhead>
+      <p className="text-[13px] text-muted leading-snug">Solver examples land at 20–73% pot: K83, KK3, AJ5 and J66 are solved at 20% (1.1bb), AK2 at 73% (4bb). The transcript does not prescribe a specific size for this system.</p>
 
       <Subhead>Examples</Subhead>
 

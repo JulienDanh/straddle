@@ -111,10 +111,24 @@ Lines are derived from real node responses — open sizes are never guessed:
 - `fetch_browser.py --rfi BTN --depth 30` — BTN's RFI node
 - `fetch_browser.py --bb-vs UTG --depth 40` — UTG's RFI node, then BB's
   defend node (the open code R2/R2.1/... is read from the RFI response)
+- `fetch_browser.py --rfi HJ --vs-3bet BB --depth 40` — HJ's RFI, then the
+  villain's defend node (the REAL 3-bet size is read from its response —
+  never guess it, it varies by opener/depth: 8.5bb at ICM-40 vs UTG or HJ),
+  then the opener's vs-3bet decision node
 - `fetch_browser.py --rfi UTG --board Kh8h3c --cbet` — continue to the
   opener's flop c-bet node (line = open + folds + C, spot 9)
 - `--gametype MTTGeneral_ICM8m200PTBUBBLEMID` for ICM (archives land under
   `icm/`); `--refetch` bypasses the archive cache
+
+Capture pacing and failure semantics: the spot-solution REQUEST is matched
+exactly against its params (gametype/depth/stacks/street histories/board),
+so the app's fallbacks and stale in-app state are detected in-flight — a
+capture returns the moment the response lands (typically 1-3s push, ~10s
+cold reload). The ceilings (6s push / 25s reload) only run out when the
+spot doesn't resolve; a mismatched request means the URL doesn't exist in
+the app's solution space (wrong line/spot/size encoding), a silent
+no-request means stale state (push) or an invalid URL (reload). Running
+near the bounds is a diagnosis, not a tuning knob.
 
 Fetches REUSE already-archived captures instead of re-fetching
 (solver spots are static). Every capture prints the actions available at

@@ -46,3 +46,6 @@ export const UTG_RFI_COVERED_SIMILAR: StoredRange[] = materializeLine(
 
 /** UTG RFI, all solution types combined */
 export const UTG_RFI: StoredRange[] = [...UTG_RFI_CEV, ...UTG_RFI_ICM, ...UTG_RFI_ICM_FT, ...UTG_RFI_COVERING, ...UTG_RFI_COVERED_DEEP, ...UTG_RFI_COVERED_SIMILAR, ...UTG_RFI_ICM_FT_COVERED_DEEP, ...UTG_RFI_ICM_FT_COVERING]
+
+/** Equal stacks only (cEV + ICM bubble) — the BM1/BM7 comparison set */
+export const UTG_RFI_EQUAL: StoredRange[] = [...UTG_RFI_CEV, ...UTG_RFI_ICM]

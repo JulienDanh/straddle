@@ -209,7 +209,7 @@
     },
     {
       "type": "ICM-FT-covered-deep",
-      "subtitle": "ICM \u00b7 200-man final table \u00b7 CO 35bb covers",
+      "subtitle": "ICM \u00b7 200-man final table \u00b7 CO 35bb covers you",
       "stack": 10,
       "config": [
         30,
@@ -231,7 +231,7 @@
     },
     {
       "type": "ICM-FT-covering",
-      "subtitle": "ICM \u00b7 200-man final table \u00b7 covers table",
+      "subtitle": "ICM \u00b7 200-man final table \u00b7 you cover the table",
       "stack": 90,
       "config": [
         35,
@@ -252,8 +252,8 @@
     },
     {
       "type": "ICM-covered-deep",
-      "subtitle": "ICM \u00b7 200-man bubble \u00b7 CO 63bb covers",
-      "stack": 10,
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 CO 63bb covers you",
+      "stack": 22,
       "config": [
         30,
         27,
@@ -273,7 +273,7 @@
     },
     {
       "type": "ICM-covering",
-      "subtitle": "ICM \u00b7 200-man bubble \u00b7 covers table",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 you cover the table",
       "stack": 63,
       "config": [
         22,
@@ -288,6 +288,721 @@
       "actions": {
         "raise": "2d2c:0.0043,2h2c:0.0043,2s2c:0.0043,2h2d:0.0043,2s2d:0.0043,2s2h:0.0043,3d3c:0.5552,3h3c:0.5552,3s3c:0.5552,3h3d:0.5552,3s3d:0.5552,3s3h:0.5552,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.2391,5d4d:0.2391,5h4h:0.2391,5s4s:0.2391,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.1983,6d5d:0.1983,6h5h:0.1983,6s5s:0.1983,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.1479,7d6d:0.1479,7h6h:0.1479,7s6s:0.1479,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.3402,8d7d:0.3402,8h7h:0.3402,8s7s:0.3402,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:1,9d7d:1,9h7h:1,9s7s:1,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2d:1,Ac2h:1,Ac2s:1,Ad2c:1,Ad2h:1,Ad2s:1,Ah2c:1,Ah2d:1,Ah2s:1,As2c:1,As2d:1,As2h:1,Ac2c:0.5278,Ad2d:0.5278,Ah2h:0.5278,As2s:0.5278,Ac3d:1,Ac3h:1,Ac3s:1,Ad3c:1,Ad3h:1,Ad3s:1,Ah3c:1,Ah3d:1,Ah3s:1,As3c:1,As3d:1,As3h:1,Ac3c:0.0136,Ad3d:0.0136,Ah3h:0.0136,As3s:0.0136,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:0.5878,Ad4d:0.5878,Ah4h:0.5878,As4s:0.5878,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:0.7141,Ad5d:0.7141,Ah5h:0.7141,As5s:0.7141,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc4c:0.8141,Jd4d:0.8141,Jh4h:0.8141,Js4s:0.8141,Jc5c:1,Jd5d:1,Jh5h:1,Js5s:1,Jc6c:1,Jd6d:1,Jh6h:1,Js6s:1,Jc7c:1,Jd7d:1,Jh7h:1,Js7s:1,Jc8d:0.8816,Jc8h:0.8816,Jc8s:0.8816,Jd8c:0.8816,Jd8h:0.8816,Jd8s:0.8816,Jh8c:0.8816,Jh8d:0.8816,Jh8s:0.8816,Js8c:0.8816,Js8d:0.8816,Js8h:0.8816,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:1,Jc9h:1,Jc9s:1,Jd9c:1,Jd9h:1,Jd9s:1,Jh9c:1,Jh9d:1,Jh9s:1,Js9c:1,Js9d:1,Js9h:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:0.7067,JdTd:0.7067,JhTh:0.7067,JsTs:0.7067,Kc2c:1,Kd2d:1,Kh2h:1,Ks2s:1,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5d:0.6861,Kc5h:0.6861,Kc5s:0.6861,Kd5c:0.6861,Kd5h:0.6861,Kd5s:0.6861,Kh5c:0.6861,Kh5d:0.6861,Kh5s:0.6861,Ks5c:0.6861,Ks5d:0.6861,Ks5h:0.6861,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6d:0.8263,Kc6h:0.8263,Kc6s:0.8263,Kd6c:0.8263,Kd6h:0.8263,Kd6s:0.8263,Kh6c:0.8263,Kh6d:0.8263,Kh6s:0.8263,Ks6c:0.8263,Ks6d:0.8263,Ks6h:0.8263,Kc6c:0.8599,Kd6d:0.8599,Kh6h:0.8599,Ks6s:0.8599,Kc7d:1,Kc7h:1,Kc7s:1,Kd7c:1,Kd7h:1,Kd7s:1,Kh7c:1,Kh7d:1,Kh7s:1,Ks7c:1,Ks7d:1,Ks7h:1,Kc7c:0.9934,Kd7d:0.9934,Kh7h:0.9934,Ks7s:0.9934,Kc8d:1,Kc8h:1,Kc8s:1,Kd8c:1,Kd8h:1,Kd8s:1,Kh8c:1,Kh8d:1,Kh8s:1,Ks8c:1,Ks8d:1,Ks8h:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,KcJd:0.5104,KcJh:0.5104,KcJs:0.5104,KdJc:0.5104,KdJh:0.5104,KdJs:0.5104,KhJc:0.5104,KhJd:0.5104,KhJs:0.5104,KsJc:0.5104,KsJd:0.5104,KsJh:0.5104,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:0.9925,KcQh:0.9925,KcQs:0.9925,KdQc:0.9925,KdQh:0.9925,KdQs:0.9925,KhQc:0.9925,KhQd:0.9925,KhQs:0.9925,KsQc:0.9925,KsQd:0.9925,KsQh:0.9925,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:0.6835,KdTd:0.6835,KhTh:0.6835,KsTs:0.6835,Qc2c:0.9625,Qd2d:0.9625,Qh2h:0.9625,Qs2s:0.9625,Qc3c:1,Qd3d:1,Qh3h:1,Qs3s:1,Qc4c:1,Qd4d:1,Qh4h:1,Qs4s:1,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8d:1,Qc8h:1,Qc8s:1,Qd8c:1,Qd8h:1,Qd8s:1,Qh8c:1,Qh8d:1,Qh8s:1,Qs8c:1,Qs8d:1,Qs8h:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:1,Qc9h:1,Qc9s:1,Qd9c:1,Qd9h:1,Qd9s:1,Qh9c:1,Qh9d:1,Qh9s:1,Qs9c:1,Qs9d:1,Qs9h:1,Qc9c:0.6436,Qd9d:0.6436,Qh9h:0.6436,Qs9s:0.6436,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:0.1408,QdJd:0.1408,QhJh:0.1408,QsJs:0.1408,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:0.0001,QdTd:0.0001,QhTh:0.0001,QsTs:0.0001,Tc6c:0.0084,Td6d:0.0084,Th6h:0.0084,Ts6s:0.0084,Tc7c:1,Td7d:1,Th7h:1,Ts7s:1,Tc8d:0.248,Tc8h:0.248,Tc8s:0.248,Td8c:0.248,Td8h:0.248,Td8s:0.248,Th8c:0.248,Th8d:0.248,Th8s:0.248,Ts8c:0.248,Ts8d:0.248,Ts8h:0.248,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:1,Tc9h:1,Tc9s:1,Td9c:1,Td9h:1,Td9s:1,Th9c:1,Th9d:1,Th9s:1,Ts9c:1,Ts9d:1,Ts9h:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
         "allIn": "2d2c:0.9957,2h2c:0.9957,2s2c:0.9957,2h2d:0.9957,2s2d:0.9957,2s2h:0.9957,3d3c:0.4448,3h3c:0.4448,3s3c:0.4448,3h3d:0.4448,3s3d:0.4448,3s3h:0.4448,Ac2c:0.4722,Ad2d:0.4722,Ah2h:0.4722,As2s:0.4722,Ac3c:0.9864,Ad3d:0.9864,Ah3h:0.9864,As3s:0.9864,Ac4c:0.4122,Ad4d:0.4122,Ah4h:0.4122,As4s:0.4122,Ac5c:0.2859,Ad5d:0.2859,Ah5h:0.2859,As5s:0.2859,JcTc:0.2933,JdTd:0.2933,JhTh:0.2933,JsTs:0.2933,Kc6c:0.1401,Kd6d:0.1401,Kh6h:0.1401,Ks6s:0.1401,Kc7c:0.0066,Kd7d:0.0066,Kh7h:0.0066,Ks7s:0.0066,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:0.4896,KcJh:0.4896,KcJs:0.4896,KdJc:0.4896,KdJh:0.4896,KdJs:0.4896,KhJc:0.4896,KhJd:0.4896,KhJs:0.4896,KsJc:0.4896,KsJd:0.4896,KsJh:0.4896,KcQd:0.0075,KcQh:0.0075,KcQs:0.0075,KdQc:0.0075,KdQh:0.0075,KdQs:0.0075,KhQc:0.0075,KhQd:0.0075,KhQs:0.0075,KsQc:0.0075,KsQd:0.0075,KsQh:0.0075,KcTc:0.3165,KdTd:0.3165,KhTh:0.3165,KsTs:0.3165,Qc9c:0.3564,Qd9d:0.3564,Qh9h:0.3564,Qs9s:0.3564,QcJc:0.8592,QdJd:0.8592,QhJh:0.8592,QsJs:0.8592,QcTc:0.9999,QdTd:0.9999,QhTh:0.9999,QsTs:0.9999"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "cEV",
+      "subtitle": "ChipEV",
+      "stack": 15,
+      "actions": {
+        "raise": "5d5c:0.3067,5h5c:0.3067,5s5c:0.3067,5h5d:0.3067,5s5d:0.3067,5s5h:0.3067,6d6c:0.3384,6h6c:0.3384,6s6c:0.3384,6h6d:0.3384,6s6d:0.3384,6s6h:0.3384,7d7c:0.4449,7h7c:0.4449,7s7c:0.4449,7h7d:0.4449,7s7d:0.4449,7s7h:0.4449,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.0001,9d8d:0.0001,9h8h:0.0001,9s8s:0.0001,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:0.4283,Ad4d:0.4283,Ah4h:0.4283,As4s:0.4283,Ac5d:0.3483,Ac5h:0.3483,Ac5s:0.3483,Ad5c:0.3483,Ad5h:0.3483,Ad5s:0.3483,Ah5c:0.3483,Ah5d:0.3483,Ah5s:0.3483,As5c:0.3483,As5d:0.3483,As5h:0.3483,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.5241,Ac7h:0.5241,Ac7s:0.5241,Ad7c:0.5241,Ad7h:0.5241,Ad7s:0.5241,Ah7c:0.5241,Ah7d:0.5241,Ah7s:0.5241,As7c:0.5241,As7d:0.5241,As7h:0.5241,Ac7c:0.3932,Ad7d:0.3932,Ah7h:0.3932,As7s:0.3932,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:0.8124,Ad8d:0.8124,Ah8h:0.8124,As8s:0.8124,Ac9d:0.4537,Ac9h:0.4537,Ac9s:0.4537,Ad9c:0.4537,Ad9h:0.4537,Ad9s:0.4537,Ah9c:0.4537,Ah9d:0.4537,Ah9s:0.4537,As9c:0.4537,As9d:0.4537,As9h:0.4537,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:0.069,AcJh:0.069,AcJs:0.069,AdJc:0.069,AdJh:0.069,AdJs:0.069,AhJc:0.069,AhJd:0.069,AhJs:0.069,AsJc:0.069,AsJd:0.069,AsJh:0.069,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:0.3538,AcQh:0.3538,AcQs:0.3538,AdQc:0.3538,AdQh:0.3538,AdQs:0.3538,AhQc:0.3538,AhQd:0.3538,AhQs:0.3538,AsQc:0.3538,AsQd:0.3538,AsQh:0.3538,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:0.1779,AcTh:0.1779,AcTs:0.1779,AdTc:0.1779,AdTh:0.1779,AdTs:0.1779,AhTc:0.1779,AhTd:0.1779,AhTs:0.1779,AsTc:0.1779,AsTd:0.1779,AsTh:0.1779,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:0.9919,Jd9d:0.9919,Jh9h:0.9919,Js9s:0.9919,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.4717,JcTh:0.4717,JcTs:0.4717,JdTc:0.4717,JdTh:0.4717,JdTs:0.4717,JhTc:0.4717,JhTd:0.4717,JhTs:0.4717,JsTc:0.4717,JsTd:0.4717,JsTh:0.4717,Kc7c:0.344,Kd7d:0.344,Kh7h:0.344,Ks7s:0.344,Kc8c:0.9943,Kd8d:0.9943,Kh8h:0.9943,Ks8s:0.9943,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:0.5206,KdJd:0.5206,KhJh:0.5206,KsJs:0.5206,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:0.1343,KcQh:0.1343,KcQs:0.1343,KdQc:0.1343,KdQh:0.1343,KdQs:0.1343,KhQc:0.1343,KhQd:0.1343,KhQs:0.1343,KsQc:0.1343,KsQd:0.1343,KsQh:0.1343,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,Qc8c:0.9988,Qd8d:0.9988,Qh8h:0.9988,Qs8s:0.9988,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:0.0001,QdJd:0.0001,QhJh:0.0001,QsJs:0.0001,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,Tc8c:0.1288,Td8d:0.1288,Th8h:0.1288,Ts8s:0.1288,Tc9c:0.1636,Td9d:0.1636,Th9h:0.1636,Ts9s:0.1636,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "3d3c:0.6845,3h3c:0.6845,3s3c:0.6845,3h3d:0.6845,3s3d:0.6845,3s3h:0.6845,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5d5c:0.6933,5h5c:0.6933,5s5c:0.6933,5h5d:0.6933,5s5d:0.6933,5s5h:0.6933,6d6c:0.6616,6h6c:0.6616,6s6c:0.6616,6h6d:0.6616,6s6d:0.6616,6s6h:0.6616,7d7c:0.5551,7h7c:0.5551,7s7c:0.5551,7h7d:0.5551,7s7d:0.5551,7s7h:0.5551,Ac4c:0.5717,Ad4d:0.5717,Ah4h:0.5717,As4s:0.5717,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac7c:0.6068,Ad7d:0.6068,Ah7h:0.6068,As7s:0.6068,Ac8c:0.1876,Ad8d:0.1876,Ah8h:0.1876,As8s:0.1876,Ac9d:0.5463,Ac9h:0.5463,Ac9s:0.5463,Ad9c:0.5463,Ad9h:0.5463,Ad9s:0.5463,Ah9c:0.5463,Ah9d:0.5463,Ah9s:0.5463,As9c:0.5463,As9d:0.5463,As9h:0.5463,AcJd:0.931,AcJh:0.931,AcJs:0.931,AdJc:0.931,AdJh:0.931,AdJs:0.931,AhJc:0.931,AhJd:0.931,AhJs:0.931,AsJc:0.931,AsJd:0.931,AsJh:0.931,AcQd:0.6462,AcQh:0.6462,AcQs:0.6462,AdQc:0.6462,AdQh:0.6462,AdQs:0.6462,AhQc:0.6462,AhQd:0.6462,AhQs:0.6462,AsQc:0.6462,AsQd:0.6462,AsQh:0.6462,AcTd:0.8221,AcTh:0.8221,AcTs:0.8221,AdTc:0.8221,AdTh:0.8221,AdTs:0.8221,AhTc:0.8221,AhTd:0.8221,AhTs:0.8221,AsTc:0.8221,AsTd:0.8221,AsTh:0.8221,Jc9c:0.0081,Jd9d:0.0081,Jh9h:0.0081,Js9s:0.0081,JcTc:1,JdTd:1,JhTh:1,JsTs:1,KcJc:0.4794,KdJd:0.4794,KhJh:0.4794,KsJs:0.4794,KcQd:0.8657,KcQh:0.8657,KcQs:0.8657,KdQc:0.8657,KdQh:0.8657,KdQs:0.8657,KhQc:0.8657,KhQd:0.8657,KhQs:0.8657,KsQc:0.8657,KsQd:0.8657,KsQh:0.8657,KcTc:1,KdTd:1,KhTh:1,KsTs:1,QcJc:0.9999,QdJd:0.9999,QhJh:0.9999,QsJs:0.9999,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:0.8364,Td9d:0.8364,Th9h:0.8364,Ts9s:0.8364"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "cEV",
+      "subtitle": "ChipEV",
+      "stack": 60,
+      "actions": {
+        "raise": "2d2c:0.3258,2h2c:0.3258,2s2c:0.3258,2h2d:0.3258,2s2d:0.3258,2s2h:0.3258,3d3c:1,3h3c:1,3s3c:1,3h3d:1,3s3d:1,3s3h:1,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.9998,5d4d:0.9998,5h4h:0.9998,5s4s:0.9998,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:1,6d5d:1,6h5h:1,6s5s:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:1,7d6d:1,7h6h:1,7s6s:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c6c:0.2792,8d6d:0.2792,8h6h:0.2792,8s6s:0.2792,8c7c:1,8d7d:1,8h7h:1,8s7s:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:1,9d7d:1,9h7h:1,9s7s:1,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.8143,Ac8h:0.8143,Ac8s:0.8143,Ad8c:0.8143,Ad8h:0.8143,Ad8s:0.8143,Ah8c:0.8143,Ah8d:0.8143,Ah8s:0.8143,As8c:0.8143,As8d:0.8143,As8h:0.8143,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:0.9998,AcKh:0.9998,AcKs:0.9998,AdKc:0.9998,AdKh:0.9998,AdKs:0.9998,AhKc:0.9998,AhKd:0.9998,AhKs:0.9998,AsKc:0.9998,AsKd:0.9998,AsKh:0.9998,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc7c:0.3588,Jd7d:0.3588,Jh7h:0.3588,Js7s:0.3588,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:0.9999,JhJc:0.9999,JsJc:0.9999,JhJd:0.9999,JsJd:0.9999,JsJh:0.9999,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc3c:0.0045,Kd3d:0.0045,Kh3h:0.0045,Ks3s:0.0045,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc5c:0.0272,Qd5d:0.0272,Qh5h:0.0272,Qs5s:0.0272,Qc6c:0.4015,Qd6d:0.4015,Qh6h:0.4015,Qs6s:0.4015,Qc7c:0.9999,Qd7d:0.9999,Qh7h:0.9999,Qs7s:0.9999,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:0.9999,QhQc:0.9999,QsQc:0.9999,QhQd:0.9999,QsQd:0.9999,QsQh:0.9999,QcTd:0.9999,QcTh:0.9999,QcTs:0.9999,QdTc:0.9999,QdTh:0.9999,QdTs:0.9999,QhTc:0.9999,QhTd:0.9999,QhTs:0.9999,QsTc:0.9999,QsTd:0.9999,QsTh:0.9999,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:1,Td7d:1,Th7h:1,Ts7s:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:0.043,Tc9h:0.043,Tc9s:0.043,Td9c:0.043,Td9h:0.043,Td9s:0.043,Th9c:0.043,Th9d:0.043,Th9s:0.043,Ts9c:0.043,Ts9d:0.043,Ts9h:0.043,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AcKd:0.0002,AcKh:0.0002,AcKs:0.0002,AdKc:0.0002,AdKh:0.0002,AdKs:0.0002,AhKc:0.0002,AhKd:0.0002,AhKs:0.0002,AsKc:0.0002,AsKd:0.0002,AsKh:0.0002,JdJc:0.0001,JhJc:0.0001,JsJc:0.0001,JhJd:0.0001,JsJd:0.0001,JsJh:0.0001,QdQc:0.0001,QhQc:0.0001,QsQc:0.0001,QhQd:0.0001,QsQd:0.0001,QsQh:0.0001"
+      },
+      "sizings": {
+        "raise": 2.1
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 23,
+      "config": [
+        17,
+        26,
+        32,
+        23,
+        20,
+        13,
+        34,
+        75
+      ],
+      "actions": {
+        "raise": "5d5c:0.6875,5h5c:0.6875,5s5c:0.6875,5h5d:0.6875,5s5d:0.6875,5s5h:0.6875,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.1555,9d8d:0.1555,9h8h:0.1555,9s8s:0.1555,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:0.5456,Ad2d:0.5456,Ah2h:0.5456,As2s:0.5456,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.1398,Ac9h:0.1398,Ac9s:0.1398,Ad9c:0.1398,Ad9h:0.1398,Ad9s:0.1398,Ah9c:0.1398,Ah9d:0.1398,Ah9s:0.1398,As9c:0.1398,As9d:0.1398,As9h:0.1398,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc6c:0.0164,Kd6d:0.0164,Kh6h:0.0164,Ks6s:0.0164,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:0.9996,KcJh:0.9996,KcJs:0.9996,KdJc:0.9996,KdJh:0.9996,KdJs:0.9996,KhJc:0.9996,KhJd:0.9996,KhJs:0.9996,KsJc:0.9996,KsJd:0.9996,KsJh:0.9996,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.1392,KcTh:0.1392,KcTs:0.1392,KdTc:0.1392,KdTh:0.1392,KdTs:0.1392,KhTc:0.1392,KhTd:0.1392,KhTs:0.1392,KsTc:0.1392,KsTd:0.1392,KsTh:0.1392,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.9675,Qd8d:0.9675,Qh8h:0.9675,Qs8s:0.9675,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:0.7963,QcJh:0.7963,QcJs:0.7963,QdJc:0.7963,QdJh:0.7963,QdJs:0.7963,QhJc:0.7963,QhJd:0.7963,QhJs:0.7963,QsJc:0.7963,QsJd:0.7963,QsJh:0.7963,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.0166,QcTh:0.0166,QcTs:0.0166,QdTc:0.0166,QdTh:0.0166,QdTs:0.0166,QhTc:0.0166,QhTd:0.0166,QhTs:0.0166,QsTc:0.0166,QsTd:0.0166,QsTh:0.0166,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:0.4998,Td8d:0.4998,Th8h:0.4998,Ts8s:0.4998,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 15,
+      "config": [
+        10,
+        20,
+        50,
+        15,
+        45,
+        40,
+        25,
+        35
+      ],
+      "actions": {
+        "raise": "7d7c:0.0917,7h7c:0.0917,7s7c:0.0917,7h7d:0.0917,7s7d:0.0917,7s7h:0.0917,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:0.7283,9h9c:0.7283,9s9c:0.7283,9h9d:0.7283,9s9d:0.7283,9s9h:0.7283,Ac3c:0.0865,Ad3d:0.0865,Ah3h:0.0865,As3s:0.0865,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.2547,Ac9h:0.2547,Ac9s:0.2547,Ad9c:0.2547,Ad9h:0.2547,Ad9s:0.2547,Ah9c:0.2547,Ah9d:0.2547,Ah9s:0.2547,As9c:0.2547,As9d:0.2547,As9h:0.2547,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:0.7639,AcKh:0.7639,AcKs:0.7639,AdKc:0.7639,AdKh:0.7639,AdKs:0.7639,AhKc:0.7639,AhKd:0.7639,AhKs:0.7639,AsKc:0.7639,AsKd:0.7639,AsKh:0.7639,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:0.3595,AcQh:0.3595,AcQs:0.3595,AdQc:0.3595,AdQh:0.3595,AdQs:0.3595,AhQc:0.3595,AhQd:0.3595,AhQs:0.3595,AsQc:0.3595,AsQd:0.3595,AsQh:0.3595,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:0.851,AdTd:0.851,AhTh:0.851,AsTs:0.851,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc8c:0.0001,Kd8d:0.0001,Kh8h:0.0001,Ks8s:0.0001,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:0.8507,KcJh:0.8507,KcJs:0.8507,KdJc:0.8507,KdJh:0.8507,KdJs:0.8507,KhJc:0.8507,KhJd:0.8507,KhJs:0.8507,KsJc:0.8507,KsJd:0.8507,KsJh:0.8507,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:0.5604,KdQd:0.5604,KhQh:0.5604,KsQs:0.5604,KcTd:0.0103,KcTh:0.0103,KcTs:0.0103,KdTc:0.0103,KdTh:0.0103,KdTs:0.0103,KhTc:0.0103,KhTd:0.0103,KhTs:0.0103,KsTc:0.0103,KsTd:0.0103,KsTh:0.0103,KcTc:0.8665,KdTd:0.8665,KhTh:0.8665,KsTs:0.8665,Qc9c:0.5827,Qd9d:0.5827,Qh9h:0.5827,Qs9s:0.5827,QcJd:0.082,QcJh:0.082,QcJs:0.082,QdJc:0.082,QdJh:0.082,QdJs:0.082,QhJc:0.082,QhJd:0.082,QhJs:0.082,QsJc:0.082,QsJd:0.082,QsJh:0.082,QcJc:0.9999,QdJd:0.9999,QhJh:0.9999,QsJs:0.9999,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:0.0014,Td9d:0.0014,Th9h:0.0014,Ts9s:0.0014,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "9d9c:0.2717,9h9c:0.2717,9s9c:0.2717,9h9d:0.2717,9s9d:0.2717,9s9h:0.2717,Ac3c:0.0001,Ad3d:0.0001,Ah3h:0.0001,As3s:0.0001,AcKd:0.2361,AcKh:0.2361,AcKs:0.2361,AdKc:0.2361,AdKh:0.2361,AdKs:0.2361,AhKc:0.2361,AhKd:0.2361,AhKs:0.2361,AsKc:0.2361,AsKd:0.2361,AsKh:0.2361,AcQd:0.6405,AcQh:0.6405,AcQs:0.6405,AdQc:0.6405,AdQh:0.6405,AdQs:0.6405,AhQc:0.6405,AhQd:0.6405,AhQs:0.6405,AsQc:0.6405,AsQd:0.6405,AsQh:0.6405,AcTc:0.149,AdTd:0.149,AhTh:0.149,AsTs:0.149,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQc:0.4396,KdQd:0.4396,KhQh:0.4396,KsQs:0.4396,KcTc:0.1335,KdTd:0.1335,KhTh:0.1335,KsTs:0.1335,QcJc:0.0001,QdJd:0.0001,QhJh:0.0001,QsJs:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 15,
+      "config": [
+        100,
+        35,
+        50,
+        15,
+        30,
+        25,
+        20,
+        45
+      ],
+      "actions": {
+        "raise": "6d6c:0.0552,6h6c:0.0552,6s6c:0.0552,6h6d:0.0552,6s6d:0.0552,6s6h:0.0552,7d7c:0.6711,7h7c:0.6711,7s7c:0.6711,7h7d:0.6711,7s7d:0.6711,7s7h:0.6711,8d8c:0.9608,8h8c:0.9608,8s8c:0.9608,8h8d:0.9608,8s8d:0.9608,8s8h:0.9608,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:0.0001,Ad2d:0.0001,Ah2h:0.0001,As2s:0.0001,Ac3c:0.3222,Ad3d:0.3222,Ah3h:0.3222,As3s:0.3222,Ac4c:0.9768,Ad4d:0.9768,Ah4h:0.9768,As4s:0.9768,Ac5c:0.9623,Ad5d:0.9623,Ah5h:0.9623,As5s:0.9623,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.0614,Ac8h:0.0614,Ac8s:0.0614,Ad8c:0.0614,Ad8h:0.0614,Ad8s:0.0614,Ah8c:0.0614,Ah8d:0.0614,Ah8s:0.0614,As8c:0.0614,As8d:0.0614,As8h:0.0614,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.9863,Ac9h:0.9863,Ac9s:0.9863,Ad9c:0.9863,Ad9h:0.9863,Ad9s:0.9863,Ah9c:0.9863,Ah9d:0.9863,Ah9s:0.9863,As9c:0.9863,As9d:0.9863,As9h:0.9863,Ac9c:0.9999,Ad9d:0.9999,Ah9h:0.9999,As9s:0.9999,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:0.9785,AcJh:0.9785,AcJs:0.9785,AdJc:0.9785,AdJh:0.9785,AdJs:0.9785,AhJc:0.9785,AhJd:0.9785,AhJs:0.9785,AsJc:0.9785,AsJd:0.9785,AsJh:0.9785,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:0.8288,AcKh:0.8288,AcKs:0.8288,AdKc:0.8288,AdKh:0.8288,AdKs:0.8288,AhKc:0.8288,AhKd:0.8288,AhKs:0.8288,AsKc:0.8288,AsKd:0.8288,AsKh:0.8288,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:0.3854,AcQh:0.3854,AcQs:0.3854,AdQc:0.3854,AdQh:0.3854,AdQs:0.3854,AhQc:0.3854,AhQd:0.3854,AhQs:0.3854,AsQc:0.3854,AsQd:0.3854,AsQh:0.3854,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:0.825,AdTd:0.825,AhTh:0.825,AsTs:0.825,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc7c:0.0004,Kd7d:0.0004,Kh7h:0.0004,Ks7s:0.0004,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:0.9891,KdQd:0.9891,KhQh:0.9891,KsQs:0.9891,KcTd:0.3732,KcTh:0.3732,KcTs:0.3732,KdTc:0.3732,KdTh:0.3732,KdTs:0.3732,KhTc:0.3732,KhTd:0.3732,KhTs:0.3732,KsTc:0.3732,KsTd:0.3732,KsTh:0.3732,KcTc:0.4057,KdTd:0.4057,KhTh:0.4057,KsTs:0.4057,Qc8c:0.0003,Qd8d:0.0003,Qh8h:0.0003,Qs8s:0.0003,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:0.7539,QcJh:0.7539,QcJs:0.7539,QdJc:0.7539,QdJh:0.7539,QdJs:0.7539,QhJc:0.7539,QhJd:0.7539,QhJs:0.7539,QsJc:0.7539,QsJd:0.7539,QsJh:0.7539,QcJc:0.503,QdJd:0.503,QhJh:0.503,QsJs:0.503,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:0.0816,Td9d:0.0816,Th9h:0.0816,Ts9s:0.0816,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "7d7c:0.3234,7h7c:0.3234,7s7c:0.3234,7h7d:0.3234,7s7d:0.3234,7s7h:0.3234,8d8c:0.0392,8h8c:0.0392,8s8c:0.0392,8h8d:0.0392,8s8d:0.0392,8s8h:0.0392,Ac3c:0.3113,Ad3d:0.3113,Ah3h:0.3113,As3s:0.3113,Ac4c:0.0232,Ad4d:0.0232,Ah4h:0.0232,As4s:0.0232,Ac5c:0.0377,Ad5d:0.0377,Ah5h:0.0377,As5s:0.0377,Ac9c:0.0001,Ad9d:0.0001,Ah9h:0.0001,As9s:0.0001,AcJd:0.0215,AcJh:0.0215,AcJs:0.0215,AdJc:0.0215,AdJh:0.0215,AdJs:0.0215,AhJc:0.0215,AhJd:0.0215,AhJs:0.0215,AsJc:0.0215,AsJd:0.0215,AsJh:0.0215,AcKd:0.1712,AcKh:0.1712,AcKs:0.1712,AdKc:0.1712,AdKh:0.1712,AdKs:0.1712,AhKc:0.1712,AhKd:0.1712,AhKs:0.1712,AsKc:0.1712,AsKd:0.1712,AsKh:0.1712,AcQd:0.6146,AcQh:0.6146,AcQs:0.6146,AdQc:0.6146,AdQh:0.6146,AdQs:0.6146,AhQc:0.6146,AhQd:0.6146,AhQs:0.6146,AsQc:0.6146,AsQd:0.6146,AsQh:0.6146,AcTc:0.175,AdTd:0.175,AhTh:0.175,AsTs:0.175,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQc:0.0109,KdQd:0.0109,KhQh:0.0109,KsQs:0.0109,KcTc:0.5943,KdTd:0.5943,KhTh:0.5943,KsTs:0.5943,QcJc:0.497,QdJd:0.497,QhJh:0.497,QsJs:0.497"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BB 32bb similar \u2014 covers you",
+      "stack": 29,
+      "config": [
+        11,
+        14,
+        8,
+        29,
+        17,
+        26,
+        23,
+        32
+      ],
+      "actions": {
+        "raise": "4d4c:0.9007,4h4c:0.9007,4s4c:0.9007,4h4d:0.9007,4s4d:0.9007,4s4h:0.9007,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.0287,6d5d:0.0287,6h5h:0.0287,6s5s:0.0287,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.1031,7d6d:0.1031,7h6h:0.1031,7s6s:0.1031,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.9222,8d7d:0.9222,8h7h:0.9222,8s7s:0.9222,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:0.4112,9d7d:0.4112,9h7h:0.4112,9s7s:0.4112,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:0.1989,Ac4h:0.1989,Ac4s:0.1989,Ad4c:0.1989,Ad4h:0.1989,Ad4s:0.1989,Ah4c:0.1989,Ah4d:0.1989,Ah4s:0.1989,As4c:0.1989,As4d:0.1989,As4h:0.1989,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:0.5119,Ac6h:0.5119,Ac6s:0.5119,Ad6c:0.5119,Ad6h:0.5119,Ad6s:0.5119,Ah6c:0.5119,Ah6d:0.5119,Ah6s:0.5119,As6c:0.5119,As6d:0.5119,As6h:0.5119,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc7c:0.1581,Jd7d:0.1581,Jh7h:0.1581,Js7s:0.1581,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:0.0001,Kd2d:0.0001,Kh2h:0.0001,Ks2s:0.0001,Kc3c:0.8892,Kd3d:0.8892,Kh3h:0.8892,Ks3s:0.8892,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:0.5951,Kc9h:0.5951,Kc9s:0.5951,Kd9c:0.5951,Kd9h:0.5951,Kd9s:0.5951,Kh9c:0.5951,Kh9d:0.5951,Kh9s:0.5951,Ks9c:0.5951,Ks9d:0.5951,Ks9h:0.5951,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.0002,Qd4d:0.0002,Qh4h:0.0002,Qs4s:0.0002,Qc5c:0.9971,Qd5d:0.9971,Qh5h:0.9971,Qs5s:0.9971,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:0.1586,Qc9h:0.1586,Qc9s:0.1586,Qd9c:0.1586,Qd9h:0.1586,Qd9s:0.1586,Qh9c:0.1586,Qh9d:0.1586,Qh9s:0.1586,Qs9c:0.1586,Qs9d:0.1586,Qs9h:0.1586,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:0.0001,Td7d:0.0001,Th7h:0.0001,Ts7s:0.0001,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 9,
+      "config": [
+        13,
+        29,
+        37,
+        9,
+        33,
+        21,
+        41,
+        17
+      ],
+      "actions": {
+        "raise": "6d6c:0.0006,6h6c:0.0006,6s6c:0.0006,6h6d:0.0006,6s6d:0.0006,6s6h:0.0006,7d7c:0.2555,7h7c:0.2555,7s7c:0.2555,7h7d:0.2555,7s7d:0.2555,7s7h:0.2555,Ac4d:0.1198,Ac4h:0.1198,Ac4s:0.1198,Ad4c:0.1198,Ad4h:0.1198,Ad4s:0.1198,Ah4c:0.1198,Ah4d:0.1198,Ah4s:0.1198,As4c:0.1198,As4d:0.1198,As4h:0.1198,Ac5d:0.4505,Ac5h:0.4505,Ac5s:0.4505,Ad5c:0.4505,Ad5h:0.4505,Ad5s:0.4505,Ah5c:0.4505,Ah5d:0.4505,Ah5s:0.4505,As5c:0.4505,As5d:0.4505,As5h:0.4505,Ac6d:0.0374,Ac6h:0.0374,Ac6s:0.0374,Ad6c:0.0374,Ad6h:0.0374,Ad6s:0.0374,Ah6c:0.0374,Ah6d:0.0374,Ah6s:0.0374,As6c:0.0374,As6d:0.0374,As6h:0.0374,Ac7d:0.221,Ac7h:0.221,Ac7s:0.221,Ad7c:0.221,Ad7h:0.221,Ad7s:0.221,Ah7c:0.221,Ah7d:0.221,Ah7s:0.221,As7c:0.221,As7d:0.221,As7h:0.221,Ac8d:0.789,Ac8h:0.789,Ac8s:0.789,Ad8c:0.789,Ad8h:0.789,Ad8s:0.789,Ah8c:0.789,Ah8d:0.789,Ah8s:0.789,As8c:0.789,As8d:0.789,As8h:0.789,Ac9d:0.6189,Ac9h:0.6189,Ac9s:0.6189,Ad9c:0.6189,Ad9h:0.6189,Ad9s:0.6189,Ah9c:0.6189,Ah9d:0.6189,Ah9s:0.6189,As9c:0.6189,As9d:0.6189,As9h:0.6189,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJc:0.0181,AdJd:0.0181,AhJh:0.0181,AsJs:0.0181,AcKd:0.1651,AcKh:0.1651,AcKs:0.1651,AdKc:0.1651,AdKh:0.1651,AdKs:0.1651,AhKc:0.1651,AhKd:0.1651,AhKs:0.1651,AsKc:0.1651,AsKd:0.1651,AsKh:0.1651,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQc:0.1136,AdQd:0.1136,AhQh:0.1136,AsQs:0.1136,AcTd:0.1019,AcTh:0.1019,AcTs:0.1019,AdTc:0.1019,AdTh:0.1019,AdTs:0.1019,AhTc:0.1019,AhTd:0.1019,AhTs:0.1019,AsTc:0.1019,AsTd:0.1019,AsTh:0.1019,AcTc:1,AdTd:1,AhTh:1,AsTs:1,KcJd:0.3894,KcJh:0.3894,KcJs:0.3894,KdJc:0.3894,KdJh:0.3894,KdJs:0.3894,KhJc:0.3894,KhJd:0.3894,KhJs:0.3894,KsJc:0.3894,KsJd:0.3894,KsJh:0.3894,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:0.0034,KcQh:0.0034,KcQs:0.0034,KdQc:0.0034,KdQh:0.0034,KdQs:0.0034,KhQc:0.0034,KhQd:0.0034,KhQs:0.0034,KsQc:0.0034,KsQd:0.0034,KsQh:0.0034,KcTd:0.3429,KcTh:0.3429,KcTs:0.3429,KdTc:0.3429,KdTh:0.3429,KdTs:0.3429,KhTc:0.3429,KhTd:0.3429,KhTs:0.3429,KsTc:0.3429,KsTd:0.3429,KsTh:0.3429,QcJd:0.2281,QcJh:0.2281,QcJs:0.2281,QdJc:0.2281,QdJh:0.2281,QdJs:0.2281,QhJc:0.2281,QhJd:0.2281,QhJs:0.2281,QsJc:0.2281,QsJd:0.2281,QsJh:0.2281,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1",
+        "allIn": "4d4c:0.3517,4h4c:0.3517,4s4c:0.3517,4h4d:0.3517,4s4d:0.3517,4s4h:0.3517,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:0.9994,6h6c:0.9994,6s6c:0.9994,6h6d:0.9994,6s6d:0.9994,6s6h:0.9994,7d7c:0.7445,7h7c:0.7445,7s7c:0.7445,7h7d:0.7445,7s7d:0.7445,7s7h:0.7445,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.3811,Ac9h:0.3811,Ac9s:0.3811,Ad9c:0.3811,Ad9h:0.3811,Ad9s:0.3811,Ah9c:0.3811,Ah9d:0.3811,Ah9s:0.3811,As9c:0.3811,As9d:0.3811,As9h:0.3811,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:0.9819,AdJd:0.9819,AhJh:0.9819,AsJs:0.9819,AcKd:0.8349,AcKh:0.8349,AcKs:0.8349,AdKc:0.8349,AdKh:0.8349,AdKs:0.8349,AhKc:0.8349,AhKd:0.8349,AhKs:0.8349,AsKc:0.8349,AsKd:0.8349,AsKh:0.8349,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:0.8864,AdQd:0.8864,AhQh:0.8864,AsQs:0.8864,AcTd:0.8981,AcTh:0.8981,AcTs:0.8981,AdTc:0.8981,AdTh:0.8981,AdTs:0.8981,AhTc:0.8981,AhTd:0.8981,AhTs:0.8981,AsTc:0.8981,AsTd:0.8981,AsTh:0.8981,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:0.6106,KcJh:0.6106,KcJs:0.6106,KdJc:0.6106,KdJh:0.6106,KdJs:0.6106,KhJc:0.6106,KhJd:0.6106,KhJs:0.6106,KsJc:0.6106,KsJd:0.6106,KsJh:0.6106,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQd:0.9966,KcQh:0.9966,KcQs:0.9966,KdQc:0.9966,KdQh:0.9966,KdQs:0.9966,KhQc:0.9966,KhQd:0.9966,KhQs:0.9966,KsQc:0.9966,KsQd:0.9966,KsQh:0.9966,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc9c:0.4678,Qd9d:0.4678,Qh9h:0.4678,Qs9s:0.4678,QcJd:0.0003,QcJh:0.0003,QcJs:0.0003,QdJc:0.0003,QdJh:0.0003,QdJs:0.0003,QhJc:0.0003,QhJd:0.0003,QhJs:0.0003,QsJc:0.0003,QsJd:0.0003,QsJh:0.0003,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 SB 41bb covers you",
+      "stack": 21,
+      "config": [
+        13,
+        37,
+        17,
+        21,
+        9,
+        33,
+        41,
+        29
+      ],
+      "actions": {
+        "raise": "5d5c:0.1795,5h5c:0.1795,5s5c:0.1795,5h5d:0.1795,5s5d:0.1795,5s5h:0.1795,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.2033,Ac8h:0.2033,Ac8s:0.2033,Ad8c:0.2033,Ad8h:0.2033,Ad8s:0.2033,Ah8c:0.2033,Ah8d:0.2033,Ah8s:0.2033,As8c:0.2033,As8d:0.2033,As8h:0.2033,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9998,AhAc:0.9998,AsAc:0.9998,AhAd:0.9998,AsAd:0.9998,AsAh:0.9998,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:0.9945,Jd9d:0.9945,Jh9h:0.9945,Js9s:0.9945,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc6c:0.0008,Kd6d:0.0008,Kh6h:0.0008,Ks6s:0.0008,Kc7c:0.8853,Kd7d:0.8853,Kh7h:0.8853,Ks7s:0.8853,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.6625,KcTh:0.6625,KcTs:0.6625,KdTc:0.6625,KdTh:0.6625,KdTs:0.6625,KhTc:0.6625,KhTd:0.6625,KhTs:0.6625,KsTc:0.6625,KsTd:0.6625,KsTh:0.6625,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.6962,Qd8d:0.6962,Qh8h:0.6962,Qs8s:0.6962,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:0.9165,QcJh:0.9165,QcJs:0.9165,QdJc:0.9165,QdJh:0.9165,QdJs:0.9165,QhJc:0.9165,QhJd:0.9165,QhJs:0.9165,QsJc:0.9165,QsJd:0.9165,QsJh:0.9165,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:0.0002,Td8d:0.0002,Th8h:0.0002,Ts8s:0.0002,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0002,AhAc:0.0002,AsAc:0.0002,AhAd:0.0002,AsAd:0.0002,AsAh:0.0002"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 CO 64bb covers you",
+      "stack": 28,
+      "config": [
+        16,
+        58,
+        22,
+        28,
+        64,
+        46,
+        52,
+        34
+      ],
+      "actions": {
+        "raise": "5d5c:0.5397,5h5c:0.5397,5s5c:0.5397,5h5d:0.5397,5s5d:0.5397,5s5h:0.5397,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.5456,Ac9h:0.5456,Ac9s:0.5456,Ad9c:0.5456,Ad9h:0.5456,Ad9s:0.5456,Ah9c:0.5456,Ah9d:0.5456,Ah9s:0.5456,As9c:0.5456,As9d:0.5456,As9h:0.5456,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:0.9999,Jd9d:0.9999,Jh9h:0.9999,Js9s:0.9999,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.0001,Kd5d:0.0001,Kh5h:0.0001,Ks5s:0.0001,Kc6c:0.0002,Kd6d:0.0002,Kh6h:0.0002,Ks6s:0.0002,Kc7c:0.3818,Kd7d:0.3818,Kh7h:0.3818,Ks7s:0.3818,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.3075,KcTh:0.3075,KcTs:0.3075,KdTc:0.3075,KdTh:0.3075,KdTs:0.3075,KhTc:0.3075,KhTd:0.3075,KhTs:0.3075,KsTc:0.3075,KsTd:0.3075,KsTh:0.3075,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc9c:0.9997,Qd9d:0.9997,Qh9h:0.9997,Qs9s:0.9997,QcJd:0.266,QcJh:0.266,QcJs:0.266,QdJc:0.266,QdJh:0.266,QdJs:0.266,QhJc:0.266,QhJd:0.266,QhJs:0.266,QsJc:0.266,QsJd:0.266,QsJh:0.266,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 CO 32bb similar \u2014 covers you",
+      "stack": 26,
+      "config": [
+        17,
+        8,
+        29,
+        26,
+        32,
+        14,
+        23,
+        11
+      ],
+      "actions": {
+        "raise": "5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2d:0.8073,Ac2h:0.8073,Ac2s:0.8073,Ad2c:0.8073,Ad2h:0.8073,Ad2s:0.8073,Ah2c:0.8073,Ah2d:0.8073,Ah2s:0.8073,As2c:0.8073,As2d:0.8073,As2h:0.8073,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:1,Ac3h:1,Ac3s:1,Ad3c:1,Ad3h:1,Ad3s:1,Ah3c:1,Ah3d:1,Ah3s:1,As3c:1,As3d:1,As3h:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.9987,JcTh:0.9987,JcTs:0.9987,JdTc:0.9987,JdTh:0.9987,JdTs:0.9987,JhTc:0.9987,JhTd:0.9987,JhTs:0.9987,JsTc:0.9987,JsTd:0.9987,JsTh:0.9987,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc4c:0.0584,Kd4d:0.0584,Kh4h:0.0584,Ks4s:0.0584,Kc5c:0.9699,Kd5d:0.9699,Kh5h:0.9699,Ks5s:0.9699,Kc6c:0.9025,Kd6d:0.9025,Kh6h:0.9025,Ks6s:0.9025,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:0.6998,Kc9h:0.6998,Kc9s:0.6998,Kd9c:0.6998,Kd9h:0.6998,Kd9s:0.6998,Kh9c:0.6998,Kh9d:0.6998,Kh9s:0.6998,Ks9c:0.6998,Ks9d:0.6998,Ks9h:0.6998,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.68,Qd8d:0.68,Qh8h:0.68,Qs8s:0.68,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:0.9722,Td9d:0.9722,Th9h:0.9722,Ts9s:0.9722,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BTN 27bb similar \u2014 covers you",
+      "stack": 16,
+      "config": [
+        18,
+        13,
+        26,
+        16,
+        24,
+        27,
+        14,
+        22
+      ],
+      "actions": {
+        "raise": "5d5c:0.0001,5h5c:0.0001,5s5c:0.0001,5h5d:0.0001,5s5d:0.0001,5s5h:0.0001,6d6c:0.0874,6h6c:0.0874,6s6c:0.0874,6h6d:0.0874,6s6d:0.0874,6s6h:0.0874,7d7c:0.3206,7h7c:0.3206,7s7c:0.3206,7h7d:0.3206,7s7d:0.3206,7s7h:0.3206,8d8c:0.9801,8h8c:0.9801,8s8c:0.9801,8h8d:0.9801,8s8d:0.9801,8s8h:0.9801,9d9c:0.9999,9h9c:0.9999,9s9c:0.9999,9h9d:0.9999,9s9d:0.9999,9s9h:0.9999,Ac2c:0.9755,Ad2d:0.9755,Ah2h:0.9755,As2s:0.9755,Ac3c:0.9561,Ad3d:0.9561,Ah3h:0.9561,As3s:0.9561,Ac4c:0.9454,Ad4d:0.9454,Ah4h:0.9454,As4s:0.9454,Ac5d:0.3033,Ac5h:0.3033,Ac5s:0.3033,Ad5c:0.3033,Ad5h:0.3033,Ad5s:0.3033,Ah5c:0.3033,Ah5d:0.3033,Ah5s:0.3033,As5c:0.3033,As5d:0.3033,As5h:0.3033,Ac5c:0.9908,Ad5d:0.9908,Ah5h:0.9908,As5s:0.9908,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.3027,Ac8h:0.3027,Ac8s:0.3027,Ad8c:0.3027,Ad8h:0.3027,Ad8s:0.3027,Ah8c:0.3027,Ah8d:0.3027,Ah8s:0.3027,As8c:0.3027,As8d:0.3027,As8h:0.3027,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:0.8935,AcKh:0.8935,AcKs:0.8935,AdKc:0.8935,AdKh:0.8935,AdKs:0.8935,AhKc:0.8935,AhKd:0.8935,AhKs:0.8935,AsKc:0.8935,AsKd:0.8935,AsKh:0.8935,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:0.7211,AcQh:0.7211,AcQs:0.7211,AdQc:0.7211,AdQh:0.7211,AdQs:0.7211,AhQc:0.7211,AhQd:0.7211,AhQs:0.7211,AsQc:0.7211,AsQd:0.7211,AsQh:0.7211,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:0.9955,AdTd:0.9955,AhTh:0.9955,AsTs:0.9955,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc6c:0.0006,Kd6d:0.0006,Kh6h:0.0006,Ks6s:0.0006,Kc7c:0.0014,Kd7d:0.0014,Kh7h:0.0014,Ks7s:0.0014,Kc8c:0.2733,Kd8d:0.2733,Kh8h:0.2733,Ks8s:0.2733,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:0.5841,KdJd:0.5841,KhJh:0.5841,KsJs:0.5841,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:0.9874,KdQd:0.9874,KhQh:0.9874,KsQs:0.9874,KcTd:0.7192,KcTh:0.7192,KcTs:0.7192,KdTc:0.7192,KdTh:0.7192,KdTs:0.7192,KhTc:0.7192,KhTd:0.7192,KhTs:0.7192,KsTc:0.7192,KsTd:0.7192,KsTh:0.7192,KcTc:0.9734,KdTd:0.9734,KhTh:0.9734,KsTs:0.9734,Qc9c:0.4813,Qd9d:0.4813,Qh9h:0.4813,Qs9s:0.4813,QcJd:0.8553,QcJh:0.8553,QcJs:0.8553,QdJc:0.8553,QdJh:0.8553,QdJs:0.8553,QhJc:0.8553,QhJd:0.8553,QhJs:0.8553,QsJc:0.8553,QsJd:0.8553,QsJh:0.8553,QcJc:0.9999,QdJd:0.9999,QhJh:0.9999,QsJs:0.9999,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.0501,QcTh:0.0501,QcTs:0.0501,QdTc:0.0501,QdTh:0.0501,QdTs:0.0501,QhTc:0.0501,QhTd:0.0501,QhTs:0.0501,QsTc:0.0501,QsTd:0.0501,QsTh:0.0501,QcTc:1,QdTd:1,QhTh:1,QsTs:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "9d9c:0.0001,9h9c:0.0001,9s9c:0.0001,9h9d:0.0001,9s9d:0.0001,9s9h:0.0001,Ac2c:0.0245,Ad2d:0.0245,Ah2h:0.0245,As2s:0.0245,Ac3c:0.0439,Ad3d:0.0439,Ah3h:0.0439,As3s:0.0439,Ac4c:0.0546,Ad4d:0.0546,Ah4h:0.0546,As4s:0.0546,Ac5c:0.0092,Ad5d:0.0092,Ah5h:0.0092,As5s:0.0092,AcKd:0.1065,AcKh:0.1065,AcKs:0.1065,AdKc:0.1065,AdKh:0.1065,AdKs:0.1065,AhKc:0.1065,AhKd:0.1065,AhKs:0.1065,AsKc:0.1065,AsKd:0.1065,AsKh:0.1065,AcQd:0.2789,AcQh:0.2789,AcQs:0.2789,AdQc:0.2789,AdQh:0.2789,AdQs:0.2789,AhQc:0.2789,AhQd:0.2789,AhQs:0.2789,AsQc:0.2789,AsQd:0.2789,AsQh:0.2789,AcTc:0.0045,AdTd:0.0045,AhTh:0.0045,AsTs:0.0045,KcJc:0.4159,KdJd:0.4159,KhJh:0.4159,KsJs:0.4159,KcQc:0.0126,KdQd:0.0126,KhQh:0.0126,KsQs:0.0126,KcTc:0.0266,KdTd:0.0266,KhTh:0.0266,KsTs:0.0266,QcJc:0.0001,QdJd:0.0001,QhJh:0.0001,QsJs:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BTN 50bb similar \u2014 covers you",
+      "stack": 45,
+      "config": [
+        20,
+        40,
+        10,
+        45,
+        35,
+        50,
+        15,
+        25
+      ],
+      "actions": {
+        "raise": "4d4c:0.9995,4h4c:0.9995,4s4c:0.9995,4h4d:0.9995,4s4d:0.9995,4s4h:0.9995,5c4c:0.0604,5d4d:0.0604,5h4h:0.0604,5s4s:0.0604,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.3647,6d5d:0.3647,6h5h:0.3647,6s5s:0.3647,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.1833,7d6d:0.1833,7h6h:0.1833,7s6s:0.1833,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.8816,8d7d:0.8816,8h7h:0.8816,8s7s:0.8816,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:0.0162,9d7d:0.0162,9h7h:0.0162,9s7s:0.0162,9c8c:0.9999,9d8d:0.9999,9h8h:0.9999,9s8s:0.9999,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2d:0.0001,Ac2h:0.0001,Ac2s:0.0001,Ad2c:0.0001,Ad2h:0.0001,Ad2s:0.0001,Ah2c:0.0001,Ah2d:0.0001,Ah2s:0.0001,As2c:0.0001,As2d:0.0001,As2h:0.0001,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:0.9671,Ac3h:0.9671,Ac3s:0.9671,Ad3c:0.9671,Ad3h:0.9671,Ad3s:0.9671,Ah3c:0.9671,Ah3d:0.9671,Ah3s:0.9671,As3c:0.9671,As3d:0.9671,As3h:0.9671,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc7c:0.9991,Jd7d:0.9991,Jh7h:0.9991,Js7s:0.9991,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:0.9957,Kd2d:0.9957,Kh2h:0.9957,Ks2s:0.9957,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:0.9815,Kc9h:0.9815,Kc9s:0.9815,Kd9c:0.9815,Kd9h:0.9815,Kd9s:0.9815,Kh9c:0.9815,Kh9d:0.9815,Kh9s:0.9815,Ks9c:0.9815,Ks9d:0.9815,Ks9h:0.9815,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.1081,Qd4d:0.1081,Qh4h:0.1081,Qs4s:0.1081,Qc5c:0.9997,Qd5d:0.9997,Qh5h:0.9997,Qs5s:0.9997,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:0.9987,Td7d:0.9987,Th7h:0.9987,Ts7s:0.9987,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:0.0127,Tc9h:0.0127,Tc9s:0.0127,Td9c:0.0127,Td9h:0.0127,Td9s:0.0127,Th9c:0.0127,Th9d:0.0127,Th9s:0.0127,Ts9c:0.0127,Ts9d:0.0127,Ts9h:0.0127,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 30,
+      "config": [
+        20,
+        50,
+        35,
+        30,
+        100,
+        25,
+        15,
+        45
+      ],
+      "actions": {
+        "raise": "4d4c:0.0175,4h4c:0.0175,4s4c:0.0175,4h4d:0.0175,4s4d:0.0175,4s4h:0.0175,5d5c:0.9999,5h5c:0.9999,5s5c:0.9999,5h5d:0.9999,5s5d:0.9999,5s5h:0.9999,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.6524,9d8d:0.6524,9h8h:0.6524,9s8s:0.6524,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.6977,Ac9h:0.6977,Ac9s:0.6977,Ad9c:0.6977,Ad9h:0.6977,Ad9s:0.6977,Ah9c:0.6977,Ah9d:0.6977,Ah9s:0.6977,As9c:0.6977,As9d:0.6977,As9h:0.6977,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc8c:0.0008,Jd8d:0.0008,Jh8h:0.0008,Js8s:0.0008,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.021,Kd5d:0.021,Kh5h:0.021,Ks5s:0.021,Kc6c:0.52,Kd6d:0.52,Kh6h:0.52,Ks6s:0.52,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.3275,KcTh:0.3275,KcTs:0.3275,KdTc:0.3275,KdTh:0.3275,KdTs:0.3275,KhTc:0.3275,KhTd:0.3275,KhTs:0.3275,KsTc:0.3275,KsTd:0.3275,KsTh:0.3275,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.5651,Qd8d:0.5651,Qh8h:0.5651,Qs8s:0.5651,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:0.6185,QcJh:0.6185,QcJs:0.6185,QdJc:0.6185,QdJh:0.6185,QdJs:0.6185,QhJc:0.6185,QhJd:0.6185,QhJs:0.6185,QsJc:0.6185,QsJd:0.6185,QsJh:0.6185,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:0.3659,Td8d:0.3659,Th8h:0.3659,Ts8s:0.3659,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BB 63bb covers you",
+      "stack": 27,
+      "config": [
+        22,
+        16,
+        10,
+        27,
+        14,
+        30,
+        18,
+        63
+      ],
+      "actions": {
+        "raise": "4d4c:0.2103,4h4c:0.2103,4s4c:0.2103,4h4d:0.2103,4s4d:0.2103,4s4h:0.2103,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.2374,8d7d:0.2374,8h7h:0.2374,8s7s:0.2374,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.8529,Ac9h:0.8529,Ac9s:0.8529,Ad9c:0.8529,Ad9h:0.8529,Ad9s:0.8529,Ah9c:0.8529,Ah9d:0.8529,Ah9s:0.8529,As9c:0.8529,As9d:0.8529,As9h:0.8529,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc8c:0.3056,Jd8d:0.3056,Jh8h:0.3056,Js8s:0.3056,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.1508,JcTh:0.1508,JcTs:0.1508,JdTc:0.1508,JdTh:0.1508,JdTs:0.1508,JhTc:0.1508,JhTd:0.1508,JhTs:0.1508,JsTc:0.1508,JsTd:0.1508,JsTh:0.1508,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.6114,Kd5d:0.6114,Kh5h:0.6114,Ks5s:0.6114,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.3451,KcTh:0.3451,KcTs:0.3451,KdTc:0.3451,KdTh:0.3451,KdTs:0.3451,KhTc:0.3451,KhTd:0.3451,KhTs:0.3451,KsTc:0.3451,KsTd:0.3451,KsTh:0.3451,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc7c:0.0204,Qd7d:0.0204,Qh7h:0.0204,Qs7s:0.0204,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.23,QcTh:0.23,QcTs:0.23,QdTc:0.23,QdTh:0.23,QdTs:0.23,QhTc:0.23,QhTd:0.23,QhTs:0.23,QsTc:0.23,QsTd:0.23,QsTh:0.23,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 LJ 38bb similar \u2014 covers you",
+      "stack": 26,
+      "config": [
+        22,
+        24,
+        38,
+        26,
+        28,
+        34,
+        36,
+        32
+      ],
+      "actions": {
+        "raise": "4d4c:0.1057,4h4c:0.1057,4s4c:0.1057,4h4d:0.1057,4s4d:0.1057,4s4h:0.1057,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.4273,9d8d:0.4273,9h8h:0.4273,9s8s:0.4273,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.1355,Ac5h:0.1355,Ac5s:0.1355,Ad5c:0.1355,Ad5h:0.1355,Ad5s:0.1355,Ah5c:0.1355,Ah5d:0.1355,Ah5s:0.1355,As5c:0.1355,As5d:0.1355,As5h:0.1355,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.8983,Ac8h:0.8983,Ac8s:0.8983,Ad8c:0.8983,Ad8h:0.8983,Ad8s:0.8983,Ah8c:0.8983,Ah8d:0.8983,Ah8s:0.8983,As8c:0.8983,As8d:0.8983,As8h:0.8983,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc8c:0.1067,Jd8d:0.1067,Jh8h:0.1067,Js8s:0.1067,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.1909,JcTh:0.1909,JcTs:0.1909,JdTc:0.1909,JdTh:0.1909,JdTs:0.1909,JhTc:0.1909,JhTd:0.1909,JhTs:0.1909,JsTc:0.1909,JsTd:0.1909,JsTh:0.1909,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc4c:0.0001,Kd4d:0.0001,Kh4h:0.0001,Ks4s:0.0001,Kc5c:0.9322,Kd5d:0.9322,Kh5h:0.9322,Ks5s:0.9322,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.9866,Qd8d:0.9866,Qh8h:0.9866,Qs8s:0.9866,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.1305,QcTh:0.1305,QcTs:0.1305,QdTc:0.1305,QdTh:0.1305,QdTs:0.1305,QhTc:0.1305,QhTd:0.1305,QhTs:0.1305,QsTc:0.1305,QsTd:0.1305,QsTh:0.1305,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:0.451,Td8d:0.451,Th8h:0.451,Ts8s:0.451,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covering",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 you cover the table",
+      "stack": 38,
+      "config": [
+        22,
+        26,
+        28,
+        38,
+        24,
+        32,
+        36,
+        34
+      ],
+      "actions": {
+        "raise": "3d3c:0.5913,3h3c:0.5913,3s3c:0.5913,3h3d:0.5913,3s3d:0.5913,3s3h:0.5913,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.4648,5d4d:0.4648,5h4h:0.4648,5s4s:0.4648,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.9581,6d5d:0.9581,6h5h:0.9581,6s5s:0.9581,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c5c:0.0001,7d5d:0.0001,7h5h:0.0001,7s5s:0.0001,7c6c:0.9595,7d6d:0.9595,7h6h:0.9595,7s6s:0.9595,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c6c:0.228,8d6d:0.228,8h6h:0.228,8s6s:0.228,8c7c:1,8d7d:1,8h7h:1,8s7s:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:1,9d7d:1,9h7h:1,9s7s:1,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:0.0428,Ac3h:0.0428,Ac3s:0.0428,Ad3c:0.0428,Ad3h:0.0428,Ad3s:0.0428,Ah3c:0.0428,Ah3d:0.0428,Ah3s:0.0428,As3c:0.0428,As3d:0.0428,As3h:0.0428,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:0.9982,Ac6h:0.9982,Ac6s:0.9982,Ad6c:0.9982,Ad6h:0.9982,Ad6s:0.9982,Ah6c:0.9982,Ah6d:0.9982,Ah6s:0.9982,As6c:0.9982,As6d:0.9982,As6h:0.9982,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc7c:0.9998,Jd7d:0.9998,Jh7h:0.9998,Js7s:0.9998,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:0.0037,Jc9h:0.0037,Jc9s:0.0037,Jd9c:0.0037,Jd9h:0.0037,Jd9s:0.0037,Jh9c:0.0037,Jh9d:0.0037,Jh9s:0.0037,Js9c:0.0037,Js9d:0.0037,Js9h:0.0037,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:1,Kd2d:1,Kh2h:1,Ks2s:1,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8d:0.0508,Kc8h:0.0508,Kc8s:0.0508,Kd8c:0.0508,Kd8h:0.0508,Kd8s:0.0508,Kh8c:0.0508,Kh8d:0.0508,Kh8s:0.0508,Ks8c:0.0508,Ks8d:0.0508,Ks8h:0.0508,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.0346,Qd4d:0.0346,Qh4h:0.0346,Qs4s:0.0346,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:0.2042,Qc9h:0.2042,Qc9s:0.2042,Qd9c:0.2042,Qd9h:0.2042,Qd9s:0.2042,Qh9c:0.2042,Qh9d:0.2042,Qh9s:0.2042,Qs9c:0.2042,Qs9d:0.2042,Qs9h:0.2042,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:0.9999,Td7d:0.9999,Th7h:0.9999,Ts7s:0.9999,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:0.3163,Tc9h:0.3163,Tc9s:0.3163,Td9c:0.3163,Td9h:0.3163,Td9s:0.3163,Th9c:0.3163,Th9d:0.3163,Th9s:0.3163,Ts9c:0.3163,Ts9d:0.3163,Ts9h:0.3163,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 LJ 75bb covers you",
+      "stack": 34,
+      "config": [
+        23,
+        32,
+        75,
+        34,
+        13,
+        20,
+        26,
+        17
+      ],
+      "actions": {
+        "raise": "5d5c:0.1511,5h5c:0.1511,5s5c:0.1511,5h5d:0.1511,5s5d:0.1511,5s5h:0.1511,6d6c:0.9999,6h6c:0.9999,6s6c:0.9999,6h6d:0.9999,6s6d:0.9999,6s6h:0.9999,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2d:1,Ac2h:1,Ac2s:1,Ad2c:1,Ad2h:1,Ad2s:1,Ah2c:1,Ah2d:1,Ah2s:1,As2c:1,As2d:1,As2h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:1,Ac3h:1,Ac3s:1,Ad3c:1,Ad3h:1,Ad3s:1,Ah3c:1,Ah3d:1,Ah3s:1,As3c:1,As3d:1,As3h:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc5c:0.0006,Jd5d:0.0006,Jh5h:0.0006,Js5s:0.0006,Jc6c:0.0002,Jd6d:0.0002,Jh6h:0.0002,Js6s:0.0002,Jc7c:0.9999,Jd7d:0.9999,Jh7h:0.9999,Js7s:0.9999,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:0.3549,Jc9h:0.3549,Jc9s:0.3549,Jd9c:0.3549,Jd9h:0.3549,Jd9s:0.3549,Jh9c:0.3549,Jh9d:0.3549,Jh9s:0.3549,Js9c:0.3549,Js9d:0.3549,Js9h:0.3549,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:0.0074,Kd2d:0.0074,Kh2h:0.0074,Ks2s:0.0074,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7d:0.2211,Kc7h:0.2211,Kc7s:0.2211,Kd7c:0.2211,Kd7h:0.2211,Kd7s:0.2211,Kh7c:0.2211,Kh7d:0.2211,Kh7s:0.2211,Ks7c:0.2211,Ks7d:0.2211,Ks7h:0.2211,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8d:0.8006,Kc8h:0.8006,Kc8s:0.8006,Kd8c:0.8006,Kd8h:0.8006,Kd8s:0.8006,Kh8c:0.8006,Kh8d:0.8006,Kh8s:0.8006,Ks8c:0.8006,Ks8d:0.8006,Ks8h:0.8006,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.0038,Qd4d:0.0038,Qh4h:0.0038,Qs4s:0.0038,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:0.9997,Qc9h:0.9997,Qc9s:0.9997,Qd9c:0.9997,Qd9h:0.9997,Qd9s:0.9997,Qh9c:0.9997,Qh9d:0.9997,Qh9s:0.9997,Qs9c:0.9997,Qs9d:0.9997,Qs9h:0.9997,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:0.1979,Td7d:0.1979,Th7h:0.1979,Ts7s:0.1979,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:0.113,Tc9h:0.113,Tc9s:0.113,Td9c:0.113,Td9h:0.113,Td9s:0.113,Th9c:0.113,Th9d:0.113,Th9s:0.113,Ts9c:0.113,Ts9d:0.113,Ts9h:0.113,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covering",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 you cover the table",
+      "stack": 50,
+      "config": [
+        24,
+        18,
+        22,
+        50,
+        4,
+        12,
+        14,
+        16
+      ],
+      "actions": {
+        "raise": "5c4c:0.7539,5d4d:0.7539,5h4h:0.7539,5s4s:0.7539,6c5c:0.0001,6d5d:0.0001,6h5h:0.0001,6s5s:0.0001,6d6c:0.0057,6h6c:0.0057,6s6c:0.0057,6h6d:0.0057,6s6d:0.0057,6s6h:0.0057,7c5c:0.3341,7d5d:0.3341,7h5h:0.3341,7s5s:0.3341,7c6c:0.867,7d6d:0.867,7h6h:0.867,7s6s:0.867,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c6c:1,8d6d:1,8h6h:1,8s6s:1,8c7c:0.0001,8d7d:0.0001,8h7h:0.0001,8s7s:0.0001,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c6c:0.9999,9d6d:0.9999,9h6h:0.9999,9s6s:0.9999,9c7c:0.9968,9d7d:0.9968,9h7h:0.9968,9s7s:0.9968,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2d:1,Ac2h:1,Ac2s:1,Ad2c:1,Ad2h:1,Ad2s:1,Ah2c:1,Ah2d:1,Ah2s:1,As2c:1,As2d:1,As2h:1,Ac3d:1,Ac3h:1,Ac3s:1,Ad3c:1,Ad3h:1,Ad3s:1,Ah3c:1,Ah3d:1,Ah3s:1,As3c:1,As3d:1,As3h:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac5d:0.6154,Ac5h:0.6154,Ac5s:0.6154,Ad5c:0.6154,Ad5h:0.6154,Ad5s:0.6154,Ah5c:0.6154,Ah5d:0.6154,Ah5s:0.6154,As5c:0.6154,As5d:0.6154,As5h:0.6154,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac9d:0.5969,Ac9h:0.5969,Ac9s:0.5969,Ad9c:0.5969,Ad9h:0.5969,Ad9s:0.5969,Ah9c:0.5969,Ah9d:0.5969,Ah9s:0.5969,As9c:0.5969,As9d:0.5969,As9h:0.5969,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc2c:0.9998,Jd2d:0.9998,Jh2h:0.9998,Js2s:0.9998,Jc3c:1,Jd3d:1,Jh3h:1,Js3s:1,Jc4c:1,Jd4d:1,Jh4h:1,Js4s:1,Jc5c:1,Jd5d:1,Jh5h:1,Js5s:1,Jc6c:1,Jd6d:1,Jh6h:1,Js6s:1,Jc7c:1,Jd7d:1,Jh7h:1,Js7s:1,Jc8d:1,Jc8h:1,Jc8s:1,Jd8c:1,Jd8h:1,Jd8s:1,Jh8c:1,Jh8d:1,Jh8s:1,Js8c:1,Js8d:1,Js8h:1,Jc9d:1,Jc9h:1,Jc9s:1,Jd9c:1,Jd9h:1,Jd9s:1,Jh9c:1,Jh9d:1,Jh9s:1,Js9c:1,Js9d:1,Js9h:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.2187,JcTh:0.2187,JcTs:0.2187,JdTc:0.2187,JdTh:0.2187,JdTs:0.2187,JhTc:0.2187,JhTd:0.2187,JhTs:0.2187,JsTc:0.2187,JsTd:0.2187,JsTh:0.2187,Kc2c:0.1128,Kd2d:0.1128,Kh2h:0.1128,Ks2s:0.1128,Kc3c:0.0001,Kd3d:0.0001,Kh3h:0.0001,Ks3s:0.0001,Kc5d:0.9999,Kc5h:0.9999,Kc5s:0.9999,Kd5c:0.9999,Kd5h:0.9999,Kd5s:0.9999,Kh5c:0.9999,Kh5d:0.9999,Kh5s:0.9999,Ks5c:0.9999,Ks5d:0.9999,Ks5h:0.9999,Kc6d:1,Kc6h:1,Kc6s:1,Kd6c:1,Kd6h:1,Kd6s:1,Kh6c:1,Kh6d:1,Kh6s:1,Ks6c:1,Ks6d:1,Ks6h:1,Kc7d:1,Kc7h:1,Kc7s:1,Kd7c:1,Kd7h:1,Kd7s:1,Kh7c:1,Kh7d:1,Kh7s:1,Ks7c:1,Ks7d:1,Ks7h:1,Kc8d:1,Kc8h:1,Kc8s:1,Kd8c:1,Kd8h:1,Kd8s:1,Kh8c:1,Kh8d:1,Kh8s:1,Ks8c:1,Ks8d:1,Ks8h:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcTd:0.7443,KcTh:0.7443,KcTs:0.7443,KdTc:0.7443,KdTh:0.7443,KdTs:0.7443,KhTc:0.7443,KhTd:0.7443,KhTs:0.7443,KsTc:0.7443,KsTd:0.7443,KsTh:0.7443,Qc2c:1,Qd2d:1,Qh2h:1,Qs2s:1,Qc3c:1,Qd3d:1,Qh3h:1,Qs3s:1,Qc4c:1,Qd4d:1,Qh4h:1,Qs4s:1,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8d:1,Qc8h:1,Qc8s:1,Qd8c:1,Qd8h:1,Qd8s:1,Qh8c:1,Qh8d:1,Qh8s:1,Qs8c:1,Qs8d:1,Qs8h:1,Qc9d:1,Qc9h:1,Qc9s:1,Qd9c:1,Qd9h:1,Qd9s:1,Qh9c:1,Qh9d:1,Qh9s:1,Qs9c:1,Qs9d:1,Qs9h:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.9999,QcTh:0.9999,QcTs:0.9999,QdTc:0.9999,QdTh:0.9999,QdTs:0.9999,QhTc:0.9999,QhTd:0.9999,QhTs:0.9999,QsTc:0.9999,QsTd:0.9999,QsTh:0.9999,Tc4c:0.9999,Td4d:0.9999,Th4h:0.9999,Ts4s:0.9999,Tc5c:1,Td5d:1,Th5h:1,Ts5s:1,Tc6c:1,Td6d:1,Th6h:1,Ts6s:1,Tc7c:1,Td7d:1,Th7h:1,Ts7s:1,Tc8d:1,Tc8h:1,Tc8s:1,Td8c:1,Td8h:1,Td8s:1,Th8c:1,Th8d:1,Th8s:1,Ts8c:1,Ts8d:1,Ts8h:1,Tc9d:1,Tc9h:1,Tc9s:1,Td9c:1,Td9h:1,Td9s:1,Th9c:1,Th9d:1,Th9s:1,Ts9c:1,Ts9d:1,Ts9h:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "2d2c:1,2h2c:1,2s2c:1,2h2d:1,2s2d:1,2s2h:1,3d3c:1,3h3c:1,3s3c:1,3h3d:1,3s3d:1,3s3h:1,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.2459,5d4d:0.2459,5h4h:0.2459,5s4s:0.2459,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.9999,6d5d:0.9999,6h5h:0.9999,6s5s:0.9999,6d6c:0.9943,6h6c:0.9943,6s6c:0.9943,6h6d:0.9943,6s6d:0.9943,6s6h:0.9943,7c6c:0.133,7d6d:0.133,7h6h:0.133,7s6s:0.133,8c7c:0.9999,8d7d:0.9999,8h7h:0.9999,8s7s:0.9999,9c7c:0.0032,9d7d:0.0032,9h7h:0.0032,9s7s:0.0032,9c8c:1,9d8d:1,9h8h:1,9s8s:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.3846,Ac5h:0.3846,Ac5s:0.3846,Ad5c:0.3846,Ad5h:0.3846,Ad5s:0.3846,Ah5c:0.3846,Ah5d:0.3846,Ah5s:0.3846,As5c:0.3846,As5d:0.3846,As5h:0.3846,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.4031,Ac9h:0.4031,Ac9s:0.4031,Ad9c:0.4031,Ad9h:0.4031,Ad9s:0.4031,Ah9c:0.4031,Ah9d:0.4031,Ah9s:0.4031,As9c:0.4031,As9d:0.4031,As9h:0.4031,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JcTd:0.7813,JcTh:0.7813,JcTs:0.7813,JdTc:0.7813,JdTh:0.7813,JdTs:0.7813,JhTc:0.7813,JhTd:0.7813,JhTs:0.7813,JsTc:0.7813,JsTd:0.7813,JsTh:0.7813,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:0.8872,Kd2d:0.8872,Kh2h:0.8872,Ks2s:0.8872,Kc3c:0.9999,Kd3d:0.9999,Kh3h:0.9999,Ks3s:0.9999,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.2557,KcTh:0.2557,KcTs:0.2557,KdTc:0.2557,KdTh:0.2557,KdTs:0.2557,KhTc:0.2557,KhTd:0.2557,KhTs:0.2557,KsTc:0.2557,KsTd:0.2557,KsTh:0.2557,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QcTd:0.0001,QcTh:0.0001,QcTs:0.0001,QdTc:0.0001,QdTh:0.0001,QdTs:0.0001,QhTc:0.0001,QhTd:0.0001,QhTs:0.0001,QsTc:0.0001,QsTd:0.0001,QsTh:0.0001,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 UTG+1 27bb covers you",
+      "stack": 14,
+      "config": [
+        24,
+        27,
+        16,
+        14,
+        22,
+        26,
+        13,
+        18
+      ],
+      "actions": {
+        "raise": "5d5c:0.0001,5h5c:0.0001,5s5c:0.0001,5h5d:0.0001,5s5d:0.0001,5s5h:0.0001,6d6c:0.0107,6h6c:0.0107,6s6c:0.0107,6h6d:0.0107,6s6d:0.0107,6s6h:0.0107,7d7c:0.1234,7h7c:0.1234,7s7c:0.1234,7h7d:0.1234,7s7d:0.1234,7s7h:0.1234,8d8c:0.494,8h8c:0.494,8s8c:0.494,8h8d:0.494,8s8d:0.494,8s8h:0.494,9d9c:0.7036,9h9c:0.7036,9s9c:0.7036,9h9d:0.7036,9s9d:0.7036,9s9h:0.7036,Ac2c:0.8874,Ad2d:0.8874,Ah2h:0.8874,As2s:0.8874,Ac3c:0.3343,Ad3d:0.3343,Ah3h:0.3343,As3s:0.3343,Ac4d:0.1612,Ac4h:0.1612,Ac4s:0.1612,Ad4c:0.1612,Ad4h:0.1612,Ad4s:0.1612,Ah4c:0.1612,Ah4d:0.1612,Ah4s:0.1612,As4c:0.1612,As4d:0.1612,As4h:0.1612,Ac4c:0.6285,Ad4d:0.6285,Ah4h:0.6285,As4s:0.6285,Ac5d:0.6237,Ac5h:0.6237,Ac5s:0.6237,Ad5c:0.6237,Ad5h:0.6237,Ad5s:0.6237,Ah5c:0.6237,Ah5d:0.6237,Ah5s:0.6237,As5c:0.6237,As5d:0.6237,As5h:0.6237,Ac5c:0.411,Ad5d:0.411,Ah5h:0.411,As5s:0.411,Ac6d:0.0226,Ac6h:0.0226,Ac6s:0.0226,Ad6c:0.0226,Ad6h:0.0226,Ad6s:0.0226,Ah6c:0.0226,Ah6d:0.0226,Ah6s:0.0226,As6c:0.0226,As6d:0.0226,As6h:0.0226,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.1147,Ac7h:0.1147,Ac7s:0.1147,Ad7c:0.1147,Ad7h:0.1147,Ad7s:0.1147,Ah7c:0.1147,Ah7d:0.1147,Ah7s:0.1147,As7c:0.1147,As7d:0.1147,As7h:0.1147,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.5194,Ac8h:0.5194,Ac8s:0.5194,Ad8c:0.5194,Ad8h:0.5194,Ad8s:0.5194,Ah8c:0.5194,Ah8d:0.5194,Ah8s:0.5194,As8c:0.5194,As8d:0.5194,As8h:0.5194,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:0.5904,Ad9d:0.5904,Ah9h:0.5904,As9s:0.5904,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:0.8172,AcJh:0.8172,AcJs:0.8172,AdJc:0.8172,AdJh:0.8172,AdJs:0.8172,AhJc:0.8172,AhJd:0.8172,AhJs:0.8172,AsJc:0.8172,AsJd:0.8172,AsJh:0.8172,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:0.6335,AcKh:0.6335,AcKs:0.6335,AdKc:0.6335,AdKh:0.6335,AdKs:0.6335,AhKc:0.6335,AhKd:0.6335,AhKs:0.6335,AsKc:0.6335,AsKd:0.6335,AsKh:0.6335,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:0.4876,AcQh:0.4876,AcQs:0.4876,AdQc:0.4876,AdQh:0.4876,AdQs:0.4876,AhQc:0.4876,AhQd:0.4876,AhQs:0.4876,AsQc:0.4876,AsQd:0.4876,AsQh:0.4876,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:0.9446,AdTd:0.9446,AhTh:0.9446,AsTs:0.9446,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:0.9297,JdTd:0.9297,JhTh:0.9297,JsTs:0.9297,Kc9c:0.2659,Kd9d:0.2659,Kh9h:0.2659,Ks9s:0.2659,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:0.0909,KdQd:0.0909,KhQh:0.0909,KsQs:0.0909,KcTd:0.4661,KcTh:0.4661,KcTs:0.4661,KdTc:0.4661,KdTh:0.4661,KdTs:0.4661,KhTc:0.4661,KhTd:0.4661,KhTs:0.4661,KsTc:0.4661,KsTd:0.4661,KsTh:0.4661,KcTc:0.5506,KdTd:0.5506,KhTh:0.5506,KsTs:0.5506,QcJd:0.9273,QcJh:0.9273,QcJs:0.9273,QdJc:0.9273,QdJh:0.9273,QdJs:0.9273,QhJc:0.9273,QhJd:0.9273,QhJs:0.9273,QsJc:0.9273,QsJd:0.9273,QsJh:0.9273,QcJc:0.3574,QdJd:0.3574,QhJh:0.3574,QsJs:0.3574,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.0137,QcTh:0.0137,QcTs:0.0137,QdTc:0.0137,QdTh:0.0137,QdTs:0.0137,QhTc:0.0137,QhTd:0.0137,QhTs:0.0137,QsTc:0.0137,QsTd:0.0137,QsTh:0.0137,QcTc:1,QdTd:1,QhTh:1,QsTs:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "8d8c:0.055,8h8c:0.055,8s8c:0.055,8h8d:0.055,8s8d:0.055,8s8h:0.055,9d9c:0.2964,9h9c:0.2964,9s9c:0.2964,9h9d:0.2964,9s9d:0.2964,9s9h:0.2964,Ac2c:0.1126,Ad2d:0.1126,Ah2h:0.1126,As2s:0.1126,Ac3c:0.6657,Ad3d:0.6657,Ah3h:0.6657,As3s:0.6657,Ac4c:0.3715,Ad4d:0.3715,Ah4h:0.3715,As4s:0.3715,Ac5c:0.589,Ad5d:0.589,Ah5h:0.589,As5s:0.589,Ac9c:0.4096,Ad9d:0.4096,Ah9h:0.4096,As9s:0.4096,AcJd:0.1828,AcJh:0.1828,AcJs:0.1828,AdJc:0.1828,AdJh:0.1828,AdJs:0.1828,AhJc:0.1828,AhJd:0.1828,AhJs:0.1828,AsJc:0.1828,AsJd:0.1828,AsJh:0.1828,AcKd:0.3665,AcKh:0.3665,AcKs:0.3665,AdKc:0.3665,AdKh:0.3665,AdKs:0.3665,AhKc:0.3665,AhKd:0.3665,AhKs:0.3665,AsKc:0.3665,AsKd:0.3665,AsKh:0.3665,AcQd:0.5124,AcQh:0.5124,AcQs:0.5124,AdQc:0.5124,AdQh:0.5124,AdQs:0.5124,AhQc:0.5124,AhQd:0.5124,AhQs:0.5124,AsQc:0.5124,AsQd:0.5124,AsQh:0.5124,AcTc:0.0554,AdTd:0.0554,AhTh:0.0554,AsTs:0.0554,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQc:0.9091,KdQd:0.9091,KhQh:0.9091,KsQs:0.9091,KcTc:0.4494,KdTd:0.4494,KhTh:0.4494,KsTs:0.4494,QcJc:0.6426,QdJd:0.6426,QhJh:0.6426,QsJs:0.6426"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BB 100bb covers you",
+      "stack": 35,
+      "config": [
+        25,
+        15,
+        30,
+        35,
+        50,
+        20,
+        45,
+        100
+      ],
+      "actions": {
+        "raise": "4d4c:0.0113,4h4c:0.0113,4s4c:0.0113,4h4d:0.0113,4s4d:0.0113,4s4h:0.0113,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.7007,9d8d:0.7007,9h8h:0.7007,9s8s:0.7007,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.0615,Ac9h:0.0615,Ac9s:0.0615,Ad9c:0.0615,Ad9h:0.0615,Ad9s:0.0615,Ah9c:0.0615,Ah9d:0.0615,Ah9s:0.0615,As9c:0.0615,As9d:0.0615,As9h:0.0615,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9998,AhAc:0.9998,AsAc:0.9998,AhAd:0.9998,AsAd:0.9998,AsAh:0.9998,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc8c:0.0733,Jd8d:0.0733,Jh8h:0.0733,Js8s:0.0733,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.0062,JcTh:0.0062,JcTs:0.0062,JdTc:0.0062,JdTh:0.0062,JdTs:0.0062,JhTc:0.0062,JhTd:0.0062,JhTs:0.0062,JsTc:0.0062,JsTd:0.0062,JsTh:0.0062,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.0795,Kd5d:0.0795,Kh5h:0.0795,Ks5s:0.0795,Kc6c:0.844,Kd6d:0.844,Kh6h:0.844,Ks6s:0.844,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.4417,Qd8d:0.4417,Qh8h:0.4417,Qs8s:0.4417,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:0.6483,QcJh:0.6483,QcJs:0.6483,QdJc:0.6483,QdJh:0.6483,QdJs:0.6483,QhJc:0.6483,QhJd:0.6483,QhJs:0.6483,QsJc:0.6483,QsJd:0.6483,QsJh:0.6483,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:0.4866,Td8d:0.4866,Th8h:0.4866,Ts8s:0.4866,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0002,AhAc:0.0002,AsAc:0.0002,AhAd:0.0002,AsAd:0.0002,AsAh:0.0002"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covering",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 you cover the table",
+      "stack": 38,
+      "config": [
+        28,
+        22,
+        26,
+        38,
+        24,
+        32,
+        34,
+        36
+      ],
+      "actions": {
+        "raise": "3d3c:0.5164,3h3c:0.5164,3s3c:0.5164,3h3d:0.5164,3s3d:0.5164,3s3h:0.5164,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.3481,5d4d:0.3481,5h4h:0.3481,5s4s:0.3481,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.9422,6d5d:0.9422,6h5h:0.9422,6s5s:0.9422,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.9924,7d6d:0.9924,7h6h:0.9924,7s6s:0.9924,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c6c:0.1025,8d6d:0.1025,8h6h:0.1025,8s6s:0.1025,8c7c:1,8d7d:1,8h7h:1,8s7s:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:0.9996,9d7d:0.9996,9h7h:0.9996,9s7s:0.9996,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:0.0044,Ac3h:0.0044,Ac3s:0.0044,Ad3c:0.0044,Ad3h:0.0044,Ad3s:0.0044,Ah3c:0.0044,Ah3d:0.0044,Ah3s:0.0044,As3c:0.0044,As3d:0.0044,As3h:0.0044,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:0.9682,Ac4h:0.9682,Ac4s:0.9682,Ad4c:0.9682,Ad4h:0.9682,Ad4s:0.9682,Ah4c:0.9682,Ah4d:0.9682,Ah4s:0.9682,As4c:0.9682,As4d:0.9682,As4h:0.9682,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:0.9537,Ac6h:0.9537,Ac6s:0.9537,Ad6c:0.9537,Ad6h:0.9537,Ad6s:0.9537,Ah6c:0.9537,Ah6d:0.9537,Ah6s:0.9537,As6c:0.9537,As6d:0.9537,As6h:0.9537,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc7c:0.9999,Jd7d:0.9999,Jh7h:0.9999,Js7s:0.9999,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:0.0004,Jc9h:0.0004,Jc9s:0.0004,Jd9c:0.0004,Jd9h:0.0004,Jd9s:0.0004,Jh9c:0.0004,Jh9d:0.0004,Jh9s:0.0004,Js9c:0.0004,Js9d:0.0004,Js9h:0.0004,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:1,Kd2d:1,Kh2h:1,Ks2s:1,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8d:0.0425,Kc8h:0.0425,Kc8s:0.0425,Kd8c:0.0425,Kd8h:0.0425,Kd8s:0.0425,Kh8c:0.0425,Kh8d:0.0425,Kh8s:0.0425,Ks8c:0.0425,Ks8d:0.0425,Ks8h:0.0425,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.1163,Qd4d:0.1163,Qh4h:0.1163,Qs4s:0.1163,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:0.4083,Qc9h:0.4083,Qc9s:0.4083,Qd9c:0.4083,Qd9h:0.4083,Qd9s:0.4083,Qh9c:0.4083,Qh9d:0.4083,Qh9s:0.4083,Qs9c:0.4083,Qs9d:0.4083,Qs9h:0.4083,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:0.9999,Td7d:0.9999,Th7h:0.9999,Ts7s:0.9999,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:0.3229,Tc9h:0.3229,Tc9s:0.3229,Td9c:0.3229,Td9h:0.3229,Td9s:0.3229,Th9c:0.3229,Th9d:0.3229,Th9s:0.3229,Ts9c:0.3229,Ts9d:0.3229,Ts9h:0.3229,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covering",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 you cover the table",
+      "stack": 52,
+      "config": [
+        28,
+        46,
+        37,
+        52,
+        34,
+        49,
+        43,
+        31
+      ],
+      "actions": {
+        "raise": "3d3c:0.4171,3h3c:0.4171,3s3c:0.4171,3h3d:0.4171,3s3d:0.4171,3s3h:0.4171,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.4574,5d4d:0.4574,5h4h:0.4574,5s4s:0.4574,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.9977,6d5d:0.9977,6h5h:0.9977,6s5s:0.9977,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.8888,7d6d:0.8888,7h6h:0.8888,7s6s:0.8888,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c6c:0.1911,8d6d:0.1911,8h6h:0.1911,8s6s:0.1911,8c7c:0.9999,8d7d:0.9999,8h7h:0.9999,8s7s:0.9999,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:1,9d7d:1,9h7h:1,9s7s:1,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:0.5671,Ac3h:0.5671,Ac3s:0.5671,Ad3c:0.5671,Ad3h:0.5671,Ad3s:0.5671,Ah3c:0.5671,Ah3d:0.5671,Ah3s:0.5671,As3c:0.5671,As3d:0.5671,As3h:0.5671,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc5c:0.2904,Jd5d:0.2904,Jh5h:0.2904,Js5s:0.2904,Jc6c:0.0001,Jd6d:0.0001,Jh6h:0.0001,Js6s:0.0001,Jc7c:1,Jd7d:1,Jh7h:1,Js7s:1,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:0.2824,Jc9h:0.2824,Jc9s:0.2824,Jd9c:0.2824,Jd9h:0.2824,Jd9s:0.2824,Jh9c:0.2824,Jh9d:0.2824,Jh9s:0.2824,Js9c:0.2824,Js9d:0.2824,Js9h:0.2824,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:1,Kd2d:1,Kh2h:1,Ks2s:1,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8d:0.0432,Kc8h:0.0432,Kc8s:0.0432,Kd8c:0.0432,Kd8h:0.0432,Kd8s:0.0432,Kh8c:0.0432,Kh8d:0.0432,Kh8s:0.0432,Ks8c:0.0432,Ks8d:0.0432,Ks8h:0.0432,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.9864,Qd4d:0.9864,Qh4h:0.9864,Qs4s:0.9864,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:0.4042,Qc9h:0.4042,Qc9s:0.4042,Qd9c:0.4042,Qd9h:0.4042,Qd9s:0.4042,Qh9c:0.4042,Qh9d:0.4042,Qh9s:0.4042,Qs9c:0.4042,Qs9d:0.4042,Qs9h:0.4042,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc7c:0.9998,Td7d:0.9998,Th7h:0.9998,Ts7s:0.9998,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:0.5421,Tc9h:0.5421,Tc9s:0.5421,Td9c:0.5421,Td9h:0.5421,Td9s:0.5421,Th9c:0.5421,Th9d:0.5421,Th9s:0.5421,Ts9c:0.5421,Ts9d:0.5421,Ts9h:0.5421,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 20,
+      "config": [
+        32,
+        13,
+        34,
+        20,
+        75,
+        23,
+        26,
+        17
+      ],
+      "actions": {
+        "raise": "6d6c:0.1265,6h6c:0.1265,6s6c:0.1265,6h6d:0.1265,6s6d:0.1265,6s6h:0.1265,7d7c:0.6169,7h7c:0.6169,7s7c:0.6169,7h7d:0.6169,7s7d:0.6169,7s7h:0.6169,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:0.0044,Ac4h:0.0044,Ac4s:0.0044,Ad4c:0.0044,Ad4h:0.0044,Ad4s:0.0044,Ah4c:0.0044,Ah4d:0.0044,Ah4s:0.0044,As4c:0.0044,As4d:0.0044,As4h:0.0044,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.9242,Ac5h:0.9242,Ac5s:0.9242,Ad5c:0.9242,Ad5h:0.9242,Ad5s:0.9242,Ah5c:0.9242,Ah5d:0.9242,Ah5s:0.9242,As5c:0.9242,As5d:0.9242,As5h:0.9242,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:0.002,Ac6h:0.002,Ac6s:0.002,Ad6c:0.002,Ad6h:0.002,Ad6s:0.002,Ah6c:0.002,Ah6d:0.002,Ah6s:0.002,As6c:0.002,As6d:0.002,As6h:0.002,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.0018,Ac7h:0.0018,Ac7s:0.0018,Ad7c:0.0018,Ad7h:0.0018,Ad7s:0.0018,Ah7c:0.0018,Ah7d:0.0018,Ah7s:0.0018,As7c:0.0018,As7d:0.0018,As7h:0.0018,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.9541,Ac8h:0.9541,Ac8s:0.9541,Ad8c:0.9541,Ad8h:0.9541,Ad8s:0.9541,Ah8c:0.9541,Ah8d:0.9541,Ah8s:0.9541,As8c:0.9541,As8d:0.9541,As8h:0.9541,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.0002,Kd5d:0.0002,Kh5h:0.0002,Ks5s:0.0002,Kc6c:0.0649,Kd6d:0.0649,Kh6h:0.0649,Ks6s:0.0649,Kc7c:0.3203,Kd7d:0.3203,Kh7h:0.3203,Ks7s:0.3203,Kc8c:0.9606,Kd8d:0.9606,Kh8h:0.9606,Ks8s:0.9606,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.9999,KcTh:0.9999,KcTs:0.9999,KdTc:0.9999,KdTh:0.9999,KdTs:0.9999,KhTc:0.9999,KhTd:0.9999,KhTs:0.9999,KsTc:0.9999,KsTd:0.9999,KsTh:0.9999,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc9c:0.9999,Qd9d:0.9999,Qh9h:0.9999,Qs9s:0.9999,QcJd:0.9731,QcJh:0.9731,QcJs:0.9731,QdJc:0.9731,QdJh:0.9731,QdJs:0.9731,QhJc:0.9731,QhJd:0.9731,QhJs:0.9731,QsJc:0.9731,QsJd:0.9731,QsJh:0.9731,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.07,QcTh:0.07,QcTs:0.07,QdTc:0.07,QdTh:0.07,QdTs:0.07,QhTc:0.07,QhTd:0.07,QhTs:0.07,QsTc:0.07,QsTd:0.07,QsTh:0.07,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:0.5189,Td9d:0.5189,Th9h:0.5189,Ts9s:0.5189,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 8,
+      "config": [
+        32,
+        14,
+        29,
+        8,
+        17,
+        23,
+        11,
+        26
+      ],
+      "actions": {
+        "raise": "6d6c:0.0482,6h6c:0.0482,6s6c:0.0482,6h6d:0.0482,6s6d:0.0482,6s6h:0.0482,7d7c:0.0279,7h7c:0.0279,7s7c:0.0279,7h7d:0.0279,7s7d:0.0279,7s7h:0.0279,Ac4d:0.1104,Ac4h:0.1104,Ac4s:0.1104,Ad4c:0.1104,Ad4h:0.1104,Ad4s:0.1104,Ah4c:0.1104,Ah4d:0.1104,Ah4s:0.1104,As4c:0.1104,As4d:0.1104,As4h:0.1104,Ac5d:0.3389,Ac5h:0.3389,Ac5s:0.3389,Ad5c:0.3389,Ad5h:0.3389,Ad5s:0.3389,Ah5c:0.3389,Ah5d:0.3389,Ah5s:0.3389,As5c:0.3389,As5d:0.3389,As5h:0.3389,Ac6d:0.1985,Ac6h:0.1985,Ac6s:0.1985,Ad6c:0.1985,Ad6h:0.1985,Ad6s:0.1985,Ah6c:0.1985,Ah6d:0.1985,Ah6s:0.1985,As6c:0.1985,As6d:0.1985,As6h:0.1985,Ac7d:0.4251,Ac7h:0.4251,Ac7s:0.4251,Ad7c:0.4251,Ad7h:0.4251,Ad7s:0.4251,Ah7c:0.4251,Ah7d:0.4251,Ah7s:0.4251,As7c:0.4251,As7d:0.4251,As7h:0.4251,Ac8d:0.1954,Ac8h:0.1954,Ac8s:0.1954,Ad8c:0.1954,Ad8h:0.1954,Ad8s:0.1954,Ah8c:0.1954,Ah8d:0.1954,Ah8s:0.1954,As8c:0.1954,As8d:0.1954,As8h:0.1954,Ac9d:0.2134,Ac9h:0.2134,Ac9s:0.2134,Ad9c:0.2134,Ad9h:0.2134,Ad9s:0.2134,Ah9c:0.2134,Ah9d:0.2134,Ah9s:0.2134,As9c:0.2134,As9d:0.2134,As9h:0.2134,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJc:0.0653,AdJd:0.0653,AhJh:0.0653,AsJs:0.0653,AcKc:0.7959,AdKd:0.7959,AhKh:0.7959,AsKs:0.7959,AcTd:0.0274,AcTh:0.0274,AcTs:0.0274,AdTc:0.0274,AdTh:0.0274,AdTs:0.0274,AhTc:0.0274,AhTd:0.0274,AhTs:0.0274,AsTc:0.0274,AsTd:0.0274,AsTh:0.0274,AcTc:0.4009,AdTd:0.4009,AhTh:0.4009,AsTs:0.4009,KcJd:0.0137,KcJh:0.0137,KcJs:0.0137,KdJc:0.0137,KdJh:0.0137,KdJs:0.0137,KhJc:0.0137,KhJd:0.0137,KhJs:0.0137,KsJc:0.0137,KsJd:0.0137,KsJh:0.0137,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcTd:0.247,KcTh:0.247,KcTs:0.247,KdTc:0.247,KdTh:0.247,KdTs:0.247,KhTc:0.247,KhTd:0.247,KhTs:0.247,KsTc:0.247,KsTd:0.247,KsTh:0.247,QcJd:0.2228,QcJh:0.2228,QcJs:0.2228,QdJc:0.2228,QdJh:0.2228,QdJs:0.2228,QhJc:0.2228,QhJd:0.2228,QhJs:0.2228,QsJc:0.2228,QsJd:0.2228,QsJh:0.2228,QdQc:0.1682,QhQc:0.1682,QsQc:0.1682,QhQd:0.1682,QsQd:0.1682,QsQh:0.1682,Tc9c:0.0001,Td9d:0.0001,Th9h:0.0001,Ts9s:0.0001",
+        "allIn": "3d3c:1,3h3c:1,3s3c:1,3h3d:1,3s3d:1,3s3h:1,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:0.9518,6h6c:0.9518,6s6c:0.9518,6h6d:0.9518,6s6d:0.9518,6s6h:0.9518,7d7c:0.9721,7h7c:0.9721,7s7c:0.9721,7h7d:0.9721,7s7d:0.9721,7s7h:0.9721,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.0513,Ac5h:0.0513,Ac5s:0.0513,Ad5c:0.0513,Ad5h:0.0513,Ad5s:0.0513,Ah5c:0.0513,Ah5d:0.0513,Ah5s:0.0513,As5c:0.0513,As5d:0.0513,As5h:0.0513,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.8046,Ac8h:0.8046,Ac8s:0.8046,Ad8c:0.8046,Ad8h:0.8046,Ad8s:0.8046,Ah8c:0.8046,Ah8d:0.8046,Ah8s:0.8046,As8c:0.8046,As8d:0.8046,As8h:0.8046,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.7866,Ac9h:0.7866,Ac9s:0.7866,Ad9c:0.7866,Ad9h:0.7866,Ad9s:0.7866,Ah9c:0.7866,Ah9d:0.7866,Ah9s:0.7866,As9c:0.7866,As9d:0.7866,As9h:0.7866,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:0.9347,AdJd:0.9347,AhJh:0.9347,AsJs:0.9347,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:0.2041,AdKd:0.2041,AhKh:0.2041,AsKs:0.2041,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:0.9726,AcTh:0.9726,AcTs:0.9726,AdTc:0.9726,AdTh:0.9726,AdTs:0.9726,AhTc:0.9726,AhTd:0.9726,AhTs:0.9726,AsTc:0.9726,AsTd:0.9726,AsTh:0.9726,AcTc:0.5991,AdTd:0.5991,AhTh:0.5991,AsTs:0.5991,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:0.9863,KcJh:0.9863,KcJs:0.9863,KdJc:0.9863,KdJh:0.9863,KdJs:0.9863,KhJc:0.9863,KhJd:0.9863,KhJs:0.9863,KsJc:0.9863,KsJd:0.9863,KsJh:0.9863,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc9c:0.9559,Qd9d:0.9559,Qh9h:0.9559,Qs9s:0.9559,QcJd:0.168,QcJh:0.168,QcJs:0.168,QdJc:0.168,QdJh:0.168,QdJs:0.168,QhJc:0.168,QhJd:0.168,QhJs:0.168,QsJc:0.168,QsJd:0.168,QsJh:0.168,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:0.8318,QhQc:0.8318,QsQc:0.8318,QhQd:0.8318,QsQd:0.8318,QsQh:0.8318,QcTc:1,QdTd:1,QhTh:1,QsTs:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 UTG 33bb covers you",
+      "stack": 17,
+      "config": [
+        33,
+        29,
+        21,
+        17,
+        31,
+        23,
+        27,
+        19
+      ],
+      "actions": {
+        "raise": "6d6c:0.0239,6h6c:0.0239,6s6c:0.0239,6h6d:0.0239,6s6d:0.0239,6s6h:0.0239,7d7c:0.2561,7h7c:0.2561,7s7c:0.2561,7h7d:0.2561,7s7d:0.2561,7s7h:0.2561,8d8c:0.8814,8h8c:0.8814,8s8c:0.8814,8h8d:0.8814,8s8d:0.8814,8s8h:0.8814,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:0.0002,Ac4h:0.0002,Ac4s:0.0002,Ad4c:0.0002,Ad4h:0.0002,Ad4s:0.0002,Ah4c:0.0002,Ah4d:0.0002,Ah4s:0.0002,As4c:0.0002,As4d:0.0002,As4h:0.0002,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.8412,Ac5h:0.8412,Ac5s:0.8412,Ad5c:0.8412,Ad5h:0.8412,Ad5s:0.8412,Ah5c:0.8412,Ah5d:0.8412,Ah5s:0.8412,As5c:0.8412,As5d:0.8412,As5h:0.8412,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:0.0004,Ac6h:0.0004,Ac6s:0.0004,Ad6c:0.0004,Ad6h:0.0004,Ad6s:0.0004,Ah6c:0.0004,Ah6d:0.0004,Ah6s:0.0004,As6c:0.0004,As6d:0.0004,As6h:0.0004,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.0395,Ac7h:0.0395,Ac7s:0.0395,Ad7c:0.0395,Ad7h:0.0395,Ad7s:0.0395,Ah7c:0.0395,Ah7d:0.0395,Ah7s:0.0395,As7c:0.0395,As7d:0.0395,As7h:0.0395,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.7875,Ac8h:0.7875,Ac8s:0.7875,Ad8c:0.7875,Ad8h:0.7875,Ad8s:0.7875,Ah8c:0.7875,Ah8d:0.7875,Ah8s:0.7875,As8c:0.7875,As8d:0.7875,As8h:0.7875,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc7c:0.0001,Kd7d:0.0001,Kh7h:0.0001,Ks7s:0.0001,Kc8c:0.0003,Kd8d:0.0003,Kh8h:0.0003,Ks8s:0.0003,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.7866,KcTh:0.7866,KcTs:0.7866,KdTc:0.7866,KdTh:0.7866,KdTs:0.7866,KhTc:0.7866,KhTd:0.7866,KhTs:0.7866,KsTc:0.7866,KsTd:0.7866,KsTh:0.7866,KcTc:1,KdTd:1,KhTh:1,KsTs:1,QcJd:0.8645,QcJh:0.8645,QcJs:0.8645,QdJc:0.8645,QdJh:0.8645,QdJs:0.8645,QhJc:0.8645,QhJd:0.8645,QhJs:0.8645,QsJc:0.8645,QsJd:0.8645,QsJh:0.8645,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 UTG 33bb similar \u2014 covers you",
+      "stack": 21,
+      "config": [
+        33,
+        31,
+        27,
+        21,
+        23,
+        19,
+        17,
+        29
+      ],
+      "actions": {
+        "raise": "5d5c:0.0661,5h5c:0.0661,5s5c:0.0661,5h5d:0.0661,5s5d:0.0661,5s5h:0.0661,6d6c:0.7552,6h6c:0.7552,6s6c:0.7552,6h6d:0.7552,6s6d:0.7552,6s6h:0.7552,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.7101,Ac5h:0.7101,Ac5s:0.7101,Ad5c:0.7101,Ad5h:0.7101,Ad5s:0.7101,Ah5c:0.7101,Ah5d:0.7101,Ah5s:0.7101,As5c:0.7101,As5d:0.7101,As5h:0.7101,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.0238,Ac7h:0.0238,Ac7s:0.0238,Ad7c:0.0238,Ad7h:0.0238,Ad7s:0.0238,Ah7c:0.0238,Ah7d:0.0238,Ah7s:0.0238,As7c:0.0238,As7d:0.0238,As7h:0.0238,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.2987,Kd5d:0.2987,Kh5h:0.2987,Ks5s:0.2987,Kc6c:0.7851,Kd6d:0.7851,Kh6h:0.7851,Ks6s:0.7851,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc8c:0.9954,Qd8d:0.9954,Qh8h:0.9954,Qs8s:0.9954,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.4562,QcTh:0.4562,QcTs:0.4562,QdTc:0.4562,QdTh:0.4562,QdTs:0.4562,QhTc:0.4562,QhTd:0.4562,QhTs:0.4562,QsTc:0.4562,QsTd:0.4562,QsTh:0.4562,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covering",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 you cover the table",
+      "stack": 50,
+      "config": [
+        35,
+        25,
+        45,
+        50,
+        10,
+        15,
+        20,
+        40
+      ],
+      "actions": {
+        "raise": "3d3c:0.205,3h3c:0.205,3s3c:0.205,3h3d:0.205,3s3d:0.205,3s3h:0.205,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.8957,6d5d:0.8957,6h5h:0.8957,6s5s:0.8957,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.9995,7d6d:0.9995,7h6h:0.9995,7s6s:0.9995,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c6c:0.6581,8d6d:0.6581,8h6h:0.6581,8s6s:0.6581,8c7c:1,8d7d:1,8h7h:1,8s7s:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:1,9d7d:1,9h7h:1,9s7s:1,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3d:0.87,Ac3h:0.87,Ac3s:0.87,Ad3c:0.87,Ad3h:0.87,Ad3s:0.87,Ah3c:0.87,Ah3d:0.87,Ah3s:0.87,As3c:0.87,As3d:0.87,As3h:0.87,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc5c:0.4248,Jd5d:0.4248,Jh5h:0.4248,Js5s:0.4248,Jc6c:0.1549,Jd6d:0.1549,Jh6h:0.1549,Js6s:0.1549,Jc7c:1,Jd7d:1,Jh7h:1,Js7s:1,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:0.7423,Jc9h:0.7423,Jc9s:0.7423,Jd9c:0.7423,Jd9h:0.7423,Jd9s:0.7423,Jh9c:0.7423,Jh9d:0.7423,Jh9s:0.7423,Js9c:0.7423,Js9d:0.7423,Js9h:0.7423,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc2c:0.9905,Kd2d:0.9905,Kh2h:0.9905,Ks2s:0.9905,Kc3c:1,Kd3d:1,Kh3h:1,Ks3s:1,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8d:0.9541,Kc8h:0.9541,Kc8s:0.9541,Kd8c:0.9541,Kd8h:0.9541,Kd8s:0.9541,Kh8c:0.9541,Kh8d:0.9541,Kh8s:0.9541,Ks8c:0.9541,Ks8d:0.9541,Ks8h:0.9541,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc4c:0.8489,Qd4d:0.8489,Qh4h:0.8489,Qs4s:0.8489,Qc5c:1,Qd5d:1,Qh5h:1,Qs5s:1,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:1,Qc9h:1,Qc9s:1,Qd9c:1,Qd9h:1,Qd9s:1,Qh9c:1,Qh9d:1,Qh9s:1,Qs9c:1,Qs9d:1,Qs9h:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc6c:0.1413,Td6d:0.1413,Th6h:0.1413,Ts6s:0.1413,Tc7c:1,Td7d:1,Th7h:1,Ts7s:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9d:1,Tc9h:1,Tc9s:1,Td9c:1,Td9h:1,Td9s:1,Th9c:1,Th9d:1,Th9s:1,Ts9c:1,Ts9d:1,Ts9h:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BB 52bb similar \u2014 covers you",
+      "stack": 46,
+      "config": [
+        37,
+        43,
+        31,
+        46,
+        49,
+        34,
+        28,
+        52
+      ],
+      "actions": {
+        "raise": "4d4c:0.9964,4h4c:0.9964,4s4c:0.9964,4h4d:0.9964,4s4d:0.9964,4s4h:0.9964,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.3599,6d5d:0.3599,6h5h:0.3599,6s5s:0.3599,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.5921,7d6d:0.5921,7h6h:0.5921,7s6s:0.5921,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.9862,8d7d:0.9862,8h7h:0.9862,8s7s:0.9862,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:0.4692,9d7d:0.4692,9h7h:0.4692,9s7s:0.4692,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.9999,Ac5h:0.9999,Ac5s:0.9999,Ad5c:0.9999,Ad5h:0.9999,Ad5s:0.9999,Ah5c:0.9999,Ah5d:0.9999,Ah5s:0.9999,As5c:0.9999,As5d:0.9999,As5h:0.9999,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.825,Ac7h:0.825,Ac7s:0.825,Ad7c:0.825,Ad7h:0.825,Ad7s:0.825,Ah7c:0.825,Ah7d:0.825,Ah7s:0.825,As7c:0.825,As7d:0.825,As7h:0.825,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.9999,JcTh:0.9999,JcTs:0.9999,JdTc:0.9999,JdTh:0.9999,JdTs:0.9999,JhTc:0.9999,JhTd:0.9999,JhTs:0.9999,JsTc:0.9999,JsTd:0.9999,JsTh:0.9999,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc3c:0.9992,Kd3d:0.9992,Kh3h:0.9992,Ks3s:0.9992,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:0.1267,Kc9h:0.1267,Kc9s:0.1267,Kd9c:0.1267,Kd9h:0.1267,Kd9s:0.1267,Kh9c:0.1267,Kh9d:0.1267,Kh9s:0.1267,Ks9c:0.1267,Ks9d:0.1267,Ks9h:0.1267,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc6c:0.9266,Qd6d:0.9266,Qh6h:0.9266,Qs6s:0.9266,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 they cover you by heaps",
+      "stack": 14,
+      "config": [
+        4,
+        16,
+        18,
+        14,
+        12,
+        24,
+        50,
+        22
+      ],
+      "actions": {
+        "raise": "7d7c:0.009,7h7c:0.009,7s7c:0.009,7h7d:0.009,7s7d:0.009,7s7h:0.009,8d8c:0.6194,8h8c:0.6194,8s8c:0.6194,8h8d:0.6194,8s8d:0.6194,8s8h:0.6194,9d9c:0.3883,9h9c:0.3883,9s9c:0.3883,9h9d:0.3883,9s9d:0.3883,9s9h:0.3883,Ac2c:0.4855,Ad2d:0.4855,Ah2h:0.4855,As2s:0.4855,Ac3c:0.6316,Ad3d:0.6316,Ah3h:0.6316,As3s:0.6316,Ac4c:0.9425,Ad4d:0.9425,Ah4h:0.9425,As4s:0.9425,Ac5d:0.0204,Ac5h:0.0204,Ac5s:0.0204,Ad5c:0.0204,Ad5h:0.0204,Ad5s:0.0204,Ah5c:0.0204,Ah5d:0.0204,Ah5s:0.0204,As5c:0.0204,As5d:0.0204,As5h:0.0204,Ac5c:0.9238,Ad5d:0.9238,Ah5h:0.9238,As5s:0.9238,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.0794,Ac8h:0.0794,Ac8s:0.0794,Ad8c:0.0794,Ad8h:0.0794,Ad8s:0.0794,Ah8c:0.0794,Ah8d:0.0794,Ah8s:0.0794,As8c:0.0794,As8d:0.0794,As8h:0.0794,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.9961,Ac9h:0.9961,Ac9s:0.9961,Ad9c:0.9961,Ad9h:0.9961,Ad9s:0.9961,Ah9c:0.9961,Ah9d:0.9961,Ah9s:0.9961,As9c:0.9961,As9d:0.9961,As9h:0.9961,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:0.6796,AcJh:0.6796,AcJs:0.6796,AdJc:0.6796,AdJh:0.6796,AdJs:0.6796,AhJc:0.6796,AhJd:0.6796,AhJs:0.6796,AsJc:0.6796,AsJd:0.6796,AsJh:0.6796,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:0.6278,AcKh:0.6278,AcKs:0.6278,AdKc:0.6278,AdKh:0.6278,AdKs:0.6278,AhKc:0.6278,AhKd:0.6278,AhKs:0.6278,AsKc:0.6278,AsKd:0.6278,AsKh:0.6278,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:0.4892,AdTd:0.4892,AhTh:0.4892,AsTs:0.4892,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:0.6971,JdTd:0.6971,JhTh:0.6971,JsTs:0.6971,Kc8c:0.0031,Kd8d:0.0031,Kh8h:0.0031,Ks8s:0.0031,Kc9c:0.5663,Kd9d:0.5663,Kh9h:0.5663,Ks9s:0.5663,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcTd:0.0086,KcTh:0.0086,KcTs:0.0086,KdTc:0.0086,KdTh:0.0086,KdTs:0.0086,KhTc:0.0086,KhTd:0.0086,KhTs:0.0086,KsTc:0.0086,KsTd:0.0086,KsTh:0.0086,KcTc:0.542,KdTd:0.542,KhTh:0.542,KsTs:0.542,QcJd:0.6055,QcJh:0.6055,QcJs:0.6055,QdJc:0.6055,QdJh:0.6055,QdJs:0.6055,QhJc:0.6055,QhJd:0.6055,QhJs:0.6055,QsJc:0.6055,QsJd:0.6055,QsJh:0.6055,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "8d8c:0.3806,8h8c:0.3806,8s8c:0.3806,8h8d:0.3806,8s8d:0.3806,8s8h:0.3806,9d9c:0.6117,9h9c:0.6117,9s9c:0.6117,9h9d:0.6117,9s9d:0.6117,9s9h:0.6117,Ac3c:0.3684,Ad3d:0.3684,Ah3h:0.3684,As3s:0.3684,Ac4c:0.0575,Ad4d:0.0575,Ah4h:0.0575,As4s:0.0575,Ac5c:0.0762,Ad5d:0.0762,Ah5h:0.0762,As5s:0.0762,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AcJd:0.3204,AcJh:0.3204,AcJs:0.3204,AdJc:0.3204,AdJh:0.3204,AdJs:0.3204,AhJc:0.3204,AhJd:0.3204,AhJs:0.3204,AsJc:0.3204,AsJd:0.3204,AsJh:0.3204,AcKd:0.3722,AcKh:0.3722,AcKs:0.3722,AdKc:0.3722,AdKh:0.3722,AdKs:0.3722,AhKc:0.3722,AhKd:0.3722,AhKs:0.3722,AsKc:0.3722,AsKd:0.3722,AsKh:0.3722,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcTc:0.5108,AdTd:0.5108,AhTh:0.5108,AsTs:0.5108,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTc:0.458,KdTd:0.458,KhTh:0.458,KsTs:0.458,QcJc:1,QdJd:1,QhJh:1,QsJs:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 UTG 50bb covers you",
+      "stack": 24,
+      "config": [
+        50,
+        18,
+        22,
+        24,
+        16,
+        12,
+        14,
+        4
+      ],
+      "actions": {
+        "raise": "7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.0025,9d8d:0.0025,9h8h:0.0025,9s8s:0.0025,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2d:1,Ac2h:1,Ac2s:1,Ad2c:1,Ad2h:1,Ad2s:1,Ah2c:1,Ah2d:1,Ah2s:1,As2c:1,As2d:1,As2h:1,Ac2c:0.9042,Ad2d:0.9042,Ah2h:0.9042,As2s:0.9042,Ac3d:1,Ac3h:1,Ac3s:1,Ad3c:1,Ad3h:1,Ad3s:1,Ah3c:1,Ah3d:1,Ah3s:1,As3c:1,As3d:1,As3h:1,Ac3c:0.0341,Ad3d:0.0341,Ah3h:0.0341,As3s:0.0341,Ac4d:1,Ac4h:1,Ac4s:1,Ad4c:1,Ad4h:1,Ad4s:1,Ah4c:1,Ah4d:1,Ah4s:1,As4c:1,As4d:1,As4h:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:0.0001,Ad5d:0.0001,Ah5h:0.0001,As5s:0.0001,Ac6d:1,Ac6h:1,Ac6s:1,Ad6c:1,Ad6h:1,Ad6s:1,Ah6c:1,Ah6d:1,Ah6s:1,As6c:1,As6d:1,As6h:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:1,Ac7h:1,Ac7s:1,Ad7c:1,Ad7h:1,Ad7s:1,Ah7c:1,Ah7d:1,Ah7s:1,As7c:1,As7d:1,As7h:1,Ac7c:0.0063,Ad7d:0.0063,Ah7h:0.0063,As7s:0.0063,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:0.7174,AcTh:0.7174,AcTs:0.7174,AdTc:0.7174,AdTh:0.7174,AdTs:0.7174,AhTc:0.7174,AhTd:0.7174,AhTs:0.7174,AsTc:0.7174,AsTd:0.7174,AsTh:0.7174,Jc7c:0.0001,Jd7d:0.0001,Jh7h:0.0001,Js7s:0.0001,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9d:0.6417,Jc9h:0.6417,Jc9s:0.6417,Jd9c:0.6417,Jd9h:0.6417,Jd9s:0.6417,Jh9c:0.6417,Jh9d:0.6417,Jh9s:0.6417,Js9c:0.6417,Js9d:0.6417,Js9h:0.6417,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,Kc3c:0.9119,Kd3d:0.9119,Kh3h:0.9119,Ks3s:0.9119,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7d:0.9783,Kc7h:0.9783,Kc7s:0.9783,Kd7c:0.9783,Kd7h:0.9783,Kd7s:0.9783,Kh7c:0.9783,Kh7d:0.9783,Kh7s:0.9783,Ks7c:0.9783,Ks7d:0.9783,Ks7h:0.9783,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8d:1,Kc8h:1,Kc8s:1,Kd8c:1,Kd8h:1,Kd8s:1,Kh8c:1,Kh8d:1,Kh8s:1,Ks8c:1,Ks8d:1,Ks8h:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:1,Kc9h:1,Kc9s:1,Kd9c:1,Kd9h:1,Kd9s:1,Kh9c:1,Kh9d:1,Kh9s:1,Ks9c:1,Ks9d:1,Ks9h:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,Qc5c:0.0001,Qd5d:0.0001,Qh5h:0.0001,Qs5s:0.0001,Qc6c:0.5232,Qd6d:0.5232,Qh6h:0.5232,Qs6s:0.5232,Qc7c:0.9498,Qd7d:0.9498,Qh7h:0.9498,Qs7s:0.9498,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9d:1,Qc9h:1,Qc9s:1,Qd9c:1,Qd9h:1,Qd9s:1,Qh9c:1,Qh9d:1,Qh9s:1,Qs9c:1,Qs9d:1,Qs9h:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "2d2c:0.9789,2h2c:0.9789,2s2c:0.9789,2h2d:0.9789,2s2d:0.9789,2s2h:0.9789,3d3c:1,3h3c:1,3s3c:1,3h3d:1,3s3d:1,3s3h:1,4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,Ac2c:0.0958,Ad2d:0.0958,Ah2h:0.0958,As2s:0.0958,Ac3c:0.9659,Ad3d:0.9659,Ah3h:0.9659,As3s:0.9659,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:0.9999,Ad5d:0.9999,Ah5h:0.9999,As5s:0.9999,Ac7c:0.9937,Ad7d:0.9937,Ah7h:0.9937,As7s:0.9937,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AcTd:0.2826,AcTh:0.2826,AcTs:0.2826,AdTc:0.2826,AdTh:0.2826,AdTs:0.2826,AhTc:0.2826,AhTd:0.2826,AhTs:0.2826,AsTc:0.2826,AsTd:0.2826,AsTh:0.2826,AcTc:1,AdTd:1,AhTh:1,AsTs:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 UTG 52bb similar \u2014 covers you",
+      "stack": 43,
+      "config": [
+        52,
+        28,
+        34,
+        43,
+        49,
+        46,
+        31,
+        37
+      ],
+      "actions": {
+        "raise": "4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5c4c:0.0581,5d4d:0.0581,5h4h:0.0581,5s4s:0.0581,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.5144,6d5d:0.5144,6h5h:0.5144,6s5s:0.5144,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.4796,7d6d:0.4796,7h6h:0.4796,7s6s:0.4796,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.2389,8d7d:0.2389,8h7h:0.2389,8s7s:0.2389,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:0.7027,9d7d:0.7027,9h7h:0.7027,9s7s:0.7027,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:1,Ac5h:1,Ac5s:1,Ad5c:1,Ad5h:1,Ad5s:1,Ah5c:1,Ah5d:1,Ah5s:1,As5c:1,As5d:1,As5h:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.5387,Ac7h:0.5387,Ac7s:0.5387,Ad7c:0.5387,Ad7h:0.5387,Ad7s:0.5387,Ah7c:0.5387,Ah7d:0.5387,Ah7s:0.5387,As7c:0.5387,As7d:0.5387,As7h:0.5387,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.8059,JcTh:0.8059,JcTs:0.8059,JdTc:0.8059,JdTh:0.8059,JdTs:0.8059,JhTc:0.8059,JhTd:0.8059,JhTs:0.8059,JsTc:0.8059,JsTd:0.8059,JsTh:0.8059,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc3c:0.3533,Kd3d:0.3533,Kh3h:0.3533,Ks3s:0.3533,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc6c:0.0001,Qd6d:0.0001,Qh6h:0.0001,Qs6s:0.0001,Qc7c:0.0002,Qd7d:0.0002,Qh7h:0.0002,Qs7s:0.0002,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:0.9982,QcTh:0.9982,QcTs:0.9982,QdTc:0.9982,QdTh:0.9982,QdTs:0.9982,QhTc:0.9982,QhTd:0.9982,QhTs:0.9982,QsTc:0.9982,QsTd:0.9982,QsTh:0.9982,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 CO 64bb covers you",
+      "stack": 34,
+      "config": [
+        58,
+        16,
+        28,
+        34,
+        64,
+        52,
+        46,
+        22
+      ],
+      "actions": {
+        "raise": "4d4c:0.0495,4h4c:0.0495,4s4c:0.0495,4h4d:0.0495,4s4d:0.0495,4s4h:0.0495,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c8c:0.0238,9d8d:0.0238,9h8h:0.0238,9s8s:0.0238,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.4707,Ac5h:0.4707,Ac5s:0.4707,Ad5c:0.4707,Ad5h:0.4707,Ad5s:0.4707,Ah5c:0.4707,Ah5d:0.4707,Ah5s:0.4707,As5c:0.4707,As5d:0.4707,As5h:0.4707,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:0.5964,Ac8h:0.5964,Ac8s:0.5964,Ad8c:0.5964,Ad8h:0.5964,Ad8s:0.5964,Ah8c:0.5964,Ah8d:0.5964,Ah8s:0.5964,As8c:0.5964,As8d:0.5964,As8h:0.5964,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:0.9999,AhAc:0.9999,AsAc:0.9999,AhAd:0.9999,AsAd:0.9999,AsAh:0.9999,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:0.072,JcTh:0.072,JcTs:0.072,JdTc:0.072,JdTh:0.072,JdTs:0.072,JhTc:0.072,JhTd:0.072,JhTs:0.072,JsTc:0.072,JsTd:0.072,JsTh:0.072,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc5c:0.49,Kd5d:0.49,Kh5h:0.49,Ks5s:0.49,Kc6c:0.583,Kd6d:0.583,Kh6h:0.583,Ks6s:0.583,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.921,KcTh:0.921,KcTs:0.921,KdTc:0.921,KdTh:0.921,KdTs:0.921,KhTc:0.921,KhTd:0.921,KhTs:0.921,KsTc:0.921,KsTd:0.921,KsTh:0.921,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:0.9207,QcJh:0.9207,QcJs:0.9207,QdJc:0.9207,QdJh:0.9207,QdJs:0.9207,QhJc:0.9207,QhJd:0.9207,QhJs:0.9207,QsJc:0.9207,QsJd:0.9207,QsJh:0.9207,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:0.3723,Td8d:0.3723,Th8h:0.3723,Ts8s:0.3723,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1",
+        "allIn": "AdAc:0.0001,AhAc:0.0001,AsAc:0.0001,AhAd:0.0001,AsAd:0.0001,AsAh:0.0001"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-similar",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 BB 64bb similar \u2014 covers you",
+      "stack": 46,
+      "config": [
+        58,
+        52,
+        22,
+        46,
+        16,
+        34,
+        28,
+        64
+      ],
+      "actions": {
+        "raise": "4d4c:1,4h4c:1,4s4c:1,4h4d:1,4s4d:1,4s4h:1,5d5c:1,5h5c:1,5s5c:1,5h5d:1,5s5d:1,5s5h:1,6c5c:0.1177,6d5d:0.1177,6h5h:0.1177,6s5s:0.1177,6d6c:1,6h6c:1,6s6c:1,6h6d:1,6s6d:1,6s6h:1,7c6c:0.284,7d6d:0.284,7h6h:0.284,7s6s:0.284,7d7c:1,7h7c:1,7s7c:1,7h7d:1,7s7d:1,7s7h:1,8c7c:0.998,8d7d:0.998,8h7h:0.998,8s7s:0.998,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9c7c:0.6378,9d7d:0.6378,9h7h:0.6378,9s7s:0.6378,9c8c:1,9d8d:1,9h8h:1,9s8s:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:1,Ad2d:1,Ah2h:1,As2s:1,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5d:0.9999,Ac5h:0.9999,Ac5s:0.9999,Ad5c:0.9999,Ad5h:0.9999,Ad5s:0.9999,Ah5c:0.9999,Ah5d:0.9999,Ah5s:0.9999,As5c:0.9999,As5d:0.9999,As5h:0.9999,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7d:0.5114,Ac7h:0.5114,Ac7s:0.5114,Ad7c:0.5114,Ad7h:0.5114,Ad7s:0.5114,Ah7c:0.5114,Ah7d:0.5114,Ah7s:0.5114,As7c:0.5114,As7d:0.5114,As7h:0.5114,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8d:1,Ac8h:1,Ac8s:1,Ad8c:1,Ad8h:1,Ad8s:1,Ah8c:1,Ah8d:1,Ah8s:1,As8c:1,As8d:1,As8h:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:1,Ac9h:1,Ac9s:1,Ad9c:1,Ad9h:1,Ad9s:1,Ah9c:1,Ah9d:1,Ah9s:1,As9c:1,As9d:1,As9h:1,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,Jc7c:0.6,Jd7d:0.6,Jh7h:0.6,Js7s:0.6,Jc8c:1,Jd8d:1,Jh8h:1,Js8s:1,Jc9c:1,Jd9d:1,Jh9h:1,Js9s:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTd:1,JcTh:1,JcTs:1,JdTc:1,JdTh:1,JdTs:1,JhTc:1,JhTd:1,JhTs:1,JsTc:1,JsTd:1,JsTh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc3c:0.7679,Kd3d:0.7679,Kh3h:0.7679,Ks3s:0.7679,Kc4c:1,Kd4d:1,Kh4h:1,Ks4s:1,Kc5c:1,Kd5d:1,Kh5h:1,Ks5s:1,Kc6c:1,Kd6d:1,Kh6h:1,Ks6s:1,Kc7c:1,Kd7d:1,Kh7h:1,Ks7s:1,Kc8c:1,Kd8d:1,Kh8h:1,Ks8s:1,Kc9d:0.0553,Kc9h:0.0553,Kc9s:0.0553,Kd9c:0.0553,Kd9h:0.0553,Kd9s:0.0553,Kh9c:0.0553,Kh9d:0.0553,Kh9s:0.0553,Ks9c:0.0553,Ks9d:0.0553,Ks9h:0.0553,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:1,KcJh:1,KcJs:1,KdJc:1,KdJh:1,KdJs:1,KhJc:1,KhJd:1,KhJs:1,KsJc:1,KsJd:1,KsJh:1,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:1,KcTh:1,KcTs:1,KdTc:1,KdTh:1,KdTs:1,KhTc:1,KhTd:1,KhTs:1,KsTc:1,KsTd:1,KsTh:1,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc5c:0.1785,Qd5d:0.1785,Qh5h:0.1785,Qs5s:0.1785,Qc6c:1,Qd6d:1,Qh6h:1,Qs6s:1,Qc7c:1,Qd7d:1,Qh7h:1,Qs7s:1,Qc8c:1,Qd8d:1,Qh8h:1,Qs8s:1,Qc9c:1,Qd9d:1,Qh9h:1,Qs9s:1,QcJd:1,QcJh:1,QcJs:1,QdJc:1,QdJh:1,QdJs:1,QhJc:1,QhJd:1,QhJs:1,QsJc:1,QsJd:1,QsJh:1,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTd:1,QcTh:1,QcTs:1,QdTc:1,QdTh:1,QdTs:1,QhTc:1,QhTd:1,QhTs:1,QsTc:1,QsTd:1,QsTh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc8c:1,Td8d:1,Th8h:1,Ts8s:1,Tc9c:1,Td9d:1,Th9h:1,Ts9s:1,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
+      },
+      "sizings": {
+        "raise": 2
+      }
+    },
+    {
+      "type": "ICM-covered-deep",
+      "subtitle": "ICM \u00b7 200-man bubble \u00b7 UTG+1 41bb covers you",
+      "stack": 17,
+      "config": [
+        9,
+        41,
+        13,
+        17,
+        33,
+        37,
+        21,
+        29
+      ],
+      "actions": {
+        "raise": "6d6c:0.1365,6h6c:0.1365,6s6c:0.1365,6h6d:0.1365,6s6d:0.1365,6s6h:0.1365,7d7c:0.7189,7h7c:0.7189,7s7c:0.7189,7h7d:0.7189,7s7d:0.7189,7s7h:0.7189,8d8c:1,8h8c:1,8s8c:1,8h8d:1,8s8d:1,8s8h:1,9d9c:1,9h9c:1,9s9c:1,9h9d:1,9s9d:1,9s9h:1,Ac2c:0.2423,Ad2d:0.2423,Ah2h:0.2423,As2s:0.2423,Ac3c:1,Ad3d:1,Ah3h:1,As3s:1,Ac4c:1,Ad4d:1,Ah4h:1,As4s:1,Ac5c:1,Ad5d:1,Ah5h:1,As5s:1,Ac6c:1,Ad6d:1,Ah6h:1,As6s:1,Ac7c:1,Ad7d:1,Ah7h:1,As7s:1,Ac8c:1,Ad8d:1,Ah8h:1,As8s:1,Ac9d:0.9218,Ac9h:0.9218,Ac9s:0.9218,Ad9c:0.9218,Ad9h:0.9218,Ad9s:0.9218,Ah9c:0.9218,Ah9d:0.9218,Ah9s:0.9218,As9c:0.9218,As9d:0.9218,As9h:0.9218,Ac9c:1,Ad9d:1,Ah9h:1,As9s:1,AdAc:1,AhAc:1,AsAc:1,AhAd:1,AsAd:1,AsAh:1,AcJd:1,AcJh:1,AcJs:1,AdJc:1,AdJh:1,AdJs:1,AhJc:1,AhJd:1,AhJs:1,AsJc:1,AsJd:1,AsJh:1,AcJc:1,AdJd:1,AhJh:1,AsJs:1,AcKd:1,AcKh:1,AcKs:1,AdKc:1,AdKh:1,AdKs:1,AhKc:1,AhKd:1,AhKs:1,AsKc:1,AsKd:1,AsKh:1,AcKc:1,AdKd:1,AhKh:1,AsKs:1,AcQd:1,AcQh:1,AcQs:1,AdQc:1,AdQh:1,AdQs:1,AhQc:1,AhQd:1,AhQs:1,AsQc:1,AsQd:1,AsQh:1,AcQc:1,AdQd:1,AhQh:1,AsQs:1,AcTd:1,AcTh:1,AcTs:1,AdTc:1,AdTh:1,AdTs:1,AhTc:1,AhTd:1,AhTs:1,AsTc:1,AsTd:1,AsTh:1,AcTc:1,AdTd:1,AhTh:1,AsTs:1,JdJc:1,JhJc:1,JsJc:1,JhJd:1,JsJd:1,JsJh:1,JcTc:1,JdTd:1,JhTh:1,JsTs:1,Kc8c:0.9921,Kd8d:0.9921,Kh8h:0.9921,Ks8s:0.9921,Kc9c:1,Kd9d:1,Kh9h:1,Ks9s:1,KcJd:0.9998,KcJh:0.9998,KcJs:0.9998,KdJc:0.9998,KdJh:0.9998,KdJs:0.9998,KhJc:0.9998,KhJd:0.9998,KhJs:0.9998,KsJc:0.9998,KsJd:0.9998,KsJh:0.9998,KcJc:1,KdJd:1,KhJh:1,KsJs:1,KdKc:1,KhKc:1,KsKc:1,KhKd:1,KsKd:1,KsKh:1,KcQd:1,KcQh:1,KcQs:1,KdQc:1,KdQh:1,KdQs:1,KhQc:1,KhQd:1,KhQs:1,KsQc:1,KsQd:1,KsQh:1,KcQc:1,KdQd:1,KhQh:1,KsQs:1,KcTd:0.1578,KcTh:0.1578,KcTs:0.1578,KdTc:0.1578,KdTh:0.1578,KdTs:0.1578,KhTc:0.1578,KhTd:0.1578,KhTs:0.1578,KsTc:0.1578,KsTd:0.1578,KsTh:0.1578,KcTc:1,KdTd:1,KhTh:1,KsTs:1,Qc9c:0.9999,Qd9d:0.9999,Qh9h:0.9999,Qs9s:0.9999,QcJd:0.4544,QcJh:0.4544,QcJs:0.4544,QdJc:0.4544,QdJh:0.4544,QdJs:0.4544,QhJc:0.4544,QhJd:0.4544,QhJs:0.4544,QsJc:0.4544,QsJd:0.4544,QsJh:0.4544,QcJc:1,QdJd:1,QhJh:1,QsJs:1,QdQc:1,QhQc:1,QsQc:1,QhQd:1,QsQd:1,QsQh:1,QcTc:1,QdTd:1,QhTh:1,QsTs:1,Tc9c:0.3209,Td9d:0.3209,Th9h:0.3209,Ts9s:0.3209,TdTc:1,ThTc:1,TsTc:1,ThTd:1,TsTd:1,TsTh:1"
       },
       "sizings": {
         "raise": 2

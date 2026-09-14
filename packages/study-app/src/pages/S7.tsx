@@ -1,25 +1,29 @@
-import { Section, Callout, Action, RandomBoard, Collapsible, DecisionTree, DataTable, BoardExample, ExampleBrowser, Subhead } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
 import { S7_FLOP_JJ3, S7_FLOP_T33, S7_FLOP_533, S7_FLOP_662 } from '@poker/design-system/src/data/ranges'
 
 export function S7Page() {
   return (
-    <Section title="System 7 \u2014 C-bet Folding Flops (vs Check-Raises)">
+    <Section title="System 7 — C-bet Folding Flops (vs Check-Raises)">
       <p>You c-bet the flop as preflop raiser and face a CR. Which hands defend vs fold?</p>
+
+      <Leak items={[
+      ['Folding hands that are too strong', 'MDF says defend 65%, ace-high is snap call'],
+      ['Not doing the MDF calculation', 'emotional decisions when facing a big raise'],
+      ['Overfolding to check-raises', 'HUD-reading opponents will exploit high fold-to-CR'],
+      ['Not identifying the worst hands', "if you can't identify trash, you can't engineer the fold correctly"],
+      ]} />
 
       
       <Callout><strong>Fold% = Risk / (Pot + Risk)</strong> — makes zero-equity bluffs indifferent. But villain's bluffs have real equity → <strong>actual fold% is LOWER</strong>. Defend more than MDF.</Callout>
 
-      <Callout variant="warn"><strong>Common Leaks:</strong> Folding hands that are too strong — MDF says defend 65%, ace-high is snap call. Not doing the MDF calculation — making emotional decisions when facing a big raise. Overfolding to check-raises — HUD-reading opponents will exploit high fold-to-CR. Not identifying the worst hands — if you can't identify trash, you can't engineer the fold correctly.</Callout>
-
-                    <Collapsible title="Heuristics">
-        <ul>
-          <li>"MDF keeps you rational — it doesn't produce a hand chart in your head"</li>
-          <li>"Fold the trash, defend everything else"</li>
-          <li>"When in doubt, the bet is too small to fold much"</li>
-          <li>"Paired board: evaluate the unpaired card"</li>
-          <li>"Villain's bluffs have equity — fold less than basic MDF"</li>
-        </ul>
-      </Collapsible>
+                    <Subhead>Heuristics</Subhead>
+      <ul>
+        <li>"MDF keeps you rational — it doesn't produce a hand chart in your head"</li>
+        <li>"Fold the trash, defend everything else"</li>
+        <li>"When in doubt, the bet is too small to fold much"</li>
+        <li>"Paired board: evaluate the unpaired card"</li>
+        <li>"Villain's bluffs have equity — fold less than basic MDF"</li>
+      </ul>
 
       <DecisionTree
         root={{
@@ -30,9 +34,9 @@ export function S7Page() {
             actionVariant: 'call',
             reason: 'Pure call. Draws make it even stronger.',
             boards: [
-              <RandomBoard high="K" variant="green" />,
-              <RandomBoard high="Q" variant="green" />,
-              <RandomBoard high="J" variant="green" />,
+              <BoardType cards="Kh9d4c" label="K94" variant="green" />,
+              <BoardType cards="Qc8s3d" label="Q83" variant="green" />,
+              <BoardType cards="Jh7d2c" label="J72" variant="green" />,
             ],
           },
           no: {
@@ -42,8 +46,8 @@ export function S7Page() {
               actionVariant: 'call',
               reason: 'Paired card unusable. Ace + BDFD = pure call.',
               boards: [
-                <RandomBoard high="K" paired variant="red" label="K55" />,
-                <RandomBoard high="J" paired variant="red" label="J33" />,
+                <BoardType cards="Kh5d5c" label="K55" variant="red" />,
+                <BoardType cards="Jc3h3d" label="J33" variant="red" />,
               ],
             },
             no: {
@@ -53,8 +57,8 @@ export function S7Page() {
                 actionVariant: 'call',
                 reason: 'One over/one under or double unders + BDFD/3-straight = call.',
                 boards: [
-                  <RandomBoard high="K" suit="two-tone" variant="orange" />,
-                  <RandomBoard high="Q" suit="two-tone" variant="orange" />,
+                  <BoardType cards="Kh9c7c" label="K97 — two-tone" variant="orange" />,
+                  <BoardType cards="Qd8h6h" label="Q86 — two-tone" variant="orange" />,
                 ],
               },
               no: {
@@ -62,8 +66,8 @@ export function S7Page() {
                 actionVariant: 'fold',
                 reason: 'Naked double-unders, no equity, no BDFD, no 3-straight.',
                 boards: [
-                  <RandomBoard high="9" variant="red" />,
-                  <RandomBoard high="T" variant="red" />,
+                  <BoardType cards="9c6d2h" label="962" variant="red" />,
+                  <BoardType cards="Th7s3d" label="T73" variant="red" />,
                 ],
               },
             },
@@ -71,28 +75,25 @@ export function S7Page() {
         }}
       />
 
-      <Collapsible title="Defend priority (for trash)">
-        <ol>
-          <li>Direct equity (overcards to top pair) — Ace-high first</li>
-          <li>Backdoor flush draw (high card of suit &gt; low)</li>
-          <li>Three to a straight</li>
-          <li>Backdoor straight draws</li>
-          <li>Blocker effects (avoid suit that blocks villain's bluffs)</li>
-        </ol>
-      </Collapsible>
+      <Subhead>Defend priority (for trash)</Subhead>
+      <ol>
+        <li>Direct equity (overcards to top pair) — Ace-high first</li>
+        <li>Backdoor flush draw (high card of suit &gt; low)</li>
+        <li>Three to a straight</li>
+        <li>Backdoor straight draws</li>
+        <li>Blocker effects (avoid suit that blocks villain's bluffs)</li>
+      </ol>
 
-      <Collapsible title="Risk factors">
-        <DataTable columns={[{header:'Factor'},{header:'Effect'}]} rows={[
-          [<><strong>Villain bluffs have high equity</strong></>, 'Defend even more than MDF'],
-          [<><strong>Paired boards (K55)</strong></>, 'Organize around unpaired card. Ace + BDFD = pure call'],
-          [<><strong>Small raise sizes</strong></>, 'Defend almost everything; pot odds may prevent any fold'],
-          [<><strong>Blocker suits (two-tone)</strong></>, 'Avoid suit villain bluffs with — blocks their bluff frequency'],
-        ]} />
-      </Collapsible>
+      <Subhead>Risk factors</Subhead>
+      <DataTable columns={[{header:'Factor'},{header:'Effect'}]} rows={[
+        [<><strong>Villain bluffs have high equity</strong></>, 'Defend even more than MDF'],
+        [<><strong>Paired boards (K55)</strong></>, 'Organize around unpaired card. Ace + BDFD = pure call'],
+        [<><strong>Small raise sizes</strong></>, 'Defend almost everything; pot odds may prevent any fold'],
+        [<><strong>Blocker suits (two-tone)</strong></>, 'Avoid suit villain bluffs with — blocks their bluff frequency'],
+      ]} />
 
-      <Collapsible title="Sizing">
-        <p>Depends on villain's CR size. Smaller CR → defend almost everything; larger → fold more.</p>
-      </Collapsible>
+      <Subhead>Sizing</Subhead>
+      <p>Depends on villain's CR size. Smaller CR → defend almost everything; larger → fold more.</p>
 
       <Subhead>Examples</Subhead>
 

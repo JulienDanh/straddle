@@ -68,8 +68,8 @@ const COURSES: Course[] = [
       {
         label: 'Preflop',
         pages: [
-          { id: 'bm2', label: 'Opening Into Covered', num: '2' },
-          { id: 'bm3', label: 'Opening Into Covering', num: '3' },
+          { id: 'bm2', label: 'Open vs Bigger Stacks', num: '2' },
+          { id: 'bm3', label: 'Open vs Smaller Stacks', num: '3' },
           { id: 'bm4', label: 'Blind vs Blind', num: '4' },
           { id: 'bm5', label: 'Blinds Facing Open', num: '5' },
           { id: 'bm6', label: 'Dealing With 3-Bets', num: '6' },

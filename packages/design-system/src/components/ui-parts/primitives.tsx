@@ -1,22 +1,24 @@
 import type { ReactNode } from 'react'
 
-export function Section({ title, children }: { title: string; children: ReactNode }) {
+export function Section({ title, children }: { title?: string; children: ReactNode }) {
   return (
-    <div className="my-6">
-      <h2 className="text-[24px] font-bold text-txt border-l-[3px] border-accent pl-3 leading-tight">{title}</h2>
-      <div className="mt-5 section-content">{children}</div>
+    <div>
+      {title && (
+        <h2 className="text-[19px] font-bold text-txt border-l-[3px] border-accent pl-2.5 leading-tight">{title}</h2>
+      )}
+      <div className="mt-2.5 section-content">{children}</div>
     </div>
   )
 }
 
-export function Callout({ variant = 'default', children }: { variant?: 'default' | 'warn' | 'bad' | 'good'; children: ReactNode }) {
+export function Callout({ variant = 'default', className = '', children }: { variant?: 'default' | 'warn' | 'bad' | 'good'; className?: string; children: ReactNode }) {
   const borderColors: Record<string, string> = {
     default: 'border-accent2',
     warn: 'border-warn',
     bad: 'border-bad',
     good: 'border-good',
   }
-  return <div className={`bg-panel2 border-l-[3px] ${borderColors[variant]} px-4 py-3 rounded-lg my-3.5`}>{children}</div>
+  return <div className={`bg-panel2 border-l-[3px] ${borderColors[variant]} px-3.5 py-2.5 rounded-lg my-3 ${className}`}>{children}</div>
 }
 
 export function Tag({ variant = 'default', children }: { variant?: 'default' | 'risk' | 'call' | 'fold'; children: ReactNode }) {
@@ -49,6 +51,25 @@ export function Code({ children }: { children: ReactNode }) {
   return <code className="bg-dark border border-line px-1.5 py-0.5 rounded text-[13px]">{children}</code>
 }
 
-export function Subhead({ children }: { children: ReactNode }) {
-  return <h3 className="text-[15px] font-bold text-txt border-l-[3px] border-accent2 pl-2.5 mt-7 mb-1 leading-tight">{children}</h3>
+export function Subhead({ className = '', children }: { className?: string; children: ReactNode }) {
+  return <h3 className={`text-[15px] font-bold text-txt border-l-[3px] border-accent2 pl-2.5 mt-4 mb-1.5 leading-tight ${className}`}>{children}</h3>
+}
+
+// Leak — the "most players do X, should do Y" panel: red accent (the
+// mistake), one row per leak with the correction in green after an arrow.
+// Distinct from Callout (insight) — this is the error the system corrects.
+export function Leak({ title = 'Common leaks', items }: { title?: string; items: [ReactNode, ReactNode?][] }) {
+  return (
+    <div className="bg-panel2 border-l-[3px] border-bad px-3.5 py-2.5 rounded-lg my-3">
+      <span className="text-[10px] font-bold uppercase tracking-wider text-bad">{title}</span>
+      <ul className="mt-1 flex flex-col gap-1">
+        {items.map(([leak, fix], i) => (
+          <li key={i} className="text-[12.5px] leading-snug text-txt">
+            {leak}
+            {fix && <span className="text-good"> → {fix}</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 }

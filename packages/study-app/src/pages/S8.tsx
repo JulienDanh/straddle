@@ -1,4 +1,4 @@
-import { Section, Callout, Action, Collapsible, DataTable, BoardExample, ExampleBrowser, Subhead } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Subhead, DataTable, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
 import { S8_FLOP_T922D, S8_FLOP_Q72Q, S8_FLOP_A72, S8_FLOP_KKT } from '@poker/design-system/src/data/ranges'
 
 export function S8Page() {
@@ -6,8 +6,15 @@ export function S8Page() {
     <Section title="System 8 — Bet Sizing In Position">
       <p>IP player deciding bet sizing on flop/turn/river. Core mistake: betting too small.</p>
 
+      <Leak items={[
+      ['Betting too small in position', 'reopening action with thin value, risking CR by worse hands'],
+      ['Not accounting for compounding', 'small flop bets → small turn bets → small river bets = not enough money invested'],
+      ['Overbetting into high nut ratios', 'villain has too many strong hands'],
+      ['Not recognizing when villain is capped (checked back)', 'should bet large, not small'],
+      ]} />
+
       
-      <h3>Sizing by nut ratio</h3>
+      <Subhead>Sizing by nut ratio</Subhead>
       <DataTable columns={[{ header: 'Situation' }, { header: 'Sizing' }, { header: 'Why' }]} rows={[[<>Villain capped (low nut ratio)</>, <><Action variant="bet">Overbet / pot</Action></>, <>Geometric to get stacks in. Fold% rises slower than bet size.</>],
           [<>Both have nuts possible</>, <><Action variant="bet">~70% pot</Action></>, <>Large but not overbet. Nuts frequency constrains sizing.</>],
           [<>Thin value hand</>, <><Action variant="check">Check</Action></>, <>Don't bet thin hands small. &lt;50% pot almost never correct IP.</>],
@@ -16,39 +23,32 @@ export function S8Page() {
 
       <Callout variant="bad">Reopening action risks being check-raised off equity. Small bets don't justify that risk. Fold% rises slower than bet size → bigger bets profit more.</Callout>
 
-      <Callout variant="warn"><strong>Common Leaks:</strong> Betting too small in position — reopening action with thin value, risking CR by worse hands. Not accounting for compounding — small flop bets → small turn bets → small river bets = not enough money invested. Overbetting into high nut ratios — villain has too many strong hands. Not recognizing when villain is capped (checked back) — should bet large, not small.</Callout>
+                    <Subhead>Heuristics</Subhead>
+      <ul>
+        <li>"IP polarizes → bet bigger"</li>
+        <li>"Risk must be worth the reward"</li>
+        <li>"Nut ratio high = bet small; nut ratio low = bet large"</li>
+        <li>"If villain checks back, they're capped — bet big"</li>
+        <li>"Small bets in position suck"</li>
+      </ul>
 
-                    <Collapsible title="Heuristics">
-        <ul>
-          <li>"IP polarizes → bet bigger"</li>
-          <li>"Risk must be worth the reward"</li>
-          <li>"Nut ratio high = bet small; nut ratio low = bet large"</li>
-          <li>"If villain checks back, they're capped — bet big"</li>
-          <li>"Small bets in position suck"</li>
-        </ul>
-      </Collapsible>
+      <Subhead>IP advantage</Subhead>
+      <ul>
+        <li>IP checks → range uncaps on next card (turn improves hands).</li>
+        <li>OOP checks → IP punishes immediately.</li>
+        <li>IP can polarize more → <strong>IP bets larger on average</strong>.</li>
+      </ul>
 
-      <Collapsible title="IP advantage">
-        <ul>
-          <li>IP checks → range uncaps on next card (turn improves hands).</li>
-          <li>OOP checks → IP punishes immediately.</li>
-          <li>IP can polarize more → <strong>IP bets larger on average</strong>.</li>
-        </ul>
-      </Collapsible>
+      <Subhead>Geometric betting</Subhead>
+      <p>To get stack in over 2 streets: ~pot on both (equal fractions). E.g. 50bb: ~11bb turn → ~34bb river shove.</p>
 
-      <Collapsible title="Geometric betting">
-        <p>To get stack in over 2 streets: ~pot on both (equal fractions). E.g. 50bb: ~11bb turn → ~34bb river shove.</p>
-      </Collapsible>
+      <Subhead>Risk factors</Subhead>
+      <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Villain uncapped (can have nuts)</strong></>, <>Don't overbet — ~70% pot</>],
+        [<><strong>Quads risk</strong></>, <>~48 combos. Don't assume villain can't have quads.</>],
+        [<><strong>Turn check-back inflection</strong></>, <>If you checked turn, villain's river check = weakness → bet big</>]]} />
 
-      <Collapsible title="Risk factors">
-        <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Villain uncapped (can have nuts)</strong></>, <>Don't overbet — ~70% pot</>],
-          [<><strong>Quads risk</strong></>, <>~48 combos. Don't assume villain can't have quads.</>],
-          [<><strong>Turn check-back inflection</strong></>, <>If you checked turn, villain's river check = weakness → bet big</>]]} />
-      </Collapsible>
-
-      <Collapsible title="Sizing">
-        <p>Default pot-sized or slightly over; <strong>never sub-half-pot IP</strong>.</p>
-      </Collapsible>
+      <Subhead>Sizing</Subhead>
+      <p>Default pot-sized or slightly over; <strong>never sub-half-pot IP</strong>.</p>
 
       <Subhead>Examples</Subhead>
 

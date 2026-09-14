@@ -1,4 +1,4 @@
-import { Section, Callout, Action, RandomBoard, Tabs, Collapsible, DecisionTree, HandExample, BoardExample, ExampleBrowser, Subhead } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Tabs, Subhead, DecisionTree, HandExample, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { BTN_RFI_CEV, BB_VS_BTN_CEV, S2_FLOP_A95, S2_FLOP_K93, S2_FLOP_A72, S2_FLOP_K84, S2_FLOP_963 } from '@poker/design-system/src/data/ranges'
 
@@ -7,6 +7,13 @@ export function S2Page() {
   return (
     <Section title="System 2 — BTN RFI vs BB Call · C-betting">
       <p>Button opens, BB calls, BB checks. Three flop buckets.</p>
+
+      <Leak items={[
+      ['Checking back boards that should be 100% c-bet', 'ace-high, T–K high with deuce/three'],
+      ['Not recognizing when BTN misses a board entirely (no 8+)', 'must check, not bet blindly'],
+      ['Only considering one suit for blocker effects', 'consider both calling suits'],
+      ['Betting too small in position', 'IP can polarize, should bet larger'],
+      ]} />
 
       
       <DecisionTree
@@ -23,8 +30,8 @@ export function S2Page() {
                 actionVariant: 'check',
                 reason: 'Bet strong + weak, check medium. Deeper → more checking.',
                 boards: [
-                  <RandomBoard high="A" suit="monotone" variant="orange" />,
-                  <RandomBoard high="A" paired variant="orange" label="A-J-J" />,
+                  <BoardType cards="AhTh4h" label="A-high monotone" variant="orange" />,
+                  <BoardType cards="AsJcJh" label="AJJ paired" variant="orange" />,
                 ],
               },
               no: {
@@ -32,7 +39,7 @@ export function S2Page() {
                 actionVariant: 'bet',
                 reason: 'BTN has the most aces. Risk-free.',
                 boards: [
-                  <RandomBoard high="A" variant="green" />,
+                  <BoardType cards="Ah9c4d" label="A94" variant="green" />,
                 ],
               },
             },
@@ -44,9 +51,9 @@ export function S2Page() {
                 actionVariant: 'bet',
                 reason: 'Disconnected → bet 100%.',
                 boards: [
-                  <RandomBoard high="K" variant="green" />,
-                  <RandomBoard high="Q" variant="green" />,
-                  <RandomBoard high="T" variant="green" />,
+                  <BoardType cards="Kd8s3c" label="K83" variant="green" />,
+                  <BoardType cards="Qh9d2c" label="Q92" variant="green" />,
+                  <BoardType cards="Th7d2s" label="T72" variant="green" />,
                 ],
               },
               no: {
@@ -54,8 +61,8 @@ export function S2Page() {
                 actionVariant: 'check',
                 reason: 'Two low cards (biggest risk) or monotone. Bet strong+weak, check middle.',
                 boards: [
-                  <RandomBoard high="K" paired variant="orange" />,
-                  <RandomBoard high="K" suit="monotone" variant="orange" />,
+                  <BoardType cards="Kh6d6c" label="K66 — two low cards" variant="orange" />,
+                  <BoardType cards="Kh9h2h" label="K-high monotone" variant="orange" />,
                 ],
               },
             },
@@ -65,7 +72,7 @@ export function S2Page() {
             actionVariant: 'check',
             reason: '9-high & below. No 100% exists. BTN misses low boards harder.',
             boards: [
-              <RandomBoard high="9" variant="orange" />,
+              <BoardType cards="9h6d3c" label="963" variant="orange" />,
             ],
           },
         }}
@@ -73,25 +80,20 @@ export function S2Page() {
 
       <Callout>BTN range is wider (offsuit 8s+), so it misses low boards harder. When BTN doesn't interact, build a checking strategy — bet top, bet bottom, check middle.</Callout>
 
-      <Collapsible title="Two-suit awareness (key skill)">
-        <p>On two-tone boards, BB defends around <em>two</em> suits. Most only think about the flush-draw suit. Also <strong>block the second suit</strong> (non-flush-draw suit BB calls with via backdoor draws) — no equity risk.</p>
-        <Callout variant="warn"><strong>K83 two-tone (hearts+diamonds):</strong> KJ with heart+diamond = pure bet. KJ with spades+clubs (both off) = pure check.</Callout>
-      </Collapsible>
+      <Subhead>Two-suit awareness (key skill)</Subhead>
+      <p>On two-tone boards, BB defends around <em>two</em> suits. Most only think about the flush-draw suit. Also <strong>block the second suit</strong> (non-flush-draw suit BB calls with via backdoor draws) — no equity risk.</p>
+      <Callout variant="warn"><strong>K83 two-tone (hearts+diamonds):</strong> KJ with heart+diamond = pure bet. KJ with spades+clubs (both off) = pure check.</Callout>
 
-      <Collapsible title="Sizing">
-        <p>No explicit sizing prescribed in the transcript. The solved boards land at 19% pot (1.1bb — A72, K93, K84) and 72% pot (4.1bb — A95, 963): the small stabs carry the risk boards, the big front-loaded stabs come on the clean ace and the low board BTN misses.</p>
-      </Collapsible>
+      <Subhead>Sizing</Subhead>
+      <p>No explicit sizing prescribed in the transcript. The solved boards land at 19% pot (1.1bb — A72, K93, K84) and 72% pot (4.1bb — A95, 963): the small stabs carry the risk boards, the big front-loaded stabs come on the clean ace and the low board BTN misses.</p>
 
-      <Callout variant="warn"><strong>Common Leaks:</strong> Checking back boards that should be 100% c-bet (ace-high, T–K high with deuce/three). Not recognizing when BTN misses a board entirely (no 8+) — must check, not bet blindly. Only considering one suit for blocker effects — should consider both calling suits. Betting too small in position — IP can polarize, should bet larger.</Callout>
-
-                    <Collapsible title="Heuristics">
-        <ul>
-          <li>"If there's no 8+ on the board, BTN probably misses — check more"</li>
-          <li>"Consider both suits, not just the flush draw suit"</li>
-          <li>"In position can polarize — bet bigger"</li>
-          <li>"Miss a 15% check? Costs ~0% EV — just bet range"</li>
-        </ul>
-      </Collapsible>
+                    <Subhead>Heuristics</Subhead>
+      <ul>
+        <li>"If there's no 8+ on the board, BTN probably misses — check more"</li>
+        <li>"Consider both suits, not just the flush draw suit"</li>
+        <li>"In position can polarize — bet bigger"</li>
+        <li>"Miss a 15% check? Costs ~0% EV — just bet range"</li>
+      </ul>
 
       <Subhead>Examples</Subhead>
 

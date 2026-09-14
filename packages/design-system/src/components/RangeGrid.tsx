@@ -133,19 +133,6 @@ export function actionShares(actions: Actions, base = ''): Partial<Record<(typeo
   return out
 }
 
-/** Total non-fold frequency (%, 0-100) per hand class — input for diffing
- *  two solutions of the same spot (e.g. cEV vs ICM at the same stack). */
-export function handClassTotals(actions: Actions): Record<string, number> {
-  const out: Record<string, number> = {}
-  for (const a of ACTION_ORDER) {
-    if (a === 'fold' || !actions[a]) continue
-    for (const [hc, f] of Object.entries(parseComboData(actions[a]))) {
-      out[hc] = (out[hc] ?? 0) + f * 100
-    }
-  }
-  return out
-}
-
 // Build a multi-color horizontal gradient for a cell. Each action fills its
 // raw frequency share of the cell width (a 40% raise = 40% fill), like
 // GTO Wizard; unfilled width shows the cell background.
@@ -198,15 +185,6 @@ export interface RangeGridProps {
   // compact: small grid for inline use in course content — no numbers, no
   // legend, no click-to-lock panel. Just colored cells.
   compact?: boolean
-  // Diff view: per-hand-class frequency delta (%, target − reference).
-  // Negative = the target folds more (green), positive = it plays more (red).
-  // When set, action strings are ignored and the grid renders the delta.
-  diff?: Record<string, number>
-  // Diff labels: cell tooltip reads "pts vs <diffRefLabel>"; the legend rows
-  // read "<diffNegLabel> / <diffPosLabel>".
-  diffRefLabel?: string
-  diffNegLabel?: string
-  diffPosLabel?: string
 }
 
 // Human label for an action, annotating the size when provided.
@@ -216,7 +194,7 @@ function actionLabel(a: string, sizing?: number): string {
   return sizing !== undefined ? `${base} ${sizing}bb` : base
 }
 
-export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false, diff, diffRefLabel = 'cEV', diffNegLabel = 'ICM folds more', diffPosLabel = 'ICM plays more' }: RangeGridProps) {
+export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false }: RangeGridProps) {
   const { perHand, activeActions, colors, actionPcts, actionCombos, baseByCombo } = useMemo(() => {
     const data: Record<string, string> = { fold, call, raise, allIn, check, bet }
     const active = ACTION_ORDER.filter(a => data[a].length > 0)
@@ -315,53 +293,6 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
             ))}
           </tbody>
         </table>
-      </div>
-    )
-  }
-
-  // Diff view: one signed value per hand class, colored by sign/intensity.
-  if (diff) {
-    return (
-      <div className="rv-grid-area">
-        <div className="rv-grid-wrap">
-          <table className="rv-grid">
-            <tbody>
-              {HAND_GRID.map((rowCells, ri) => (
-                <tr key={ri}>
-                  {rowCells.map((cell, ci) => {
-                    const v = diff[cell.hand] ?? 0
-                    const alpha = v === 0 ? 0 : Math.min(0.85, Math.abs(v) / 55 + 0.08)
-                    const bg = v < 0
-                      ? `rgba(57,255,136,${alpha.toFixed(2)})`
-                      : v > 0 ? `rgba(255,84,112,${alpha.toFixed(2)})` : undefined
-                    return (
-                      <td key={ci}
-                        className="rv-cell"
-                        style={{
-                          ...(bg ? { background: bg } : null),
-                          color: v === 0 ? '#8080a4' : '#fff',
-                          textShadow: v === 0 ? undefined : '0 1px 2px rgba(6,6,14,0.7)',
-                        }}
-                        title={`${cell.hand}: ${v > 0 ? '+' : ''}${v.toFixed(1)} pts vs ${diffRefLabel}`}
-                      >
-                        <span className="rv-cell-hand">{cell.hand}</span>
-                        {v !== 0 && (
-                          <span className="block text-[8.5px] font-bold leading-none tabular-nums">
-                            {v > 0 ? '+' : '−'}{Math.abs(v) < 1 ? '<1' : Math.round(Math.abs(v))}
-                          </span>
-                        )}
-                      </td>
-                    )
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="rv-legend">
-          <span className="rv-legend-item"><span className="rv-legend-dot" style={{ background: '#39ff88' }} />{diffNegLabel}</span>
-          <span className="rv-legend-item"><span className="rv-legend-dot" style={{ background: '#ff5470' }} />{diffPosLabel}</span>
-        </div>
       </div>
     )
   }

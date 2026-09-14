@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { HoleCards, Board, BoardType, RandomBoard, H as Heart } from '../components/ui-parts/cards'
+import { HoleCards, Board, BoardType, H as Heart } from '../components/ui-parts/cards'
 
 const meta = {
   title: 'Cards/Playing Cards',
@@ -42,21 +42,6 @@ export const BoardTypeVariants: Story = {
   ),
 }
 
-export const RandomBoards: Story = {
-  render: () => (
-    <div className="flex flex-col gap-3">
-      <div className="flex gap-3 flex-wrap items-center">
-        <RandomBoard high="A" variant="green" />
-        <RandomBoard high="K" variant="green" />
-        <RandomBoard high="A" suit="monotone" variant="red" />
-        <RandomBoard high="J" paired lowCard={6} variant="orange" label="High-low-low" />
-        <RandomBoard akx variant="orange" />
-        <RandomBoard high="Q" connected variant="green" />
-      </div>
-      <div className="text-xs text-muted">Re-rolls on each render</div>
-    </div>
-  ),
-}
 
 export const SuitSpan: Story = {
   render: () => (

@@ -1,11 +1,17 @@
-import { Section, Callout, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Subhead, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { BTN_RFI_COVERED, CO_RFI_COVERED } from '@poker/design-system/src/data/ranges'
 
 export function BM2Page() {
   return (
-    <Section title="Opening Into Covered Stacks (You Are Covered)">
+    <Section title="Open vs Bigger Stacks — You Are Covered">
+      <p className="mb-1"><strong className="text-bad">Covered = they can bust you.</strong> A bigger stack behind you covers your entire stack — losing the pot ends your tournament.</p>
       <p>A stack (or several) behind covers you. You open much tighter than baseline, with the degree of tightness driven by how much the BB covers you, position of covering stacks, and presence of shorter stacks elsewhere.</p>
+
+      <Leak items={[
+        ['Autopilot shoving K7s/T9s/KTo at 12bb covered', 'offsuit Ax very poor and almost no open shoves — cut low pairs and the worst Ax'],
+        ['Being way too tight at 30-40bb covered', "losing a raise-fold costs <10% of your stack — still open ~35%"],
+      ]} />
 
       <>
               <StackMatrix
@@ -38,33 +44,29 @@ export function BM2Page() {
               <RangeBrowser ranges={BTN_RFI_COVERED} />
               <RangeBrowser ranges={CO_RFI_COVERED} />
 
-              <Collapsible title="What tightens you">
-                <ul>
-                  <li><strong>BB covers you by heaps:</strong> open very tight — they can destroy you postflop, donk, float.</li>
-                  <li><strong>Very short / micro stacks at other tables:</strong> tighten (FGS overlay — folding has positive $EV).</li>
-                  <li><strong>Covered by a massive stack (120bb+) when you're mid:</strong> trim thinnest hands; no wider than ~35% on BTN.</li>
-                </ul>
-              </Collapsible>
+              <Subhead>What tightens you</Subhead>
+              <ul>
+                <li><strong>BB covers you by heaps:</strong> open very tight — they can destroy you postflop, donk, float.</li>
+                <li><strong>Very short / micro stacks at other tables:</strong> tighten (FGS overlay — folding has positive $EV).</li>
+                <li><strong>Covered by a massive stack (120bb+) when you're mid:</strong> trim thinnest hands; no wider than ~35% on BTN.</li>
+              </ul>
 
-              <Collapsible title="What loosens you">
-                <ul>
-                  <li><strong>BB is close to your stack (game of chicken):</strong> you can open a bit more; they risk tournament life playing back.</li>
-                  <li><strong>You're deeper (30-50bb) and covered:</strong> more forgiving — losing a raise-fold costs &lt;10% of stack.</li>
-                  <li><strong>You're the shortest at the table:</strong> loosen back up — can't rely on others busting.</li>
-                </ul>
-              </Collapsible>
+              <Subhead>What loosens you</Subhead>
+              <ul>
+                <li><strong>BB is close to your stack (game of chicken):</strong> you can open a bit more; they risk tournament life playing back.</li>
+                <li><strong>You're deeper (30-50bb) and covered:</strong> more forgiving — losing a raise-fold costs &lt;10% of stack.</li>
+                <li><strong>You're the shortest at the table:</strong> loosen back up — can't rely on others busting.</li>
+              </ul>
 
-              <Collapsible title="Risk factors">
-                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Open-shove hand shift (covered)</strong></>, <>Shift stronger — AQ not AJ. Offsuit Ax shove terribly. Drop A2s/A3s.</>],
-                  [<><strong>Low pairs (22-33) when covered and short</strong></>, <>Often fold — they block the blinds' pair-folds, hurting your fold equity.</>],
-                  [<><strong>Covered by one but cover the rest</strong></>, <>Still wider than baseline — covering player folds ~80%; you pressure the rest.</>],
-                  [<><strong>FGS: short stacks at other tables</strong></>, <>Tighten further — folding has positive $EV when others may bust before you.</>]]} />
-                <Callout><strong>Folding is not zero EV on the bubble.</strong> With shorter stacks elsewhere, folding has positive $EV — and you get free hands coming next. This makes the thinnest opens pass.</Callout>
-              </Collapsible>
+              <Subhead>Risk factors</Subhead>
+              <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Open-shove hand shift (covered)</strong></>, <>Shift stronger — AQ not AJ. Offsuit Ax shove terribly. Drop A2s/A3s.</>],
+                [<><strong>Low pairs (22-33) when covered and short</strong></>, <>Often fold — they block the blinds' pair-folds, hurting your fold equity.</>],
+                [<><strong>Covered by one but cover the rest</strong></>, <>Still wider than baseline — covering player folds ~80%; you pressure the rest.</>],
+                [<><strong>FGS: short stacks at other tables</strong></>, <>Tighten further — folding has positive $EV when others may bust before you.</>]]} />
+              <Callout><strong>Folding is not zero EV on the bubble.</strong> With shorter stacks elsewhere, folding has positive $EV — and you get free hands coming next. This makes the thinnest opens pass.</Callout>
 
-              <Collapsible title="Sizing">
-                <p>Min-raise dominant when covered (preserve tournament life, fold to reshoves). Open shoves drop sharply — and shift stronger (AQ, not AJ) when they do appear. BB 3-bet size vs a covering opener can be large/polar (~14bb) to deny price with Ax.</p>
-              </Collapsible>
+              <Subhead>Sizing</Subhead>
+              <p>Min-raise dominant when covered (preserve tournament life, fold to reshoves). Open shoves drop sharply — and shift stronger (AQ, not AJ) when they do appear. BB 3-bet size vs a covering opener can be large/polar (~14bb) to deny price with Ax.</p>
             </>
     </Section>
   )

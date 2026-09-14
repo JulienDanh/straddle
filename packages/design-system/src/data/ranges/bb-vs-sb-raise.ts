@@ -27,3 +27,6 @@ export const BB_VS_SB_RAISE_ICM_FT: StoredRange[] = materializeLine(
   { ...data, stacks: data.stacks.filter((e) => e.type === 'ICM-FT') },
   (stack) => preflopUrl(stack, 'F-F-F-F-F-F-R3.5', 8, ICM_FT_GAMETYPE))
 export const BB_VS_SB_RAISE: StoredRange[] = [...BB_VS_SB_RAISE_CEV, ...BB_VS_SB_RAISE_ICM, ...BB_VS_SB_RAISE_ASYM, ...BB_VS_SB_RAISE_ICM_FT]
+
+/** Bubble solutions without the final-table gametype — BM4 blind vs blind */
+export const BB_VS_SB_RAISE_BUBBLE: StoredRange[] = [...BB_VS_SB_RAISE_CEV, ...BB_VS_SB_RAISE_ICM, ...BB_VS_SB_RAISE_ASYM]

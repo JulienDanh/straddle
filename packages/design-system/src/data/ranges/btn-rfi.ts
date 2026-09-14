@@ -51,3 +51,6 @@ export const BTN_RFI_COVERED: StoredRange[] = [...BTN_RFI_COVERED_DEEP, ...BTN_R
 
 /** BTN RFI, all solution types combined */
 export const BTN_RFI: StoredRange[] = [...BTN_RFI_CEV, ...BTN_RFI_ICM, ...BTN_RFI_ICM_FT, ...BTN_RFI_COVERED, ...BTN_RFI_COVERING, ...BTN_RFI_ICM_FT_COVERING, ...BTN_RFI_ICM_FT_COVERED_DEEP]
+
+/** Equal stacks only (cEV + ICM bubble) — the BM1 comparison set */
+export const BTN_RFI_EQUAL: StoredRange[] = [...BTN_RFI_CEV, ...BTN_RFI_ICM]

@@ -1,6 +1,6 @@
-import { Section, Callout, Action, Collapsible, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Action, Subhead, StackMatrix, DataTable } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { SB_RFI, BB_VS_SB_LIMP, BB_VS_SB_RAISE } from '@poker/design-system/src/data/ranges'
+import { SB_RFI_BUBBLE, BB_VS_SB_LIMP, BB_VS_SB_RAISE_BUBBLE } from '@poker/design-system/src/data/ranges'
 
 export function BM4Page() {
   return (
@@ -35,26 +35,23 @@ export function BM4Page() {
               <Callout variant="bad"><strong>Limping is a MISTAKE when you cover a short stack on the bubble.</strong>
 
 <p className="mt-6 mb-1 text-sm text-muted">The blind-vs-blind decisions, solved — SB's first-in (limp or raise), BB's iso-or-check vs the limp, and BB's defense vs the 3bb raise. Toggle cEV / ICM to see bubble pressure halve BB's call frequency:</p>
-              <RangeBrowser ranges={SB_RFI} />
+              <RangeBrowser ranges={SB_RFI_BUBBLE} />
               <RangeBrowser ranges={BB_VS_SB_LIMP} />
-              <RangeBrowser ranges={BB_VS_SB_RAISE} /> BB overfolds ~85%. Limping gives free equity realization to hands that would fold to a shove. Shove/raise instead.</Callout>
+              <RangeBrowser ranges={BB_VS_SB_RAISE_BUBBLE} /> BB overfolds ~85%. Limping gives free equity realization to hands that would fold to a shove. Shove/raise instead.</Callout>
 
-              <Collapsible title="Core rules">
-                <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>BB calls only ~10-22%</strong></>, <>vs ~37% call rate in chip model. ICM pressure roughly halves BB call frequency.</>],
-                  [<><strong>Open-shove selection shifts UP in ICM</strong></>, <>Drop A2s/A3s; threshold shifts past AJo to AQo. Bluffs shift up with value.</>],
-                  [<><strong>Limp-shove disappears at 40+bb</strong></>, <>Limp-call pairs instead — BB can't pile vs uncapped, trapping range.</>],
-                  [<><strong>Covering SB at ~22bb</strong></>, <>Shove vs limp depends on other-table ICM pressure. More pressure = more shoving.</>]]} />
-              </Collapsible>
+              <Subhead>Core rules</Subhead>
+              <DataTable columns={[{ header: 'Rule' }, { header: 'Detail' }]} rows={[[<><strong>BB calls only ~10-22%</strong></>, <>vs ~37% call rate in chip model. ICM pressure roughly halves BB call frequency.</>],
+                [<><strong>Open-shove selection shifts UP in ICM</strong></>, <>Drop A2s/A3s; threshold shifts past AJo to AQo. Bluffs shift up with value.</>],
+                [<><strong>Limp-shove disappears at 40+bb</strong></>, <>Limp-call pairs instead — BB can't pile vs uncapped, trapping range.</>],
+                [<><strong>Covering SB at ~22bb</strong></>, <>Shove vs limp depends on other-table ICM pressure. More pressure = more shoving.</>]]} />
 
-              <Collapsible title="Risk factors">
-                <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Other-table short stacks</strong></>, <>Covering SB leans harder into shoving/raising (max ICM pressure on BB).</>],
-                  [<><strong>BB call frequency</strong></>, <>BB calls only ~10-22% when covered (vs ~37% in chip model). Limping gives free equity to folders.</>],
-                  [<><strong>At 25% field left</strong></>, <>Limping reappears for covered short stacks; on direct bubble, gone.</>]]} />
-              </Collapsible>
+              <Subhead>Risk factors</Subhead>
+              <DataTable columns={[{ header: 'Factor' }, { header: 'Effect' }]} rows={[[<><strong>Other-table short stacks</strong></>, <>Covering SB leans harder into shoving/raising (max ICM pressure on BB).</>],
+                [<><strong>BB call frequency</strong></>, <>BB calls only ~10-22% when covered (vs ~37% in chip model). Limping gives free equity to folders.</>],
+                [<><strong>At 25% field left</strong></>, <>Limping reappears for covered short stacks; on direct bubble, gone.</>]]} />
 
-              <Collapsible title="Sizing">
-                <p>Short covered: pure shove/fold. Close stacks: more open-shoving. Deeper covered (~18bb+): limping begins. Deep (37+bb): pure limp, no limp-shove — limp-call pairs. BB ISO ~49.5% (vs 42% chips) when SB is covered deep.</p>
-              </Collapsible>
+              <Subhead>Sizing</Subhead>
+              <p>Short covered: pure shove/fold. Close stacks: more open-shoving. Deeper covered (~18bb+): limping begins. Deep (37+bb): pure limp, no limp-shove — limp-call pairs. BB ISO ~49.5% (vs 42% chips) when SB is covered deep.</p>
             </>
     </Section>
   )

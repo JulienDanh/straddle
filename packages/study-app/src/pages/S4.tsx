@@ -1,10 +1,17 @@
-import { Section, Callout, Action, RandomBoard, Collapsible, DecisionTree, HandExample, BoardExample, ExampleBrowser, Subhead } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, HandExample, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
 import { S4_FLOP_AK4 } from '@poker/design-system/src/data/ranges'
 
 export function S4Page() {
   return (
     <Section title="System 4 — Missed River Bluffs">
       <p>Hero opened, BB called, betting river as bluff after missing. Two-system approach. <strong>Prioritize System 1</strong> (easier) while acknowledging System 2 (solvers use it more).</p>
+
+      <Leak items={[
+      ["Waiting for the perfect blocker and never bluffing", "if you can't have the ideal hand, bluff with what you have"],
+      ['Not having a bluffing range at all', 'checking every weak hand means your value bets lose fold equity'],
+      ['Bluffing with hands too high up', 'the opportunity cost of checking is too high'],
+      ['Only considering one suit for blocker effects', 'must consider how villain calls AND folds by suit'],
+      ]} />
 
       
       <DecisionTree
@@ -16,7 +23,7 @@ export function S4Page() {
             actionVariant: 'raise',
             reason: 'One card of the flush suit blocks flushes AND hero calls. Use System 2 first.',
             boards: [
-              <RandomBoard high="K" suit="monotone" variant="green" label="3-flush on board" streets={5} />,
+              <BoardType cards="Kh9h5h8d3c" label="3-flush on board" variant="green" />,
             ],
           },
           no: {
@@ -27,7 +34,7 @@ export function S4Page() {
               actionVariant: 'bet',
               reason: 'Only suited hands can bluff — scarce. Pure bluff them all.',
               boards: [
-                <RandomBoard high="A" variant="green" label="Three Broadway · EP" streets={5} />,
+                <BoardType cards="AhKdQh8s3c" label="Three Broadway · EP" variant="green" />,
               ],
             },
             no: {
@@ -38,7 +45,7 @@ export function S4Page() {
                 actionVariant: 'fold',
                 reason: 'Blocking both folding regions is terrible. Prefer hands blocking only one.',
                 boards: [
-                  <RandomBoard high="A" suit="two-tone" variant="red" label="Busted straight + flush" streets={5} />,
+                  <BoardType cards="AhJh9c7d4s" label="Busted straight + flush" variant="red" />,
                 ],
               },
               no: {
@@ -46,8 +53,8 @@ export function S4Page() {
                 actionVariant: 'bet',
                 reason: 'Wide ranges, no obvious suit blanked. Bluff weakest hands first; prioritize the LOW card.',
                 boards: [
-                  <RandomBoard high="A" variant="green" streets={5} />,
-                  <RandomBoard high="K" variant="green" streets={5} />,
+                  <BoardType cards="Ah9c6d4s2h" label="A-high" variant="green" />,
+                  <BoardType cards="Kd8s5c3h2s" label="K-high" variant="green" />,
                 ],
               },
             },
@@ -57,36 +64,30 @@ export function S4Page() {
 
       <Callout>Low cards have good blocking effects vs linear ranges (deuce blocks few value, unblocks folds — opponents folded 2x preflop).</Callout>
 
-      <Collapsible title="The two systems">
-        <p><strong>System 1 — bottom of range up:</strong> bluff with <em>weakest</em> hands first — lowest EV when checking, lowest opportunity cost. Heuristic: prioritize the <em>lowest card</em> in the hand. 72o before 65o. 92o before 87o.</p>
-        <p><strong>System 2 — blocking effects:</strong> bluff with combos that <strong>block opponent's calls/raises</strong> and <strong>unblock their folds</strong>. Very difficult to manage all three — System 1 is default.</p>
-      </Collapsible>
+      <Subhead>The two systems</Subhead>
+      <p><strong>System 1 — bottom of range up:</strong> bluff with <em>weakest</em> hands first — lowest EV when checking, lowest opportunity cost. Heuristic: prioritize the <em>lowest card</em> in the hand. 72o before 65o. 92o before 87o.</p>
+      <p><strong>System 2 — blocking effects:</strong> bluff with combos that <strong>block opponent's calls/raises</strong> and <strong>unblock their folds</strong>. Very difficult to manage all three — System 1 is default.</p>
 
-      <Collapsible title="Key blocking patterns">
-        <ul>
-          <li><strong>3-flush river:</strong> bluff with one card of the flush suit. Blocks flushes AND hero calls.</li>
-          <li><strong>Two-tone flop called:</strong> opponent called with 2 suits. Bluff avoiding those; prefer others.</li>
-          <li><strong>High card vs low card of suit:</strong> high card heart is <em>worse</em> (blocks more folds). Low card heart less damaging.</li>
-        </ul>
-        <Callout variant="bad"><strong>You can't always have the ideal bluff.</strong> If hearts bet flop+turn, you <em>won't have hearts left</em> on river. Don't wait for the perfect blocker — you'll have <em>no</em> bluffing range.</Callout>
-      </Collapsible>
+      <Subhead>Key blocking patterns</Subhead>
+      <ul>
+        <li><strong>3-flush river:</strong> bluff with one card of the flush suit. Blocks flushes AND hero calls.</li>
+        <li><strong>Two-tone flop called:</strong> opponent called with 2 suits. Bluff avoiding those; prefer others.</li>
+        <li><strong>High card vs low card of suit:</strong> high card heart is <em>worse</em> (blocks more folds). Low card heart less damaging.</li>
+      </ul>
+      <Callout variant="bad"><strong>You can't always have the ideal bluff.</strong> If hearts bet flop+turn, you <em>won't have hearts left</em> on river. Don't wait for the perfect blocker — you'll have <em>no</em> bluffing range.</Callout>
 
-      <Collapsible title="Sizing">
-        <p>~65% pot for river bluffs.</p>
-      </Collapsible>
+      <Subhead>Sizing</Subhead>
+      <p>~65% pot for river bluffs.</p>
 
-      <Callout variant="warn"><strong>Common Leaks:</strong> Waiting for the perfect blocker and never bluffing — if you can't have the ideal hand, bluff with what you have. Not having a bluffing range at all — checking every weak hand means your value bets lose fold equity. Bluffing with hands too high up — opportunity cost of checking is too high. Only considering one suit for blocker effects — must consider how villain calls AND folds by suit.</Callout>
-
-                    <Collapsible title="Heuristics">
-        <ul>
-          <li>"Bluff from the bottom of the range up"</li>
-          <li>"Pay attention to the lowest card in your hand, not the highest"</li>
-          <li>"If you have value, you need bluffs"</li>
-          <li>"Three Broadway = no offsuit air = bluff aggressively"</li>
-          <li>"How should you NOT bluff? — easier to identify what to avoid"</li>
-          <li>"Don't wait for the perfect blocker — it's not realistic"</li>
-        </ul>
-      </Collapsible>
+                    <Subhead>Heuristics</Subhead>
+      <ul>
+        <li>"Bluff from the bottom of the range up"</li>
+        <li>"Pay attention to the lowest card in your hand, not the highest"</li>
+        <li>"If you have value, you need bluffs"</li>
+        <li>"Three Broadway = no offsuit air = bluff aggressively"</li>
+        <li>"How should you NOT bluff? — easier to identify what to avoid"</li>
+        <li>"Don't wait for the perfect blocker — it's not realistic"</li>
+      </ul>
 
       <Subhead>Examples</Subhead>
 

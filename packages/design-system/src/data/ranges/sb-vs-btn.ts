@@ -35,3 +35,6 @@ export const SB_VS_BTN_ICM_FT: StoredRange[] = materializeLine(
   { ...data, stacks: data.stacks.filter((e) => e.type === 'ICM-FT') },
   (stack) => preflopUrl(stack, `F-F-F-F-F-R${openSize(stack)}`, 7, ICM_FT_GAMETYPE))
 export const SB_VS_BTN: StoredRange[] = [...SB_VS_BTN_CEV, ...SB_VS_BTN_ICM, ...SB_VS_BTN_ASYM, ...SB_VS_BTN_ICM_FT]
+
+/** Bubble solutions without the final-table gametype — BM5 blinds vs opens */
+export const SB_VS_BTN_BUBBLE: StoredRange[] = [...SB_VS_BTN_CEV, ...SB_VS_BTN_ICM, ...SB_VS_BTN_ASYM]

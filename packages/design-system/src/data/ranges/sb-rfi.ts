@@ -51,3 +51,6 @@ export const SB_RFI_ICM_FT_COVERING: StoredRange[] = materializeLine(
   { ...data, stacks: data.stacks.filter((e) => e.type === 'ICM-FT-covering') },
   (_stack, e) => preflopUrlStacks(e.config!, 'F-F-F-F-F-F', 7, ICM_FT_GAMETYPE))
 export const SB_RFI: StoredRange[] = [...SB_RFI_CEV, ...SB_RFI_ICM, ...SB_RFI_ICM_FT, ...SB_RFI_COVERING, ...SB_RFI_COVERED_DEEP, ...SB_RFI_COVERED_SIMILAR, ...SB_RFI_ICM_FT_COVERED_DEEP, ...SB_RFI_ICM_FT_COVERING]
+
+/** Bubble solutions without the final-table gametype — BM4 blind vs blind */
+export const SB_RFI_BUBBLE: StoredRange[] = [...SB_RFI_CEV, ...SB_RFI_ICM, ...SB_RFI_COVERING, ...SB_RFI_COVERED_DEEP, ...SB_RFI_COVERED_SIMILAR]
