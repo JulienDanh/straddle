@@ -26,8 +26,8 @@ import { BM8Page } from './pages/BM8'
 import { BM9Page } from './pages/BM9'
 import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
-import { DesignSystemPage } from './pages/DesignSystem'
-import { RangesPage } from './pages/Ranges'
+import { LivePage } from './pages/Live'
+import { LiveBbzPage } from './pages/LiveBbz'
 
 const navTitles: Record<string, { course: string; title: string }> = {
   primer: { course: 'No-Limit Systems', title: 'Preflop Primer' },
@@ -56,8 +56,8 @@ const navTitles: Record<string, { course: string; title: string }> = {
   bm9: { course: 'Bubble Mastery', title: 'BB Covers BTN (Postflop)' },
   bm10: { course: 'Bubble Mastery', title: 'UTG Covers BB (Postflop)' },
   bm11: { course: 'Bubble Mastery', title: 'Polar Opens · Split Range' },
-  ranges: { course: '', title: 'Range Library' },
-  sandbox: { course: '', title: 'Design System' },
+  live: { course: '', title: 'Live' },
+  livebbz: { course: '', title: 'Live BBZ' },
 }
 
 const PAGES = {
@@ -66,7 +66,7 @@ const PAGES = {
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage,
   bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
-  ranges: RangesPage, sandbox: DesignSystemPage,
+  live: LivePage, livebbz: LiveBbzPage,
 } as const
 
 type PageId = keyof typeof PAGES
@@ -133,16 +133,25 @@ function App() {
         onClick={() => setSidebarOpen(false)}
       />
       <Sidebar activePage={page} onNavigate={navigate} open={sidebarOpen} />
-      <main className="flex-1 px-8 pt-6 pb-20 min-w-0 max-w-[1000px] mx-auto">
-        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+      <main
+        className={
+          page === 'live' || page === 'livebbz'
+            ? 'flex-1 px-8 pt-4 pb-4 min-w-0 mx-auto h-screen overflow-hidden flex flex-col'
+            : 'flex-1 px-8 pt-6 pb-20 min-w-0 max-w-[1000px] mx-auto'
+        }
+      >
+        <div className={`flex items-center justify-between flex-wrap gap-2 ${page === 'live' ? '[@media(max-width:760px)]:mb-4' : 'mb-4'}`}>
           <button
             className="hidden border border-line bg-panel text-txt px-2.5 py-1.5 rounded-lg text-lg cursor-pointer [@media(max-width:760px)]:block"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >≡</button>
-          <div className="text-xs text-muted tracking-wide">{nav?.course}</div>
-          <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">GTO Wizard · MTT 8-max</span>
+          {page !== 'live' && page !== 'livebbz' && <div className="text-xs text-muted tracking-wide">{nav?.course}</div>}
+          {page === 'live' && <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">GTO Wizard · MTT 8-max</span>}
+          {page === 'livebbz' && <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">BBZ · Pio solutions</span>}
         </div>
-        <PageComponent />
+        <div className={page === 'live' || page === 'livebbz' ? 'flex-1 min-h-0' : undefined}>
+          <PageComponent />
+        </div>
         {(prev || next) && (
           <div className="mt-8">
             <div className="flex items-stretch justify-between gap-3">
@@ -174,7 +183,9 @@ function App() {
             <div className="text-center text-[10px] text-muted mt-2.5">or page through with the &larr; &rarr; arrow keys</div>
           </div>
         )}
-        <footer className="text-center text-muted text-xs mt-8">No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
+        {page !== 'live' && (
+          <footer className="text-center text-muted text-xs mt-8">No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
+        )}
       </main>
     </div>
   )

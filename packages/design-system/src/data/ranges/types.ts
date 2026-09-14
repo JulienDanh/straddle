@@ -3,7 +3,34 @@
 export type RangeAction = 'fold' | 'call' | 'raise' | 'allIn' | 'check' | 'bet'
 
 /** Solution type: cEV (chip-EV), ICM (equal-stack tournament equity),
- *  or its asymmetric-stack variants (covered/covering configs) */
+ *  or its asymmetric-stack variants.
+ *
+ *  The asymmetric types are POSITION-RELATIVE: they classify the hero's
+ *  stack H against the players STILL IN THE HAND at the decision point,
+ *  not the whole table — folded stacks cannot bust you in this hand.
+ *  Same rule the import pipeline's derive_type (gw_import_all.py)
+ *  generates them with:
+ *
+ *    RFI          only the seats AFTER hero — a raise-first-in from a
+ *                 later seat has everyone before it folded, so UTG RFI
+ *                 is the whole table, BTN RFI just the blinds, SB RFI BB
+ *    vs open      the opener + every seat behind hero (the seats in
+ *                 between have folded)
+ *    vs 3-bet     the 3-bettor only (everyone folds back to hero)
+ *    blind vs bl  SB only
+ *
+ *  - covering      no relevant stack is bigger than H — hero covers the
+ *                  line's villain ("you cover BTN (25bb)"; an RFI that
+ *                  covers the whole table says "you cover the table")
+ *  - covered-*     the BIGGEST relevant coverer S decides:
+ *                    S < 1.75x H -> covered-similar ("game of chicken")
+ *                    S >= 1.75x H -> covered-deep
+ *                    S >= 3x H    -> still covered-deep, subtitled
+ *                                    "they cover you by heaps"
+ *
+ *  FT- variants are the same geometry on final-table payouts; an
+ *  all-equal table config is plain ICM / ICM-FT. The 1.75 similar/deep
+ *  boundary is DEEP_RATIO in the pipeline. */
 export type SolutionType =
   | 'cEV'
   | 'ICM'
@@ -222,12 +249,12 @@ const openLineFor = (opener: string, open: number): string => callLineFor(opener
  *  down to the caller (BB by default, SB for the SB-call lines), then the
  *  call. The app requires the LEADING folds — a line without them does not
  *  resolve (verified: CO's line is F-F-F-F-R2.2-F-F-C). */
-const callLineFor = (opener: string, caller: 'SB' | 'BB', open: number): string => {
+const callLineFor = (opener: string, caller: 'SB' | 'BB' | 'BTN', open: number): string => {
   const seat = ({ UTG: 0, 'UTG+1': 1, LJ: 2, HJ: 3, CO: 4, BTN: 5, SB: 6 } as Record<string, number>)[opener] ?? 0
-  const callerSeat = caller === 'SB' ? 6 : 7
-  // an SB caller leaves the BB to act — their fold completes the preflop
+  const callerSeat = ({ SB: 6, BB: 7, BTN: 5 } as Record<string, number>)[caller]
+  // callers before the BB leave seats behind — their folds complete the preflop
   return [...Array(seat).fill('F'), 'R' + open, ...Array(callerSeat - seat - 1).fill('F'),
-    'C', ...(caller === 'SB' ? ['F'] : [])].join('-')
+    'C', ...Array(7 - callerSeat).fill('F')].join('-')
 }
 const threeBetLineFor = (villain: string, t3: number): string => {
   const seat = ({ HJ: 3, CO: 4, BTN: 5, SB: 6, BB: 7 } as Record<string, number>)[villain] ?? 5
@@ -263,6 +290,25 @@ const LINES: Record<string, LineContext> = {
       { pos: 'BB', act: 'Call', variant: 'call' },
     ],
     url: (p, c) => flopUrl(p.position, p.sizings?.raise ?? 2, c.label!, p.stack),
+  },
+  'Cbet vs BTN call': {
+    parentAction: 'raise',
+    title: (p) => `${p.position} c-bet vs BTN call`,
+    trail: (p) => [
+      { pos: p.position, act: `Raise ${p.sizings?.raise ?? 2}bb`, variant: 'raise' },
+      { pos: 'BTN', act: 'Call', variant: 'call' },
+    ],
+    url: (p, c) => flopUrlRaw(callLineFor(p.position, 'BTN', p.sizings?.raise ?? 2),
+      c.node ?? 'X', c.label!, p.stack),
+  },
+  'BB lead vs SB open': {
+    parentAction: 'call',
+    title: () => 'BB lead vs SB open',
+    trail: () => [
+      { pos: 'SB', act: 'Raise 3bb', variant: 'raise' },
+      { pos: 'BB', act: 'Call', variant: 'call' },
+    ],
+    url: (p, c) => flopUrlRaw('F-F-F-F-F-F-R3-C', c.node ?? 'X', c.label!, p.stack),
   },
   'Defend vs SB stab': {
     parentAction: 'check',

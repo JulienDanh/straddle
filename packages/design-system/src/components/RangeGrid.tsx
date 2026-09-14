@@ -134,8 +134,8 @@ export function actionShares(actions: Actions, base = ''): Partial<Record<(typeo
 }
 
 // Build a multi-color horizontal gradient for a cell. Each action fills its
-// raw frequency share of the cell width (a 40% raise = 40% fill), like
-// GTO Wizard; unfilled width shows the cell background.
+// raw frequency share of the cell width (a 40% raise = 40% fill); unfilled
+// width shows the cell background.
 function cellGradient(freqs: number[], colors: string[]): string {
   const total = freqs.reduce((s, v) => s + v, 0)
   if (total <= 0) return ''
@@ -185,6 +185,9 @@ export interface RangeGridProps {
   // compact: small grid for inline use in course content — no numbers, no
   // legend, no click-to-lock panel. Just colored cells.
   compact?: boolean
+  // fill: stretch the grid to the container's height instead of fixed
+  // 44px cells — for full-viewport panels (Live) with no page scroll.
+  fill?: boolean
 }
 
 // Human label for an action, annotating the size when provided.
@@ -194,7 +197,7 @@ function actionLabel(a: string, sizing?: number): string {
   return sizing !== undefined ? `${base} ${sizing}bb` : base
 }
 
-export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false }: RangeGridProps) {
+export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false, fill = false }: RangeGridProps) {
   const { perHand, activeActions, colors, actionPcts, actionCombos, baseByCombo } = useMemo(() => {
     const data: Record<string, string> = { fold, call, raise, allIn, check, bet }
     const active = ACTION_ORDER.filter(a => data[a].length > 0)
@@ -246,6 +249,8 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
 
   // Clicked cell → per-hand breakdown panel.
   const [selected, setSelected] = useState<string | null>(null)
+  // Hovered cell → floating strategy tooltip (exact mixes at a glance).
+  const [hover, setHover] = useState<{ hand: string; x: number; y: number } | null>(null)
 
   // Combos behind the selected hand class, with their per-action frequencies
   // (%, same scale as the cells).
@@ -281,10 +286,9 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
                 <th className="rv-rowhead">{RANKS[ri]}</th>
                 {rowCells.map((cell, ci) => {
                   const freqs = perHand[cell.hand] ?? []
-                  const total = freqs.reduce((s, v) => s + v, 0)
                   return (
                     <td key={ci}
-                      className={`rv-cell ${total > 0 ? 'in-range' : ''}`}
+                      className={`rv-cell ${freqs.reduce((s, v) => s + v, 0) > 0 ? 'in-range' : ''}`}
                       style={{ background: cellGradient(freqs, colors) }}
                       title={`${cell.hand}: ${activeActions.map((a, i) => `${a} ${freqs[i].toFixed(0)}%`).join(' · ')}`} />
                   )
@@ -298,33 +302,38 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
   }
 
   return (
-    <div className="rv-content">
-      <div className="rv-grid-area">
+    <div className={fill ? 'rv-content rv-content-fill' : 'rv-content'}>
+      <div className={fill ? 'rv-grid-area rv-grid-area-fill' : 'rv-grid-area'}>
         {(title || subtitle) && (
           <div className="rv-grid-header">
             {title && <span className="rv-grid-spot">{title}</span>}
             {subtitle && <span className="rv-grid-sol">{subtitle}</span>}
           </div>
         )}
-        <div className="rv-grid-wrap">
+        <div className={fill ? 'rv-grid-wrap rv-grid-fill' : 'rv-grid-wrap'}>
           <table className="rv-grid">
+            <thead>
+              <tr><th></th>{RANKS.map(r => <th key={r}>{r}</th>)}</tr>
+            </thead>
             <tbody>
               {HAND_GRID.map((rowCells, ri) => (
                 <tr key={ri}>
+                  <th className="rv-rowhead">{RANKS[ri]}</th>
                   {rowCells.map((cell, ci) => {
                     const freqs = perHand[cell.hand] ?? []
                     const view = solo ? freqs.map((f, i) => (activeActions[i] === solo ? f : 0)) : freqs
                     const total = view.reduce((s, v) => s + v, 0)
                     return (
                       <td key={ci}
-                        className={`rv-cell ${total > 0 ? 'in-range' : ''} cursor-pointer ${selected === cell.hand ? 'outline outline-2 outline-accent -outline-offset-2' : ''}`}
+                        className={`rv-cell ${total > 0 ? 'in-range' : ''} cursor-pointer ${selected === cell.hand ? 'outline outline-2 outline-accent -outline-offset-2' : ''} ${hover?.hand === cell.hand ? 'ring-1 ring-white/60' : ''}`}
                         style={{
                           background: cellGradient(view, colors),
                           color: total > 0 ? '#fff' : '#8080a4',
                           ...(total > 0 ? { textShadow: '0 1px 2px rgba(6,6,14,0.7)' } : null),
                           fontWeight: total > 50 ? 700 : 400,
                         }}
-                        title={`${cell.hand}: ${activeActions.map((a, i) => `${a} ${freqs[i].toFixed(1)}%`).join(' · ')}`}
+                        onMouseMove={e => setHover({ hand: cell.hand, x: e.clientX, y: e.clientY })}
+                        onMouseLeave={() => setHover(h => (h?.hand === cell.hand ? null : h))}
                         onClick={() => setSelected(selected === cell.hand ? null : cell.hand)}
                       >
                         <span className="rv-cell-hand">{cell.hand}</span>
@@ -348,6 +357,16 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
               {actionLabel(a, sizings?.[a])}
               <span className="rv-legend-pct">{actionPcts[i].toFixed(1)}%</span>
             </button>
+          ))}
+        </div>
+        <div className="rv-comp" aria-hidden={true}>
+          {activeActions.map((a, i) => actionPcts[i] > 0.05 && (
+            <span
+              key={a}
+              className="rv-comp-seg"
+              style={{ width: `${Math.min(100, actionPcts[i])}%`, background: colors[i] }}
+              title={`${actionLabel(a, sizings?.[a])} ${actionPcts[i].toFixed(1)}%`}
+            />
           ))}
         </div>
         {selected && (
@@ -391,6 +410,27 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
             </div>
           </div>
         )}
+        {hover && (() => {
+          const freqs = perHand[hover.hand] ?? []
+          const W = 210
+          const left = Math.min(hover.x + 16, window.innerWidth - W - 10)
+          const top = Math.min(hover.y + 18, window.innerHeight - 40 - activeActions.length * 16)
+          return (
+            <div
+              className="fixed z-50 pointer-events-none rounded-lg border border-line bg-dark/95 backdrop-blur px-3 py-2 shadow-[0_8px_24px_rgba(0,0,0,0.55)]"
+              style={{ left, top, width: W }}
+            >
+              <div className="text-[12.5px] font-bold text-txt mb-1">{hover.hand}</div>
+              {activeActions.map((a, i) => (
+                <div key={a} className="flex items-center gap-2 py-px">
+                  <span className="w-2 h-2.5 rounded-[2px] shrink-0" style={{ background: colors[i] }} />
+                  <span className="flex-1 text-[10.5px] text-muted truncate">{actionLabel(a, sizings?.[a])}</span>
+                  <span className="text-[11px] font-bold tabular-nums" style={{ color: colors[i] }}>{freqs[i].toFixed(1)}%</span>
+                </div>
+              ))}
+            </div>
+          )
+        })()}
       </div>
     </div>
   )

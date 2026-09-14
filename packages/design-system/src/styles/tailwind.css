@@ -177,6 +177,33 @@
   background: var(--color-panel);
 }
 
+/* Fill mode — the grid stretches to the container height (Live page,
+   no page scroll): the wrapper takes the free space and the table's rows
+   distribute it evenly. */
+.rv-content-fill {
+  height: 100%;
+  min-height: 0;
+  align-items: stretch;
+}
+.rv-grid-area-fill {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.rv-grid-area-fill .rv-grid-header,
+.rv-grid-area-fill .rv-legend,
+.rv-grid-area-fill .rv-comp {
+  flex-shrink: 0;
+}
+.rv-grid-fill {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+.rv-grid-fill .rv-grid {
+  height: 100%;
+}
 /* Compact grid — small cells for inline use in course content */
 .rv-grid-sm {
   /* inline grids keep their natural fixed-cell size */
@@ -272,6 +299,20 @@
   font-weight: 700;
   color: var(--color-txt);
   font-variant-numeric: tabular-nums;
+}
+/* Range composition bar — stacked action shares of the whole range */
+.rv-comp {
+  display: flex;
+  height: 7px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 10px;
+  border: 1px solid var(--color-line);
+  background: var(--color-dark);
+}
+.rv-comp-seg {
+  display: block;
+  height: 100%;
 }
 
 /* Mobile responsive for page content */

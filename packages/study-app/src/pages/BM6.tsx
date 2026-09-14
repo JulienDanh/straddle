@@ -30,7 +30,7 @@ export function BM6Page() {
 
               <Callout variant="bad"><strong>When covering the 3-bettor, you can cold call; when covered by the 3-bettor, you can't.</strong>
 
-<p className="mt-6 mb-1 text-sm text-muted">UTG's open versus each position's defense — HJ and BTN here (the blinds are in the Range Library) — and UTG's decision facing the 3-bet itself. The seats between UTG and the 3-bettor act first, so these are the fold-back-around nodes:</p>
+<p className="mt-6 mb-1 text-sm text-muted">UTG's open versus each position's defense — HJ and BTN here (the blinds are on the Live page) — and UTG's decision facing the 3-bet itself. The seats between UTG and the 3-bettor act first, so these are the fold-back-around nodes:</p>
               <RangeBrowser ranges={HJ_VS_UTG} />
               <RangeBrowser ranges={BTN_VS_UTG} />
               <RangeBrowser ranges={UTG_VS_3BET_BTN} /> Same hand, different stack dynamic. 50bb vs 25bb 3-bet → 24% calls. 25bb vs 50bb 3-bet → 0% calls. Stack relationship to the 3-bettor, not absolute depth, is the key variable.</Callout>

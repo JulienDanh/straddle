@@ -152,23 +152,23 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         <div
           className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
-            activePage === 'ranges'
+            activePage === 'live'
               ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
               : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
           }`}
-          onClick={() => onNavigate('ranges')}
+          onClick={() => onNavigate('live')}
         >
-          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Range Library
+          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> Live
         </div>
         <div
           className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
-            activePage === 'sandbox'
+            activePage === 'livebbz'
               ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
               : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
           }`}
-          onClick={() => onNavigate('sandbox')}
+          onClick={() => onNavigate('livebbz')}
         >
-          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">·</span> Design System
+          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> Live BBZ
         </div>
       </div>
     </aside>

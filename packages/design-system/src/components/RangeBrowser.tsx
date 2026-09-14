@@ -32,6 +32,13 @@ export interface RangeBrowserProps {
    *  stack, solution type and board are appended as segments and restored
    *  on mount, so a spot reloads exactly where you left it. */
   hashPrefix?: string
+  /** Show the board selector for postflop children (default true). Pass
+   *  false for preflop-only panels — each page chooses whether to keep every
+   *  line a clean stacks view. */
+  postflop?: boolean
+  /** Fill the available height: the grid stretches to the panel instead of
+   *  fixed-height cells (for full-viewport pages like Live; no page scroll). */
+  fill?: boolean
 }
 
 const SEATS = ['UTG', 'UTG+1', 'LJ', 'HJ', 'CO', 'BTN', 'SB', 'BB']
@@ -76,7 +83,12 @@ function shortTarget(t: string): string {
  *  of internal type keys. Returns [order, label]. */
 function typeGroupLabel(t: string): [number, string] {
   const core = t.replace(/^ICM-(FT-)?/, '')
-  if (t === 'cEV' || core === '') return [0, 'Equal stacks']
+  // ICM-FT (plain final table) is an equal-stacks scenario — core 'FT';
+  // plain ICM (bubble, equal stacks) and the BBZ scrape's bubble /
+  // %-of-field ICM stages are equal stacks too
+  if (t === 'cEV' || core === '' || core === 'FT' || t === 'ICM'
+      || t.startsWith('ICM-BBZ'))
+    return [0, 'Equal stacks']
   if (core === 'covering') return [1, 'You cover them']
   if (core === 'covered-deep') return [2, 'They cover you (deep)']
   if (core === 'covered-similar') return [3, 'They cover you (similar)']
@@ -86,20 +98,45 @@ function typeGroupLabel(t: string): [number, string] {
 /** Short pill label within its scenario group — the group label carries
  *  the direction, the pill carries the model (ChipEV / ICM / final table). */
 function groupPill(t: string): string {
+  // every ICM variant carries a self-describing pill — a bare "ICM" is
+  // indistinguishable across the equal-stacks / covered / covering groups
   if (t === 'cEV') return 'ChipEV'
-  if (t.startsWith('ICM')) return t.startsWith('ICM-FT') ? 'final table' : 'ICM'
+  if (t.startsWith('ICM-BBZ-'))
+    return t.slice('ICM-BBZ-'.length).replace('pct', '%')
+  if (t === 'ICM-FT') return 'final table'
+  if (t === 'ICM') return 'bubble'
+  if (t === 'ICM-covering') return 'covering'
+  if (t === 'ICM-covered-deep') return 'covered deep'
+  if (t === 'ICM-covered-similar') return 'covered similar'
   return shortTarget(t)
 }
 
-/** Model order within a scenario group: ChipEV, then ICM, then final table. */
-const modelOrder = (t: string) => (t === 'cEV' ? 0 : t.startsWith('ICM-FT') ? 2 : 1)
+/** The covered/covering definition per scenario group — the tooltip on
+ *  the group label. Mirrors the SolutionType union spec. */
+const GROUP_HELP: Record<string, string> = {
+  'Equal stacks': 'Every stack at the table is the same size.',
+  'You cover them': 'No stack still in the hand — the villain and anyone behind you — is bigger than yours.',
+  'They cover you (deep)': 'The biggest stack in the hand over yours is at least 1.75x yours (3x+ is "by heaps").',
+  'They cover you (similar)': 'The biggest stack in the hand over yours is under 1.75x yours — close enough to fight.',
+}
+
+/** Model order within a scenario group: ChipEV, then the ICM stages in
+ * tournament progression (more of the field left first: 83% -> 40% ->
+ * bubble), then the final table. */
+const modelOrder = (t: string) =>
+  t === 'cEV' ? 0
+  : t === 'ICM-FT' ? 40
+  : t === 'ICM-BBZ-83pct' ? 10
+  : t === 'ICM-BBZ-40pct' ? 20
+  : t === 'ICM-BBZ-bubble' || t === 'ICM' ? 30
+  : 1
 
 const pillClass = (active: boolean) =>
   `px-2.5 py-1 rounded-[5px] text-[11px] font-semibold transition-colors ${
     active ? 'bg-accent text-dark' : 'text-txt/80 hover:text-txt hover:bg-panel/60'
   }`
 
-export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix }: RangeBrowserProps) {
+export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix, postflop = true, fill = false }: RangeBrowserProps) {
   // a group can mix solution types (cEV + ICM at the same stack) — the
   // type selector switches between them, and the stack selector shows
   // only the stacks of the active type. The selected type is derived
@@ -133,7 +170,7 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix }: 
   const [stackSel, setStackSel] = useState<number | null>(() =>
     init?.stack && !isNaN(init.stack) ? init.stack : (defaultStack ?? null))
   const [board, setBoard] = useState<string | null>(() =>
-    init?.board && init.board !== 'open' ? init.board : null)
+    postflop && init?.board && init.board !== 'open' ? init.board : null)
   const stack = stacks.includes(stackSel as number)
     ? (stackSel as number)
     : stacks[0]
@@ -141,7 +178,7 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix }: 
   // is live; switching scenario snaps to the nearest solved depth
   const maxStack = stacks[0]
   const current = ofType.find(r => r.stack === stack) ?? ofType[0]
-  const boards = current.postflop ?? []
+  const boards = postflop ? current.postflop ?? [] : []
   // postflop children are raw (minimal fields + open-weighted paste) —
   // materializeChild injects the parent context and converts on display
   const child = boards.find(b => b.id === board)
@@ -190,7 +227,11 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix }: 
     // Fixed width so the panel never resizes between views: must fit the grid
     // (14 cols x 46px cells + gutters + padding, ~689px) on one line with the
     // header text and the stack selector side by side (~730px).
-    <div className="my-4 rounded-xl border border-line bg-panel overflow-hidden w-[730px] max-w-full mx-auto">
+    <div className={
+      fill
+        ? 'rounded-xl border border-line bg-panel overflow-hidden w-full max-w-[780px] mx-auto h-full min-h-0 flex flex-col'
+        : 'my-4 rounded-xl border border-line bg-panel overflow-hidden w-[730px] max-w-full mx-auto'
+    }>
       <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2.5 bg-panel2 border-b border-line">
         <div className="flex items-baseline gap-2 min-w-0 flex-1">
           <span className="text-base font-bold text-txt shrink-0">{current.title} · {current.stack}bb</span>
@@ -271,7 +312,12 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix }: 
                 {list.map(([label, gts]) => (
                   <div key={label} className="flex items-center gap-1.5">
                     {list.length > 1 && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-muted">{label}</span>
+                      <span
+                        className="text-[10px] font-bold uppercase tracking-wider text-muted cursor-help"
+                        title={GROUP_HELP[label] ?? shortTarget(type)}
+                      >
+                        {label}
+                      </span>
                     )}
                     <div className="flex gap-0.5 bg-dark rounded-md p-1 border border-line/50">
                       {gts.map(t => (
@@ -357,11 +403,12 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix }: 
           ))}
         </div>
       )}
-      <div className="p-3.5">
+      <div className={fill ? 'p-3.5 flex-1 min-h-0 flex flex-col' : 'p-3.5'}>
         <RangeGrid
           {...shown.actions}
           sizings={shown.sizings}
           base={baseStr || undefined}
+          fill={fill}
         />
       </div>
     </div>
