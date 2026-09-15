@@ -52,32 +52,68 @@ const pctOf = (raw: string | undefined) => {
   return (sum / 1326) * 100;
 };
 
-/** Demo solution from the mockup's scenario (BB vs UTG, AsJd5c). */
+/** Demo solution: a complete three-street runout of BB vs UTG on AsJd5c,
+ * turn 2h, river 3c — flop c-bet, call, turn probe, river navigation. */
 function demoSolution(setup: SpotSetup): Solution {
-  const board = setup.board || "AsJd5c";
-  const cbet = demoStrategy(board, "cbet");
-  const vsBet = demoStrategy(board, "vsBet");
+  const flop = setup.board || "AsJd5c";
+  const boardT = flop + "2h";
+  const boardR = boardT + "3c";
+
+  const mk = (
+    id: string, street: "flop" | "turn" | "river", board: string, depth: number,
+    player: "OOP" | "IP", vsAction: SolutionNode["vsAction"],
+    acts: { token: string; label: string; kind: SolutionNode["actions"][0]["kind"] }[],
+    strat: Record<string, string>,
+  ): SolutionNode => ({
+    id, street, board, depth, player, vsAction,
+    actions: acts.map((a) => ({ ...a, pct: pctOf(strat[a.kind === "check" ? "check" : a.kind]) })),
+    strategy: strat,
+  });
+
+  const fCbet = demoStrategy(flop, "cbet");
+  const fStab = demoStrategy(flop, "cbet");
+  const fVsBet = demoStrategy(flop, "vsBet");
+  const tProbe = demoStrategy(boardT, "cbet", "turn");
+  const tStab = demoStrategy(boardT, "cbet", "turn");
+  const tVsBet = demoStrategy(boardT, "vsBet", "turn");
+  const rProbe = demoStrategy(boardR, "cbet", "river");
+  const rStab = demoStrategy(boardR, "cbet", "river");
+  const rVsBet = demoStrategy(boardR, "vsBet", "river");
+
   const nodes: Record<string, SolutionNode> = {
-    cbet: {
-      id: "cbet", player: "OOP", vsAction: null,
-      actions: [
-        { token: "c", label: "CHECK", kind: "check", pct: pctOf(cbet.check) },
-        { token: "b75", label: "BET 75%", kind: "bet", pct: pctOf(cbet.bet) },
-      ],
-      strategy: { check: cbet.check ?? "", bet: cbet.bet ?? "" },
-    },
-    "cbet:b75": {
-      id: "cbet:b75", player: "IP", vsAction: { label: "BET 75%", kind: "bet" },
-      actions: [
-        { token: "r60", label: "RAISE 60%", kind: "raise", pct: pctOf(vsBet.raise) },
-        { token: "c", label: "CALL", kind: "call", pct: pctOf(vsBet.call) },
-        { token: "f", label: "FOLD", kind: "fold", pct: pctOf(vsBet.fold) },
-      ],
-      strategy: { raise: vsBet.raise ?? "", call: vsBet.call ?? "", fold: vsBet.fold ?? "" },
-    },
+    // flop
+    cbet: mk("cbet", "flop", flop, 0, "OOP", null,
+      [{ token: "c", label: "CHECK", kind: "check" }, { token: "b75", label: "BET 75%", kind: "bet" }],
+      { check: fCbet.check ?? "", bet: fCbet.bet ?? "" }),
+    "cbet:c": mk("cbet:c", "flop", flop, 1, "IP", { label: "CHECK", kind: "check" },
+      [{ token: "c", label: "CHECK", kind: "check" }, { token: "b75", label: "BET 75%", kind: "bet" }],
+      { check: fStab.check ?? "", bet: fStab.bet ?? "" }),
+    "cbet:b75": mk("cbet:b75", "flop", flop, 1, "IP", { label: "BET 75%", kind: "bet" },
+      [{ token: "r60", label: "RAISE 60%", kind: "raise" }, { token: "c", label: "CALL", kind: "call" }, { token: "f", label: "FOLD", kind: "fold" }],
+      { raise: fVsBet.raise ?? "", call: fVsBet.call ?? "", fold: fVsBet.fold ?? "" }),
+    // turn (after UTG calls the flop bet)
+    "cbet:b75:c": mk("cbet:b75:c", "turn", boardT, 0, "OOP", null,
+      [{ token: "c", label: "CHECK", kind: "check" }, { token: "b60", label: "BET 60%", kind: "bet" }],
+      { check: tProbe.check ?? "", bet: tProbe.bet ?? "" }),
+    "cbet:b75:c:c": mk("cbet:b75:c:c", "turn", boardT, 1, "IP", { label: "CHECK", kind: "check" },
+      [{ token: "c", label: "CHECK", kind: "check" }, { token: "b75", label: "BET 75%", kind: "bet" }],
+      { check: tStab.check ?? "", bet: tStab.bet ?? "" }),
+    "cbet:b75:c:b60": mk("cbet:b75:c:b60", "turn", boardT, 1, "IP", { label: "BET 60%", kind: "bet" },
+      [{ token: "r60", label: "RAISE 60%", kind: "raise" }, { token: "c", label: "CALL", kind: "call" }, { token: "f", label: "FOLD", kind: "fold" }],
+      { raise: tVsBet.raise ?? "", call: tVsBet.call ?? "", fold: tVsBet.fold ?? "" }),
+    // river (after UTG calls the turn bet)
+    "cbet:b75:c:b60:c": mk("cbet:b75:c:b60:c", "river", boardR, 0, "OOP", null,
+      [{ token: "c", label: "CHECK", kind: "check" }, { token: "b60", label: "BET 60%", kind: "bet" }],
+      { check: rProbe.check ?? "", bet: rProbe.bet ?? "" }),
+    "cbet:b75:c:b60:c:c": mk("cbet:b75:c:b60:c:c", "river", boardR, 1, "IP", { label: "CHECK", kind: "check" },
+      [{ token: "c", label: "CHECK", kind: "check" }, { token: "b75", label: "BET 75%", kind: "bet" }],
+      { check: rStab.check ?? "", bet: rStab.bet ?? "" }),
+    "cbet:b75:c:b60:c:b60": mk("cbet:b75:c:b60:c:b60", "river", boardR, 1, "IP", { label: "BET 60%", kind: "bet" },
+      [{ token: "r60", label: "RAISE 60%", kind: "raise" }, { token: "c", label: "CALL", kind: "call" }, { token: "f", label: "FOLD", kind: "fold" }],
+      { raise: rVsBet.raise ?? "", call: rVsBet.call ?? "", fold: rVsBet.fold ?? "" }),
   };
   return {
-    demo: true, board, pot: "11.7",
+    demo: true, board: flop, pot: "11.7",
     elapsed: "02:13", exploit: "0.6%",
     evs: { oop: "0.23", ip: "0.04" },
     rootId: "cbet", nodes,
@@ -85,9 +121,13 @@ function demoSolution(setup: SpotSetup): Solution {
 }
 
 /** Parse the UPI trio (node info / child actions / strategy) into a SolutionNode. */
-function parseNode(id: string, nodeR: string, actionsR: string, stratR: string, parentNode?: SolutionNode): SolutionNode {
+function parseNode(id: string, nodeR: string, actionsR: string, stratR: string): SolutionNode {
   const player = nodeR.includes("OOP_DEC") ? "OOP" : "IP";
-  const tokens = actionsR.split(/\n+/).map((s) => s.trim()).filter(Boolean);
+  // show_node: [nodeID, node type, board line, ...] — board cards drive street
+  const boardLine = nodeR.split("\n")[2] ?? "";
+  const cards = (boardLine.match(/[AKQJT2-9][shdc]/g) ?? []).join("");
+  const street = cards.length >= 10 ? "river" : cards.length >= 8 ? "turn" : "flop";
+  const tokens = actionsR.split(/\n+/).map((s2) => s2.trim()).filter(Boolean);
   const lines = stratR.split(/\n+/).filter((l) => l.trim().split(/\s+/).length > 100);
   const aggressive = tokens.some((t) => /^[br]/.test(t));
   const actions: SolutionNode["actions"] = [];
@@ -105,9 +145,8 @@ function parseNode(id: string, nodeR: string, actionsR: string, stratR: string, 
     if (line) strategy[kind === "check" || kind === "call" ? (aggressive ? "call" : "check") : kind] = lineToCombos(line);
   });
   return {
-    id, player,
-    vsAction: parentNode ? { label: parentNode.actions.find((a) => `${parentNode.id}:${a.token}` === id)?.label ?? "", kind: (["bet", "raise"] as const).includes((parentNode.actions.find((a) => `${parentNode.id}:${a.token}` === id)?.kind ?? "bet") as "bet" | "raise") ? (parentNode.actions.find((a) => `${parentNode.id}:${a.token}` === id)?.kind as "bet" | "raise") : "bet" } : null,
-    actions, strategy,
+    id, player, street, board: cards, depth: (id.match(/:/g)?.length ?? 0) % 2,
+    vsAction: null, actions, strategy,
   };
 }
 
@@ -135,11 +174,11 @@ export function SolverPage() {
     }
   };
 
-  const fetchNode = async (id: string, parent?: SolutionNode): Promise<SolutionNode> => {
+  const fetchNode = async (id: string): Promise<SolutionNode> => {
     const [nodeR, actionsR, stratR] = await upi(apiUrl, [
       `show_node ${id}`, `show_children_actions ${id}`, `show_strategy ${id}`,
     ]);
-    return parseNode(id, nodeR, actionsR, stratR, parent);
+    return parseNode(id, nodeR, actionsR, stratR);
   };
 
   const solve = async () => {
@@ -196,9 +235,7 @@ export function SolverPage() {
     setSelected(id);
     if (!solution || solution.nodes[id] || status !== "connected") return;
     try {
-      const parent = Object.values(solution.nodes).find((n) =>
-        n.actions.some((a) => `${n.id}:${a.token}` === id));
-      const node = await fetchNode(id, parent);
+      const node = await fetchNode(id);
       setSolution({ ...solution, nodes: { ...solution.nodes, [id]: node } });
     } catch (e) {
       append(`node fetch failed: ${(e as Error).message}`);

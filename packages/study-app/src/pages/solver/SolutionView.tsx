@@ -10,8 +10,11 @@ import { ALL_CLASSES, CATEGORY_ORDER, categorize } from "./utils";
 
 export type SolutionNode = {
   id: string;
+  street: "flop" | "turn" | "river";
+  board: string; // the board AT this node (flop / flop+turn / +river)
+  depth: number; // indent within its street panel
   player: "OOP" | "IP";
-  vsAction: { label: string; kind: "bet" | "raise" | null } | null;
+  vsAction: { label: string; kind: "bet" | "raise" | "check" } | null;
   actions: { token: string; label: string; kind: "bet" | "raise" | "call" | "check" | "fold"; pct: number }[];
   strategy: Record<string, string>; // action name -> combo:freq
 };
@@ -69,48 +72,33 @@ function classOfCombo(combo: string): string | null {
   return hi + lo + (s1 === s2 ? "s" : "o");
 }
 
-// ---- action tree (one street per panel, matching the mockup) ----
-function TreePanel({ title, nodes, rootId, selected, onSelect }: {
-  title: string; nodes: Record<string, SolutionNode>;
-  rootId: string; selected: string; onSelect: (id: string) => void;
+// ---- action tree: one panel per street, node rows grouped per street ----
+function TreePanel({ title, streetNodes, selected, onSelect }: {
+  title: string; streetNodes: SolutionNode[]; selected: string; onSelect: (id: string) => void;
 }) {
-  const root = nodes[rootId];
-  if (!root) return (
-    <div className="rounded-xl border border-line bg-panel p-3 min-w-[150px]">
-      <div className="text-[10px] uppercase tracking-widest text-muted/60 pb-2">{title}</div>
-      <div className="text-[11px] text-muted/40">—</div>
-    </div>
-  );
-  const renderNode = (id: string, depth: number): React.ReactNode => {
-    const n = nodes[id];
-    if (!n) return null;
-    return (
-      <div key={id} className={depth ? "ml-4 pt-1 border-l border-line/60 pl-2" : ""}>
-        <button onClick={() => onSelect(id)}
-          className={`text-[11px] font-semibold cursor-pointer block text-left ${selected === id ? "text-accent" : "text-txt/80 hover:text-txt"}`}>
-          {n.player === "OOP" ? "BB" : "UTG"}
-          {n.vsAction ? <span className="text-muted/60"> vs </span> : " ·"}
-          {n.actions.map((a, i) => (
-            <span key={i} className="pl-1.5 pr-0.5 inline-flex items-center gap-0.5">
-              {i > 0 && <span className="text-muted/40">/</span>}
-              <span className="px-1 rounded font-bold"
-                style={{ background: ACTION_COLOR[a.kind], color: a.kind === "fold" ? "#9aa" : "#fff" }}>
-                {a.label}
-              </span>
-              <span className="text-muted/60">({a.pct.toFixed(1)}%)</span>
-            </span>
-          ))}
-        </button>
-        {n.actions
-          .filter((a) => nodes[`${id}:${a.token}`])
-          .map((a) => renderNode(`${id}:${a.token}`, depth + 1))}
-      </div>
-    );
-  };
   return (
     <div className="rounded-xl border border-line bg-panel p-3 min-w-[150px] flex-1">
       <div className="text-[10px] uppercase tracking-widest text-muted/60 pb-2">{title}</div>
-      {renderNode(rootId, 0)}
+      {streetNodes.length === 0 && <div className="text-[11px] text-muted/40">—</div>}
+      {streetNodes.map((n) => (
+        <div key={n.id} className={n.depth ? "ml-4 pt-1 border-l border-line/60 pl-2" : "pt-0.5"}>
+          <button onClick={() => onSelect(n.id)}
+            className={`text-[11px] font-semibold cursor-pointer block text-left ${selected === n.id ? "text-accent" : "text-txt/80 hover:text-txt"}`}>
+            {n.player === "OOP" ? "BB" : "UTG"}
+            {n.vsAction ? <span className="text-muted/60"> vs </span> : " ·"}
+            {n.actions.map((a, i) => (
+              <span key={i} className="pl-1.5 pr-0.5 inline-flex items-center gap-0.5">
+                {i > 0 && <span className="text-muted/40">/</span>}
+                <span className="px-1 rounded font-bold"
+                  style={{ background: ACTION_COLOR[a.kind], color: a.kind === "fold" ? "#9aa" : "#fff" }}>
+                  {a.label}
+                </span>
+                <span className="text-muted/60">({a.pct.toFixed(1)}%)</span>
+              </span>
+            ))}
+          </button>
+        </div>
+      ))}
     </div>
   );
 }
@@ -121,8 +109,10 @@ export function SolutionView({
   solution: Solution; selected: string; onSelect: (id: string) => void;
 }) {
   const node = solution.nodes[selected] ?? solution.nodes[solution.rootId];
+  const all = Object.values(solution.nodes);
+  const byStreet = (st: string) => all.filter((n) => n.street === st);
 
-  const rows = useMemo(() => categoryRows(node, solution.board), [node, solution.board]);
+  const rows = useMemo(() => categoryRows(node, node.board), [node]);
 
   const gridProps: Record<string, string> = {};
   for (const [k, v] of Object.entries(node.strategy)) gridProps[k] = v;
@@ -138,7 +128,7 @@ export function SolutionView({
           <div className="relative h-[75px] rounded-[40px] bg-[#1b5e20] border-4 border-[#3e2723] flex items-center justify-center">
             <span className="text-white font-bold text-[11px]">Pot: {solution.pot}</span>
             <div className="absolute -bottom-2.5 left-1/2 -translate-x-1/2 rounded bg-panel border border-line px-1">
-              <Board cards={solution.board} size="sm" />
+              <Board cards={node.board} size="sm" />
             </div>
           </div>
           <div className="text-[11px] font-bold text-txt pt-3">
@@ -148,10 +138,12 @@ export function SolutionView({
             <div className="text-[9px] text-orange-400/80">demo data — no bridge connected</div>
           )}
         </div>
-        <TreePanel title="Flop actions" nodes={solution.nodes} rootId={solution.rootId}
+        <TreePanel title="Flop actions" streetNodes={byStreet("flop")}
           selected={selected} onSelect={onSelect} />
-        <TreePanel title="Turn actions" nodes={{}} rootId="" selected="" onSelect={() => {}} />
-        <TreePanel title="River actions" nodes={{}} rootId="" selected="" onSelect={() => {}} />
+        <TreePanel title="Turn actions" streetNodes={byStreet("turn")}
+          selected={selected} onSelect={onSelect} />
+        <TreePanel title="River actions" streetNodes={byStreet("river")}
+          selected={selected} onSelect={onSelect} />
       </div>
 
       {/* tabs row (visual parity with the mockup) */}

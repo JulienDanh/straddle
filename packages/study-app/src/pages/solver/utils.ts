@@ -78,7 +78,7 @@ export async function upi(url: string, commands: string[]): Promise<string[]> {
 
 // ---- made-hand categories on a 3-card board ----
 export const CATEGORY_ORDER = [
-  "Set", "Two Pair", "Overpair", "Top Pair", "2nd Pair", "3rd Pair",
+  "Flush", "Set", "Two Pair", "Overpair", "Top Pair", "2nd Pair", "3rd Pair",
   "Pocket Pair", "A-High", "Flush Draw", "OESD", "Gutshot", "Air",
 ] as const;
 
@@ -93,10 +93,11 @@ const runsOf = (ranks: number[]): number[][] => {
   return windows;
 };
 
-/** Classify a hand class on an unpaired 3-card board (flop). */
+/** Classify a hand class on a 3-5 card board (flop/turn/river). */
 export function categorize(cls: string, board: string): string {
-  const bRanks = [board[0], board[2], board[4]].map((r) => RANKS.indexOf(r));
-  const bSuits = [board[1], board[3], board[5]];
+  const cards = board.match(/.{2}/g) ?? [];
+  const bRanks = cards.map((c) => RANKS.indexOf(c[0]));
+  const bSuits = cards.map((c) => c[1]);
   const sorted = [...bRanks].sort((a, b) => b - a);
   const top = sorted[0], second = sorted[1];
 
@@ -107,6 +108,7 @@ export function categorize(cls: string, board: string): string {
   }
   const hi = RANKS.indexOf(cls[0]), lo = RANKS.indexOf(cls[1]);
   const suited = cls[2] === "s";
+  if (suited && bSuits.filter((s) => s === cls[1]).length >= 3) return "Flush";
   const matchesHi = bRanks.includes(hi);
   const matchesLo = bRanks.includes(lo);
   if (matchesHi && matchesLo) return "Two Pair";
@@ -167,15 +169,26 @@ const DEMO_ACTIONS: Record<string, Record<string, Record<string, number>>> = {
   },
 };
 
-/** Build the demo solution's strategy strings from category heuristics. */
-export function demoStrategy(board: string, kind: "cbet" | "vsBet") {
+/** Build the demo solution's strategy strings from category heuristics,
+ * scaled by street: turn barrels get slightly stronger, calls shrink,
+ * folds absorb the difference. */
+export function demoStrategy(board: string, kind: "cbet" | "vsBet",
+  street: "flop" | "turn" | "river" = "flop") {
+  const S = street === "flop" ? { bet: 1, raise: 1, call: 1 }
+    : street === "turn" ? { bet: 0.85, raise: 0.8, call: 0.8 }
+    : { bet: 0.95, raise: 0.7, call: 0.7 };
   const out: Record<string, string> = {};
   for (const cls of ALL_CLASSES) {
     const cat = categorize(cls, board);
-    const acts = DEMO_ACTIONS[kind][cat] ?? DEMO_ACTIONS[kind].Air;
+    const base = DEMO_ACTIONS[kind][cat] ?? DEMO_ACTIONS[kind].Air;
     const j = jitter(cls);
+    const acts: Record<string, number> = {};
+    for (const [a, f] of Object.entries(base))
+      acts[a] = a === "check" || a === "fold" ? f : cap(f * (S as Record<string, number>)[a] + j * (a === "check" || a === "fold" ? 0 : 1));
+    if (acts.check !== undefined) acts.check = cap(1 - (acts.bet ?? 0));
+    if (acts.fold !== undefined) acts.fold = cap(1 - (acts.raise ?? 0) - (acts.call ?? 0));
     for (const [a, f] of Object.entries(acts)) {
-      const v = cap(f + (a === "fold" ? 0 : j));
+      const v = cap(f);
       if (v <= 0) continue;
       // expand to concrete combos — RangeGrid parses 4-char combo:freq
       for (const combo of combosOfClass(cls))
