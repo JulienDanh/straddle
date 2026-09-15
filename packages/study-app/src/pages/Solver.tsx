@@ -1,5 +1,7 @@
 // Solver — a GTO solver workbench against a UPI (PioSOLVER Universal Poker
-// Interface) bridge.
+// Interface) bridge. Two views: Setup (spot configuration, the input
+// mockup) and Solution (table visualizer, action tree, strategy matrix,
+// made-hand breakdown — the solution mockup).
 //
 // ASSUMED API CONTRACT (the bridge is a thin HTTP wrapper around a
 // persistent PioSOLVER process speaking standard UPI):
@@ -7,111 +9,118 @@
 //     ->  {"responses": ["set_range ok!", ...]}
 // Commands run sequentially against the same solver process; responses are
 // the raw UPI output bodies in order (END markers stripped, ERROR lines
-// preserved as "ERROR ..." entries). `go` blocks until the solver stops.
-// The bridge normalizes `show_children_actions` to one action token per
-// line ("c", "b 50", "b 100") and `show_strategy` to one 1326-float line
-// per child, in child order.
-//
-// Mixed-content note: an https page may fetch http://localhost / 127.0.0.1
-// (potentially-trustworthy origins), so the deployed site can drive a
-// local bridge.
-import { useEffect, useMemo, useState } from "react";
-import { RangeGrid, UPI_HANDS } from "@poker/design-system/src/components/RangeGrid";
-
-const SUITS = ["s", "h", "d", "c"];
-
-// ---- range text helpers (class:freq <-> combos <-> UPI) ----
-function combosOfClass(cls: string): string[] {
-  if (cls.length === 2) {
-    const out: string[] = [];
-    for (let i = 0; i < 4; i++) for (let j = i + 1; j < 4; j++)
-      out.push(cls[0] + SUITS[i] + cls[0] + SUITS[j]);
-    return out;
-  }
-  const hi = cls[0], lo = cls[1];
-  if (cls[2] === "s") return SUITS.map((s) => hi + s + lo + s);
-  const out: string[] = [];
-  for (const a of SUITS) for (const b of SUITS) if (a !== b) out.push(hi + a + lo + b);
-  return out;
-}
-const CLS_RE = /^[AKQJT2-9]{2}[so]?$|^[AKQJT2-9]{2}$/;
-
-/** Validate a class:freq text ("AA:1,AKs:0.5"). Returns share of 1326, or null. */
-function rangeShare(raw: string): number | null {
-  let sum = 0;
-  for (const entry of raw.split(/[,\s]+/).filter(Boolean)) {
-    const [cls, f] = entry.split(":");
-    if (!CLS_RE.test(cls)) return null;
-    const w = f === undefined ? 1 : parseFloat(f);
-    if (isNaN(w) || w < 0 || w > 1) return null;
-    sum += w * combosOfClass(cls).length;
-  }
-  return sum / 1326;
-}
-/** class:freq text -> 1326 space-separated UPI weights (null if invalid). */
-function toUpiWeights(raw: string): string | null {
-  const freqs: Record<string, number> = {};
-  for (const entry of raw.split(/[,\s]+/).filter(Boolean)) {
-    const [cls, f] = entry.split(":");
-    if (!CLS_RE.test(cls)) return null;
-    const w = f === undefined ? 1 : parseFloat(f);
-    if (isNaN(w) || w < 0 || w > 1) return null;
-    for (const combo of combosOfClass(cls)) freqs[combo] = w;
-  }
-  return UPI_HANDS.map((h) => Math.round((freqs[h] ?? 0) * 10000) / 10000).join(" ");
-}
-/** one 1326-float line -> combo:freq string for a RangeGrid action. */
-function lineToCombos(line: string): string {
-  const w = line.trim().split(/\s+/).map(Number);
-  const out: string[] = [];
-  for (let i = 0; i < UPI_HANDS.length; i++) {
-    const f = Math.round((w[i] ?? 0) * 10000) / 10000;
-    if (f > 0.00005) out.push(`${UPI_HANDS[i]}:${f}`);
-  }
-  return out.join(",");
-}
-
-// ---- UPI bridge client ----
-async function upi(url: string, commands: string[]): Promise<string[]> {
-  const r = await fetch(`${url.replace(/\/+$/, "")}/upi`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ commands }),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  if (!Array.isArray(d.responses)) throw new Error("malformed bridge response");
-  return d.responses;
-}
+// preserved). The bridge normalizes `show_children_actions` to one action
+// token per line ("c", "b50") and `show_strategy` to one 1326-float line
+// per child, in child order; it answers CORS preflights; and it accepts
+// `set_bet_sizes <street> <OOP|IP> <comma sizes>` (percent-of-pot) as a
+// normalization of Pio's line-based tree config. https pages may call
+// http://localhost (potentially-trustworthy origin), so the deployed site
+// can drive a local bridge. With no bridge connected, CALCULATE renders
+// the demo solution.
+import { useState } from "react";
+import { SetupView, type SpotSetup } from "./solver/SetupView";
+import { SolutionView, type Solution, type SolutionNode } from "./solver/SolutionView";
+import { upi, toUpiWeights, lineToCombos, lineShare, demoStrategy, combosOfClass } from "./solver/utils";
 
 const label = "block text-[10px] uppercase tracking-widest text-muted/60 pb-1";
 const input =
   "w-full bg-panel2/60 border border-line rounded-md px-2 py-1.5 text-[12.5px] text-txt outline-none focus:border-accent/60";
 
+const DEFAULT_SETUP: SpotSetup = {
+  board: "AsJd5c", pot: "6.7", stack: "37.5",
+  oopRange: "", ipRange: "",
+  sizings: {
+    "flop-oop": { bet: ["75"], raise: ["60"] },
+    "flop-ip": { bet: ["33", "60"], raise: ["60"] },
+    "turn-oop": { bet: ["60"], raise: ["60"] },
+    "turn-ip": { bet: ["60"], raise: ["60"] },
+    "river-oop": { bet: ["60"], raise: ["60"] },
+    "river-ip": { bet: ["60"], raise: ["60"] },
+  },
+  seconds: "30",
+};
+
+// share of 1326 carried by a class:freq strategy string
+const pctOf = (raw: string | undefined) => {
+  if (!raw) return 0;
+  let sum = 0;
+  for (const e of raw.split(",").filter(Boolean)) {
+    const [tok, f] = e.split(":");
+    // class:freq entries weigh by combo count; combo:freq by one combo
+    sum += parseFloat(f) * (tok.length === 4 ? 1 : combosOfClass(tok).length);
+  }
+  return (sum / 1326) * 100;
+};
+
+/** Demo solution from the mockup's scenario (BB vs UTG, AsJd5c). */
+function demoSolution(setup: SpotSetup): Solution {
+  const board = setup.board || "AsJd5c";
+  const cbet = demoStrategy(board, "cbet");
+  const vsBet = demoStrategy(board, "vsBet");
+  const nodes: Record<string, SolutionNode> = {
+    cbet: {
+      id: "cbet", player: "OOP", vsAction: null,
+      actions: [
+        { token: "c", label: "CHECK", kind: "check", pct: pctOf(cbet.check) },
+        { token: "b75", label: "BET 75%", kind: "bet", pct: pctOf(cbet.bet) },
+      ],
+      strategy: { check: cbet.check ?? "", bet: cbet.bet ?? "" },
+    },
+    "cbet:b75": {
+      id: "cbet:b75", player: "IP", vsAction: { label: "BET 75%", kind: "bet" },
+      actions: [
+        { token: "r60", label: "RAISE 60%", kind: "raise", pct: pctOf(vsBet.raise) },
+        { token: "c", label: "CALL", kind: "call", pct: pctOf(vsBet.call) },
+        { token: "f", label: "FOLD", kind: "fold", pct: pctOf(vsBet.fold) },
+      ],
+      strategy: { raise: vsBet.raise ?? "", call: vsBet.call ?? "", fold: vsBet.fold ?? "" },
+    },
+  };
+  return {
+    demo: true, board, pot: "11.7",
+    elapsed: "02:13", exploit: "0.6%",
+    evs: { oop: "0.23", ip: "0.04" },
+    rootId: "cbet", nodes,
+  };
+}
+
+/** Parse the UPI trio (node info / child actions / strategy) into a SolutionNode. */
+function parseNode(id: string, nodeR: string, actionsR: string, stratR: string, parentNode?: SolutionNode): SolutionNode {
+  const player = nodeR.includes("OOP_DEC") ? "OOP" : "IP";
+  const tokens = actionsR.split(/\n+/).map((s) => s.trim()).filter(Boolean);
+  const lines = stratR.split(/\n+/).filter((l) => l.trim().split(/\s+/).length > 100);
+  const aggressive = tokens.some((t) => /^[br]/.test(t));
+  const actions: SolutionNode["actions"] = [];
+  const strategy: Record<string, string> = {};
+  tokens.forEach((t, i) => {
+    const line = lines[i] ?? "";
+    const kind: SolutionNode["actions"][0]["kind"] =
+      t === "c" ? (aggressive ? "call" : "check")
+      : t === "f" ? "fold"
+      : t.startsWith("r") ? "raise" : "bet";
+    const amount = t.replace(/^[br]\s?/, "");
+    const label = kind === "check" ? "CHECK" : kind === "call" ? "CALL" : kind === "fold" ? "FOLD"
+      : `${kind === "raise" ? "RAISE" : "BET"} ${amount}`;
+    actions.push({ token: t, label, kind, pct: lineShare(line) * 100 });
+    if (line) strategy[kind === "check" || kind === "call" ? (aggressive ? "call" : "check") : kind] = lineToCombos(line);
+  });
+  return {
+    id, player,
+    vsAction: parentNode ? { label: parentNode.actions.find((a) => `${parentNode.id}:${a.token}` === id)?.label ?? "", kind: (["bet", "raise"] as const).includes((parentNode.actions.find((a) => `${parentNode.id}:${a.token}` === id)?.kind ?? "bet") as "bet" | "raise") ? (parentNode.actions.find((a) => `${parentNode.id}:${a.token}` === id)?.kind as "bet" | "raise") : "bet" } : null,
+    actions, strategy,
+  };
+}
+
 export function SolverPage() {
-  const [apiUrl, setApiUrl] = useState(
-    () => localStorage.getItem("solver-api") ?? "http://127.0.0.1:8500",
-  );
+  const [apiUrl, setApiUrl] = useState(() => localStorage.getItem("solver-api") ?? "http://127.0.0.1:8500");
   const [status, setStatus] = useState<"idle" | "connected" | "error">("idle");
-  const [log, setLog] = useState<string[]>([]);
-  const append = (line: string) => setLog((l) => [...l.slice(-80), line]);
-
-  // spot setup
-  const [board, setBoard] = useState("AsKd5c");
-  const [pot, setPot] = useState("3.5");
-  const [stack, setStack] = useState("37.5");
-  const [sizes, setSizes] = useState("33,60,100,150");
-  const [seconds, setSeconds] = useState("30");
-  const [oopRange, setOopRange] = useState("");
-  const [ipRange, setIpRange] = useState("");
+  const [tab, setTab] = useState<"setup" | "solution">("setup");
+  const [setup, setSetup] = useState<SpotSetup>(DEFAULT_SETUP);
+  const [solution, setSolution] = useState<Solution | null>(null);
+  const [selected, setSelected] = useState("");
   const [busy, setBusy] = useState(false);
-
-  // results
-  const [results, setResults] = useState<string[] | null>(null);
-  const [node, setNode] = useState("r:0");
-  const [strategy, setStrategy] = useState<{ actions: string[]; lines: string[] } | null>(null);
-
-  useEffect(() => localStorage.setItem("solver-api", apiUrl), [apiUrl]);
+  const [log, setLog] = useState<string[]>([]);
+  const append = (l: string) => setLog((x) => [...x.slice(-40), l]);
 
   const connect = async () => {
     setStatus("idle");
@@ -126,30 +135,55 @@ export function SolverPage() {
     }
   };
 
+  const fetchNode = async (id: string, parent?: SolutionNode): Promise<SolutionNode> => {
+    const [nodeR, actionsR, stratR] = await upi(apiUrl, [
+      `show_node ${id}`, `show_children_actions ${id}`, `show_strategy ${id}`,
+    ]);
+    return parseNode(id, nodeR, actionsR, stratR, parent);
+  };
+
   const solve = async () => {
     setBusy(true);
-    setResults(null);
-    setStrategy(null);
     try {
-      const oop = toUpiWeights(oopRange);
-      const ip = toUpiWeights(ipRange);
-      if (!oop || !ip) throw new Error("invalid range text");
-      const responses = await upi(apiUrl, [
-        "free_tree",
-        `set_range OOP ${oop}`,
-        `set_range IP ${ip}`,
-        `set_board ${board}`,
-        `set_pot 0 0 ${pot}`,
-        `set_eff_stack ${stack}`,
-        `set_bet_sizes ${sizes}`,
-        "build_tree",
-        `go ${seconds}`,
-        "calc_results",
-      ]);
-      const errs = responses.filter((r) => r.includes("ERROR"));
-      if (errs.length) throw new Error(errs[0]);
-      setResults(responses.slice(-1)[0].split("\n").filter(Boolean));
-      append(`solved board ${board} (${seconds}s)`);
+      if (status === "connected") {
+        const oop = toUpiWeights(setup.oopRange);
+        const ip = toUpiWeights(setup.ipRange);
+        if (!oop || !ip) throw new Error("paste valid starting ranges first");
+        const sizeCmds = Object.entries(setup.sizings).flatMap(([k, v]) => {
+          const [street, pos] = k.split("-");
+          const s = `set_bet_sizes ${street} ${pos.toUpperCase()} ${[...v.bet, ...v.raise].join(",")}`;
+          return [s];
+        });
+        const responses = await upi(apiUrl, [
+          "free_tree",
+          `set_range OOP ${oop}`,
+          `set_range IP ${ip}`,
+          `set_board ${setup.board}`,
+          `set_pot 0 0 ${setup.pot}`,
+          `set_eff_stack ${setup.stack}`,
+          ...sizeCmds,
+          "build_tree",
+          `go ${setup.seconds}`,
+          "calc_results",
+        ]);
+        const errs = responses.filter((r) => r.includes("ERROR"));
+        if (errs.length) throw new Error(errs[0]);
+        const results = responses[responses.length - 1];
+        const ev = (re: RegExp) => results.match(re)?.[1] ?? "—";
+        const root = await fetchNode("r:0");
+        setSolution({
+          demo: false, board: setup.board, pot: setup.pot,
+          elapsed: `${setup.seconds}s`, exploit: ev(/exploitable for:\s*([\d.]+)/),
+          evs: { oop: ev(/EV OOP:\s*(-?[\d.]+)/), ip: ev(/EV IP:\s*(-?[\d.]+)/) },
+          rootId: "r:0", nodes: { "r:0": root },
+        });
+        append(`solved ${setup.board} — exploit ${results.match(/exploitable for:\s*([\d.]+)/)?.[1] ?? "?"}`);
+      } else {
+        setSolution(demoSolution(setup));
+        append("no bridge connected — rendered demo solution");
+      }
+      setSelected("");
+      setTab("solution");
     } catch (e) {
       append(`solve failed: ${(e as Error).message}`);
     } finally {
@@ -157,173 +191,56 @@ export function SolverPage() {
     }
   };
 
-  const showNode = async () => {
-    setStrategy(null);
+  // walk the tree: selecting an unfetched child node fetches its strategy
+  const selectNode = async (id: string) => {
+    setSelected(id);
+    if (!solution || solution.nodes[id] || status !== "connected") return;
     try {
-      const [actionsR, stratR] = await upi(apiUrl, [
-        `show_children_actions ${node}`,
-        `show_strategy ${node}`,
-      ]);
-      const actions = actionsR.split(/\n+/).map((s) => s.trim()).filter(Boolean);
-      const lines = stratR.split(/\n+/).filter((l) => l.trim().split(/\s+/).length > 100);
-      setStrategy({ actions, lines });
+      const parent = Object.values(solution.nodes).find((n) =>
+        n.actions.some((a) => `${n.id}:${a.token}` === id));
+      const node = await fetchNode(id, parent);
+      setSolution({ ...solution, nodes: { ...solution.nodes, [id]: node } });
     } catch (e) {
-      append(`show failed: ${(e as Error).message}`);
+      append(`node fetch failed: ${(e as Error).message}`);
     }
   };
 
-  // render the node strategy as RangeGrid actions
-  const gridActions = useMemo(() => {
-    if (!strategy) return null;
-    const out: Record<"check" | "bet", string> = { check: "", bet: "" };
-    let betSize = 0;
-    strategy.actions.forEach((a, i) => {
-      const line = strategy.lines[i];
-      if (!line) return;
-      if (a === "c") out.check = lineToCombos(line);
-      else if (a.startsWith("b")) {
-        out.bet = out.bet ? `${out.bet},${lineToCombos(line)}` : lineToCombos(line);
-        const n = parseFloat(a.split(/\s+/)[1]);
-        if (!isNaN(n)) betSize = betSize || n;
-      }
-    });
-    return { ...out, betSize };
-  }, [strategy]);
-
-  const shareOf = (raw: string) => (raw.trim() ? rangeShare(raw) : null);
+  const chip = (active: boolean) =>
+    `px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-pointer border transition-colors select-none ${
+      active ? "bg-accent text-dark border-accent" : "text-txt/80 bg-panel2/60 border-transparent hover:bg-panel2 hover:text-txt"}`;
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="rounded-xl border border-line bg-panel px-4 py-3 mb-4">
+    <div className="max-w-6xl mx-auto flex flex-col gap-3">
+      {/* bridge bar */}
+      <div className="rounded-xl border border-line bg-panel px-4 py-3">
         <div className="flex items-center gap-2 flex-wrap">
           <span className={label + " pb-0"}>UPI bridge</span>
-          <input
-            className={input + " max-w-[280px]"}
-            value={apiUrl}
-            onChange={(e) => setApiUrl(e.target.value)}
-            placeholder="http://127.0.0.1:8500"
-          />
-          <button
-            onClick={connect}
-            className="px-2.5 py-1 rounded-md bg-panel2/60 border border-line text-[11px] font-semibold text-txt hover:border-accent/60 cursor-pointer"
-          >
+          <input className={input + " max-w-[260px]"} value={apiUrl}
+            onChange={(e) => { setApiUrl(e.target.value); localStorage.setItem("solver-api", e.target.value); }} />
+          <button onClick={connect}
+            className="px-2.5 py-1 rounded-md bg-panel2/60 border border-line text-[11px] font-semibold text-txt hover:border-accent/60 cursor-pointer">
             Connect
           </button>
-          <span
-            className={
-              "text-[11px] font-semibold " +
-              (status === "connected" ? "text-accent" : status === "error" ? "text-red-400" : "text-muted")
-            }
-          >
+          <span className={"text-[11px] font-semibold " + (status === "connected" ? "text-accent" : status === "error" ? "text-red-400" : "text-muted")}>
             {status === "connected" ? "connected" : status === "error" ? "unreachable" : "not connected"}
           </span>
-          <span className="text-[11px] text-muted/50 ml-auto">
-            POST /upi {"{"}commands[]{"}"} → {"{"}responses[]{"}"} — see page docs for the contract
-          </span>
+          <div className="ml-auto flex gap-1">
+            <button onClick={() => setTab("setup")} className={chip(tab === "setup")}>Setup</button>
+            <button onClick={() => setTab("solution")} className={chip(tab === "solution")}
+              disabled={!solution} title={solution ? "" : "hit CALCULATE first"}>Solution</button>
+          </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="rounded-xl border border-line bg-panel px-4 py-3">
-          <div className={label}>Spot</div>
-          <div className="grid grid-cols-2 gap-2">
-            <div><span className="text-[10px] text-muted/60">Board</span>
-              <input className={input} value={board} onChange={(e) => setBoard(e.target.value)} /></div>
-            <div><span className="text-[10px] text-muted/60">Pot (bb)</span>
-              <input className={input} value={pot} onChange={(e) => setPot(e.target.value)} /></div>
-            <div><span className="text-[10px] text-muted/60">Effective stack (bb)</span>
-              <input className={input} value={stack} onChange={(e) => setStack(e.target.value)} /></div>
-            <div><span className="text-[10px] text-muted/60">Bet sizes (bb, comma-sep)</span>
-              <input className={input} value={sizes} onChange={(e) => setSizes(e.target.value)} /></div>
-          </div>
+      {tab === "setup" ? (
+        <SetupView setup={setup} setSetup={setSetup} connected={status === "connected"} busy={busy} onSolve={solve} />
+      ) : solution ? (
+        <SolutionView solution={solution} selected={selected || solution.rootId} onSelect={selectNode} />
+      ) : null}
 
-          <div className="pt-3">
-            <div className={label}>OOP range (class:freq)</div>
-            <textarea
-              className={input + " h-24 font-mono text-[11px]"}
-              value={oopRange}
-              onChange={(e) => setOopRange(e.target.value)}
-              placeholder="AA:1,AKs:0.5,... — paste from any grid's copy button, or load from the BBZ store below"
-            />
-            <div className="text-[10.5px] pt-0.5 text-muted">
-              {shareOf(oopRange) === null ? "invalid or empty" : `${(shareOf(oopRange)! * 100).toFixed(1)}% of hands`}
-            </div>
-          </div>
-          <div className="pt-2">
-            <div className={label}>IP range (class:freq)</div>
-            <textarea
-              className={input + " h-24 font-mono text-[11px]"}
-              value={ipRange}
-              onChange={(e) => setIpRange(e.target.value)}
-              placeholder="AA:1,AKs:0.5,..."
-            />
-            <div className="text-[10.5px] pt-0.5 text-muted">
-              {shareOf(ipRange) === null ? "invalid or empty" : `${(shareOf(ipRange)! * 100).toFixed(1)}% of hands`}
-            </div>
-          </div>
-          <div className="flex items-center gap-2 pt-3">
-            <input
-              className={input + " w-20"}
-              value={seconds}
-              onChange={(e) => setSeconds(e.target.value)}
-              title="seconds"
-            />
-            <span className="text-[11px] text-muted/60">s solve time</span>
-            <button
-              onClick={solve}
-              disabled={busy || status !== "connected"}
-              className="ml-auto px-3 py-1.5 rounded-md bg-accent text-dark text-[12px] font-bold cursor-pointer disabled:opacity-40 disabled:cursor-default"
-            >
-              {busy ? "solving…" : "Build tree & solve"}
-            </button>
-          </div>
-          {results && (
-            <div className="mt-3 rounded-lg border border-line bg-panel2/50 px-3 py-2 font-mono text-[11px] text-muted whitespace-pre-wrap">
-              {results.join("\n")}
-            </div>
-          )}
-        </div>
-
-        <div className="rounded-xl border border-line bg-panel px-4 py-3">
-          <div className={label}>Node explorer</div>
-          <div className="flex items-center gap-2">
-            <input className={input} value={node} onChange={(e) => setNode(e.target.value)} />
-            <button
-              onClick={showNode}
-              disabled={status !== "connected"}
-              className="px-2.5 py-1.5 rounded-md bg-panel2/60 border border-line text-[11px] font-semibold text-txt hover:border-accent/60 cursor-pointer disabled:opacity-40"
-            >
-              Show strategy
-            </button>
-          </div>
-          <div className="text-[10.5px] text-muted/60 pt-1">
-            nodeID per UPI: actions separated by “:”, b = cumulative bet, c = check/call
-          </div>
-          {strategy && (
-            <div className="pt-2 text-[11px] text-muted">
-              actions: {strategy.actions.join(" · ")}
-            </div>
-          )}
-          {gridActions && (
-            <div className="pt-3">
-              <RangeGrid
-                title={`Node ${node}`}
-                subtitle={gridActions.betSize ? `bet ${gridActions.betSize}` : "check"}
-                check={gridActions.check}
-                bet={gridActions.bet}
-                sizings={gridActions.betSize ? { bet: gridActions.betSize } : undefined}
-              />
-            </div>
-          )}
-          {strategy && !gridActions?.check && !gridActions?.bet && (
-            <div className="pt-3 text-[12px] text-muted">No check/bet children at this node.</div>
-          )}
-        </div>
-      </div>
-
-      <div className="rounded-xl border border-line bg-panel px-4 py-3 mt-4">
+      <div className="rounded-xl border border-line bg-panel px-4 py-3">
         <div className={label}>Bridge log</div>
-        <div className="font-mono text-[11px] text-muted/80 max-h-40 overflow-y-auto whitespace-pre-wrap">
+        <div className="font-mono text-[11px] text-muted/80 max-h-28 overflow-y-auto whitespace-pre-wrap">
           {log.length === 0 ? "— no calls yet —" : log.map((l, i) => <div key={i}>{l}</div>)}
         </div>
       </div>
