@@ -160,6 +160,16 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
         >
           <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> Live
         </div>
+        <div
+          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
+            activePage === 'solver'
+              ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
+              : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
+          }`}
+          onClick={() => onNavigate('solver')}
+        >
+          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> GTO Solver
+        </div>
       </div>
     </aside>
   )

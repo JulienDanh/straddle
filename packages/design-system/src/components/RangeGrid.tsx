@@ -203,7 +203,7 @@ function actionLabel(a: string, sizing?: number): string {
 // the combo order of the stored GTO Wizard captures. set_range over UPI
 // expects 1326 weights in exactly this order (scripts should still verify
 // once against the solver's own show_hand_order).
-const UPI_HANDS: readonly string[] = (() => {
+export const UPI_HANDS: readonly string[] = (() => {
   const deck: string[] = []
   for (const r of '23456789TJQKA') for (const s of 'cdhs') deck.push(r + s)
   const out: string[] = []
