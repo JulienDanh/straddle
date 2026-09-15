@@ -12,11 +12,14 @@
 // preserved). The bridge normalizes `show_children_actions` to one action
 // token per line ("c", "b50") and `show_strategy` to one 1326-float line
 // per child, in child order; it answers CORS preflights; and it accepts
-// `set_bet_sizes <street> <OOP|IP> <comma sizes>` (percent-of-pot) as a
-// normalization of Pio's line-based tree config. https pages may call
-// http://localhost (potentially-trustworthy origin), so the deployed site
-// can drive a local bridge. With no bridge connected, CALCULATE renders
-// the demo solution.
+// `set_bet_sizes <street> <OOP|IP> bets=<csv> raises=<csv>` (percent-of-pot,
+// bets and raises keyed because a bare csv cannot be split). Node ids are
+// action paths: "r:0" is the root, a child is "<parent>:<token>" — chance
+// deals are transparent (the bridge follows one representative runout).
+// The reference bridge is cuda-poker-solver/python/upi_bridge.py (the pps
+// GPU solver as backend); https pages may call http://localhost
+// (potentially-trustworthy origin), so the deployed site can drive a local
+// bridge. With no bridge connected, CALCULATE renders the demo solution.
 import { useState } from "react";
 import { SetupView, type SpotSetup } from "./solver/SetupView";
 import { SolutionView, type Solution, type SolutionNode } from "./solver/SolutionView";
@@ -145,7 +148,7 @@ function parseNode(id: string, nodeR: string, actionsR: string, stratR: string):
     if (line) strategy[kind === "check" || kind === "call" ? (aggressive ? "call" : "check") : kind] = lineToCombos(line);
   });
   return {
-    id, player, street, board: cards, depth: (id.match(/:/g)?.length ?? 0) % 2,
+    id, player, street, board: cards, depth: id.match(/:/g)?.length ?? 0,
     vsAction: null, actions, strategy,
   };
 }
@@ -190,8 +193,7 @@ export function SolverPage() {
         if (!oop || !ip) throw new Error("paste valid starting ranges first");
         const sizeCmds = Object.entries(setup.sizings).flatMap(([k, v]) => {
           const [street, pos] = k.split("-");
-          const s = `set_bet_sizes ${street} ${pos.toUpperCase()} ${[...v.bet, ...v.raise].join(",")}`;
-          return [s];
+          return [`set_bet_sizes ${street} ${pos.toUpperCase()} bets=${v.bet.join(",")} raises=${v.raise.join(",")}`];
         });
         const responses = await upi(apiUrl, [
           "free_tree",
@@ -230,7 +232,6 @@ export function SolverPage() {
     }
   };
 
-  // walk the tree: selecting an unfetched child node fetches its strategy
   const selectNode = async (id: string) => {
     setSelected(id);
     if (!solution || solution.nodes[id] || status !== "connected") return;
@@ -240,6 +241,11 @@ export function SolverPage() {
     } catch (e) {
       append(`node fetch failed: ${(e as Error).message}`);
     }
+  };
+
+  // walk the tree: an action badge fetches its child node (id = parent:token)
+  const walkChild = (id: string, token: string) => {
+    if (status === "connected") return selectNode(`${id}:${token}`);
   };
 
   const chip = (active: boolean) =>
@@ -272,7 +278,7 @@ export function SolverPage() {
       {tab === "setup" ? (
         <SetupView setup={setup} setSetup={setSetup} connected={status === "connected"} busy={busy} onSolve={solve} />
       ) : solution ? (
-        <SolutionView solution={solution} selected={selected || solution.rootId} onSelect={selectNode} />
+        <SolutionView solution={solution} selected={selected || solution.rootId} onSelect={selectNode} onAction={walkChild} />
       ) : null}
 
       <div className="rounded-xl border border-line bg-panel px-4 py-3">

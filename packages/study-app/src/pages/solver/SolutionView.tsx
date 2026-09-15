@@ -73,8 +73,9 @@ function classOfCombo(combo: string): string | null {
 }
 
 // ---- action tree: one panel per street, node rows grouped per street ----
-function TreePanel({ title, streetNodes, selected, onSelect }: {
-  title: string; streetNodes: SolutionNode[]; selected: string; onSelect: (id: string) => void;
+function TreePanel({ title, streetNodes, selected, onSelect, onAction }: {
+  title: string; streetNodes: SolutionNode[]; selected: string;
+  onSelect: (id: string) => void; onAction: (id: string, token: string) => void;
 }) {
   return (
     <div className="rounded-xl border border-line bg-panel p-3 min-w-[150px] flex-1">
@@ -87,14 +88,16 @@ function TreePanel({ title, streetNodes, selected, onSelect }: {
             {n.player === "OOP" ? "BB" : "UTG"}
             {n.vsAction ? <span className="text-muted/60"> vs </span> : " ·"}
             {n.actions.map((a, i) => (
-              <span key={i} className="pl-1.5 pr-0.5 inline-flex items-center gap-0.5">
+              <button key={i} onClick={(e) => { e.stopPropagation(); onAction(n.id, a.token); }}
+                title="walk to this action's node"
+                className="pl-1.5 pr-0.5 inline-flex items-center gap-0.5 cursor-pointer hover:opacity-80">
                 {i > 0 && <span className="text-muted/40">/</span>}
                 <span className="px-1 rounded font-bold"
                   style={{ background: ACTION_COLOR[a.kind], color: a.kind === "fold" ? "#9aa" : "#fff" }}>
                   {a.label}
                 </span>
                 <span className="text-muted/60">({a.pct.toFixed(1)}%)</span>
-              </span>
+              </button>
             ))}
           </button>
         </div>
@@ -104,9 +107,10 @@ function TreePanel({ title, streetNodes, selected, onSelect }: {
 }
 
 export function SolutionView({
-  solution, selected, onSelect,
+  solution, selected, onSelect, onAction,
 }: {
   solution: Solution; selected: string; onSelect: (id: string) => void;
+  onAction: (id: string, token: string) => void;
 }) {
   const node = solution.nodes[selected] ?? solution.nodes[solution.rootId];
   const all = Object.values(solution.nodes);
@@ -139,11 +143,11 @@ export function SolutionView({
           )}
         </div>
         <TreePanel title="Flop actions" streetNodes={byStreet("flop")}
-          selected={selected} onSelect={onSelect} />
+          selected={selected} onSelect={onSelect} onAction={onAction} />
         <TreePanel title="Turn actions" streetNodes={byStreet("turn")}
-          selected={selected} onSelect={onSelect} />
+          selected={selected} onSelect={onSelect} onAction={onAction} />
         <TreePanel title="River actions" streetNodes={byStreet("river")}
-          selected={selected} onSelect={onSelect} />
+          selected={selected} onSelect={onSelect} onAction={onAction} />
       </div>
 
       {/* tabs row (visual parity with the mockup) */}
