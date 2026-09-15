@@ -421,20 +421,22 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
                 {actionLabel(a, sizings?.[a])}
                 <span className="rv-legend-pct">{actionPcts[i].toFixed(1)}%</span>
               </button>
-              <button
-                onClick={() => copyAction(a)}
-                className="pl-1.5 text-[10px] text-muted/50 hover:text-txt cursor-pointer transition-colors select-none"
-                title={`Copy ${actionLabel(a, sizings?.[a])} range as class:freq text (PioViewer paste format)`}
-              >
-                {copied === `gui:${a}` ? 'copied' : 'copy'}
-              </button>
-              <button
-                onClick={() => copyUpi(a)}
-                className="pl-1 text-[10px] text-muted/50 hover:text-txt cursor-pointer transition-colors select-none"
-                title={`Copy ${actionLabel(a, sizings?.[a])} range as 1326 weights for PioSOLVER UPI set_range`}
-              >
-                {copied === `upi:${a}` ? 'copied' : 'upi'}
-              </button>
+              <span className="pl-1.5 ml-0.5 flex gap-0.5">
+                <button
+                  onClick={() => copyAction(a)}
+                  className="px-1.5 py-px border border-line bg-panel2/50 rounded text-[10px] font-semibold text-muted hover:text-txt hover:border-accent/60 cursor-pointer transition-colors select-none"
+                  title={`Copy ${actionLabel(a, sizings?.[a])} range as class:freq text (PioViewer paste format)`}
+                >
+                  {copied === `gui:${a}` ? 'copied' : 'copy'}
+                </button>
+                <button
+                  onClick={() => copyUpi(a)}
+                  className="px-1.5 py-px border border-line bg-panel2/50 rounded text-[10px] font-semibold text-muted hover:text-txt hover:border-accent/60 cursor-pointer transition-colors select-none"
+                  title={`Copy ${actionLabel(a, sizings?.[a])} range as 1326 weights for PioSOLVER UPI set_range`}
+                >
+                  {copied === `upi:${a}` ? 'copied' : 'upi'}
+                </button>
+              </span>
             </div>
           ))}
         </div>
