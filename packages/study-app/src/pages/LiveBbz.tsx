@@ -52,13 +52,13 @@ export function LiveBbzPage() {
   const [failed, setFailed] = useState(false);
 
   const [seat, setSeat] = useState<string>(() => {
-    const s = window.location.hash.split("/")[2];
+    const s = window.location.hash.split("/")[1];
     return s && SEATS.includes(s as (typeof SEATS)[number]) ? s : "BB";
   });
   const slug = SEAT_SLUG[seat as keyof typeof SEAT_SLUG] ?? "bb";
   const lines = manifest?.[slug] ?? {};
 
-  const [line, setLine] = useState<string>(() => window.location.hash.split("/")[3] ?? "");
+  const [line, setLine] = useState<string>(() => window.location.hash.split("/")[2] ?? "");
 
   const [loading, setLoading] = useState(false);
   // line-file cache — refetch on a fresh dev session, never during browsing
@@ -96,7 +96,7 @@ export function LiveBbzPage() {
         setLoading(false);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slug, line]);
+  }, [manifest, slug, line]);
 
   const ranges = line ? cache.get(`${slug}/${line}`) : undefined;
 
@@ -107,7 +107,7 @@ export function LiveBbzPage() {
     window.history.replaceState(
       null,
       "",
-      `${window.location.pathname}${window.location.search}#livebbz/${encodeURIComponent(s)}/${first}`,
+      `${window.location.pathname}${window.location.search}#live/${encodeURIComponent(s)}/${first}`,
     );
   };
 
@@ -116,7 +116,7 @@ export function LiveBbzPage() {
     window.history.replaceState(
       null,
       "",
-      `${window.location.pathname}${window.location.search}#livebbz/${encodeURIComponent(seat)}/${l}`,
+      `${window.location.pathname}${window.location.search}#live/${encodeURIComponent(seat)}/${l}`,
     );
   };
 
@@ -174,7 +174,7 @@ export function LiveBbzPage() {
           <RangeBrowser
             key={`${slug}-${line}`}
             ranges={ranges}
-            hashPrefix={`#livebbz/${encodeURIComponent(seat)}/${line}`}
+            hashPrefix={`#live/${encodeURIComponent(seat)}/${line}`}
             postflop={false}
             fill
           />

@@ -197,6 +197,34 @@ function actionLabel(a: string, sizing?: number): string {
   return sizing !== undefined ? `${base} ${sizing}bb` : base
 }
 
+// PioSOLVER UPI (Universal Poker Interface) canonical hand order: all
+// 1326 combos, deck order (ranks 2..A, suits c d h s), later card first in
+// each pair — matching Pio's documented sequence "2d2c 2h2c 2h2d ..." and
+// the combo order of the stored GTO Wizard captures. set_range over UPI
+// expects 1326 weights in exactly this order (scripts should still verify
+// once against the solver's own show_hand_order).
+const UPI_HANDS: readonly string[] = (() => {
+  const deck: string[] = []
+  for (const r of '23456789TJQKA') for (const s of 'cdhs') deck.push(r + s)
+  const out: string[] = []
+  for (let i = 1; i < 52; i++)
+    for (let j = 0; j < i; j++) out.push(deck[i] + deck[j])
+  return out
+})()
+
+// clipboard write for non-secure contexts (execCommand is deprecated but
+// still the only fallback over plain http)
+function fallbackCopy(text: string) {
+  const ta = document.createElement('textarea')
+  ta.value = text
+  ta.style.position = 'fixed'
+  ta.style.opacity = '0'
+  document.body.appendChild(ta)
+  ta.select()
+  try { document.execCommand('copy') } catch { /* nothing to do */ }
+  document.body.removeChild(ta)
+}
+
 export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', allIn = '', check = '', bet = '', sizings, base = '', compact = false, fill = false }: RangeGridProps) {
   const { perHand, activeActions, colors, actionPcts, actionCombos, baseByCombo } = useMemo(() => {
     const data: Record<string, string> = { fold, call, raise, allIn, check, bet }
@@ -246,6 +274,42 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
   // that action's share. Derived so a stale pick (actions changed) clears.
   const [soloPick, setSoloPick] = useState<string | null>(null)
   const solo = activeActions.includes(soloPick as never) ? soloPick : null
+
+  // Copy an action's strategy, in two formats:
+  // - gui (class:freq, e.g. "AA:1,AKs:0.35") — PioViewer's paste-range box
+  // - upi (1326 space-separated weights) — PioSOLVER's set_range over the
+  //   Universal Poker Interface, in Pio's canonical hand order
+  const [copied, setCopied] = useState<string | null>(null)
+  const rawOf = (a: string) =>
+    ({ fold, call, raise, allIn, check, bet } as Record<string, string>)[a] ?? ''
+  const writeClipboard = (text: string, key: string) => {
+    const done = () => {
+      setCopied(key)
+      window.setTimeout(() => setCopied(c => (c === key ? null : c)), 1300)
+    }
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(() => {
+        fallbackCopy(text)
+        done()
+      })
+    } else {
+      fallbackCopy(text)
+      done()
+    }
+  }
+  const copyAction = (a: string) => {
+    const perClass = parseComboData(rawOf(a))
+    const text = Object.entries(perClass)
+      .filter(([, f]) => f > 0.00005)
+      .map(([c, f]) => `${c}:${Math.round(f * 10000) / 10000}`)
+      .join(',')
+    writeClipboard(text, `gui:${a}`)
+  }
+  const copyUpi = (a: string) => {
+    const freqs = parseComboFreqs(rawOf(a))
+    const text = UPI_HANDS.map(h => Math.round((freqs[h] ?? 0) * 10000) / 10000).join(' ')
+    writeClipboard(text, `upi:${a}`)
+  }
 
   // Clicked cell → per-hand breakdown panel.
   const [selected, setSelected] = useState<string | null>(null)
@@ -347,16 +411,31 @@ export function RangeGrid({ title, subtitle, fold = '', call = '', raise = '', a
         </div>
         <div className="rv-legend">
           {activeActions.map((a, i) => (
-            <button
-              key={a}
-              onClick={() => setSoloPick(solo === a ? null : a)}
-              className={`rv-legend-item cursor-pointer transition-colors ${solo === a ? 'text-txt' : ''}`}
-              title={solo === a ? 'Show all actions' : `Show only ${actionLabel(a, sizings?.[a])}`}
-            >
-              <span className="rv-legend-dot" style={{ background: colors[i] }} />
-              {actionLabel(a, sizings?.[a])}
-              <span className="rv-legend-pct">{actionPcts[i].toFixed(1)}%</span>
-            </button>
+            <div key={a} className="flex items-center">
+              <button
+                onClick={() => setSoloPick(solo === a ? null : a)}
+                className={`rv-legend-item cursor-pointer transition-colors ${solo === a ? 'text-txt' : ''}`}
+                title={solo === a ? 'Show all actions' : `Show only ${actionLabel(a, sizings?.[a])}`}
+              >
+                <span className="rv-legend-dot" style={{ background: colors[i] }} />
+                {actionLabel(a, sizings?.[a])}
+                <span className="rv-legend-pct">{actionPcts[i].toFixed(1)}%</span>
+              </button>
+              <button
+                onClick={() => copyAction(a)}
+                className="pl-1.5 text-[10px] text-muted/50 hover:text-txt cursor-pointer transition-colors select-none"
+                title={`Copy ${actionLabel(a, sizings?.[a])} range as class:freq text (PioViewer paste format)`}
+              >
+                {copied === `gui:${a}` ? 'copied' : 'copy'}
+              </button>
+              <button
+                onClick={() => copyUpi(a)}
+                className="pl-1 text-[10px] text-muted/50 hover:text-txt cursor-pointer transition-colors select-none"
+                title={`Copy ${actionLabel(a, sizings?.[a])} range as 1326 weights for PioSOLVER UPI set_range`}
+              >
+                {copied === `upi:${a}` ? 'copied' : 'upi'}
+              </button>
+            </div>
           ))}
         </div>
         <div className="rv-comp" aria-hidden={true}>

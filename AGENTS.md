@@ -128,7 +128,7 @@ Import components from `@poker/design-system/src/components/ui` (the barrel) or 
 - **`RangeGrid`** — 13x13 combo grid underneath RangeBrowser. Use directly only for compact inline grids or multi-action demos; props: `title`, `subtitle`, `fold`, `call`, `raise`, `allIn`, `check`, `bet` (comma-separated combo strings), `base`, `compact`. `base` (combo:freq line of the parent open) makes legend percentages weighted shares of that range instead of all 1326 combos — used for postflop children.
 - **`packages/ranges/data/`** — the single machine-readable range store (the neutral home: read by the app). One JSON per preflop line (e.g. `utg/rfi.json`, `bb/vs-btn.json`): shared `title`/`position` at the top, `stacks` with one entry per depth — per-action combo:freq strings preserved (raise/call/allIn separately). Postflop solutions are minimal children nested under the preflop entry they derive from (`postflop` array, matched by `id`); the loaders materialize the full `StoredRange` display shape (`materializeLine`/`materializeChild` in design-system `data/ranges/types.ts`). Edit these files; new stack depths are new `stacks` entries.
 - **`data/ranges/*.ts` (design-system)** — thin loaders that materialize the store into `StoredRange`s (injecting the shared title/position and converting postflop pastes to conditional), re-exporting the constants (`UTG_RFI_CEV`, `BB_VS_UTG_CEV`); solved flops are bundled as `SolvedFlop`s (`solvedFlop` in `data/ranges/types.ts`: child + parent reach line + action trail) for the `BoardExample` cards — one loader file per system (`s1-flops.ts` ... `s12-flops.ts`), with per-board provenance comments carrying the weighted shares. The barrel is `data/ranges/index.ts`. Don't put range data here.
-- **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells.
+- **`RangeGrid.tsx`** — also owns the 13x13 hand-grid layout constants (`RANKS`, `HAND_GRID`) used to map combo strings onto grid cells. Every legend action carries two copy buttons: `copy` (class:freq — PioViewer paste format) and `upi` (1326 space-separated weights in PioSOLVER's canonical hand order, for `set_range` over the Universal Poker Interface) — see "Range text formats" below.
 
 ### Range store updates
 
@@ -146,6 +146,19 @@ All card-related props use a consistent string format:
 - Board: `"AsKd5c"` (3-5 cards concatenated, 2 chars each)
 - Hole cards: `"QdJc"` (4 chars, two cards)
 - Single card: `"As"` (2 chars)
+
+### Range text formats (solver interchange)
+
+Every rendered range can leave the app in two canonical text formats — the `copy` / `upi` buttons on each RangeGrid legend action:
+
+| Format | Shape | Where it's used |
+|---|---|---|
+| class:freq | `AA:1,AKs:0.35,KQo:0.25` — 169 hand classes, 0-1 weights, per-class averaged over combos | PioViewer's paste-range box; also the shape BBZ's own pioData strings use |
+| UPI weights | 1326 space-separated floats `0 0.2692 1 ...` | PioSOLVER `set_range <IP|OOP>` over the Universal Poker Interface (stdin/stdout protocol, UPI docs at piosolver.com/docs/upi/) |
+
+The UPI order is fixed: deck order (ranks `2..A`, suits `c d h s`), later card first in each pair — Pio documents it as `"2d2c 2h2c 2h2d ..."`. This is the SAME order as `combo_order()` in `straddle-solutions/scripts/gw_order.py`, so all three (store combo:freq strings, the RangeGrid `upi` button, and the scripts) share one mapping. Scripts driving a solver should still assert once against the solver's own `show_hand_order` output before mass-solving.
+
+Batch conversion (no UI needed): `straddle-solutions/scripts/store_to_upi.py` — reads any wizard-schema line JSON (`straddle-solutions/bbz/store/` or `packages/ranges/data/`) and emits UPI weight arrays per action per stack entry (`--json` for a dump, `--type`/`--stack`/`--action` filters). Reading solver output back: `show_strategy`/`show_range` return the same 1326-float shape — on boards, board-blocked combos read back as 0 and ingestion should skip them, not treat them as "never plays".
 
 ### shadcn/ui components
 
