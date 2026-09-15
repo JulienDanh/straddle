@@ -29,9 +29,17 @@ const label = "block text-[10px] uppercase tracking-widest text-muted/60 pb-1";
 const input =
   "w-full bg-panel2/60 border border-line rounded-md px-2 py-1.5 text-[12.5px] text-txt outline-none focus:border-accent/60";
 
+// Default spot: UTG opens 40bb, BB calls — the System 1 scenario. Ranges
+// are the real ChipEV solutions from the range store (combo:freq), so
+// CALCULATE works out of the box; the board is the mockup's AsJd5c.
+import { UTG_RFI_CEV, BB_VS_UTG_CEV } from "@poker/design-system/src/data/ranges";
+
+const UTG_OPEN_40 = UTG_RFI_CEV.find((r) => r.stack === 40)?.actions.raise ?? "";
+const BB_CALL_40 = BB_VS_UTG_CEV.find((r) => r.stack === 40)?.actions.call ?? "";
+
 const DEFAULT_SETUP: SpotSetup = {
   board: "AsJd5c", pot: "6.7", stack: "37.5",
-  oopRange: "", ipRange: "",
+  oopRange: BB_CALL_40, ipRange: UTG_OPEN_40,
   sizings: {
     "flop-oop": { bet: ["75"], raise: ["60"] },
     "flop-ip": { bet: ["33", "60"], raise: ["60"] },

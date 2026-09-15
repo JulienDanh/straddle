@@ -21,29 +21,40 @@ export function combosOfClass(cls: string): string[] {
 }
 
 const CLS_RE = /^[AKQJT2-9]{2}[so]?$/;
+const COMBO_RE = /^[AKQJT2-9][shdc][AKQJT2-9][shdc]$/;
 
-/** Validate class:freq text; returns the share of 1326 combos, or null. */
+// One range-text entry -> its combos (classes expand, raw combos pass
+// through; the store and lineToCombos emit combo:freq).
+function entryCombos(tok: string): string[] | null {
+  if (COMBO_RE.test(tok)) return [tok];
+  if (CLS_RE.test(tok)) return combosOfClass(tok);
+  return null;
+}
+
+/** Validate class:freq / combo:freq text; returns the share of 1326 combos, or null. */
 export function rangeShare(raw: string): number | null {
   let sum = 0;
   for (const entry of raw.split(/[,\s]+/).filter(Boolean)) {
     const [cls, f] = entry.split(":");
-    if (!CLS_RE.test(cls)) return null;
     const w = f === undefined ? 1 : parseFloat(f);
     if (isNaN(w) || w < 0 || w > 1) return null;
-    sum += w * combosOfClass(cls).length;
+    const combos = entryCombos(cls);
+    if (!combos) return null;
+    sum += w * combos.length;
   }
   return sum / 1326;
 }
 
-/** class:freq text -> 1326 space-separated UPI weights (null if invalid). */
+/** range text -> 1326 space-separated UPI weights (null if invalid). */
 export function toUpiWeights(raw: string): string | null {
   const freqs: Record<string, number> = {};
   for (const entry of raw.split(/[,\s]+/).filter(Boolean)) {
     const [cls, f] = entry.split(":");
-    if (!CLS_RE.test(cls)) return null;
     const w = f === undefined ? 1 : parseFloat(f);
     if (isNaN(w) || w < 0 || w > 1) return null;
-    for (const combo of combosOfClass(cls)) freqs[combo] = w;
+    const combos = entryCombos(cls);
+    if (!combos) return null;
+    for (const combo of combos) freqs[combo] = w;
   }
   return UPI_HANDS.map((h) => Math.round((freqs[h] ?? 0) * 10000) / 10000).join(" ");
 }

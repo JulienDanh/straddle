@@ -26,13 +26,22 @@ const input =
 const RANKS = "AKQJT98765432";
 const SUITS = "shdc";
 
-// ---- range thumbnail: 13x13 heat map of a class:freq text ----
+// ---- range thumbnail: 13x13 heat map of class/combo:freq text ----
 function RangeThumb({ raw }: { raw: string }) {
   const w: Record<string, number> = {};
   let ok = false;
   for (const entry of raw.split(/[,\s]+/).filter(Boolean)) {
     const [cls, f] = entry.split(":");
-    if (cls && ALL_CLASSES.includes(cls)) { w[cls] = f === undefined ? 1 : parseFloat(f); ok = true; }
+    if (!cls) continue;
+    let c = cls;
+    if (cls.length === 4) {
+      // raw combo -> its class cell
+      const hi = cls[0] < cls[2] ? cls : cls.slice(2) + cls.slice(0, 2);
+      const r1 = hi[0], r2 = hi[2];
+      const suited = hi[1] === hi[3];
+      c = r1 === r2 ? r1 + r2 : r1 + r2 + (suited ? "s" : "o");
+    }
+    if (ALL_CLASSES.includes(c)) { w[c] = Math.max(w[c] ?? 0, f === undefined ? 1 : parseFloat(f) || 0); ok = true; }
   }
   if (!ok) return <div className="w-[60px] h-[60px] rounded border border-line bg-panel2/40" />;
   return (
@@ -205,7 +214,7 @@ export function SetupView({
               <div className="pt-2">
                 <textarea value={pasteBuf} onChange={(e) => setPasteBuf(e.target.value)}
                   className={input + " h-16 font-mono text-[10.5px]"}
-                  placeholder="AA:1,AKs:0.5,... — the copy button output from any range grid" />
+                  placeholder="class or combo weights — AA:1, AKs:0.5, AsKd:0.25 — the copy button output from any range grid" />
                 <div className="flex items-center gap-1.5 pt-1">
                   <span className="text-[9.5px] text-muted">
                     {rangeShare(pasteBuf) === null ? "invalid" : `${(rangeShare(pasteBuf)! * 100).toFixed(1)}% of hands`}
