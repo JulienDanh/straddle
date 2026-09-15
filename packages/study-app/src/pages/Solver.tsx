@@ -19,11 +19,12 @@
 // The reference bridge is cuda-poker-solver/python/upi_bridge.py (the pps
 // GPU solver as backend); https pages may call http://localhost
 // (potentially-trustworthy origin), so the deployed site can drive a local
-// bridge. With no bridge connected, CALCULATE renders the demo solution.
-import { useState } from "react";
+// bridge. There is no connect flow: CALCULATE tries the bridge and falls
+// back to the demo solution when it is unreachable.
+import { useEffect, useRef, useState } from "react";
 import { SetupView, type SpotSetup } from "./solver/SetupView";
 import { SolutionView, type Solution, type SolutionNode } from "./solver/SolutionView";
-import { upi, toUpiWeights, lineToCombos, lineShare, demoStrategy, combosOfClass } from "./solver/utils";
+import { upi, toUpiWeights, lineToCombos, lineShare, demoStrategy, combosOfClass, liveUrl } from "./solver/utils";
 
 const label = "block text-[10px] uppercase tracking-widest text-muted/60 pb-1";
 const input =
@@ -168,7 +169,6 @@ function parseNode(id: string, nodeR: string, actionsR: string, stratR: string):
 
 export function SolverPage() {
   const [apiUrl, setApiUrl] = useState(() => localStorage.getItem("solver-api") ?? "http://127.0.0.1:8500");
-  const [status, setStatus] = useState<"idle" | "connected" | "error">("idle");
   const [tab, setTab] = useState<"setup" | "solution">("setup");
   const [setup, setSetup] = useState<SpotSetup>(DEFAULT_SETUP);
   const [solution, setSolution] = useState<Solution | null>(null);
@@ -179,20 +179,40 @@ export function SolverPage() {
     iters: number; active: number; budget: number;
   }>(null);
   const [log, setLog] = useState<string[]>([]);
+  const [wsLive, setWsLive] = useState(false);
   const append = (l: string) => setLog((x) => [...x.slice(-40), l]);
+  const busyRef = useRef(false);
 
-  const connect = async () => {
-    setStatus("idle");
-    try {
-      const [r] = await upi(apiUrl, ["is_ready"], { timeoutMs: 4000, retries: 1 });
-      if (r.includes("ERROR")) throw new Error(r);
-      setStatus("connected");
-      append(`connected — ${r}`);
-    } catch (e) {
-      setStatus("error");
-      append(`cannot reach ${apiUrl}: ${(e as Error).message}`);
-    }
-  };
+  // live progress socket: the bridge pushes per-iteration progress and
+  // phase events; between solves it just keeps the liveness dot honest
+  useEffect(() => {
+    let closed = false;
+    let sock: WebSocket | null = null;
+    let retry: ReturnType<typeof setTimeout>;
+    const open = () => {
+      sock = new WebSocket(liveUrl(apiUrl));
+      sock.onopen = () => !closed && setWsLive(true);
+      sock.onclose = () => {
+        setWsLive(false);
+        if (!closed) retry = setTimeout(open, 3000);
+      };
+      sock.onmessage = (ev) => {
+        if (!busyRef.current) return;
+        try {
+          const m = JSON.parse(ev.data);
+          if (m.type === "progress" || m.type === "phase") {
+            setProgress(m.type === "progress"
+              ? { phase: "solve", iters: m.iters, active: m.active, budget: m.budget,
+                  pct: Math.min(100, (m.active / m.budget) * 100) }
+              : { phase: m.phase === "compile" ? "compile" : "solve",
+                  pct: 0, iters: 0, active: 0, budget: 0 });
+          }
+        } catch { /* not a live frame */ }
+      };
+    };
+    open();
+    return () => { closed = true; clearTimeout(retry); sock?.close(); };
+  }, [apiUrl]);
 
   const fetchNode = async (id: string): Promise<SolutionNode> => {
     const [nodeR, actionsR, stratR] = await upi(apiUrl, [
@@ -203,10 +223,11 @@ export function SolverPage() {
 
   const solve = async () => {
     setBusy(true);
+    busyRef.current = true;
     setProgress({ phase: "compile", pct: 0, iters: 0, active: 0, budget: 0 });
+    let unreachable = false;
     try {
-      if (status === "connected") {
-        const oop = toUpiWeights(setup.oopRange);
+      const oop = toUpiWeights(setup.oopRange);
         const ip = toUpiWeights(setup.ipRange);
         if (!oop || !ip) throw new Error("paste valid starting ranges first");
         const sizeCmds = Object.entries(setup.sizings).flatMap(([k, v]) => {
@@ -262,29 +283,30 @@ export function SolverPage() {
           rootId: "r:0", nodes: { "r:0": root },
         });
         append(`solved ${setup.board} — exploit ${results.match(/exploitable for:\s*([\d.]+)/)?.[1] ?? "?"}`);
-      } else {
-        setSolution(demoSolution(setup));
-        append("no bridge connected — rendered demo solution");
-      }
       setSelected("");
       setTab("solution");
     } catch (e) {
-      const msg = (e as Error).name === "AbortError" ? "bridge timed out" : (e as Error).message;
-      append(`solve failed: ${msg}`);
-      // the bridge died or hung mid-solve — the connected flag is stale
       if ((e as Error).name === "AbortError" || e instanceof TypeError) {
-        setStatus("error");
-        append("bridge unreachable — reconnect after restarting it");
+        unreachable = true;          // network failure: fall back to demo
+      } else {
+        append(`solve failed: ${(e as Error).message}`);
       }
     } finally {
+      busyRef.current = false;
       setBusy(false);
       setProgress(null);
+    }
+    if (unreachable) {
+      setSolution(demoSolution(setup));
+      append("bridge unreachable — rendered demo solution");
+      setSelected("");
+      setTab("solution");
     }
   };
 
   const selectNode = async (id: string) => {
     setSelected(id);
-    if (!solution || solution.nodes[id] || status !== "connected") return;
+    if (!solution || solution.nodes[id]) return;
     try {
       const node = await fetchNode(id);
       setSolution({ ...solution, nodes: { ...solution.nodes, [id]: node } });
@@ -294,9 +316,7 @@ export function SolverPage() {
   };
 
   // walk the tree: an action badge fetches its child node (id = parent:token)
-  const walkChild = (id: string, token: string) => {
-    if (status === "connected") return selectNode(`${id}:${token}`);
-  };
+  const walkChild = (id: string, token: string) => selectNode(`${id}:${token}`);
 
   const chip = (active: boolean) =>
     `px-2.5 py-1 rounded-md text-[11px] font-semibold cursor-pointer border transition-colors select-none ${
@@ -308,15 +328,10 @@ export function SolverPage() {
       <div className="rounded-xl border border-line bg-panel px-4 py-3">
         <div className="flex items-center gap-2 flex-wrap">
           <span className={label + " pb-0"}>UPI bridge</span>
-          <input className={input + " max-w-[260px]"} value={apiUrl}
+          <input className={input + " max-w-[260px]"} value={apiUrl} title="UPI bridge endpoint"
             onChange={(e) => { setApiUrl(e.target.value); localStorage.setItem("solver-api", e.target.value); }} />
-          <button onClick={connect}
-            className="px-2.5 py-1 rounded-md bg-panel2/60 border border-line text-[11px] font-semibold text-txt hover:border-accent/60 cursor-pointer">
-            Connect
-          </button>
-          <span className={"text-[11px] font-semibold " + (status === "connected" ? "text-accent" : status === "error" ? "text-red-400" : "text-muted")}>
-            {status === "connected" ? "connected" : status === "error" ? "unreachable" : "not connected"}
-          </span>
+          <span title={wsLive ? "bridge live" : "bridge not reachable"}
+            className={"w-2 h-2 rounded-full shrink-0 " + (wsLive ? "bg-accent animate-pulse" : "bg-muted/30")} />
           <div className="ml-auto flex gap-1">
             <button onClick={() => setTab("setup")} className={chip(tab === "setup")}>Setup</button>
             <button onClick={() => setTab("solution")} className={chip(tab === "solution")}
@@ -326,7 +341,7 @@ export function SolverPage() {
       </div>
 
       {tab === "setup" ? (
-        <SetupView setup={setup} setSetup={setSetup} connected={status === "connected"} busy={busy} progress={progress} onSolve={solve} />
+        <SetupView setup={setup} setSetup={setSetup} busy={busy} progress={progress} onSolve={solve} />
       ) : solution ? (
         <SolutionView solution={solution} selected={selected || solution.rootId} onSelect={selectNode} onAction={walkChild} />
       ) : null}

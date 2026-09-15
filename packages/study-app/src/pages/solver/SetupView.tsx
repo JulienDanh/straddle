@@ -116,10 +116,10 @@ function SizingBox({ title, box, onChange }: {
 }
 
 export function SetupView({
-  setup, setSetup, connected, busy, progress, onSolve,
+  setup, setSetup, busy, progress, onSolve,
 }: {
   setup: SpotSetup; setSetup: (s: SpotSetup) => void;
-  connected: boolean; busy: boolean;
+  busy: boolean;
   progress: null | { phase: "compile" | "solve" | "results"; pct: number;
     iters: number; active: number; budget: number };
   onSolve: () => void;
@@ -359,9 +359,6 @@ export function SetupView({
         </div>
 
         <div className="rounded-xl border border-line bg-panel p-2.5 text-center">
-          <div className="text-[9.5px] text-muted/60 pb-1.5">
-            {connected ? "bridge connected" : "bridge not connected — demo data"}
-          </div>
           <button onClick={onSolve} disabled={busy}
             className="w-full py-2 rounded bg-green-600 text-white text-[13px] font-bold cursor-pointer hover:bg-green-500 disabled:opacity-50">
             {busy ? "CALCULATING" : "CALCULATE"}

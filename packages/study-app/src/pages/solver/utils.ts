@@ -76,6 +76,11 @@ export const lineShare = (line: string) =>
 
 // ---- UPI bridge client (contract documented in Solver.tsx) ----
 
+/** http(s)://… bridge endpoint -> the WebSocket live-progress endpoint. */
+export function liveUrl(url: string): string {
+  return `${url.replace(/^http/, "ws").replace(/\/+$/, "")}/ws`;
+}
+
 /** POST {url}/upi with a hard timeout and optional retries on network
  * errors (a bridge restart mid-solve surfaces as a rejected promise,
  * not a hung UI). HTTP-level errors are not retried. */
