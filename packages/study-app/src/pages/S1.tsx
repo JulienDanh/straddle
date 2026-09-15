@@ -85,7 +85,19 @@ export function S1Page() {
       <Callout variant="bad"><strong>Not High-High-Low.</strong> KK3 rainbow is <em>not</em> a risk factor — c-bet 100%. Only paired low under high counts.</Callout>
 
       <Subhead>Sizing</Subhead>
-      <p className="text-[13px] text-muted leading-snug">Solver examples land at 20–73% pot: K83, KK3, AJ5 and J66 are solved at 20% (1.1bb), AK2 at 73% (4bb). The transcript does not prescribe a specific size for this system.</p>
+      <DataTable
+        compact
+        columns={[{ header: 'Branch' }, { header: 'Size' }, { header: 'At 40bb' }]}
+        rows={[
+          ['T-high+ clean — range bet', '20% pot', '1.1bb'],
+          ['Monotone ace-high · high-low-low (soft risk factors)', '20% pot — handle the risk by checking more, not by sizing up', '1.1bb'],
+          ['Mix branch — AKx family · 9-high & below · straights possible · broadway-low (BB connects)', '~73% pot — the polar branch needs the big size', '4bb'],
+        ]}
+      />
+      <p className="text-[13px] text-muted leading-snug">
+        The transcript does not prescribe sizes — these come from the solved spots (40bb single-raised pot, 5.5bb after antes, so 20% pot = 1.1bb).
+        The small size grows with depth: 1.1bb (20%) at 40bb, 1.8bb (33%) at 50bb, ~2bb at 100bb, where the polar branch reaches overbet territory (6.5bb on AK2).
+      </p>
 
       <Subhead>Examples</Subhead>
 
@@ -121,7 +133,7 @@ export function S1Page() {
       >
         AKx is a risk factor: BB connects with every Ax/Kx too, so the overpair
         advantage that powers 100% c-bets on clean boards is gone. Slow down —
-        not 100%.
+        not 100%. Solved at 73% pot (4bb), the polar size.
       </BoardExample>
 
       <BoardExample

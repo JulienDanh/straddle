@@ -45,6 +45,11 @@ export default defineConfig({
       '@poker/design-system/src': path.resolve(dirname, '../design-system/src'),
     },
   },
+  // Dev-only: allow access via the Windows host's Tailscale Serve name
+  // (the dev server runs in WSL, tailscale serve runs on the Windows host).
+  server: {
+    allowedHosts: ['desktop-3120na2.tail645ce2.ts.net'],
+  },
   build: {
     outDir: 'dist',
   },
