@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useState } from 'react'
 import { RangeGrid, strategyShare } from './RangeGrid'
 import { Board } from './ui-parts/cards'
 import { lineContext, materializeChild } from '../data/ranges'
@@ -81,7 +81,24 @@ function shortTarget(t: string): string {
  *  is grouped by it, so the pill row reads as the course's mental model
  *  (equal stacks / you cover them / they cover you) instead of a flat list
  *  of internal type keys. Returns [order, label]. */
+const PKO_STAGES: [prefix: string, label: string, order: number][] = [
+  ['70pct', 'PKO · 70% left', 11],
+  ['50pct', 'PKO · 50% left', 12],
+  ['30pct', 'PKO · 30% left', 13],
+  ['10pct', 'PKO · 10% left', 14],
+  ['bubble', 'PKO · bubble', 15],
+  ['FT', 'PKO · final table', 16],
+]
 function typeGroupLabel(t: string): [number, string] {
+  // asymmetric ICM (the BBZ store's full-table configs) is its own
+  // scenario — checked first so ICM-BBZ-*-asym can't fall into the
+  // equal-stacks match below
+  if (t.endsWith('-asym'))
+    return [10, 'Asymmetric tables']
+  if (t.startsWith('PKO-')) {
+    const s = PKO_STAGES.find(([p]) => t.slice(4).startsWith(p))
+    return s ? [s[2], s[1]] : [9, 'Other']
+  }
   const core = t.replace(/^ICM-(FT-)?/, '')
   // ICM-FT (plain final table) is an equal-stacks scenario — core 'FT';
   // plain ICM (bubble, equal stacks) and the BBZ scrape's bubble /
@@ -101,6 +118,14 @@ function groupPill(t: string): string {
   // every ICM variant carries a self-describing pill — a bare "ICM" is
   // indistinguishable across the equal-stacks / covered / covering groups
   if (t === 'cEV') return 'ChipEV'
+  if (t === 'ICM-FT-asym') return 'final table'
+  if (t === 'ICM-BBZ-bubble-asym') return 'bubble'
+  if (t === 'ICM-BBZ-40pct-asym') return '40% left'
+  if (t === 'ICM-BBZ-83pct-asym') return '83% left'
+  if (t.startsWith('PKO-')) {
+    const bm = t.match(/-b(\d+)$/)
+    return bm ? `$${bm[1]} bounty` : 'equal bounties'
+  }
   if (t.startsWith('ICM-BBZ-'))
     return t.slice('ICM-BBZ-'.length).replace('pct', '%')
   if (t === 'ICM-FT') return 'final table'
@@ -118,6 +143,47 @@ const GROUP_HELP: Record<string, string> = {
   'You cover them': 'No stack still in the hand — the villain and anyone behind you — is bigger than yours.',
   'They cover you (deep)': 'The biggest stack in the hand over yours is at least 1.75x yours (3x+ is "by heaps").',
   'They cover you (similar)': 'The biggest stack in the hand over yours is under 1.75x yours — close enough to fight.',
+  'Asymmetric tables': 'Unequal stacks around the table — the table strip shows every seat\'s stack, color-coded against yours.',
+  'PKO · 70% left': 'Progressive knockout, 70% of the field left — equal-bounty and $N bounty variants of the same spots.',
+  'PKO · 50% left': 'Progressive knockout, 50% of the field left — equal-bounty and $N bounty variants of the same spots.',
+  'PKO · 30% left': 'Progressive knockout, 30% of the field left — equal-bounty and $N bounty variants of the same spots.',
+  'PKO · 10% left': 'Progressive knockout, 10% of the field left — equal-bounty and $N bounty variants of the same spots.',
+  'PKO · bubble': 'Progressive knockout on the bubble — equal-bounty and $N bounty variants of the same spots.',
+  'PKO · final table': 'Progressive knockout at the final table — equal-bounty and $N bounty variants of the same spots.',
+}
+
+/** Hero's standing vs an asymmetric table — the same covering /
+ *  covered-similar / covered-deep distinction the course teaches, taken
+ *  from the per-seat stacks: covering = no seat stacks more than the
+ *  hero, deep = the biggest stack over the hero is 1.75x+. */
+function heroStanding(stack: number, position: string, config: number[]): 'covering' | 'similar' | 'deep' {
+  const others = config.filter((_, i) => SEATS[i] !== position)
+  if (!others.length) return 'covering'
+  const maxOther = Math.max(...others)
+  return stack > maxOther ? 'covering'
+    : maxOther >= stack * 1.75 ? 'deep'
+    : 'similar'
+}
+
+const STANDING_META: Record<'covering' | 'similar' | 'deep', { label: string; chip: string; text: string; title: string }> = {
+  covering: {
+    label: 'you cover',
+    chip: 'bg-good text-dark font-bold',
+    text: 'text-good',
+    title: 'No seat at the table has you covered.',
+  },
+  similar: {
+    label: 'covered',
+    chip: 'bg-warn text-dark font-bold',
+    text: 'text-warn',
+    title: 'The biggest stack over yours is under 1.75x — close enough to fight.',
+  },
+  deep: {
+    label: 'covered deep',
+    chip: 'bg-bad text-dark font-bold',
+    text: 'text-bad',
+    title: 'The biggest stack over yours is at least 1.75x yours (3x+ is "by heaps").',
+  },
 }
 
 /** Model order within a scenario group: ChipEV, then the ICM stages in
@@ -125,10 +191,12 @@ const GROUP_HELP: Record<string, string> = {
  * bubble), then the final table. */
 const modelOrder = (t: string) =>
   t === 'cEV' ? 0
-  : t === 'ICM-FT' ? 40
-  : t === 'ICM-BBZ-83pct' ? 10
-  : t === 'ICM-BBZ-40pct' ? 20
-  : t === 'ICM-BBZ-bubble' || t === 'ICM' ? 30
+  : t === 'ICM-FT' || t === 'ICM-FT-asym' ? 40
+  : t === 'ICM-BBZ-83pct' || t === 'ICM-BBZ-83pct-asym' ? 10
+  : t === 'ICM-BBZ-40pct' || t === 'ICM-BBZ-40pct-asym' ? 20
+  : t === 'ICM-BBZ-bubble' || t === 'ICM-BBZ-bubble-asym' || t === 'ICM' ? 30
+  : /^PKO-.*-flat$/.test(t) ? 0
+  : /^PKO-.*-b\d+$/.test(t) ? Number(t.match(/-b(\d+)$/)![1])
   : 1
 
 const pillClass = (active: boolean) =>
@@ -174,10 +242,17 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix, po
   const stack = stacks.includes(stackSel as number)
     ? (stackSel as number)
     : stacks[0]
+  // asymmetric entries: several full-table configs can share the hero's
+  // stack depth — the table strip doubles as the config selector
+  const atStack = ofType.filter(r => r.stack === stack)
+  const [cfgIdx, setCfgIdx] = useState(0)
+  useEffect(() => { setCfgIdx(0) }, [type, stack])
+  const current = atStack.length
+    ? atStack[Math.min(cfgIdx, atStack.length - 1)]
+    : ofType[0]
   // the depth ladder shows ONLY the active scenario's depths — every pill
   // is live; switching scenario snaps to the nearest solved depth
   const maxStack = stacks[0]
-  const current = ofType.find(r => r.stack === stack) ?? ofType[0]
   const boards = postflop ? current.postflop ?? [] : []
   // postflop children are raw (minimal fields + open-weighted paste) —
   // materializeChild injects the parent context and converts on display
@@ -257,16 +332,26 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix, po
           <div className="flex flex-wrap gap-0.5 bg-dark rounded-md p-1 border border-line/50 max-w-full">
             {stacks.map(s => {
               const active = stack === s
-              // asymmetric entries (covered/covering configs) carry the
-              // stack config as a third subtitle segment — surface it as
-              // a tooltip on the stack pill
-              const meta = ofType.find(r => r.stack === s)
-              const asymmetric = !!meta && (meta.subtitle.match(/·/g) ?? []).length >= 2
+              // asymmetric entries: several table configs can live at one
+              // hero depth with different standings — the pill carries one
+              // colored dot per distinct standing (green covering / orange
+              // covered / red covered deep), so the ladder doubles as a
+              // standing navigator. Equal-stack pills keep the depth gauge.
+              const counts = { covering: 0, similar: 0, deep: 0 }
+              ofType.filter(r => r.stack === s).forEach(r => {
+                if (r.config) counts[heroStanding(r.stack, r.position, r.config)]++
+              })
+              const hasCfg = counts.covering + counts.similar + counts.deep > 0
+              const dots = hasCfg
+                ? (['covering', 'similar', 'deep'] as const).filter(k => counts[k] > 0)
+                : null
               return (
                 <button
                   key={s}
                   onClick={() => pickStack(s)}
-                  title={asymmetric ? meta!.subtitle : undefined}
+                  title={hasCfg
+                    ? `${counts.covering} covering · ${counts.similar} covered · ${counts.deep} covered deep`
+                    : undefined}
                   className={`flex flex-col items-center gap-1 px-2 pt-0.5 pb-1 rounded-[5px] cursor-pointer transition-colors tabular-nums ${
                     active
                       ? 'bg-accent text-dark'
@@ -274,13 +359,26 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix, po
                   }`}
                 >
                   <span className="text-[11px] font-semibold leading-none">{s}bb</span>
-                  {/* depth gauge: fill is proportional to the stack depth */}
-                  <span className={`w-full h-[2px] rounded-full overflow-hidden ${active ? 'bg-dark/25' : 'bg-line'}`}>
-                    <span
-                      className={`block h-full rounded-full transition-colors ${active ? 'bg-dark' : 'bg-muted/80'}`}
-                      style={{ width: `${Math.round((s / maxStack) * 100)}%` }}
-                    />
-                  </span>
+                  {dots ? (
+                    <span className="flex gap-1 py-0.5">
+                      {dots.map(k => (
+                        <span
+                          key={k}
+                          className={`w-1.5 h-1.5 rounded-full ${
+                            k === 'covering' ? 'bg-good' : k === 'similar' ? 'bg-warn' : 'bg-bad'
+                          }`}
+                        />
+                      ))}
+                    </span>
+                  ) : (
+                    /* depth gauge: fill is proportional to the stack depth */
+                    <span className={`w-full h-[2px] rounded-full overflow-hidden ${active ? 'bg-dark/25' : 'bg-line'}`}>
+                      <span
+                        className={`block h-full rounded-full transition-colors ${active ? 'bg-dark' : 'bg-muted/80'}`}
+                        style={{ width: `${Math.round((s / maxStack) * 100)}%` }}
+                      />
+                    </span>
+                  )}
                 </button>
               )
             })}
@@ -337,31 +435,68 @@ export function RangeBrowser({ ranges, defaultStack, defaultType, hashPrefix, po
             )
           })()}
           {current.config && (
+            // one strip: solution-type pills, and for asymmetric solutions the
+            // whole table's stacks in seat order. Other seats are color-coded
+            // vs hero: red = covers hero 2x+, orange = covers hero, green =
+            // covered by hero. The HERO seat's fill carries the hero's
+            // standing instead — green = you cover the table, orange = the
+            // biggest stack over you is under 1.75x, red = 1.75x+ — with the
+            // standing tag next to the Table label. Several configs can
+            // share the hero's stack depth — then each config renders as a
+            // clickable strip (dimmed = not selected).
             <div className="flex items-center gap-1.5 flex-wrap">
               <span className="text-[10px] font-bold uppercase tracking-wider text-muted mr-0.5">Table</span>
-              {current.config.map((s, i) => {
-                const seat = SEATS[i]
-                const hero = seat === current.position
-                const rel = hero ? 'hero'
-                  : s >= current.stack * 2 ? 'twice'
-                  : s > current.stack ? 'covers'
-                  : s < current.stack ? 'covered'
-                  : 'even'
+              {(() => {
+                const meta = STANDING_META[heroStanding(current.stack, current.position, current.config!)]
                 return (
                   <span
-                    key={seat}
-                    className={`px-1.5 py-0.5 rounded text-[11px] font-semibold tabular-nums ${
-                      rel === 'hero' ? 'bg-accent text-dark'
-                        : rel === 'twice' ? 'text-bad font-bold'
-                        : rel === 'covers' ? 'text-warn'
-                        : rel === 'covered' ? 'text-good'
-                        : 'text-muted'
-                    }`}
+                    className={`text-[10px] font-bold uppercase tracking-wider ${meta.text}`}
+                    title={meta.title}
                   >
-                    {seat} {s}
+                    {meta.label}
                   </span>
                 )
-              })}
+              })()}
+              {atStack.map((e, ei) => (
+                <button
+                  key={ei}
+                  onClick={() => setCfgIdx(ei)}
+                  disabled={atStack.length < 2}
+                  title={e.subtitle}
+                  className={`flex items-center gap-1 px-1 py-0.5 rounded-[7px] transition-all ${
+                    ei === cfgIdx
+                      ? 'ring-2 ring-accent'
+                      : atStack.length > 1
+                        ? 'ring-2 ring-transparent opacity-45 hover:opacity-100 cursor-pointer'
+                        : 'cursor-default'
+                  }`}
+                >
+                  {e.config!.map((s, i) => {
+                    const seat = SEATS[i]
+                    const hero = seat === e.position
+                    const rel = hero ? 'hero'
+                      : s >= e.stack * 2 ? 'twice'
+                      : s > e.stack ? 'covers'
+                      : s < e.stack ? 'covered'
+                      : 'even'
+                    return (
+                      <span
+                        key={seat}
+                        title={hero ? STANDING_META[heroStanding(e.stack, e.position, e.config!)].title : undefined}
+                        className={`px-1.5 py-0.5 rounded text-[11px] font-semibold tabular-nums ${
+                          rel === 'hero' ? STANDING_META[heroStanding(e.stack, e.position, e.config!)].chip
+                            : rel === 'twice' ? 'text-bad font-bold'
+                            : rel === 'covers' ? 'text-warn'
+                            : rel === 'covered' ? 'text-good'
+                            : 'text-muted'
+                        }`}
+                      >
+                        {seat} {s}
+                      </span>
+                    )
+                  })}
+                </button>
+              ))}
             </div>
           )}
         </div>

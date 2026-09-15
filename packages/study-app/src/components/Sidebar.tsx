@@ -150,26 +150,23 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
       </Accordion>
       <div className="px-2.5 mt-4 border-t border-line pt-3">
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
-        <div
-          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
-            activePage === 'live'
-              ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
-              : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
-          }`}
-          onClick={() => onNavigate('live')}
-        >
-          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> Live
-        </div>
-        <div
-          className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
-            activePage === 'solver'
-              ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
-              : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
-          }`}
-          onClick={() => onNavigate('solver')}
-        >
-          <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> GTO Solver
-        </div>
+        {([
+          { id: 'live', label: 'Live' },
+          { id: 'liveasym', label: 'ICM asym' },
+          { id: 'livepko', label: 'PKO' },
+        ] as const).map((t) => (
+          <div
+            key={t.id}
+            className={`flex items-center gap-2 py-1.5 px-2.5 rounded-lg text-[12.5px] cursor-pointer border transition-colors select-none ${
+              activePage === t.id
+                ? 'bg-panel2 text-accent border-accent/40 shadow-[0_0_14px_rgba(0,240,255,0.10)]'
+                : 'text-muted border-transparent hover:bg-panel2 hover:text-txt'
+            }`}
+            onClick={() => onNavigate(t.id)}
+          >
+            <span className="text-[10px] w-5 text-center bg-dark border border-line rounded px-0 py-px">&middot;</span> {t.label}
+          </div>
+        ))}
       </div>
     </aside>
   )

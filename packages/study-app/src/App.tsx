@@ -26,8 +26,7 @@ import { BM8Page } from './pages/BM8'
 import { BM9Page } from './pages/BM9'
 import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
-import { LiveBbzPage } from './pages/LiveBbz'
-import { SolverPage } from './pages/Solver'
+import { LiveEqualPage, LiveAsymPage, LivePkoPage } from './pages/LiveBbz'
 
 const navTitles: Record<string, { course: string; title: string }> = {
   primer: { course: 'No-Limit Systems', title: 'Preflop Primer' },
@@ -57,7 +56,8 @@ const navTitles: Record<string, { course: string; title: string }> = {
   bm10: { course: 'Bubble Mastery', title: 'UTG Covers BB (Postflop)' },
   bm11: { course: 'Bubble Mastery', title: 'Polar Opens · Split Range' },
   live: { course: '', title: 'Live' },
-  solver: { course: '', title: 'GTO Solver' },
+  liveasym: { course: '', title: 'Live · ICM asym' },
+  livepko: { course: '', title: 'Live · PKO' },
 }
 
 const PAGES = {
@@ -66,7 +66,7 @@ const PAGES = {
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage,
   bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
-  live: LiveBbzPage, solver: SolverPage,
+  live: LiveEqualPage, liveasym: LiveAsymPage, livepko: LivePkoPage,
 } as const
 
 type PageId = keyof typeof PAGES
@@ -85,6 +85,12 @@ function pageFromHash(): PageId {
   // hash can carry a tab suffix (#s1/practice) — the page is the first segment
   const hash = window.location.hash.replace(/^#/, '').split('/')[0]
   return (VALID_PAGES.has(hash) ? hash : 's1') as PageId
+}
+
+const LIVE_LABEL: Partial<Record<PageId, string>> = {
+  live: 'BBZ · Pio solutions',
+  liveasym: 'BBZ · asymmetric ICM',
+  livepko: 'BBZ · PKO',
 }
 
 function App() {
@@ -106,6 +112,7 @@ function App() {
 
   const PageComponent = PAGES[page]
   const nav = navTitles[page]
+  const isLive = page === 'live' || page === 'liveasym' || page === 'livepko'
 
   // prev/next along the reading order
   const idx = READING_ORDER.indexOf(page)
@@ -135,20 +142,20 @@ function App() {
       <Sidebar activePage={page} onNavigate={navigate} open={sidebarOpen} />
       <main
         className={
-          page === 'live'
-            ? 'flex-1 px-8 pt-4 pb-4 min-w-0 mx-auto h-screen overflow-hidden flex flex-col'
+          isLive
+            ? 'flex-1 px-8 pt-4 pb-4 min-w-0 mx-auto h-screen overflow-hidden flex flex-col [@media(max-width:760px)]:h-auto [@media(max-width:760px)]:min-h-screen [@media(max-width:760px)]:overflow-y-auto [@media(max-width:760px)]:px-4'
             : 'flex-1 px-8 pt-6 pb-20 min-w-0 max-w-[1000px] mx-auto'
         }
       >
-        <div className={`flex items-center justify-between flex-wrap gap-2 ${page === 'live' ? '[@media(max-width:760px)]:mb-4' : 'mb-4'}`}>
+        <div className={`flex items-center justify-between flex-wrap gap-2 ${isLive ? '[@media(max-width:760px)]:mb-4' : 'mb-4'}`}>
           <button
             className="hidden border border-line bg-panel text-txt px-2.5 py-1.5 rounded-lg text-lg cursor-pointer [@media(max-width:760px)]:block"
             onClick={() => setSidebarOpen(!sidebarOpen)}
           >≡</button>
-          {page !== 'live' && <div className="text-xs text-muted tracking-wide">{nav?.course}</div>}
-          {page === 'live' && <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">BBZ · Pio solutions</span>}
+          {!isLive && <div className="text-xs text-muted tracking-wide">{nav?.course}</div>}
+          {isLive && <span className="inline-block bg-panel border border-line px-3 py-1 rounded-full text-[11px] text-muted">{LIVE_LABEL[page]}</span>}
         </div>
-        <div className={page === 'live' ? 'flex-1 min-h-0' : undefined}>
+        <div className={isLive ? 'flex-1 min-h-0' : undefined}>
           <PageComponent />
         </div>
         {(prev || next) && (
@@ -182,7 +189,7 @@ function App() {
             <div className="text-center text-[10px] text-muted mt-2.5">or page through with the &larr; &rarr; arrow keys</div>
           </div>
         )}
-        {page !== 'live' && (
+        {!isLive && (
           <footer className="text-center text-muted text-xs mt-8">No-Limit Systems Study Guide · study aid, not a solver replacement.</footer>
         )}
       </main>

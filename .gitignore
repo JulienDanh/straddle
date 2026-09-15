@@ -13,3 +13,4 @@ __pycache__/
 
 # Local scratch (Chrome profile for scraping sessions)
 .scratch/
+.scratch/

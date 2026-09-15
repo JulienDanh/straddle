@@ -2,7 +2,3 @@
 	path = straddle-solutions
 	url = git@github.com:JulienDanh/straddle-solutions.git
 	branch = main
-[submodule "cuda-poker-solver"]
-	path = cuda-poker-solver
-	url = git@github.com:JulienDanh/cuda-poker-solver.git
-	branch = main

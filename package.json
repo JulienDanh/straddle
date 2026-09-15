@@ -13,7 +13,7 @@
     "storybook": "npm run storybook --workspace @poker/design-system",
     "build-storybook": "npm run build-storybook --workspace @poker/design-system",
     "build-all": "npm run build-storybook --workspace @poker/design-system && npm run build --workspace @poker/study-app",
-    "sync-bbz": "rm -rf packages/study-app/public/bbz && mkdir -p packages/study-app/public/bbz && cp -R straddle-solutions/bbz/store packages/study-app/public/bbz/store"
+    "sync-bbz": "rm -rf packages/study-app/public/bbz && mkdir -p packages/study-app/public/bbz && cp -R straddle-solutions/bbz/store straddle-solutions/bbz/store-asym straddle-solutions/bbz/store-pko packages/study-app/public/bbz/"
   },
   "dependencies": {
     "dagre": "^0.8.5"

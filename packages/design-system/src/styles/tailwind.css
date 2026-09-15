@@ -199,10 +199,29 @@
 .rv-grid-fill {
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  /* auto, not hidden: the table never shrinks below its natural height
+     (the 44px cells are a floor), so a short window scrolls the grid
+     internally instead of clipping its bottom rows */
+  overflow: auto;
 }
 .rv-grid-fill .rv-grid {
   height: 100%;
+}
+/* Narrow viewports: the Live page stacks its nav and scrolls as a normal
+   page, so fill mode reverts to natural sizing — the grid keeps its
+   natural height instead of stretching or clipping inside a container
+   that no longer owns the viewport. Hand labels shrink with the cells. */
+@media (max-width: 900px) {
+  .rv-cell-hand { font-size: 12px; }
+}
+@media (max-width: 760px) {
+  .rv-content-fill { height: auto; align-items: flex-start; }
+  .rv-grid-fill { flex: none; overflow: visible; }
+  .rv-grid-fill .rv-grid { height: auto; }
+  .rv-cell-hand { font-size: 10px; }
+}
+@media (max-width: 480px) {
+  .rv-cell-hand { font-size: 9px; }
 }
 /* Compact grid — small cells for inline use in course content */
 .rv-grid-sm {
