@@ -75,16 +75,40 @@ export const lineShare = (line: string) =>
   line.trim().split(/\s+/).reduce((s, x) => s + (parseFloat(x) || 0), 0) / 1326;
 
 // ---- UPI bridge client (contract documented in Solver.tsx) ----
-export async function upi(url: string, commands: string[]): Promise<string[]> {
-  const r = await fetch(`${url.replace(/\/+$/, "")}/upi`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ commands }),
-  });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
-  const d = await r.json();
-  if (!Array.isArray(d.responses)) throw new Error("malformed bridge response");
-  return d.responses;
+
+/** POST {url}/upi with a hard timeout and optional retries on network
+ * errors (a bridge restart mid-solve surfaces as a rejected promise,
+ * not a hung UI). HTTP-level errors are not retried. */
+export async function upi(url: string, commands: string[], opts?: {
+  timeoutMs?: number; retries?: number;
+}): Promise<string[]> {
+  const timeoutMs = opts?.timeoutMs ?? 15000;
+  const retries = opts?.retries ?? 0;
+  let lastError: Error | null = null;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const r = await fetch(`${url.replace(/\/+$/, "")}/upi`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ commands }),
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      const d = await r.json();
+      if (!Array.isArray(d.responses)) throw new Error("malformed bridge response");
+      return d.responses;
+    } catch (e) {
+      clearTimeout(timer);
+      lastError = e as Error;
+      const network = e instanceof TypeError || (e as Error).name === "AbortError";
+      if (!network) throw e;            // protocol error: fail fast
+      if (attempt < retries) await new Promise((res) => setTimeout(res, 500));
+    }
+  }
+  throw lastError ?? new Error("bridge unreachable");
 }
 
 // ---- made-hand categories on a 3-card board ----

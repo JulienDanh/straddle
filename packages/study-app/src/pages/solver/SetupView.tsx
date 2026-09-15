@@ -116,10 +116,13 @@ function SizingBox({ title, box, onChange }: {
 }
 
 export function SetupView({
-  setup, setSetup, connected, busy, onSolve,
+  setup, setSetup, connected, busy, progress, onSolve,
 }: {
   setup: SpotSetup; setSetup: (s: SpotSetup) => void;
-  connected: boolean; busy: boolean; onSolve: () => void;
+  connected: boolean; busy: boolean;
+  progress: null | { phase: "compile" | "solve" | "results"; pct: number;
+    iters: number; active: number; budget: number };
+  onSolve: () => void;
 }) {
   const [pasteSide, setPasteSide] = useState<"oop" | "ip" | null>(null);
   const [editBoard, setEditBoard] = useState(false);
@@ -361,8 +364,29 @@ export function SetupView({
           </div>
           <button onClick={onSolve} disabled={busy}
             className="w-full py-2 rounded bg-green-600 text-white text-[13px] font-bold cursor-pointer hover:bg-green-500 disabled:opacity-50">
-            {busy ? "calculating…" : "CALCULATE"}
+            {busy ? "CALCULATING" : "CALCULATE"}
           </button>
+          {busy && (
+            <div className="pt-2" data-testid="solve-progress">
+              <div className="flex justify-between text-[9px] text-muted/70 pb-1">
+                <span>
+                  {progress?.phase === "compile" ? "compiling tree…"
+                    : progress?.phase === "results" ? "loading results…"
+                    : `solving · ${progress?.iters ?? 0} iters`}
+                </span>
+                <span>
+                  {progress?.phase === "solve"
+                    ? `${(progress.active).toFixed(0)}s / ${progress.budget}s`
+                    : ""}
+                </span>
+              </div>
+              <div className="h-1.5 rounded bg-panel2 border border-line overflow-hidden">
+                <div data-testid="solve-progress-fill"
+                  className={`h-full rounded ${progress?.phase === "solve" ? "bg-accent" : "bg-accent/40 animate-pulse"}`}
+                  style={{ width: `${progress?.phase === "solve" ? Math.min(100, progress.pct) : 100}%` }} />
+              </div>
+            </div>
+          )}
           <button disabled title="queueing — coming"
             className="w-full mt-1 py-1 bg-panel2/60 border border-line rounded text-[10px] text-muted/60 cursor-not-allowed">
             Add to queue

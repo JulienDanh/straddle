@@ -174,13 +174,17 @@ export function SolverPage() {
   const [solution, setSolution] = useState<Solution | null>(null);
   const [selected, setSelected] = useState("");
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState<null | {
+    phase: "compile" | "solve" | "results"; pct: number;
+    iters: number; active: number; budget: number;
+  }>(null);
   const [log, setLog] = useState<string[]>([]);
   const append = (l: string) => setLog((x) => [...x.slice(-40), l]);
 
   const connect = async () => {
     setStatus("idle");
     try {
-      const [r] = await upi(apiUrl, ["is_ready"]);
+      const [r] = await upi(apiUrl, ["is_ready"], { timeoutMs: 4000, retries: 1 });
       if (r.includes("ERROR")) throw new Error(r);
       setStatus("connected");
       append(`connected — ${r}`);
@@ -193,12 +197,13 @@ export function SolverPage() {
   const fetchNode = async (id: string): Promise<SolutionNode> => {
     const [nodeR, actionsR, stratR] = await upi(apiUrl, [
       `show_node ${id}`, `show_children_actions ${id}`, `show_strategy ${id}`,
-    ]);
+    ], { timeoutMs: 30000, retries: 1 });
     return parseNode(id, nodeR, actionsR, stratR);
   };
 
   const solve = async () => {
     setBusy(true);
+    setProgress({ phase: "compile", pct: 0, iters: 0, active: 0, budget: 0 });
     try {
       if (status === "connected") {
         const oop = toUpiWeights(setup.oopRange);
@@ -208,7 +213,9 @@ export function SolverPage() {
           const [street, pos] = k.split("-");
           return [`set_bet_sizes ${street} ${pos.toUpperCase()} bets=${v.bet.join(",")} raises=${v.raise.join(",")}`];
         });
-        const responses = await upi(apiUrl, [
+        // 1) setup + compile (the GPU tree build is one-shot; big trees
+        //    can take tens of seconds — no partial progress exists yet)
+        const buildResponses = await upi(apiUrl, [
           "free_tree",
           `set_range OOP ${oop}`,
           `set_range IP ${ip}`,
@@ -217,12 +224,35 @@ export function SolverPage() {
           `set_eff_stack ${setup.stack}`,
           ...sizeCmds,
           "build_tree",
-          `go ${setup.seconds}`,
-          "calc_results",
-        ]);
-        const errs = responses.filter((r) => r.includes("ERROR"));
-        if (errs.length) throw new Error(errs[0]);
-        const results = responses[responses.length - 1];
+        ], { timeoutMs: 180000, retries: 1 });
+        const buildErrs = buildResponses.filter((r) => r.includes("ERROR"));
+        if (buildErrs.length) throw new Error(buildErrs[0]);
+
+        // 2) chunked solve — each POST is a short go_chunk call, so the
+        //    request can never hang and progress updates between calls;
+        //    a dropped call retries (the engine warm-starts exactly)
+        const budget = Math.max(1, parseFloat(setup.seconds) || 30);
+        setProgress({ phase: "solve", pct: 0, iters: 0, active: 0, budget });
+        let last: { iters: number; active: number; budget: number; done: boolean };
+        for (let guard = 0; guard < 1000; guard++) {
+          const [chunkR] = await upi(apiUrl, [`go_chunk 2 ${budget}`],
+            { timeoutMs: 30000, retries: 2 });
+          if (chunkR.includes("ERROR")) throw new Error(chunkR);
+          let p: { iters?: number; active?: number; budget?: number; done?: boolean };
+          try { p = JSON.parse(chunkR); } catch { throw new Error(chunkR); }
+          last = { iters: p.iters ?? 0, active: p.active ?? 0,
+                   budget: p.budget ?? budget, done: !!p.done };
+          setProgress({ phase: "solve", iters: last.iters, active: last.active,
+            budget: last.budget, pct: Math.min(100, (last.active / last.budget) * 100) });
+          if (last.done) break;
+        }
+        if (!last!.done) throw new Error("solve did not finish");
+
+        // 3) results + root node
+        setProgress({ phase: "results", pct: 100, iters: last!.iters,
+          active: last!.active, budget: last!.budget });
+        const [results] = await upi(apiUrl, ["calc_results"], { timeoutMs: 60000 });
+        if (results.includes("ERROR")) throw new Error(results);
         const ev = (re: RegExp) => results.match(re)?.[1] ?? "—";
         const root = await fetchNode("r:0");
         setSolution({
@@ -239,9 +269,16 @@ export function SolverPage() {
       setSelected("");
       setTab("solution");
     } catch (e) {
-      append(`solve failed: ${(e as Error).message}`);
+      const msg = (e as Error).name === "AbortError" ? "bridge timed out" : (e as Error).message;
+      append(`solve failed: ${msg}`);
+      // the bridge died or hung mid-solve — the connected flag is stale
+      if ((e as Error).name === "AbortError" || e instanceof TypeError) {
+        setStatus("error");
+        append("bridge unreachable — reconnect after restarting it");
+      }
     } finally {
       setBusy(false);
+      setProgress(null);
     }
   };
 
@@ -289,7 +326,7 @@ export function SolverPage() {
       </div>
 
       {tab === "setup" ? (
-        <SetupView setup={setup} setSetup={setSetup} connected={status === "connected"} busy={busy} onSolve={solve} />
+        <SetupView setup={setup} setSetup={setSetup} connected={status === "connected"} busy={busy} progress={progress} onSolve={solve} />
       ) : solution ? (
         <SolutionView solution={solution} selected={selected || solution.rootId} onSelect={selectNode} onAction={walkChild} />
       ) : null}
