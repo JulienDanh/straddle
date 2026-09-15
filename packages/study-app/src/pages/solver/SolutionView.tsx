@@ -83,7 +83,8 @@ function TreePanel({ title, streetNodes, selected, onSelect, onAction }: {
       {streetNodes.length === 0 && <div className="text-[11px] text-muted/40">—</div>}
       {streetNodes.map((n) => (
         <div key={n.id} className={n.depth ? "ml-4 pt-1 border-l border-line/60 pl-2" : "pt-0.5"}>
-          <button onClick={() => onSelect(n.id)}
+          <div role="button" tabIndex={0} onClick={() => onSelect(n.id)}
+            onKeyDown={(e) => e.key === "Enter" && onSelect(n.id)}
             className={`text-[11px] font-semibold cursor-pointer block text-left ${selected === n.id ? "text-accent" : "text-txt/80 hover:text-txt"}`}>
             {n.player === "OOP" ? "BB" : "UTG"}
             {n.vsAction ? <span className="text-muted/60"> vs </span> : " ·"}
@@ -99,7 +100,7 @@ function TreePanel({ title, streetNodes, selected, onSelect, onAction }: {
                 <span className="text-muted/60">({a.pct.toFixed(1)}%)</span>
               </button>
             ))}
-          </button>
+          </div>
         </div>
       ))}
     </div>

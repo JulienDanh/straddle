@@ -132,20 +132,25 @@ function parseNode(id: string, nodeR: string, actionsR: string, stratR: string):
   const street = cards.length >= 10 ? "river" : cards.length >= 8 ? "turn" : "flop";
   const tokens = actionsR.split(/\n+/).map((s2) => s2.trim()).filter(Boolean);
   const lines = stratR.split(/\n+/).filter((l) => l.trim().split(/\s+/).length > 100);
-  const aggressive = tokens.some((t) => /^[br]/.test(t));
+  // "c" is a call only when facing a bet (a fold option exists);
+  // unopened it is a check.
+  const facing = tokens.includes("f");
+  // action shares of the node's acting range (not of all 1326 hands)
+  const shares = tokens.map((_, i) => lineShare(lines[i] ?? ""));
+  const total = shares.reduce((a, b) => a + b, 0) || 1;
   const actions: SolutionNode["actions"] = [];
   const strategy: Record<string, string> = {};
   tokens.forEach((t, i) => {
     const line = lines[i] ?? "";
     const kind: SolutionNode["actions"][0]["kind"] =
-      t === "c" ? (aggressive ? "call" : "check")
+      t === "c" ? (facing ? "call" : "check")
       : t === "f" ? "fold"
       : t.startsWith("r") ? "raise" : "bet";
     const amount = t.replace(/^[br]\s?/, "");
     const label = kind === "check" ? "CHECK" : kind === "call" ? "CALL" : kind === "fold" ? "FOLD"
       : `${kind === "raise" ? "RAISE" : "BET"} ${amount}`;
-    actions.push({ token: t, label, kind, pct: lineShare(line) * 100 });
-    if (line) strategy[kind === "check" || kind === "call" ? (aggressive ? "call" : "check") : kind] = lineToCombos(line);
+    actions.push({ token: t, label, kind, pct: (shares[i] / total) * 100 });
+    if (line) strategy[kind] = lineToCombos(line);
   });
   return {
     id, player, street, board: cards, depth: id.match(/:/g)?.length ?? 0,
