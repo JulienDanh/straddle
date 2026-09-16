@@ -102,6 +102,18 @@ and UTG-vs-CO-3bet pots. Trees whose default range is not in the store
 (100bb BB call, UTG call-vs-3bet) say so in `_notes` — pass `--oop` with a
 store spec or a literal Pio-style range.
 
+**Generic trees.** `generic-cbet-ip` / `generic-cbet-oop` carry the same
+course ladder but offer BOTH flop buckets (20% and 73%) at any depth — the
+solver picks per texture. Verified on the two S1 boards: on AsKh2c it bets
+4bb with 81.6% of the range (Wizard: 78.8%), matching the polar bucket. On
+Kh8h3c it MIXES the sizes (~41% at 1.1bb, ~55% at 4bb) instead of Wizard's
+pure 100% small-bet — both sizings are near-equal in EV there (0.24% of pot
+exploitability), and the Wizard sim itself only offers ONE flop size per
+board, so its pure strategy and the solver's mix are equally valid
+equilibria. Use the single-bucket scenario trees when replicating Wizard;
+use the generic trees for exploration, and read mixed sizings as "either
+works," not as noise.
+
 ## Building a spot from the range store
 
 `scripts/spot_from_store.py` fills `ranges` from `packages/ranges/data` and
