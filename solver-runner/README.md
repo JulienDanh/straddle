@@ -74,17 +74,22 @@ python3 scripts/compare_wizard.py --result result.json \
 ```
 
 Verified there: Wizard c-bets 99.97% of the open range at 1.1bb, solver
-100.0% (0.24% of pot exploitability), mean per-combo |diff| 0.006 — the only
-class-level divergence is K7s (Wizard 100%, solver 55%, a near-indifferent
-mix).
+100.0% (0.22% of pot exploitability), mean per-combo |diff| 0.008 — the only
+class-level divergence is K7s, an indifference-boundary hand that mixes
+(Wizard 100%, solver ~34%) while everything else is pure.
 
 ## Scenario trees
 
 `trees/` stores one bet-size tree per scenario (`trees/index.json` lists them;
-`scripts/make_trees.py` regenerates them). Sizes come from the archived GTO
-Wizard captures cited in each tree's `_sources`; anything not archived is
-flagged in `_notes`. A tree carries the full scenario: default pot/stack,
-default ranges, bet sizes per street, donk sizes — only the board is missing.
+`scripts/make_trees.py` regenerates them). Flop sizes and donk sizings come
+from the archived GTO Wizard captures cited in each tree's `_sources`. The
+turn/river sizings follow the course's own bet-size tree (the Sizing page):
+OOP leads the 33% block (S10) and check-raises to pot or jams (S6), IP
+barrels geometric (S5/S8 — the solver's `e`), river is 67% default / 130%
+overbet vs capped (S4/S10/S11), with jams added by the all-in threshold.
+Anything approximated is flagged in `_notes`. A tree carries the full
+scenario: default pot/stack, default ranges, bet sizes per street, donk
+sizes — only the board is missing.
 
 ```sh
 python3 scripts/spot_from_store.py --list-trees        # what exists

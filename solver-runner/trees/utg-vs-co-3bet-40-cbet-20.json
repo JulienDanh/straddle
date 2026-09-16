@@ -4,7 +4,7 @@
   "_sources": [
     "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-r6.5-f-f-c/kdjh2c-x.json"
   ],
-  "_notes": "UTG's call-3bet range is not in the store \u2014 pass --oop manually; UTG x-raise vs 3.1 approximated at 3x; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "_notes": "UTG's call-3bet range is not in the store \u2014 pass --oop manually; UTG x-raise vs 3.1 approximated at 3x; turn/river sizes follow the course's bet-size tree (Sizing page): OOP block 33% (S10), CR to pot or jam (S6), IP geometric barrel (S5/S8), river 67%/130% and jams via threshold (S4/S10/S11)",
   "pot": 15.5,
   "effective_stack": 33.5,
   "ranges": {
@@ -24,22 +24,22 @@
     },
     "turn": {
       "oop": [
-        "33%, 66%",
-        "2.5x"
+        "33%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%",
-        "2.5x"
+        "e",
+        "a"
       ]
     },
     "river": {
       "oop": [
-        "33%, 66%, a",
-        "2.5x"
+        "33%, 67%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%, a",
-        "2.5x"
+        "67%, 130%",
+        "a"
       ]
     }
   },
@@ -57,6 +57,7 @@
     "print_progress": false
   },
   "donk_sizes": {
+    "river": "33%",
     "turn": "113%"
   }
 }

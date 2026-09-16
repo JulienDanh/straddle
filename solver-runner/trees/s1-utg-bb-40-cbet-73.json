@@ -5,7 +5,7 @@
   "_sources": [
     "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/askh2c-x.json"
   ],
-  "_notes": "BB check-raise vs 4 approximated at 2.3x (measured ratio vs 55-63% bets); 113% turn donk approximated from the 1.1 line; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "_notes": "BB check-raise vs 4 approximated at 2.3x (measured ratio vs 55-63% bets); 113% turn donk approximated from the 1.1 line; turn/river sizes follow the course's bet-size tree (Sizing page): OOP block 33% (S10), CR to pot or jam (S6), IP geometric barrel (S5/S8), river 67%/130% and jams via threshold (S4/S10/S11)",
   "pot": 5.5,
   "effective_stack": 38.0,
   "ranges": {
@@ -25,22 +25,22 @@
     },
     "turn": {
       "oop": [
-        "33%, 66%",
-        "2.5x"
+        "33%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%",
-        "2.5x"
+        "e",
+        "a"
       ]
     },
     "river": {
       "oop": [
-        "33%, 66%, a",
-        "2.5x"
+        "33%, 67%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%, a",
-        "2.5x"
+        "67%, 130%",
+        "a"
       ]
     }
   },
@@ -58,6 +58,7 @@
     "print_progress": false
   },
   "donk_sizes": {
+    "river": "33%",
     "turn": "113%"
   }
 }

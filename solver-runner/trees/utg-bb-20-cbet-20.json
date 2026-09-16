@@ -5,7 +5,7 @@
     "straddle-solutions/solutions/cev/20/r2-f-f-f-f-f-f-c/6s6h2c-x.json",
     "straddle-solutions/solutions/cev/13/r2-f-f-f-f-f-f-c/kc8h4d-x-r1.1.json"
   ],
-  "_notes": "BB check-raise vs 1.1 approximated at 2.8x (13/15bb facing nodes raise to 3.1/3.4); turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "_notes": "BB check-raise vs 1.1 approximated at 2.8x (13/15bb facing nodes raise to 3.1/3.4); turn/river sizes follow the course's bet-size tree (Sizing page): OOP block 33% (S10), CR to pot or jam (S6), IP geometric barrel (S5/S8), river 67%/130% and jams via threshold (S4/S10/S11)",
   "pot": 5.5,
   "effective_stack": 18.0,
   "ranges": {
@@ -25,22 +25,22 @@
     },
     "turn": {
       "oop": [
-        "33%, 66%",
-        "2.5x"
+        "33%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%",
-        "2.5x"
+        "e",
+        "a"
       ]
     },
     "river": {
       "oop": [
-        "33%, 66%, a",
-        "2.5x"
+        "33%, 67%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%, a",
-        "2.5x"
+        "67%, 130%",
+        "a"
       ]
     }
   },
@@ -58,6 +58,7 @@
     "print_progress": false
   },
   "donk_sizes": {
+    "river": "33%",
     "turn": "113%"
   }
 }

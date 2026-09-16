@@ -4,7 +4,7 @@
   "_sources": [
     "straddle-solutions/solutions/cev/100/flops/r2.1-f-f-f-f-f-f-c/6s6h2c-x.json"
   ],
-  "_notes": "UTG opens 2.1 at 100bb; BB call range vs UTG is not in the store below 50bb depths \u2014 pass --oop (literal Pio-style ranges work); BB check-raise approximated at 3x; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "_notes": "UTG opens 2.1 at 100bb; BB call range vs UTG is not in the store below 50bb depths \u2014 pass --oop (literal Pio-style ranges work); BB check-raise approximated at 3x; turn/river sizes follow the course's bet-size tree (Sizing page): OOP block 33% (S10), CR to pot or jam (S6), IP geometric barrel (S5/S8), river 67%/130% and jams via threshold (S4/S10/S11)",
   "pot": 5.7,
   "effective_stack": 97.9,
   "ranges": {
@@ -24,22 +24,22 @@
     },
     "turn": {
       "oop": [
-        "33%, 66%",
-        "2.5x"
+        "33%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%",
-        "2.5x"
+        "e",
+        "a"
       ]
     },
     "river": {
       "oop": [
-        "33%, 66%, a",
-        "2.5x"
+        "33%, 67%",
+        "100%, a"
       ],
       "ip": [
-        "33%, 66%, a",
-        "2.5x"
+        "67%, 130%",
+        "a"
       ]
     }
   },
@@ -57,6 +57,7 @@
     "print_progress": false
   },
   "donk_sizes": {
-    "turn": "25%"
+    "river": "33%",
+    "turn": "113%"
   }
 }
