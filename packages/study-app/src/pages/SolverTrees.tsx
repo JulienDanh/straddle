@@ -5,8 +5,8 @@ interface TreeEntry {
   name: string
   line: string
   system?: string
-  pot: number
-  effective_stack: number
+  pot: number | null
+  effective_stack: number | null
   flop_oop: [string, string]
   flop_ip: [string, string]
   turn_donk: string | null
@@ -17,9 +17,9 @@ interface TreeEntry {
 
 const ENTRIES = trees as TreeEntry[]
 
-function bb(pot: number, pct: string): string {
+function bb(pot: number | null, pct: string): string {
   const v = parseFloat(pct)
-  if (Number.isNaN(v)) return pct
+  if (pot == null || Number.isNaN(v)) return pct
   return `${(pot * v / 100).toFixed(1)}bb`
 }
 
@@ -51,6 +51,7 @@ export function SolverTreesPage() {
     { label: 'S2 · BTN vs BB call', match: (t) => t.name.startsWith('s2-') || t.name.startsWith('btn-bb-') },
     { label: 'SB vs BB — blind battle', match: (t) => t.name.startsWith('sb-bb-') },
     { label: 'Vs 3-bet pots', match: (t) => t.name.startsWith('utg-vs-') },
+    { label: 'Generic — any line, any depth', match: (t) => t.name.startsWith('generic-') },
   ]
   const rest = ENTRIES.filter((t) => !groups.some((g) => g.match(t)))
 
@@ -91,7 +92,7 @@ export function SolverTreesPage() {
                     <code className="text-[12px]">{t.name}</code>
                     <Small>{t.line}</Small>
                   </div>,
-                  `${t.pot} / ${t.effective_stack}bb`,
+                  t.pot == null ? 'any — pass --pot/--effective-stack' : `${t.pot} / ${t.effective_stack}bb`,
                   sizesCell(t),
                   rangesCell(t.ranges),
                   <Tag>{t.fidelity}</Tag>,

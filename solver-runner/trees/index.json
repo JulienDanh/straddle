@@ -307,5 +307,47 @@
     "sources": [
       "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-r6.5-f-f-c/kdjh2c-x.json"
     ]
+  },
+  {
+    "name": "generic-cbet-ip",
+    "line": "Generic SRP tree \u2014 preflop aggressor is IN position (any depth; pass pot/stack/ranges)",
+    "pot": null,
+    "effective_stack": null,
+    "flop_oop": [
+      "",
+      "5.18x, a"
+    ],
+    "flop_ip": [
+      "20%, 73%",
+      "2.5x"
+    ],
+    "turn_donk": "113%",
+    "ranges": {
+      "oop": null,
+      "ip": null
+    },
+    "fidelity": "course bet-size tree \u2014 pot-relative, any depth",
+    "sources": []
+  },
+  {
+    "name": "generic-cbet-oop",
+    "line": "Generic SRP tree \u2014 preflop aggressor is OUT of position (any depth; pass pot/stack/ranges)",
+    "pot": null,
+    "effective_stack": null,
+    "flop_oop": [
+      "20%, 73%",
+      "2.5x"
+    ],
+    "flop_ip": [
+      "",
+      "5.18x, a"
+    ],
+    "turn_donk": "113%",
+    "ranges": {
+      "oop": null,
+      "ip": null
+    },
+    "fidelity": "course bet-size tree \u2014 pot-relative, any depth",
+    "sources": []
   }
 ]

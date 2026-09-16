@@ -112,7 +112,7 @@ def main() -> int:
         ranges["ip"] = args.ip
     config["ranges"] = ranges
 
-    missing = [k for k in ("pot", "effective_stack") if k not in config]
+    missing = [k for k in ("pot", "effective_stack") if config.get(k) is None]
     missing += [k for k in ("oop", "ip") if not ranges.get(k)]
     if missing:
         raise SystemExit(f"Missing {missing}; pass them as flags or use --tree with defaults")
