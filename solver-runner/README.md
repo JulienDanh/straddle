@@ -22,12 +22,15 @@ scripts/run.sh build --release
 ## Usage
 
 ```sh
-./target/release/solver-runner --config <spot.json> [--out <result.json>] [--save <game.bin>] [--info]
+./target/release/solver-runner --config <spot.json> [--out <result.json>] [--save <game.bin>] [--walk check] [--info]
 ```
 
 - `--info` prints the tree's memory usage and exits without solving. Run it
   first: flop-start trees with geometric/all-in sizes at high SPR can need
   tens of GB; turn/river spots are small.
+- `--walk` plays a comma-separated sequence of exact action labels from the
+  root (e.g. `--walk check` to reach the c-bet node after the BB checks) and
+  dumps the node reached instead of the root. Cannot deal turn/river cards.
 - `--save` writes the solved game tree (bincode) for later inspection with
   the crate's `load_data_from_file`.
 - Threading: set `RAYON_NUM_THREADS` to bound CPU usage.
@@ -50,10 +53,31 @@ The tree fields `add_allin_threshold`, `force_allin_threshold`,
 
 ## Output
 
-JSON with the exploitability (bb and % of pot), the root actions in bb, and —
-per action — a class:freq string (`"AKs:0.25,..."`) averaged over the combos
-present, the same format the RangeGrid copy button and the range store use.
-Also includes per-hand strategy, equity and EV for both players.
+JSON with the exploitability (bb and % of pot), the dumped node's actions in
+bb, and — per action — a class:freq string (`"AKs:0.25,..."`) averaged over
+the combos present, the same format the RangeGrid copy button and the range
+store use. Also includes per-hand strategy for the acting player and
+equity/EV for both players at that node.
+
+## Comparing against a stored GTO Wizard solution
+
+`scripts/compare_wizard.py` divides a store child's open-weight-scaled paste
+into conditional frequencies and compares them to a solver node:
+
+```sh
+# solve UTG-vs-BB K83 with the Wizard tree sizes (archive-derived):
+python3 scripts/spot_from_store.py --board Kh8h3c --pot 5.5 --effective-stack 38 \
+    --oop "bb/vs-utg:40:cEV:call" --ip "utg/rfi:40:cEV:raise" \
+    --template examples/s1-cbet-template.json --out spot.json
+./target/release/solver-runner --config spot.json --out result.json --walk check
+python3 scripts/compare_wizard.py --result result.json \
+    --child "utg/rfi:40:cEV:k83" --action bet --solver-action "Bet(1.1)"
+```
+
+Verified there: Wizard c-bets 99.97% of the open range at 1.1bb, solver
+100.0% (0.24% of pot exploitability), mean per-combo |diff| 0.006 — the only
+class-level divergence is K7s (Wizard 100%, solver 55%, a near-indifferent
+mix).
 
 ## Building a spot from the range store
 
@@ -79,5 +103,8 @@ continue range. Bet sizes and solve settings come from
 ## Examples
 
 - `examples/turn-spot.json` — the crate's own `basic.rs` spot (turn, pot 200),
-  usable as a regression check: root actions should be
+  usable as a regression check: node actions should be
   `Check, Bet(120), Bet(216.25), AllIn(900)`.
+- `examples/s1-cbet-template.json` — S1's K83 c-bet spot tree (BB check-only
+  flop, UTG 20%-pot c-bet, BB raise to 5.7bb, 113%-pot turn donk — sizes read
+  from the Wizard archive), paired with the comparison above.

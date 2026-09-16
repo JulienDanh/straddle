@@ -110,6 +110,7 @@ fn main() -> ExitCode {
     let mut out_path: Option<String> = None;
     let mut save_path: Option<String> = None;
     let mut info_only = false;
+    let mut walk: Option<String> = None;
 
     let mut args = std::env::args().skip(1);
     while let Some(arg) = args.next() {
@@ -118,6 +119,7 @@ fn main() -> ExitCode {
             "--out" => out_path = Some(expect_value(&mut args, "--out")),
             "--save" => save_path = Some(expect_value(&mut args, "--save")),
             "--info" => info_only = true,
+            "--walk" => walk = Some(expect_value(&mut args, "--walk")),
             other => {
                 eprintln!("Unknown argument: {other}");
                 print_usage();
@@ -146,7 +148,7 @@ fn main() -> ExitCode {
         }
     };
 
-    if let Err(err) = run(&config, out_path.as_deref(), save_path.as_deref(), info_only) {
+    if let Err(err) = run(&config, out_path.as_deref(), save_path.as_deref(), info_only, walk.as_deref()) {
         eprintln!("Error: {err}");
         return ExitCode::FAILURE;
     }
@@ -155,7 +157,7 @@ fn main() -> ExitCode {
 
 fn print_usage() {
     eprintln!(
-        "Usage: solver-runner --config <spot.json> [--out <result.json>] [--save <game.bin>] [--info]"
+        "Usage: solver-runner --config <spot.json> [--out <result.json>] [--save <game.bin>] [--walk check,bet(1.1)] [--info]"
     );
 }
 
@@ -169,11 +171,12 @@ fn run(
     out_path: Option<&str>,
     save_path: Option<&str>,
     info_only: bool,
+    walk: Option<&str>,
 ) -> Result<(), String> {
-    // The solver works in integer amounts. Find the smallest unit that keeps
-    // pot and stack exact (down to 1/100 bb), then report amounts in bb.
-    const SCALE_CANDIDATES: [f64; 8] = [1.0, 2.0, 4.0, 5.0, 10.0, 20.0, 50.0, 100.0];
-    let scale = SCALE_CANDIDATES
+    // The solver works in integer amounts; bet sizes are pot-relative and
+    // must round well (20% of a 5.5bb pot is 1.1bb). Prefer 1/20bb units so
+    // percentage sizings stay near-exact, refining only if pot/stack need it.
+    let scale = [20.0, 40.0, 100.0, 200.0, 1000.0]
         .iter()
         .copied()
         .find(|&s| {
@@ -182,7 +185,7 @@ fn run(
         })
         .ok_or_else(|| {
             format!(
-                "pot {} / effective_stack {} need finer than 1/100 bb units",
+                "pot {} / effective_stack {} need finer than 1/1000 bb units",
                 config.pot, config.effective_stack
             )
         })?;
@@ -238,17 +241,16 @@ fn run(
     };
 
     let parse_side = |side: &SideSpec| -> Result<[BetSizeOptions; 2], String> {
-        let oop = BetSizeOptions::try_from((
-            side.oop[0].as_str(),
-            side.oop[1].as_str(),
-        ))
-        .map_err(|e| format!("Invalid OOP bet sizes: {e}"))?;
-        let ip = BetSizeOptions::try_from((
-            side.ip[0].as_str(),
-            side.ip[1].as_str(),
-        ))
-        .map_err(|e| format!("Invalid IP bet sizes: {e}"))?;
-        Ok([oop, ip])
+        // An empty string means the player has no first-bet (or raise)
+        // options on that street (e.g. a check-only player).
+        let parse = |pair: &[String; 2]| -> Result<BetSizeOptions, String> {
+            if pair[0].is_empty() && pair[1].is_empty() {
+                return Ok(BetSizeOptions::default());
+            }
+            BetSizeOptions::try_from((pair[0].as_str(), pair[1].as_str()))
+                .map_err(|e| format!("Invalid bet sizes {:?}: {e}", pair))
+        };
+        Ok([parse(&side.oop)?, parse(&side.ip)?])
     };
 
     let tree_config = TreeConfig {
@@ -307,40 +309,38 @@ fn run(
         BoardState::River => 1,
         _ => 0,
     };
-    let root_player_label = if root_player == 0 { "oop" } else { "ip" };
 
     game.cache_normalized_weights();
 
-    let actions: Vec<String> = game
-        .available_actions()
-        .iter()
-        .map(|a| rescale_action(&format!("{a:?}"), scale))
-        .collect();
-    let strategy = game.strategy();
-    let root_cards = game.private_cards(root_player);
-    let num_hands = root_cards.len();
+    let mut node = dump_node(&game, root_player, scale)?;
 
-    // Per-action class:freq strings, averaged over the combos present per class.
-    let mut strategy_by_action = serde_json::Map::new();
-    for (ai, action) in actions.iter().enumerate() {
-        let mut sum: BTreeMap<(u8, u8, u8), (f32, u32)> = BTreeMap::new();
-        for (hi, &(c1, c2)) in root_cards.iter().enumerate() {
-            let freq = strategy[hi + ai * num_hands];
-            let key = class_key(c1, c2);
-            let entry = sum.entry(key).or_insert((0.0, 0));
-            entry.0 += freq;
-            entry.1 += 1;
+    // Play a sequence of actions from the root (e.g. "check" to reach the
+    // c-bet node) and dump the node reached. Cannot cross chance nodes.
+    if let Some(walk) = walk {
+        let mut player = root_player;
+        for step in walk.split(',').map(str::trim) {
+            if step.is_empty() {
+                continue;
+            }
+            let actions = game.available_actions();
+            let labels: Vec<String> = actions
+                .iter()
+                .map(|a| rescale_action(&format!("{a:?}"), scale))
+                .collect();
+            let idx = labels
+                .iter()
+                .position(|l| l.eq_ignore_ascii_case(step))
+                .ok_or_else(|| format!("No action {step:?} at node; available: {labels:?}"))?;
+            game.play(idx);
+            player = 1 - player;
+            if game.is_chance_node() {
+                return Err("--walk cannot deal turn/river cards (chance node reached)".to_string());
+            }
         }
-        let classes: Vec<String> = sum
-            .iter()
-            .map(|(key, &(total, count))| {
-                format!("{}:{:.4}", class_label(key), total / count as f32)
-            })
-            .collect();
-        strategy_by_action.insert(
-            action.clone(),
-            serde_json::Value::String(classes.join(",")),
-        );
+        node = dump_node(&game, player, scale)?;
+        // play() invalidates the normalized-weight cache; the per-player
+        // equity/EV read below needs it at the current node.
+        game.cache_normalized_weights();
     }
 
     let per_player = |player: usize| -> Result<serde_json::Value, String> {
@@ -360,9 +360,6 @@ fn run(
         }))
     };
 
-    let root_hands = holes_to_strings(root_cards)
-        .map_err(|e| format!("Failed to format hole cards: {e}"))?;
-
     let result = serde_json::json!({
         "board": config.board,
         "pot": config.pot,
@@ -370,15 +367,9 @@ fn run(
         "units": "bb",
         "exploitability": exploitability as f64 / scale,
         "exploitability_pct_pot": 100.0 * exploitability / pot as f32,
-        "root": {
-            "player": root_player_label,
-            "actions": actions,
-            "strategy_by_action": strategy_by_action,
-            "hands": root_hands,
-            "strategy": strategy,
-            "oop": per_player(0)?,
-            "ip": per_player(1)?,
-        },
+        "node": node,
+        "oop": per_player(0)?,
+        "ip": per_player(1)?,
     });
 
     let pretty = serde_json::to_string_pretty(&result).map_err(|e| e.to_string())?;
@@ -390,6 +381,53 @@ fn run(
         None => println!("{pretty}"),
     }
     Ok(())
+}
+
+/// Dump the current node: acting player, actions (bb), per-action class:freq
+/// strings, per-hand strategy.
+fn dump_node(game: &PostFlopGame, player: usize, scale: f64) -> Result<serde_json::Value, String> {
+    let actions: Vec<String> = game
+        .available_actions()
+        .iter()
+        .map(|a| rescale_action(&format!("{a:?}"), scale))
+        .collect();
+    let strategy = game.strategy();
+    let cards = game.private_cards(player);
+    let num_hands = cards.len();
+
+    // Per-action class:freq strings, averaged over the combos present per class.
+    let mut strategy_by_action = serde_json::Map::new();
+    for (ai, action) in actions.iter().enumerate() {
+        let mut sum: BTreeMap<(u8, u8, u8), (f32, u32)> = BTreeMap::new();
+        for (hi, &(c1, c2)) in cards.iter().enumerate() {
+            let freq = strategy[hi + ai * num_hands];
+            let key = class_key(c1, c2);
+            let entry = sum.entry(key).or_insert((0.0, 0));
+            entry.0 += freq;
+            entry.1 += 1;
+        }
+        let classes: Vec<String> = sum
+            .iter()
+            .map(|(key, &(total, count))| {
+                format!("{}:{:.4}", class_label(key), total / count as f32)
+            })
+            .collect();
+        strategy_by_action.insert(
+            action.clone(),
+            serde_json::Value::String(classes.join(",")),
+        );
+    }
+
+    let hands = holes_to_strings(cards)
+        .map_err(|e| format!("Failed to format hole cards: {e}"))?;
+
+    Ok(serde_json::json!({
+        "player": if player == 0 { "oop" } else { "ip" },
+        "actions": actions,
+        "strategy_by_action": strategy_by_action,
+        "hands": hands,
+        "strategy": strategy,
+    }))
 }
 
 /// Convert a solver action's Debug label (e.g. "Bet(120)") back to bb units.
