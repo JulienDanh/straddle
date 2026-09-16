@@ -1,8 +1,8 @@
 {
-  "_name": "generic-cbet-ip",
-  "_line": "Generic SRP tree \u2014 preflop aggressor is IN position (any depth; pass pot/stack/ranges)",
+  "_name": "course-cbet-oop",
+  "_line": "Course strategy tree \u2014 preflop aggressor is OUT of position (any depth; pass pot/stack/ranges)",
   "_sources": [],
-  "_notes": "No captures: flop offers both course buckets (20% range bet, 73% polar) and the solver picks per texture; OOP x-raise 5.18x (S1's measured to-5.7 vs the small bet) plus the jam (S6). turn/river sizes follow the course's bet-size tree (Sizing page): OOP block 33% (S10), CR to pot or jam (S6), IP geometric barrel (S5/S8), river 67%/130% and jams via threshold (S4/S10/S11)",
+  "_notes": "Same ladder with the flop roles flipped: OOP c-bets, IP check-raises (to 5.7x the small bet or jam, S6); the c-bettor never min-raises back \u2014 jam or fold (S7). turn/river sizes follow the course's bet-size tree (Sizing page): OOP block 33% (S10), CR to pot or jam (S6), IP geometric barrel (S5/S8), river 67%/130% and jams via threshold (S4/S10/S11)",
   "pot": null,
   "effective_stack": null,
   "ranges": {
@@ -12,12 +12,12 @@
   "bet_sizes": {
     "flop": {
       "oop": [
-        "",
-        "5.18x, a"
+        "20%, 73%",
+        "a"
       ],
       "ip": [
-        "20%, 73%",
-        "2.5x"
+        "",
+        "5.18x, a"
       ]
     },
     "turn": {

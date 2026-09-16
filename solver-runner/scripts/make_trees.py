@@ -44,8 +44,8 @@ NOTE_COURSE_DEEP = ("turn/river sizes follow the course's bet-size tree (Sizing 
 # What the archived captures cover per tree (shown on the study-app page).
 FIDELITY_DEFAULT = "flop archived · x-raise approx"
 FIDELITY = {
-    "generic-cbet-ip": "course bet-size tree — pot-relative, any depth",
-    "generic-cbet-oop": "course bet-size tree — pot-relative, any depth",
+    "course-cbet-ip": "course bet-size tree — pot-relative, any depth",
+    "course-cbet-oop": "course bet-size tree — pot-relative, any depth",
     "s1-utg-bb-40-cbet-20": "flop · x-raise · donk archived",
     "sb-bb-40-lead-63": "flop · x-raise · donk archived",
     "s1-utg-bb-40-cbet-73": "flop archived · x-raise & donk approx",
@@ -246,26 +246,26 @@ SCENARIOS = [
     # so there are two: aggressor in position (opener called by a blind) and
     # aggressor out of position (early open, later caller).
     tree(
-        "generic-cbet-ip",
-        "Generic SRP tree — preflop aggressor is IN position (any depth; pass pot/stack/ranges)",
+        "course-cbet-ip",
+        "Course strategy tree — preflop aggressor is IN position (any depth; pass pot/stack/ranges)",
         [],
         "No captures: flop offers both course buckets (20% range bet, 73% polar) "
         "and the solver picks per texture; OOP x-raise 5.18x (S1's measured to-5.7 "
-        "vs the small bet) plus the jam (S6). " + NOTE_COURSE_DEEP,
+        "vs the small bet) plus the jam (S6); IP never min-raises the x-raise — jam or fold (S7). " + NOTE_COURSE_DEEP,
         pot=None, effective_stack=None,
         ranges={"oop": None, "ip": None},
-        flop_oop=["", "5.18x, a"], flop_ip=["20%, 73%", "2.5x"],
+        flop_oop=["", "5.18x, a"], flop_ip=["20%, 73%", "a"],
         donk={"turn": "113%", "river": "33%"},
     ),
     tree(
-        "generic-cbet-oop",
-        "Generic SRP tree — preflop aggressor is OUT of position (any depth; pass pot/stack/ranges)",
+        "course-cbet-oop",
+        "Course strategy tree — preflop aggressor is OUT of position (any depth; pass pot/stack/ranges)",
         [],
-        "Same ladder with the flop roles flipped: OOP c-bets, IP check-raises. "
+        "Same ladder with the flop roles flipped: OOP c-bets, IP check-raises (to 5.7x the small bet or jam, S6); the c-bettor never min-raises back — jam or fold (S7). "
         + NOTE_COURSE_DEEP,
         pot=None, effective_stack=None,
         ranges={"oop": None, "ip": None},
-        flop_oop=["20%, 73%", "2.5x"], flop_ip=["", "5.18x, a"],
+        flop_oop=["20%, 73%", "a"], flop_ip=["", "5.18x, a"],
         donk={"turn": "113%", "river": "33%"},
     ),
 ]

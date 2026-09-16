@@ -309,8 +309,8 @@
     ]
   },
   {
-    "name": "generic-cbet-ip",
-    "line": "Generic SRP tree \u2014 preflop aggressor is IN position (any depth; pass pot/stack/ranges)",
+    "name": "course-cbet-ip",
+    "line": "Course strategy tree \u2014 preflop aggressor is IN position (any depth; pass pot/stack/ranges)",
     "pot": null,
     "effective_stack": null,
     "flop_oop": [
@@ -319,7 +319,7 @@
     ],
     "flop_ip": [
       "20%, 73%",
-      "2.5x"
+      "a"
     ],
     "turn_donk": "113%",
     "ranges": {
@@ -330,13 +330,13 @@
     "sources": []
   },
   {
-    "name": "generic-cbet-oop",
-    "line": "Generic SRP tree \u2014 preflop aggressor is OUT of position (any depth; pass pot/stack/ranges)",
+    "name": "course-cbet-oop",
+    "line": "Course strategy tree \u2014 preflop aggressor is OUT of position (any depth; pass pot/stack/ranges)",
     "pot": null,
     "effective_stack": null,
     "flop_oop": [
       "20%, 73%",
-      "2.5x"
+      "a"
     ],
     "flop_ip": [
       "",

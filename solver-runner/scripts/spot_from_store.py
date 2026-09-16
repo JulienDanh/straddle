@@ -30,8 +30,9 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[2]
 STORE = REPO / "packages" / "ranges" / "data"
 RUNNER = Path(__file__).resolve().parent.parent
-DEFAULT_TEMPLATE = RUNNER / "examples" / "template.json"
 TREES = RUNNER / "trees"
+# solving without --tree plays the course strategy tree by default
+DEFAULT_TEMPLATE = TREES / "course-cbet-ip.json"
 
 
 def parse_store_range(spec: str) -> str:

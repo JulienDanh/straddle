@@ -102,17 +102,22 @@ and UTG-vs-CO-3bet pots. Trees whose default range is not in the store
 (100bb BB call, UTG call-vs-3bet) say so in `_notes` — pass `--oop` with a
 store spec or a literal Pio-style range.
 
-**Generic trees.** `generic-cbet-ip` / `generic-cbet-oop` carry the same
-course ladder but offer BOTH flop buckets (20% and 73%) at any depth — the
-solver picks per texture. Verified on the two S1 boards: on AsKh2c it bets
-4bb with 81.6% of the range (Wizard: 78.8%), matching the polar bucket. On
-Kh8h3c it MIXES the sizes (~41% at 1.1bb, ~55% at 4bb) instead of Wizard's
-pure 100% small-bet — both sizings are near-equal in EV there (0.24% of pot
+**The course strategy trees.** `course-cbet-ip` / `course-cbet-oop` ARE the
+course's strategy written as a bet-size tree — they are the default template
+for every solve. Flop: both course buckets offered (20% range bet, 73%
+polar), OOP x-raise to 5.18x the small bet or jam (S6), the c-bettor never
+min-raises the x-raise back — jam or fold (S7); turn/river: the course
+ladder (S4/S5/S6/S8/S10/S11). Pot-relative, so any depth works.
+
+Verified on the two S1 boards: on AsKh2c the tree bets 4bb with 81.9% of the
+range (Wizard: 78.8%, r = 0.83) — the polar bucket chosen on its own. On
+Kh8h3c it MIXES (~44% at 1.1bb, ~53% at 4bb) instead of Wizard's pure
+100% small-bet — both sizings are near-equal in EV there (0.24% of pot
 exploitability), and the Wizard sim itself only offers ONE flop size per
 board, so its pure strategy and the solver's mix are equally valid
-equilibria. Use the single-bucket scenario trees when replicating Wizard;
-use the generic trees for exploration, and read mixed sizings as "either
-works," not as noise.
+equilibria. The single-bucket scenario trees remain for Wizard replication;
+solve everything else with the course trees, and read mixed sizings as
+"either works," not as noise.
 
 ## Building a spot from the range store
 

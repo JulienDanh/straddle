@@ -51,7 +51,7 @@ export function SolverTreesPage() {
     { label: 'S2 · BTN vs BB call', match: (t) => t.name.startsWith('s2-') || t.name.startsWith('btn-bb-') },
     { label: 'SB vs BB — blind battle', match: (t) => t.name.startsWith('sb-bb-') },
     { label: 'Vs 3-bet pots', match: (t) => t.name.startsWith('utg-vs-') },
-    { label: 'Generic — any line, any depth', match: (t) => t.name.startsWith('generic-') },
+    { label: 'Course — the strategy tree (any line, any depth)', match: (t) => t.name.startsWith('course-') },
   ]
   const rest = ENTRIES.filter((t) => !groups.some((g) => g.match(t)))
 
