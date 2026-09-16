@@ -157,6 +157,7 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
           { id: 'live', label: 'Live' },
           { id: 'liveasym', label: 'ICM asym' },
           { id: 'livepko', label: 'PKO' },
+          { id: 'solvertrees', label: 'Solver Trees' },
         ] as const).map((t) => (
           <div
             key={t.id}

@@ -33,6 +33,19 @@ SB_BB_LINE = f"{SOL}/40/flops/f-f-f-f-f-f-r3-c"
 
 NOTE_DEEP = "turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)"
 
+# What the archived captures cover per tree (shown on the study-app page).
+FIDELITY_DEFAULT = "flop archived · x-raise approx"
+FIDELITY = {
+    "s1-utg-bb-40-cbet-20": "flop · x-raise · donk archived",
+    "sb-bb-40-lead-63": "flop · x-raise · donk archived",
+    "s1-utg-bb-40-cbet-73": "flop archived · x-raise & donk approx",
+    "s2-btn-bb-40-cbet-19": "flop archived · x-raise & donk approx",
+    "s2-btn-bb-40-cbet-72": "flop archived · x-raise & donk approx",
+    "btn-bb-50-cbet-33": "flop archived · x-raise & donk approx",
+    "btn-bb-50-cbet-81": "flop archived · x-raise & donk approx",
+    "utg-bb-20-cbet-47": "flop archived",
+}
+
 
 def tree(name, line, sources, notes, pot, effective_stack, ranges,
          flop_oop, flop_ip, donk=None, solve=None, system=None):
@@ -235,10 +248,17 @@ def main() -> int:
             "flop_ip": cfg["bet_sizes"]["flop"]["ip"],
             "turn_donk": cfg.get("donk_sizes", {}).get("turn"),
             "ranges": cfg["ranges"],
+            "fidelity": FIDELITY.get(cfg["_name"], FIDELITY_DEFAULT),
             "sources": cfg["_sources"],
         })
-    (TREES / "index.json").write_text(json.dumps(index, indent=2, ensure_ascii=True) + "\n")
+    text = json.dumps(index, indent=2, ensure_ascii=True) + "\n"
+    (TREES / "index.json").write_text(text)
+    # copy for the study-app Solver Trees page (self-contained for CI)
+    app_copy = Path(__file__).resolve().parents[2] / "packages" / "study-app" / "src" / "data" / "solver-trees.json"
+    app_copy.parent.mkdir(exist_ok=True)
+    app_copy.write_text(text)
     print(f"Wrote {len(SCENARIOS)} trees + index.json to {TREES}")
+    print(f"Wrote study-app copy to {app_copy}")
     return 0
 
 

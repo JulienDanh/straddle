@@ -28,6 +28,7 @@ import { BM9Page } from './pages/BM9'
 import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
 import { LiveEqualPage, LiveAsymPage, LivePkoPage } from './pages/LiveBbz'
+import { SolverTreesPage } from './pages/SolverTrees'
 
 const navTitles: Record<string, { course: string; title: string }> = {
   primer: { course: 'No-Limit Systems', title: 'Preflop Primer' },
@@ -60,6 +61,7 @@ const navTitles: Record<string, { course: string; title: string }> = {
   live: { course: '', title: 'Live' },
   liveasym: { course: '', title: 'Live · ICM asym' },
   livepko: { course: '', title: 'Live · PKO' },
+  solvertrees: { course: '', title: 'Solver Trees' },
 }
 
 const PAGES = {
@@ -68,7 +70,7 @@ const PAGES = {
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage, sizing: SizingPage,
   bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
-  live: LiveEqualPage, liveasym: LiveAsymPage, livepko: LivePkoPage,
+  live: LiveEqualPage, liveasym: LiveAsymPage, livepko: LivePkoPage, solvertrees: SolverTreesPage,
 } as const
 
 type PageId = keyof typeof PAGES
