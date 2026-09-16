@@ -2,3 +2,7 @@
 	path = straddle-solutions
 	url = git@github.com:JulienDanh/straddle-solutions.git
 	branch = main
+[submodule "postflop-solver"]
+	path = postflop-solver
+	url = https://github.com/JulienDanh/postflop-solver
+	branch = main
