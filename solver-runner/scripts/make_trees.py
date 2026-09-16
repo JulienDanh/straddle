@@ -46,6 +46,10 @@ FIDELITY_DEFAULT = "flop archived · x-raise approx"
 FIDELITY = {
     "course-cbet-ip": "course bet-size tree — pot-relative, any depth",
     "course-cbet-oop": "course bet-size tree — pot-relative, any depth",
+    "course-rangebet-ip": "course bet-size tree — S1 range-bet bucket",
+    "course-polar-ip": "course bet-size tree — S1 polar bucket",
+    "course-rangebet-oop": "course bet-size tree — S1 range-bet bucket",
+    "course-polar-oop": "course bet-size tree — S1 polar bucket",
     "s1-utg-bb-40-cbet-20": "flop · x-raise · donk archived",
     "sb-bb-40-lead-63": "flop · x-raise · donk archived",
     "s1-utg-bb-40-cbet-73": "flop archived · x-raise & donk approx",
@@ -266,6 +270,55 @@ SCENARIOS = [
         pot=None, effective_stack=None,
         ranges={"oop": None, "ip": None},
         flop_oop=["20%, 73%", "a"], flop_ip=["", "5.18x, a"],
+        donk={"turn": "113%", "river": "33%"},
+    ),
+
+    # Single-bucket S1 trees — the system's own play: ONE flop size per board,
+    # chosen by the board bucket (scripts/board_bucket.py). Both buckets are
+    # offered only by course-cbet-* for exploration; S1 executes a pure size.
+    # S6: check-raise to ~5.7 vs the small bet, jam vs the big bet.
+    tree(
+        "course-rangebet-ip",
+        "Course tree, S1 range-bet bucket — c-bet 100% at 20% (T-high+ clean boards)",
+        [],
+        "Polar-free flop: the 20% range bet only; OOP check-raises to 5.7bb (5.18x, S6). "
+        + NOTE_COURSE_DEEP,
+        pot=None, effective_stack=None,
+        ranges={"oop": None, "ip": None},
+        flop_oop=["", "5.18x"], flop_ip=["20%", "a"],
+        donk={"turn": "113%", "river": "33%"},
+    ),
+    tree(
+        "course-polar-ip",
+        "Course tree, S1 polar bucket — bet strong+weak at 73% (AKx · 9-high & below · straights)",
+        [],
+        "The 73% polar size only; OOP check-raises all-in vs the big bet (S6); "
+        "the c-bettor never min-raises back — jam or fold (S7). " + NOTE_COURSE_DEEP,
+        pot=None, effective_stack=None,
+        ranges={"oop": None, "ip": None},
+        flop_oop=["", "a"], flop_ip=["73%", "a"],
+        donk={"turn": "113%", "river": "33%"},
+    ),
+    tree(
+        "course-rangebet-oop",
+        "Course tree, range-bet bucket, aggressor OOP — c-bet 100% at 20%",
+        [],
+        "Flop roles flipped: OOP range-bets 20%, IP check-raises to 5.18x. "
+        + NOTE_COURSE_DEEP,
+        pot=None, effective_stack=None,
+        ranges={"oop": None, "ip": None},
+        flop_oop=["20%", "a"], flop_ip=["", "5.18x"],
+        donk={"turn": "113%", "river": "33%"},
+    ),
+    tree(
+        "course-polar-oop",
+        "Course tree, polar bucket, aggressor OOP — bet strong+weak at 73%",
+        [],
+        "Flop roles flipped: OOP bets 73% polar, IP check-raises all-in. "
+        + NOTE_COURSE_DEEP,
+        pot=None, effective_stack=None,
+        ranges={"oop": None, "ip": None},
+        flop_oop=["73%", "a"], flop_ip=["", "a"],
         donk={"turn": "113%", "river": "33%"},
     ),
 ]

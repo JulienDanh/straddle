@@ -349,5 +349,89 @@
     },
     "fidelity": "course bet-size tree \u2014 pot-relative, any depth",
     "sources": []
+  },
+  {
+    "name": "course-rangebet-ip",
+    "line": "Course tree, S1 range-bet bucket \u2014 c-bet 100% at 20% (T-high+ clean boards)",
+    "pot": null,
+    "effective_stack": null,
+    "flop_oop": [
+      "",
+      "5.18x"
+    ],
+    "flop_ip": [
+      "20%",
+      "a"
+    ],
+    "turn_donk": "113%",
+    "ranges": {
+      "oop": null,
+      "ip": null
+    },
+    "fidelity": "course bet-size tree \u2014 S1 range-bet bucket",
+    "sources": []
+  },
+  {
+    "name": "course-polar-ip",
+    "line": "Course tree, S1 polar bucket \u2014 bet strong+weak at 73% (AKx \u00b7 9-high & below \u00b7 straights)",
+    "pot": null,
+    "effective_stack": null,
+    "flop_oop": [
+      "",
+      "a"
+    ],
+    "flop_ip": [
+      "73%",
+      "a"
+    ],
+    "turn_donk": "113%",
+    "ranges": {
+      "oop": null,
+      "ip": null
+    },
+    "fidelity": "course bet-size tree \u2014 S1 polar bucket",
+    "sources": []
+  },
+  {
+    "name": "course-rangebet-oop",
+    "line": "Course tree, range-bet bucket, aggressor OOP \u2014 c-bet 100% at 20%",
+    "pot": null,
+    "effective_stack": null,
+    "flop_oop": [
+      "20%",
+      "a"
+    ],
+    "flop_ip": [
+      "",
+      "5.18x"
+    ],
+    "turn_donk": "113%",
+    "ranges": {
+      "oop": null,
+      "ip": null
+    },
+    "fidelity": "course bet-size tree \u2014 S1 range-bet bucket",
+    "sources": []
+  },
+  {
+    "name": "course-polar-oop",
+    "line": "Course tree, polar bucket, aggressor OOP \u2014 bet strong+weak at 73%",
+    "pot": null,
+    "effective_stack": null,
+    "flop_oop": [
+      "73%",
+      "a"
+    ],
+    "flop_ip": [
+      "",
+      "a"
+    ],
+    "turn_donk": "113%",
+    "ranges": {
+      "oop": null,
+      "ip": null
+    },
+    "fidelity": "course bet-size tree \u2014 S1 polar bucket",
+    "sources": []
   }
 ]
