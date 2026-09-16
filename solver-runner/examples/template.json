@@ -1,0 +1,17 @@
+{
+  "bet_sizes": {
+    "flop":  { "oop": ["33%, 60%, e, a", "2.5x"], "ip": ["33%, 60%, e, a", "2.5x"] },
+    "turn":  { "oop": ["33%, 60%, e, a", "2.5x"], "ip": ["33%, 60%, e, a", "2.5x"] },
+    "river": { "oop": ["33%, 60%, e, a", "2.5x"], "ip": ["33%, 60%, e, a", "2.5x"] }
+  },
+  "rake": [0.0, 0.0],
+  "add_allin_threshold": 1.5,
+  "force_allin_threshold": 0.15,
+  "merging_threshold": 0.1,
+  "solve": {
+    "max_iterations": 1000,
+    "target_exploitability_pct_pot": 0.5,
+    "compressed": false,
+    "print_progress": false
+  }
+}

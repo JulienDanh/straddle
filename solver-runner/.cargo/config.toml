@@ -1,0 +1,7 @@
+# The postflop-solver submodule (pinned at upstream Oct 2023) trips the
+# deny-by-default `dangerous_implicit_autorefs` lint added in newer rustc
+# (action_tree.rs implicit autorefs through raw pointers). Allowed here until
+# the fork carries the explicit-reference fix; this crate compiles clean with
+# no other suppressions.
+[build]
+rustflags = ["-A", "dangerous_implicit_autorefs"]

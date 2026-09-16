@@ -1,0 +1,21 @@
+{
+  "board": "Td9d6hQc",
+  "pot": 200,
+  "effective_stack": 900,
+  "ranges": {
+    "oop": "66+,A8s+,A5s-A4s,AJo+,K9s+,KQo,QTs+,JTs,96s+,85s+,75s+,65s,54s",
+    "ip": "QQ-22,AQs-A2s,ATo+,K5s+,KJo+,Q8s+,J8s+,T7s+,96s+,86s+,75s+,64s+,53s+"
+  },
+  "bet_sizes": {
+    "flop":  { "oop": ["60%, e, a", "2.5x"], "ip": ["60%, e, a", "2.5x"] },
+    "turn":  { "oop": ["60%, e, a", "2.5x"], "ip": ["60%, e, a", "2.5x"] },
+    "river": { "oop": ["60%, e, a", "2.5x"], "ip": ["60%, e, a", "2.5x"] }
+  },
+  "donk_sizes": { "river": "50%" },
+  "solve": {
+    "max_iterations": 1000,
+    "target_exploitability_pct_pot": 0.5,
+    "compressed": false,
+    "print_progress": false
+  }
+}
