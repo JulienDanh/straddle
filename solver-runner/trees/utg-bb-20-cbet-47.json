@@ -1,0 +1,62 @@
+{
+  "_name": "utg-bb-20-cbet-47",
+  "_line": "UTG 2bb open vs BB call (20bb cEV), 2.6bb = 47% pot c-bet",
+  "_sources": [
+    "straddle-solutions/solutions/cev/20/r2-f-f-f-f-f-f-c/5h4h3c-x.json"
+  ],
+  "_notes": "BB check-raise vs 2.6 approximated at 2.3x; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "pot": 5.5,
+  "effective_stack": 18.0,
+  "ranges": {
+    "oop": "bb/vs-utg:20:cEV:call",
+    "ip": "utg/rfi:20:cEV:raise"
+  },
+  "bet_sizes": {
+    "flop": {
+      "oop": [
+        "",
+        "2.3x"
+      ],
+      "ip": [
+        "47.3%",
+        "2.5x"
+      ]
+    },
+    "turn": {
+      "oop": [
+        "33%, 66%",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%",
+        "2.5x"
+      ]
+    },
+    "river": {
+      "oop": [
+        "33%, 66%, a",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%, a",
+        "2.5x"
+      ]
+    }
+  },
+  "rake": [
+    0.0,
+    0.0
+  ],
+  "add_allin_threshold": 1.5,
+  "force_allin_threshold": 0.15,
+  "merging_threshold": 0.1,
+  "solve": {
+    "max_iterations": 2000,
+    "target_exploitability_pct_pot": 0.25,
+    "compressed": false,
+    "print_progress": false
+  },
+  "donk_sizes": {
+    "turn": "113%"
+  }
+}

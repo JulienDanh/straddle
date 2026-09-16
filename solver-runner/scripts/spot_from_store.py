@@ -11,14 +11,15 @@ capped at 1 (call+raise = the whole continue range). The store's
 combo:freq strings are passed through as-is; the solver's Range parser
 accepts them directly.
 
+Scenarios: --tree <name> loads trees/<name>.json (see trees/index.json) —
+a full tree config with archive-derived bet sizes, default pot/stack and
+default ranges. Flags override the tree's values.
+
 Example:
 
-    python3 scripts/spot_from_store.py \
-        --board Td9d6h --pot 5.5 --effective-stack 37 \
-        --oop "utg/rfi:40:cEV:raise" \
-        --ip "bb/vs-utg:40:cEV:call" \
-        --out spot.json
-    cargo run --release -- --config spot.json --out result.json
+    python3 scripts/spot_from_store.py --tree s1-utg-bb-40-cbet-20 \
+        --board Kh8h3c --out spot.json
+    ./target/release/solver-runner --config spot.json --out result.json --walk check
 """
 
 import argparse
@@ -28,7 +29,9 @@ from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[2]
 STORE = REPO / "packages" / "ranges" / "data"
-DEFAULT_TEMPLATE = Path(__file__).resolve().parent.parent / "examples" / "template.json"
+RUNNER = Path(__file__).resolve().parent.parent
+DEFAULT_TEMPLATE = RUNNER / "examples" / "template.json"
+TREES = RUNNER / "trees"
 
 
 def parse_store_range(spec: str) -> str:
@@ -71,22 +74,61 @@ def parse_store_range(spec: str) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--board", required=True, help="board cards, e.g. Td9d6h (flop/turn/river by length)")
-    parser.add_argument("--pot", type=float, required=True, help="pot at the initial street, in bb")
-    parser.add_argument("--effective-stack", type=float, required=True, help="effective stack behind, in bb")
-    parser.add_argument("--oop", required=True, help="OOP range spec (see module docstring)")
-    parser.add_argument("--ip", required=True, help="IP range spec (see module docstring)")
-    parser.add_argument("--template", default=str(DEFAULT_TEMPLATE), help="template config carrying bet_sizes/solve settings")
+    parser.add_argument("--board", required=True, help="board cards, e.g. Kh8h3c (flop/turn/river by length)")
+    parser.add_argument("--tree", default=None, help="scenario tree name under trees/ (see trees/index.json)")
+    parser.add_argument("--template", default=None, help="raw template config path (ignored with --tree)")
+    parser.add_argument("--pot", type=float, default=None, help="pot at the initial street, in bb (default: tree)")
+    parser.add_argument("--effective-stack", type=float, default=None, help="effective stack behind, in bb (default: tree)")
+    parser.add_argument("--oop", default=None, help="OOP range spec (default: tree)")
+    parser.add_argument("--ip", default=None, help="IP range spec (default: tree)")
     parser.add_argument("--out", default="-", help="output path, or - for stdout")
+    parser.add_argument("--list-trees", action="store_true", help="print trees/index.json and exit")
     args = parser.parse_args()
 
-    config = json.loads(Path(args.template).read_text())
+    if args.list_trees:
+        print((TREES / "index.json").read_text())
+        return 0
+
+    if args.tree:
+        tree_path = TREES / f"{args.tree}.json"
+        if not tree_path.is_file():
+            available = sorted(p.stem for p in TREES.glob("*.json") if p.name != "index.json")
+            raise SystemExit(f"No tree {args.tree!r}; available: {available}")
+        config = json.loads(tree_path.read_text())
+    elif args.template:
+        config = json.loads(Path(args.template).read_text())
+    else:
+        config = json.loads(DEFAULT_TEMPLATE.read_text())
+
+    if args.pot is not None:
+        config["pot"] = args.pot
+    if args.effective_stack is not None:
+        config["effective_stack"] = args.effective_stack
+
+    ranges = config.get("ranges", {})
+    if args.oop:
+        ranges["oop"] = args.oop
+    if args.ip:
+        ranges["ip"] = args.ip
+    config["ranges"] = ranges
+
+    missing = [k for k in ("pot", "effective_stack") if k not in config]
+    missing += [k for k in ("oop", "ip") if not ranges.get(k)]
+    if missing:
+        raise SystemExit(f"Missing {missing}; pass them as flags or use --tree with defaults")
+
     config["board"] = args.board
-    config["pot"] = args.pot
-    config["effective_stack"] = args.effective_stack
+    # strip tree metadata; the runner ignores it, but keep configs clean
+    config = {k: v for k, v in config.items() if not k.startswith("_")}
+
+    def resolve(spec: str) -> str:
+        # CLI flags accept a literal Pio-style range ("QQ+,AKs") — anything
+        # without "/" is treated as literal; store specs always contain "/".
+        return parse_store_range(spec) if "/" in spec else spec
+
     config["ranges"] = {
-        "oop": parse_store_range(args.oop),
-        "ip": parse_store_range(args.ip),
+        "oop": resolve(ranges["oop"]),
+        "ip": resolve(ranges["ip"]),
     }
 
     text = json.dumps(config, indent=2)

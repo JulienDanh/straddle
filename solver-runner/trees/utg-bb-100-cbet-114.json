@@ -1,0 +1,62 @@
+{
+  "_name": "utg-bb-100-cbet-114",
+  "_line": "UTG 2.1bb open vs BB call (100bb cEV), 6.5bb = 114% pot c-bet",
+  "_sources": [
+    "straddle-solutions/solutions/cev/100/flops/r2.1-f-f-f-f-f-f-c/7c4h2d-x.json"
+  ],
+  "_notes": "BB call range vs UTG is not in the store at 100bb \u2014 pass --oop (literal Pio-style ranges work); BB check-raise approximated at 2.3x; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "pot": 5.7,
+  "effective_stack": 97.9,
+  "ranges": {
+    "oop": null,
+    "ip": "utg/rfi:100:cEV:raise"
+  },
+  "bet_sizes": {
+    "flop": {
+      "oop": [
+        "",
+        "2.3x"
+      ],
+      "ip": [
+        "114%",
+        "2.5x"
+      ]
+    },
+    "turn": {
+      "oop": [
+        "33%, 66%",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%",
+        "2.5x"
+      ]
+    },
+    "river": {
+      "oop": [
+        "33%, 66%, a",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%, a",
+        "2.5x"
+      ]
+    }
+  },
+  "rake": [
+    0.0,
+    0.0
+  ],
+  "add_allin_threshold": 1.5,
+  "force_allin_threshold": 0.15,
+  "merging_threshold": 0.1,
+  "solve": {
+    "max_iterations": 2000,
+    "target_exploitability_pct_pot": 0.25,
+    "compressed": false,
+    "print_progress": false
+  },
+  "donk_sizes": {
+    "turn": "25%"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "_name": "btn-bb-50-cbet-33",
+  "_line": "BTN 2.1bb open vs BB call (50bb cEV), 1.9bb = 33% pot c-bet",
+  "_sources": [
+    "straddle-solutions/solutions/cev/50/flops/f-f-f-f-f-r2.1-f-c/6s6h2c-x.json"
+  ],
+  "_notes": "BB check-raise approximated at 5.18x; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "pot": 5.7,
+  "effective_stack": 47.9,
+  "ranges": {
+    "oop": "bb/vs-btn:50:cEV:call",
+    "ip": "btn/rfi:50:cEV:raise"
+  },
+  "bet_sizes": {
+    "flop": {
+      "oop": [
+        "",
+        "5.18x"
+      ],
+      "ip": [
+        "33.3%",
+        "2.5x"
+      ]
+    },
+    "turn": {
+      "oop": [
+        "33%, 66%",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%",
+        "2.5x"
+      ]
+    },
+    "river": {
+      "oop": [
+        "33%, 66%, a",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%, a",
+        "2.5x"
+      ]
+    }
+  },
+  "rake": [
+    0.0,
+    0.0
+  ],
+  "add_allin_threshold": 1.5,
+  "force_allin_threshold": 0.15,
+  "merging_threshold": 0.1,
+  "solve": {
+    "max_iterations": 2000,
+    "target_exploitability_pct_pot": 0.25,
+    "compressed": false,
+    "print_progress": false
+  },
+  "donk_sizes": {
+    "turn": "113%"
+  }
+}

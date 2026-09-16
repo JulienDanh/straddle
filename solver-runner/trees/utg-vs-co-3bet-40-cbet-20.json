@@ -1,0 +1,62 @@
+{
+  "_name": "utg-vs-co-3bet-40-cbet-20",
+  "_line": "UTG calls CO's 6.5bb 3bet (40bb cEV), CO c-bet: 3.1bb = 20% pot",
+  "_sources": [
+    "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-r6.5-f-f-c/kdjh2c-x.json"
+  ],
+  "_notes": "UTG's call-3bet range is not in the store \u2014 pass --oop manually; UTG x-raise vs 3.1 approximated at 3x; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "pot": 15.5,
+  "effective_stack": 33.5,
+  "ranges": {
+    "oop": null,
+    "ip": "co/vs-utg:40:cEV:raise"
+  },
+  "bet_sizes": {
+    "flop": {
+      "oop": [
+        "",
+        "3x"
+      ],
+      "ip": [
+        "20%",
+        "2.5x"
+      ]
+    },
+    "turn": {
+      "oop": [
+        "33%, 66%",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%",
+        "2.5x"
+      ]
+    },
+    "river": {
+      "oop": [
+        "33%, 66%, a",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%, a",
+        "2.5x"
+      ]
+    }
+  },
+  "rake": [
+    0.0,
+    0.0
+  ],
+  "add_allin_threshold": 1.5,
+  "force_allin_threshold": 0.15,
+  "merging_threshold": 0.1,
+  "solve": {
+    "max_iterations": 2000,
+    "target_exploitability_pct_pot": 0.25,
+    "compressed": false,
+    "print_progress": false
+  },
+  "donk_sizes": {
+    "turn": "113%"
+  }
+}

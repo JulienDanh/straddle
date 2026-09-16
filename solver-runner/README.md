@@ -66,9 +66,8 @@ into conditional frequencies and compares them to a solver node:
 
 ```sh
 # solve UTG-vs-BB K83 with the Wizard tree sizes (archive-derived):
-python3 scripts/spot_from_store.py --board Kh8h3c --pot 5.5 --effective-stack 38 \
-    --oop "bb/vs-utg:40:cEV:call" --ip "utg/rfi:40:cEV:raise" \
-    --template examples/s1-cbet-template.json --out spot.json
+python3 scripts/spot_from_store.py --tree s1-utg-bb-40-cbet-20 \
+    --board Kh8h3c --out spot.json
 ./target/release/solver-runner --config spot.json --out result.json --walk check
 python3 scripts/compare_wizard.py --result result.json \
     --child "utg/rfi:40:cEV:k83" --action bet --solver-action "Bet(1.1)"
@@ -79,32 +78,45 @@ Verified there: Wizard c-bets 99.97% of the open range at 1.1bb, solver
 class-level divergence is K7s (Wizard 100%, solver 55%, a near-indifferent
 mix).
 
+## Scenario trees
+
+`trees/` stores one bet-size tree per scenario (`trees/index.json` lists them;
+`scripts/make_trees.py` regenerates them). Sizes come from the archived GTO
+Wizard captures cited in each tree's `_sources`; anything not archived is
+flagged in `_notes`. A tree carries the full scenario: default pot/stack,
+default ranges, bet sizes per street, donk sizes — only the board is missing.
+
+```sh
+python3 scripts/spot_from_store.py --list-trees        # what exists
+python3 scripts/spot_from_store.py --tree s1-utg-bb-40-cbet-20 --board Kh8h3c --out spot.json
+```
+
+Covered: S1's two c-bet buckets at 40bb (1.1bb / 4bb), the UTG-BB ladder at
+20/100bb, S2's BTN-BB buckets at 40/50bb, the SB-BB battle leads (1.4 / 4.4),
+and UTG-vs-CO-3bet pots. Trees whose default range is not in the store
+(100bb BB call, UTG call-vs-3bet) say so in `_notes` — pass `--oop` with a
+store spec or a literal Pio-style range.
+
 ## Building a spot from the range store
 
-`scripts/spot_from_store.py` fills `ranges` from `packages/ranges/data`:
+`scripts/spot_from_store.py` fills `ranges` from `packages/ranges/data` and
+takes the tree settings from a template (`examples/template.json` by default):
 
 ```sh
 python3 scripts/spot_from_store.py \
-    --board Ks8c3dTh --pot 8.1 --effective-stack 36.2 \
-    --oop "utg/rfi:40:cEV:raise" \
-    --ip "bb/vs-utg:40:cEV:call" \
+    --board Kh8h3c --pot 5.5 --effective-stack 38 \
+    --oop "bb/vs-utg:40:cEV:call" \
+    --ip "utg/rfi:40:cEV:raise" \
     --out spot.json
 ./target/release/solver-runner --config spot.json --out result.json
 ```
 
-(the example: UTG 40bb 2bb open vs BB call, Ks8c3d 40%-pot c-bet called, Th
-turn — solves to 0.43% of pot in seconds on 12 threads)
-
 Range spec: `<position>/<line>:<stack>:<type>:<action>[+<action>...]`; merged
 actions sum combo frequencies (capped at 1), so `call+raise` is the full
-continue range. Bet sizes and solve settings come from
-`examples/template.json`.
+continue range. CLI range flags without a `/` are literal Pio-style ranges.
 
 ## Examples
 
 - `examples/turn-spot.json` — the crate's own `basic.rs` spot (turn, pot 200),
   usable as a regression check: node actions should be
   `Check, Bet(120), Bet(216.25), AllIn(900)`.
-- `examples/s1-cbet-template.json` — S1's K83 c-bet spot tree (BB check-only
-  flop, UTG 20%-pot c-bet, BB raise to 5.7bb, 113%-pot turn donk — sizes read
-  from the Wizard archive), paired with the comparison above.

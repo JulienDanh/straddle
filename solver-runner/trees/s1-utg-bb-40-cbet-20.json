@@ -1,0 +1,65 @@
+{
+  "_name": "s1-utg-bb-40-cbet-20",
+  "_line": "UTG 2bb open vs BB call (40bb cEV), S1 small c-bet: 1.1bb = 20% pot",
+  "_system": "S1",
+  "_sources": [
+    "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c-x.json",
+    "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c-x-r1.1.json",
+    "straddle-solutions/solutions/cev/40/flops/r2-f-f-f-f-f-f-c/kh8h3c2s-x-r1.1-c.json"
+  ],
+  "_notes": "BB check-raise to 5.7 vs 1.1 (5.18x) and 113% turn donk are archived; turn/river sizings beyond archived nodes approximated (33%, 66% bets, 2.5x raises)",
+  "pot": 5.5,
+  "effective_stack": 38.0,
+  "ranges": {
+    "oop": "bb/vs-utg:40:cEV:call",
+    "ip": "utg/rfi:40:cEV:raise"
+  },
+  "bet_sizes": {
+    "flop": {
+      "oop": [
+        "",
+        "5.18x"
+      ],
+      "ip": [
+        "20%",
+        "2.5x"
+      ]
+    },
+    "turn": {
+      "oop": [
+        "33%, 66%",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%",
+        "2.5x"
+      ]
+    },
+    "river": {
+      "oop": [
+        "33%, 66%, a",
+        "2.5x"
+      ],
+      "ip": [
+        "33%, 66%, a",
+        "2.5x"
+      ]
+    }
+  },
+  "rake": [
+    0.0,
+    0.0
+  ],
+  "add_allin_threshold": 1.5,
+  "force_allin_threshold": 0.15,
+  "merging_threshold": 0.1,
+  "solve": {
+    "max_iterations": 2000,
+    "target_exploitability_pct_pot": 0.25,
+    "compressed": false,
+    "print_progress": false
+  },
+  "donk_sizes": {
+    "turn": "113%"
+  }
+}
