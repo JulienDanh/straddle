@@ -79,6 +79,53 @@ export const WithBoardNodes: Story = {
   ),
 }
 
+// Not every classification is binary — a node can fan out to N labeled
+// branches (S2's three board buckets). Mixed with yes/no children below.
+export const MultiBranch: Story = {
+  render: () => (
+    <DecisionTree
+      root={{
+        question: 'What kind of board is it?',
+        hint: 'Three buckets',
+        branches: [
+          {
+            label: 'Ace-high',
+            node: {
+              action: <Action variant="bet">C-bet 100%</Action>,
+              actionVariant: 'bet',
+              reason: 'The button has the most aces — risk-free',
+            },
+          },
+          {
+            label: 'T–K high',
+            node: {
+              question: 'Deuce or 3 present?',
+              yes: {
+                action: <Action variant="bet">C-bet 100%</Action>,
+                actionVariant: 'bet',
+                reason: 'Disconnected — bet range',
+              },
+              no: {
+                action: <Action variant="check">Mix</Action>,
+                actionVariant: 'check',
+                reason: 'Two low cards interacting — check middle',
+              },
+            },
+          },
+          {
+            label: '9-high & below',
+            node: {
+              action: <Action variant="check">Mix ~60/40</Action>,
+              actionVariant: 'check',
+              reason: 'The button misses low boards harder',
+            },
+          },
+        ],
+      }}
+    />
+  ),
+}
+
 // Demonstrate that leaves accept any ReactNode action alongside a live Board render
 export const BoardInTree: Story = {
   render: () => (

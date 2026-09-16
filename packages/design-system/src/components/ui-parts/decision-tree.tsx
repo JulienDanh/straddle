@@ -12,11 +12,21 @@ import ReactFlow, {
 import dagre from 'dagre'
 import 'reactflow/dist/style.css'
 
+export interface DecisionBranch {
+  /** Edge label, e.g. "A-HIGH" */
+  label: string
+  /** Edge color; defaults to the accent */
+  color?: string
+  node: DecisionNode | DecisionLeaf
+}
+
 export interface DecisionNode {
   question: string
   hint?: string
   yes?: DecisionNode | DecisionLeaf
   no?: DecisionNode | DecisionLeaf
+  /** N-way branch; replaces yes/no when present */
+  branches?: DecisionBranch[]
 }
 
 export interface DecisionLeaf {
@@ -32,14 +42,21 @@ const LEAF_COLOR: Record<string, string> = {
 
 // --- Custom nodes ---
 
-function QuestionNode({ data }: { data: { question: string; hint?: string } }) {
+function QuestionNode({ data }: { data: { question: string; hint?: string; handles: string[] } }) {
   return (
     <div className="bg-panel rounded-lg px-3.5 py-2.5 text-center min-w-[160px] max-w-[220px] shadow-lg" style={{ border: '1.5px solid rgba(255,46,196,0.45)', boxShadow: '0 0 18px rgba(255,46,196,0.15)' }}>
       <Handle type="target" position={Position.Left} style={{ background: '#2a2a44', width: 8, height: 8, border: 'none' }} />
       <span className="text-[13px] font-semibold text-txt">{data.question}</span>
       {data.hint && <span className="text-[11px] text-muted block mt-1 leading-tight">{data.hint}</span>}
-      <Handle type="source" id="yes" position={Position.Right} style={{ background: '#39ff88', width: 8, height: 8, border: 'none', top: '35%' }} />
-      <Handle type="source" id="no" position={Position.Right} style={{ background: '#ff5470', width: 8, height: 8, border: 'none', top: '65%' }} />
+      {data.handles.map((id, i) => (
+        <Handle
+          key={id}
+          type="source"
+          id={id}
+          position={Position.Right}
+          style={{ background: '#2a2a44', width: 8, height: 8, border: 'none', top: `${Math.round(((i + 1) / (data.handles.length + 1)) * 100)}%` }}
+        />
+      ))}
     </div>
   )
 }
@@ -78,16 +95,48 @@ const nodeTypes: NodeTypes = { question: QuestionNode, leaf: LeafNode }
 
 const isLeaf = (x: any): x is DecisionLeaf => 'action' in x
 
+interface ChildEdge {
+  handle: string
+  label: string
+  color: string
+  child: DecisionNode | DecisionLeaf
+}
+
+const BRANCH_COLOR = '#00f0ff'
+
+function childrenOf(node: DecisionNode): ChildEdge[] {
+  if (node.branches && node.branches.length > 0) {
+    return node.branches.map((b, i) => ({
+      handle: `b${i}`,
+      label: b.label.toUpperCase(),
+      color: b.color || BRANCH_COLOR,
+      child: b.node,
+    }))
+  }
+  const out: ChildEdge[] = []
+  if (node.yes) out.push({ handle: 'yes', label: 'YES', color: '#39ff88', child: node.yes })
+  if (node.no) out.push({ handle: 'no', label: 'NO', color: '#ff5470', child: node.no })
+  return out
+}
+
 let idCounter = 0
 
-function flatten(node: DecisionNode | DecisionLeaf, parentId?: string, branch?: 'yes' | 'no'): { id: string; node: DecisionNode | DecisionLeaf; parentId?: string; branch?: 'yes' | 'no' }[] {
+interface FlatEntry {
+  id: string
+  node: DecisionNode | DecisionLeaf
+  parentId?: string
+  edge?: ChildEdge
+  handles: string[]
+}
+
+function flatten(node: DecisionNode | DecisionLeaf, parentId?: string, edge?: ChildEdge): FlatEntry[] {
+  const children = isLeaf(node) ? [] : childrenOf(node)
   const id = `n${idCounter++}`
-  const result: { id: string; node: DecisionNode | DecisionLeaf; parentId?: string; branch?: 'yes' | 'no' }[] = [{ id, node, parentId, branch }]
-  if (!isLeaf(node)) {
-    if (node.yes) result.push(...flatten(node.yes, id, 'yes'))
-    if (node.no) result.push(...flatten(node.no, id, 'no'))
+  const entry: FlatEntry = {
+    id, node, parentId, edge,
+    handles: children.map(c => c.handle),
   }
-  return result
+  return [entry, ...children.flatMap(c => flatten(c.child, id, c))]
 }
 
 function layoutTree(root: DecisionNode, onBoards: (id: string) => void, openLeaf: string | null): { nodes: Node[]; edges: Edge[]; height: number; width: number } {
@@ -107,7 +156,7 @@ function layoutTree(root: DecisionNode, onBoards: (id: string) => void, openLeaf
 
   // Add edges
   for (const f of flat) {
-    if (f.parentId && f.branch) {
+    if (f.parentId && f.edge) {
       g.setEdge(f.parentId, f.id)
     }
   }
@@ -133,24 +182,24 @@ function layoutTree(root: DecisionNode, onBoards: (id: string) => void, openLeaf
         }
       : {
           type: 'question' as const,
-          data: { question: (f.node as DecisionNode).question, hint: (f.node as DecisionNode).hint },
+          data: { question: (f.node as DecisionNode).question, hint: (f.node as DecisionNode).hint, handles: f.handles },
         }
     return { id: f.id, position: { x: pos.x - pos.width / 2, y: pos.y - pos.height / 2 }, ...x }
   })
 
-  const edges: Edge[] = flat.filter(f => f.parentId && f.branch).map(f => ({
+  const edges: Edge[] = flat.filter(f => f.parentId && f.edge).map(f => ({
     id: `e${f.parentId}-${f.id}`,
     source: f.parentId!,
     target: f.id,
-    sourceHandle: f.branch,
-    label: f.branch === 'yes' ? 'YES' : 'NO',
-    labelStyle: { fontSize: 11, fontWeight: 700, fill: f.branch === 'yes' ? '#39ff88' : '#ff5470' },
+    sourceHandle: f.edge!.handle,
+    label: f.edge!.label,
+    labelStyle: { fontSize: 11, fontWeight: 700, fill: f.edge!.color },
     labelBgStyle: { fill: '#0a0a14' },
     labelBgPadding: [4, 2] as [number, number],
     labelBgBorderRadius: 4,
-    style: { stroke: f.branch === 'yes' ? '#39ff88' : '#ff5470', strokeWidth: 2 },
+    style: { stroke: f.edge!.color, strokeWidth: 2 },
     type: 'smoothstep',
-    markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: f.branch === 'yes' ? '#39ff88' : '#ff5470' },
+    markerEnd: { type: MarkerType.ArrowClosed, width: 16, height: 16, color: f.edge!.color },
   }))
 
   return { nodes, edges, height: Math.ceil(maxY) + 36, width: Math.ceil(maxX) + 32 }

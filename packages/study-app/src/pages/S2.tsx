@@ -18,63 +18,71 @@ export function S2Page() {
       
       <DecisionTree
         root={{
-          question: 'Is the high card T or higher?',
-          yes: {
-            question: 'Ace-high?',
-            hint: 'BTN has the most aces',
-            yes: {
-              question: 'Risk factors?',
-              hint: 'Monotone · Paired · Deep stacks',
-              yes: {
-                action: <Action variant="check">Mix</Action>,
-                actionVariant: 'check',
-                reason: 'Bet strong + weak, check medium. Deeper → more checking.',
-                boards: [
-                  <BoardType cards="AhTh4h" label="A-high monotone" variant="orange" />,
-                  <BoardType cards="AsJcJh" label="AJJ paired" variant="orange" />,
-                ],
+          question: 'What kind of board is it?',
+          hint: 'Three buckets — the BTN range decides each one',
+          branches: [
+            {
+              label: 'Ace-high',
+              node: {
+                question: 'Risk factors?',
+                hint: 'Monotone · Paired · Deep stacks',
+                yes: {
+                  action: <Action variant="check">Mix</Action>,
+                  actionVariant: 'check',
+                  reason: 'Bet strong + weak, check medium. Deeper → more checking.',
+                  boards: [
+                    <BoardType cards="AhTh4h" label="A-high monotone" variant="orange" />,
+                    <BoardType cards="AsJcJh" label="AJJ paired" variant="orange" />,
+                  ],
+                },
+                no: {
+                  action: <Action variant="bet">C-bet 100%</Action>,
+                  actionVariant: 'bet',
+                  reason: 'BTN has the most aces. Risk-free.',
+                  boards: [
+                    <BoardType cards="Ah9c4d" label="A94" variant="green" />,
+                  ],
+                },
               },
-              no: {
-                action: <Action variant="bet">C-bet 100%</Action>,
-                actionVariant: 'bet',
-                reason: 'BTN has the most aces. Risk-free.',
+            },
+            {
+              label: 'T–K high',
+              node: {
+                question: 'Deuce or 3 present?',
+                hint: 'Disconnected = no two low cards interacting',
+                yes: {
+                  action: <Action variant="bet">C-bet 100%</Action>,
+                  actionVariant: 'bet',
+                  reason: 'Disconnected → bet 100%.',
+                  boards: [
+                    <BoardType cards="Kd8s3c" label="K83" variant="green" />,
+                    <BoardType cards="Qh9d2c" label="Q92" variant="green" />,
+                    <BoardType cards="Th7d2s" label="T72" variant="green" />,
+                  ],
+                },
+                no: {
+                  action: <Action variant="check">Mix</Action>,
+                  actionVariant: 'check',
+                  reason: 'Two low cards (biggest risk) or monotone. Bet strong+weak, check middle.',
+                  boards: [
+                    <BoardType cards="Kh6d6c" label="K66 — two low cards" variant="orange" />,
+                    <BoardType cards="Kh9h2h" label="K-high monotone" variant="orange" />,
+                  ],
+                },
+              },
+            },
+            {
+              label: '9-high & below',
+              node: {
+                action: <Action variant="check">Mix ~60/40</Action>,
+                actionVariant: 'check',
+                reason: 'No 8+ on board — BTN misses low boards harder. No 100% exists.',
                 boards: [
-                  <BoardType cards="Ah9c4d" label="A94" variant="green" />,
+                  <BoardType cards="9h6d3c" label="963" variant="orange" />,
                 ],
               },
             },
-            no: {
-              question: 'T–K high. Deuce or 3 present?',
-              hint: 'Disconnected = no two low cards interacting',
-              yes: {
-                action: <Action variant="bet">C-bet 100%</Action>,
-                actionVariant: 'bet',
-                reason: 'Disconnected → bet 100%.',
-                boards: [
-                  <BoardType cards="Kd8s3c" label="K83" variant="green" />,
-                  <BoardType cards="Qh9d2c" label="Q92" variant="green" />,
-                  <BoardType cards="Th7d2s" label="T72" variant="green" />,
-                ],
-              },
-              no: {
-                action: <Action variant="check">Mix</Action>,
-                actionVariant: 'check',
-                reason: 'Two low cards (biggest risk) or monotone. Bet strong+weak, check middle.',
-                boards: [
-                  <BoardType cards="Kh6d6c" label="K66 — two low cards" variant="orange" />,
-                  <BoardType cards="Kh9h2h" label="K-high monotone" variant="orange" />,
-                ],
-              },
-            },
-          },
-          no: {
-            action: <Action variant="check">Mix ~60/40</Action>,
-            actionVariant: 'check',
-            reason: '9-high & below. No 100% exists. BTN misses low boards harder.',
-            boards: [
-              <BoardType cards="9h6d3c" label="963" variant="orange" />,
-            ],
-          },
+          ],
         }}
       />
 
