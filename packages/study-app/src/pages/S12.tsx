@@ -34,51 +34,59 @@ export function S12Page() {
 
       <DecisionTree
         root={{
-          question: 'Is the board A-high or K-high?',
-          yes: {
-            action: <Action variant="fold">Fold 50%+</Action>,
-            actionVariant: 'fold',
-            reason: 'Extreme caution. Fold 77/88/99, BDFDs — all folds. Most over-defended.',
-            boards: [
-              <BoardType cards="AhJd5c" label="AJ5" variant="red" />,
-              <BoardType cards="Kh9s2d" label="K92" variant="red" />,
-            ],
-          },
-          no: {
-            question: 'Broadway? (Q-J-T high)',
-            yes: {
-              action: <Action variant="fold">Fold 50%+</Action>,
-              actionVariant: 'fold',
-              reason: 'Tight / fit-or-fold. Far above MDF (~20–25%).',
-              boards: [
-                <BoardType cards="Qc9d5s" label="Q95" variant="red" />,
-                <BoardType cards="Jh8s3d" label="J83" variant="red" />,
-                <BoardType cards="Td7c2h" label="T72" variant="red" />,
-              ],
-            },
-            no: {
-              question: 'Low board. Risk factors?',
-              hint: 'Paired (minor) · Disconnected (significant) · Deuce present',
-              yes: {
-                action: <Action variant="call">Defend (elevated fold)</Action>,
-                actionVariant: 'call',
-                reason: 'Paired = minor; disconnected = significant (want straights). Deuce favors 3-bettor.',
+          question: 'What kind of board is it?',
+          branches: [
+            {
+              label: 'A or K-high',
+              node: {
+                action: <Action variant="fold">Fold 50%+</Action>,
+                actionVariant: 'fold',
+                reason: 'Extreme caution. Fold 77/88/99, BDFDs — all folds. Most over-defended.',
                 boards: [
-                  <BoardType cards="9h9c4d" label="994 paired" variant="orange" />,
-                  <BoardType cards="9c6d2h" label="Low · disconnected" variant="orange" />,
-                ],
-              },
-              no: {
-                action: <Action variant="call">Defend near MDF (~25%)</Action>,
-                actionVariant: 'call',
-                reason: 'Low boards favor caller. Call pairs, gut shots, BDFDs, 3-straight/flush.',
-                boards: [
-                  <BoardType cards="9h5d3c" label="953" variant="green" />,
-                  <BoardType cards="9c8d6h" label="986 connected" variant="green" />,
+                  <BoardType cards="AhJd5c" label="AJ5" variant="red" />,
+                  <BoardType cards="Kh9s2d" label="K92" variant="red" />,
                 ],
               },
             },
-          },
+            {
+              label: 'Broadway (Q–T high)',
+              node: {
+                action: <Action variant="fold">Fold 50%+</Action>,
+                actionVariant: 'fold',
+                reason: 'Tight / fit-or-fold. Far above MDF (~20–25%).',
+                boards: [
+                  <BoardType cards="Qc9d5s" label="Q95" variant="red" />,
+                  <BoardType cards="Jh8s3d" label="J83" variant="red" />,
+                  <BoardType cards="Td7c2h" label="T72" variant="red" />,
+                ],
+              },
+            },
+            {
+              label: 'Low board',
+              node: {
+                question: 'Risk factors?',
+                hint: 'Paired (minor) · Disconnected (significant) · Deuce present',
+                yes: {
+                  action: <Action variant="call">Defend (elevated fold)</Action>,
+                  actionVariant: 'call',
+                  reason: 'Paired = minor; disconnected = significant (want straights). Deuce favors 3-bettor.',
+                  boards: [
+                    <BoardType cards="9h9c4d" label="994 paired" variant="orange" />,
+                    <BoardType cards="9c6d2h" label="Low · disconnected" variant="orange" />,
+                  ],
+                },
+                no: {
+                  action: <Action variant="call">Defend near MDF (~25%)</Action>,
+                  actionVariant: 'call',
+                  reason: 'Low boards favor caller. Call pairs, gut shots, BDFDs, 3-straight/flush.',
+                  boards: [
+                    <BoardType cards="9h5d3c" label="953" variant="green" />,
+                    <BoardType cards="9c8d6h" label="986 connected" variant="green" />,
+                  ],
+                },
+              },
+            },
+          ],
         }}
       />
 

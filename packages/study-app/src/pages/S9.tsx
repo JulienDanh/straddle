@@ -27,30 +27,36 @@ export function S9Page() {
 
       <DecisionTree
         root={{
-          question: 'Bottom/weak pair + BDFD?',
-          yes: {
-            action: <Action variant="call">Call (BDFD)</Action>,
-            actionVariant: 'call',
-            reason: 'BDFD > good kicker almost always. High Card of suit > low card.',
-            boards: [
-              <BoardType cards="Td8h4h" label="T84 — two-tone" variant="green" />,
-              <BoardType cards="Jc9d5d" label="J95 — two-tone" variant="green" />,
-            ],
-          },
-          no: {
-            question: 'Gut shot + BDFD? ("super gut shot")',
-            yes: {
-              action: <Action variant="call">Call (super gut shot)</Action>,
-              actionVariant: 'call',
-              reason: 'Turns combo draws on suit cards. Gut shot + overcard also calls.',
-              boards: [
-                <BoardType cards="Jh9c8d" label="J98" variant="green" />,
-                <BoardType cards="Td9s7c" label="T97" variant="green" />,
-              ],
+          question: 'What do you hold vs the c-bet?',
+          hint: 'Backdoor draws carry the defense',
+          branches: [
+            {
+              label: 'Weak pair + BDFD',
+              node: {
+                action: <Action variant="call">Call (BDFD)</Action>,
+                actionVariant: 'call',
+                reason: 'BDFD > good kicker almost always. High Card of suit > low card.',
+                boards: [
+                  <BoardType cards="Td8h4h" label="T84 — two-tone" variant="green" />,
+                  <BoardType cards="Jc9d5d" label="J95 — two-tone" variant="green" />,
+                ],
+              },
             },
-            no: {
-              question: 'Ace-high / double overs + BDFD?',
-              yes: {
+            {
+              label: 'Gut shot + BDFD ("super gut shot")',
+              node: {
+                action: <Action variant="call">Call (super gut shot)</Action>,
+                actionVariant: 'call',
+                reason: 'Turns combo draws on suit cards. Gut shot + overcard also calls.',
+                boards: [
+                  <BoardType cards="Jh9c8d" label="J98" variant="green" />,
+                  <BoardType cards="Td9s7c" label="T97" variant="green" />,
+                ],
+              },
+            },
+            {
+              label: 'Ace-high / double overs + BDFD',
+              node: {
                 action: <Action variant="call">Call (double overs + BDFD)</Action>,
                 actionVariant: 'call',
                 reason: 'Pure call (vs small bet). 3-straight + 3-flush = call or CR.',
@@ -59,7 +65,10 @@ export function S9Page() {
                   <BoardType cards="Qh7d2d" label="Q72 — two-tone" variant="green" />,
                 ],
               },
-              no: {
+            },
+            {
+              label: 'None — naked',
+              node: {
                 action: <Action variant="fold">Fold (naked)</Action>,
                 actionVariant: 'fold',
                 reason: 'Naked gut shot (double unders, no BDFD) = fold. Naked high card = fold.',
@@ -69,7 +78,7 @@ export function S9Page() {
                 ],
               },
             },
-          },
+          ],
         }}
       />
 

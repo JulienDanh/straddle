@@ -16,49 +16,56 @@ export function S4Page() {
       
       <DecisionTree
         root={{
-          question: 'Is there a 3-flush on the river?',
-          hint: 'Monotone board — obvious blocking effect',
-          yes: {
-            action: <Action variant="raise">Bluff (System 2)</Action>,
-            actionVariant: 'raise',
-            reason: 'One card of the flush suit blocks flushes AND hero calls. Use System 2 first.',
-            boards: [
-              <BoardType cards="Kh9h5h8d3c" label="3-flush on board" variant="green" />,
-            ],
-          },
-          no: {
-            question: 'Three Broadway on board + EP opener?',
-            hint: 'No offsuit air in range',
-            yes: {
-              action: <Action variant="bet">Bluff all suited air</Action>,
-              actionVariant: 'bet',
-              reason: 'Only suited hands can bluff — scarce. Pure bluff them all.',
-              boards: [
-                <BoardType cards="AhKdQh8s3c" label="Three Broadway · EP" variant="green" />,
-              ],
-            },
-            no: {
-              question: 'Does your hand block both busted straights AND flushes?',
-              hint: 'e.g. QJ♥ on heart board with straight draws missed',
-              yes: {
-                action: <Action variant="fold">Don't bluff</Action>,
-                actionVariant: 'fold',
-                reason: 'Blocking both folding regions is terrible. Prefer hands blocking only one.',
+          question: 'What does the river look like?',
+          hint: 'Board first — your blockers last',
+          branches: [
+            {
+              label: '3-flush on board',
+              node: {
+                action: <Action variant="raise">Bluff (System 2)</Action>,
+                actionVariant: 'raise',
+                reason: 'One card of the flush suit blocks flushes AND hero calls. Use System 2 first.',
                 boards: [
-                  <BoardType cards="AhJh9c7d4s" label="Busted straight + flush" variant="red" />,
+                  <BoardType cards="Kh9h5h8d3c" label="3-flush on board" variant="green" />,
                 ],
               },
-              no: {
-                action: <Action variant="bet">Bluff (System 1)</Action>,
+            },
+            {
+              label: 'Three Broadway · EP opener',
+              node: {
+                action: <Action variant="bet">Bluff all suited air</Action>,
                 actionVariant: 'bet',
-                reason: 'Wide ranges, no obvious suit blanked. Bluff weakest hands first; prioritize the LOW card.',
+                reason: 'No offsuit air in range — only suited hands can bluff, and they are scarce. Pure bluff them all.',
                 boards: [
-                  <BoardType cards="Ah9c6d4s2h" label="A-high" variant="green" />,
-                  <BoardType cards="Kd8s5c3h2s" label="K-high" variant="green" />,
+                  <BoardType cards="AhKdQh8s3c" label="Three Broadway · EP" variant="green" />,
                 ],
               },
             },
-          },
+            {
+              label: 'Neither',
+              node: {
+                question: 'Does your hand block both busted straights AND flushes?',
+                hint: 'e.g. QJ♥ on heart board with straight draws missed',
+                yes: {
+                  action: <Action variant="fold">Don't bluff</Action>,
+                  actionVariant: 'fold',
+                  reason: 'Blocking both folding regions is terrible. Prefer hands blocking only one.',
+                  boards: [
+                    <BoardType cards="AhJh9c7d4s" label="Busted straight + flush" variant="red" />,
+                  ],
+                },
+                no: {
+                  action: <Action variant="bet">Bluff (System 1)</Action>,
+                  actionVariant: 'bet',
+                  reason: 'Wide ranges, no obvious suit blanked. Bluff weakest hands first; prioritize the LOW card.',
+                  boards: [
+                    <BoardType cards="Ah9c6d4s2h" label="A-high" variant="green" />,
+                    <BoardType cards="Kd8s5c3h2s" label="K-high" variant="green" />,
+                  ],
+                },
+              },
+            },
+          ],
         }}
       />
 
