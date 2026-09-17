@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Subhead, Pyramid, DataTable, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
-import { S5_FLOP_Q73J, S5_FLOP_K72Q, S5_FLOP_Q758, S5_FLOP_Q73J50 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Subhead, Pyramid, DataTable } from '@poker/design-system/src/components/ui'
 
 export function S5Page() {
   return (
@@ -47,38 +46,7 @@ export function S5Page() {
       <Subhead>Sizing</Subhead>
       <p>Default turn: <strong>polarize</strong> — pot-ish or check. Solver often prefers ~116% overbet or check. Adding 60% allows thinner value (K8s) but doesn't rescue medium hands (99 still checks).</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-      <BoardExample
-        board="Qs7c3dJh"
-        spot="J9 on Q73 → J turn (CO, 80bb)"
-        action="Check"
-        actionVariant="check"
-        solve={S5_FLOP_Q73J}
-      >Medium strength (Jx no kicker). Villain check-calls KQ, QJ at depth. Solver: KJ checks, J9 checks, only AJ barrels.</BoardExample>
-      <BoardExample
-        board="Ks7h2cQd"
-        spot="99 on K72 → Q turn (CO, 50bb)"
-        action="Check"
-        actionVariant="check"
-        solve={S5_FLOP_K72Q}
-      >Medium strength. Check. Solver: 99 and 88 don't bet even with small sizing added. Bet KK, A3s, T8s.</BoardExample>
-      <BoardExample
-        board="Qs7c5d8h"
-        spot="JJ on Q75r → 8 turn (CO, 50bb)"
-        action="Check"
-        actionVariant="check"
-        solve={S5_FLOP_Q758}
-      >Medium strength. Bad turn (improves villain's connected hands). Check. Pocket 88 (open-ender) CAN barrel — 99 and JJ cannot.</BoardExample>
-      <BoardExample
-        board="Qs7c3dJh"
-        spot="ATo on Q73 → J turn (merge, 50bb)"
-        action="Bet (merge)"
-        actionVariant="bet"
-        solve={S5_FLOP_Q73J50}
-      >Exception — merge bet. Villain checked back flop (capped). AT folds KX/QX (better) and calls J10/J4s/10Xd (worse).</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

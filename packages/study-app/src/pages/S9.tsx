@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
-import { S9_FLOP_J105, S9_FLOP_T72, S9_FLOP_T52, S9_FLOP_Q62 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardType } from '@poker/design-system/src/components/ui'
 
 export function S9Page() {
   return (
@@ -102,38 +101,7 @@ export function S9Page() {
       <Subhead>Sizing</Subhead>
       <p>Against 25–33% defend wide; against 50%+ fold bottom of marginal.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<BoardExample
-        board="JdTc5h"
-        spot="97♦ on J105 (HJ, 60bb)"
-        action="Call"
-        actionVariant="call"
-        solve={S9_FLOP_J105}
-      >"Super gut shot" — gut shot + BDFD. Can turn combo draws on diamond turns. 97o is a pure fold; 97♦ is a call.</BoardExample>
-      <BoardExample
-        board="Td7c2s"
-        spot="Q9 with Q♦ on T72 (BTN, 80bb)"
-        action="Call"
-        actionVariant="call"
-        solve={S9_FLOP_T72}
-      >Pure play. Overcard to T, BDFD, blocks villain's diamond calls.</BoardExample>
-      <BoardExample
-        board="Tc5s2d"
-        spot="J6♠ on T52 (CO, 60bb)"
-        action="Check-raise"
-        actionVariant="raise"
-        solve={S9_FLOP_T52}
-      >Direct equity vs T (jack), backdoor straight (6), BDFD (spades). Opponent misses this board a lot.</BoardExample>
-      <BoardExample
-        board="Qc6h2d"
-        spot="JTo on Q62r (BTN, 80bb)"
-        action="Fold"
-        actionVariant="fold"
-        solve={S9_FLOP_Q62}
-      >Three-to-straight but no BDFD. Sizing-sensitive — folds vs big bet, calls vs small.</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

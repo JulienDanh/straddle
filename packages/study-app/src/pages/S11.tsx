@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, H, Subhead, DataTable, HandExample, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
-import { S11_FLOP_A732K } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, H, Subhead, DataTable } from '@poker/design-system/src/components/ui'
 
 export function S11Page() {
   return (
@@ -47,19 +46,7 @@ export function S11Page() {
       <Subhead>Sizing</Subhead>
       <p>No explicit sizing — it's a call/fold decision.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<HandExample spot="A3♥ on A972K (EP, 4-way, 1/3 bet)" action="Check-raise" actionVariant="raise">Villain's small bet = thin value (KQ, QJ) or A3-A5♥. CR folds A3-A5♥, calls KQ/QJ.</HandExample>
-        <HandExample spot="A9s on 9642A (4-way, 7bb into 28bb)" action="Fold" actionVariant="fold">No natural bluffs in villain's range. They need 25% bluffs — no suited connectors called multi-way. Range is all value.</HandExample>
-        <BoardExample
-          board="Ah7c3d2hKs"
-          spot="K7 on A73 2 K (BTN vs BB, 1/2 pot)"
-          action="Call"
-          actionVariant="call"
-          solve={S11_FLOP_A732K}
-        >Villain checked turn → no AK, AQ, sets. K7 blocks KX value, unblocks 8x/9x bluffs. 87 is a bad call (blocks 8x bluffs).</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

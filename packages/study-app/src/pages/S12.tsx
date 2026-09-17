@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DecisionTree, HandExample, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
-import { S12_FLOP_842, S12_FLOP_K84, S12_FLOP_984 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, BoardType } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
 import { UTG_VS_3BET_HJ_CEV, UTG_VS_3BET_BTN_CEV, UTG_VS_3BET_BB_CEV } from '@poker/design-system/src/data/ranges'
 
@@ -100,34 +99,7 @@ export function S12Page() {
       <Subhead>Sizing</Subhead>
       <p>Against 20–25% on high boards fold 50%+; against 33% on low boards fold ~27%.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<BoardExample
-        board="8c4h2d"
-        spot="AJs on 842 (EP vs HJ 3-bet)"
-        action="Fold"
-        actionVariant="fold"
-        solve={S12_FLOP_842}
-      >Two low cards help, but AJs is still worth zero vs a tight 3-bet range.</BoardExample>
-        <BoardExample
-        board="Kc8h4d"
-        spot="77 on K84r (EP vs BTN 3-bet)"
-        action="Fold"
-        actionVariant="fold"
-        solve={S12_FLOP_K84}
-      >King-high = danger zone. 77, 66, 55 = heavy folds. Even TT mixes to fold.</BoardExample>
-        <BoardExample
-        board="9h8d4c"
-        spot="55 on 984 (EP 3-bet caller)"
-        action="Call"
-        actionVariant="call"
-        solve={S12_FLOP_984}
-      >Low board = favorable. 55 is worth 100+ bb/100. Defend gut shots, KQs with BDFD.</BoardExample>
-      <HandExample spot="44 on 963 (EP vs BTN 3-bet, jam)" action="Call" actionVariant="call">Neither player hits this board. 44 is pure call. Pair vs pair, we're ahead often enough.</HandExample>
-        <HandExample spot="AQo on 752 (EP vs BTN 3-bet, 25bb)" action="Call / shove" actionVariant="raise">AQ is worth 186 bb/100. Low board = hero is resilient.</HandExample>
-      </ExampleBrowser>
-      <p className="mt-3 mb-1 text-sm text-muted">Walk-tagged boards have no solved spot (jam / 25bb lines are not in the 40bb capture set).</p>
     </Section>
   )
 }

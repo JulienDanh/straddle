@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
-import { S6_FLOP_Q75, S6_FLOP_K84, S6_FLOP_K94, S6_FLOP_864 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardType } from '@poker/design-system/src/components/ui'
 
 export function S6Page() {
   return (
@@ -92,38 +91,7 @@ export function S6Page() {
       <Subhead>Sizing</Subhead>
       <p>CR to <strong>small size</strong> (~3x the c-bet). Short stacks = 2-street game.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<BoardExample
-        board="Qh7c5d"
-        spot="K7 on Q75 (HJ, 25bb)"
-        action="Check-raise"
-        actionVariant="raise"
-        solve={S6_FLOP_Q75}
-      >Pure check-raise. KQ, QJ, QT all pure CR. Q9 heavy mix, Q8 medium, Q2 pure call. Hierarchical taper.</BoardExample>
-      <BoardExample
-        board="Kc8h4d"
-        spot="K7 on K84 (EP, 13bb)"
-        action="Check-raise"
-        actionVariant="raise"
-        solve={S6_FLOP_K84}
-      >Pure check-raise. All Kx from KQ to K2 pure CR. K8 (two pair) = trap (check-call).</BoardExample>
-      <BoardExample
-        board="Kc9c4h"
-        spot="K3♣ on K94 (HJ, 15bb)"
-        action="Check-call (trap)"
-        actionVariant="call"
-        solve={S6_FLOP_K94}
-      >Flush draw hands trap, non-flush-draw top pairs CR. K7 no club = check-raise (protection).</BoardExample>
-      <BoardExample
-        board="8c6h4d"
-        spot="65o on 864r (CO, 25bb)"
-        action="Check-raise"
-        actionVariant="raise"
-        solve={S6_FLOP_864}
-      >Pure check-raise (top pair + gut shot). Need protection. 85, 87 with gut shots = good CR.</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

@@ -1,6 +1,6 @@
-import { Section, Callout, Leak, Action, Tabs, Subhead, DecisionTree, HandExample, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Tabs, Subhead, DecisionTree, BoardType } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { BTN_RFI_CEV, BB_VS_BTN_CEV, S2_FLOP_A95, S2_FLOP_K93, S2_FLOP_A72, S2_FLOP_K84, S2_FLOP_963 } from '@poker/design-system/src/data/ranges'
+import { BTN_RFI_CEV, BB_VS_BTN_CEV } from '@poker/design-system/src/data/ranges'
 
 
 export function S2Page() {
@@ -12,7 +12,7 @@ export function S2Page() {
       ['Checking back boards that should be 100% c-bet', 'ace-high, T–K high with deuce/three'],
       ['Not recognizing when BTN misses a board entirely (no 8+)', 'must check, not bet blindly'],
       ['Only considering one suit for blocker effects', 'consider both calling suits'],
-      ['Betting too small in position', 'IP can polarize, should bet larger'],
+      ['Betting too small in position', 'bet larger — polarize'],
       ]} />
 
       
@@ -86,10 +86,10 @@ export function S2Page() {
         }}
       />
 
-      <Callout>BTN range is wider (offsuit 8s+), so it misses low boards harder. When BTN doesn't interact, build a checking strategy — bet top, bet bottom, check middle.</Callout>
+      <Callout>BTN's range is wider (offsuit 8s+), so it misses low boards harder.</Callout>
 
       <Subhead>Two-suit awareness (key skill)</Subhead>
-      <p>On two-tone boards, BB defends around <em>two</em> suits. Most only think about the flush-draw suit. Also <strong>block the second suit</strong> (non-flush-draw suit BB calls with via backdoor draws) — no equity risk.</p>
+      <p>On two-tone boards BB defends around <em>two</em> suits: the flush-draw suit and the backdoor-draw suit it calls with. Blocking the second one costs no equity.</p>
       <Callout variant="warn"><strong>K83 two-tone (hearts+diamonds):</strong> KJ with heart+diamond = pure bet. KJ with spades+clubs (both off) = pure check.</Callout>
 
       <Subhead>Sizing</Subhead>
@@ -103,65 +103,6 @@ export function S2Page() {
         <li>"Miss a 15% check? Costs ~0% EV — just bet range"</li>
       </ul>
 
-      <Subhead>Examples</Subhead>
-
-      <p>The system applied — pick a board on the left (40bb single-raised pot, BTN opens 2.1bb). Every bucket of the tree has a solved board.</p>
-
-      <ExampleBrowser>
-      <BoardExample
-        board="Ac9h5d"
-        spot="A95 rainbow (ace-high, clean)"
-        action="C-bet 100%"
-        actionVariant="bet"
-        solve={S2_FLOP_A95}
-      >
-        BTN has the most aces — risk-free bucket. In position the solver even front-loads a big 72%-pot stab instead of small-stabbing.
-      </BoardExample>
-
-      <BoardExample
-        board="Kh9d3c"
-        spot="K93 (king-high, 3 present — disconnected)"
-        action="C-bet 100%"
-        actionVariant="bet"
-        solve={S2_FLOP_K93}
-      >
-        The 3 keeps the board disconnected — no two low cards interacting. Same rule as the deuce: bet range at a small size.
-      </BoardExample>
-
-      <BoardExample
-        board="Ah7h2h"
-        spot="A72 monotone (ace-high, risk factor)"
-        action="Mix"
-        actionVariant="check"
-        solve={S2_FLOP_A72}
-      >
-        The system says mix on monotone. The solver's answer: keep the stab tiny and the frequency near-range — the risk is priced into the size, not a check.
-      </BoardExample>
-
-      <BoardExample
-        board="Kc8c4c"
-        spot="K84 monotone (king-high, two low cards, risk factor)"
-        action="Mix"
-        actionVariant="check"
-        solve={S2_FLOP_K84}
-      >
-        Monotone + two low cards — both risk factors. Bet the club-heavy strong and weak parts; check the medium hands that can't stand a raise.
-      </BoardExample>
-
-      <BoardExample
-        board="9h6d3c"
-        spot="963 (9-high & below — BTN misses)"
-        action="Mix ~60/40"
-        actionVariant="check"
-        solve={S2_FLOP_963}
-      >
-        No 8+ on board — BTN's wide range barely connects. Bet top and bottom BIG, check the middling pairs that only beat bluffs.
-      </BoardExample>
-
-      <HandExample spot="AJJ paired (ace-high, 50bb)" action="Mix" actionVariant="check">Paired board = risk factor. Check KQ, QQ, TT-77 (medium). Bet Jx + trash. Solver checks ~50%.</HandExample>
-      <HandExample spot="K63 two-tone (two low cards, no ace)" action="Mix" actionVariant="check">Two low cards interacting — risk factor. Check QQ, JJ, 9x (medium); bet strong + weak.</HandExample>
-      </ExampleBrowser>
-      <p className="mt-3 mb-1 text-sm text-muted">Buckets with no solved board yet are tagged Walk above.</p>
 
       <Subhead>Ranges</Subhead>
       <Tabs tabs={[

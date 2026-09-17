@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DataTable, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
-import { S8_FLOP_T922D, S8_FLOP_Q72Q, S8_FLOP_A72, S8_FLOP_KKT } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DataTable } from '@poker/design-system/src/components/ui'
 
 export function S8Page() {
   return (
@@ -50,38 +49,7 @@ export function S8Page() {
       <Subhead>Sizing</Subhead>
       <p>Default pot-sized or slightly over; <strong>never sub-half-pot IP</strong>.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<BoardExample
-  board="Td9d2c2d"
-  spot="QJ♦ on T92♦ → 2♦ turn (EP vs SB, 100bb)"
-  action="Check"
-  actionVariant="check"
-  solve={S8_FLOP_T922D}
->Medium strength. Should check. Betting 70% is too thin — villain has KJ, flushes, Jx.</BoardExample>
-        <BoardExample
-          board="Ah7c2d2h8d"
-          spot="88 on A72 → 2 → 8 river (EP vs BB, 50bb)"
-          action="Bet large"
-          actionVariant="bet"
-          solve={S8_FLOP_A72}
-        >Villain checks turn and river → capped. 88 is near the nuts. Bet large, not 2.5bb. Small bet reopens action to CR.</BoardExample>
-        <BoardExample
-          board="Qh7c2dQd"
-          spot="K8 on Q72 → Q turn (BTN vs BB, 50bb)"
-          action="Overbet pot"
-          actionVariant="bet"
-          solve={S8_FLOP_Q72Q}
-        >Villain check-called flop, checked turn. Nut ratio is low. Should overbet pot to set up river shove. Betting 1/3 loses 270bb/100 EV.</BoardExample>
-        <BoardExample
-          board="KhKdTh8cQs"
-          spot="JT on KKT → Q river (EP vs BB, 50bb)"
-          action="Check"
-          actionVariant="check"
-          solve={S8_FLOP_KKT}
-        >Don't reopen with Jx — villain can have quads. Check Jx. Bet QQ+ for value to 3/4 pot.</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

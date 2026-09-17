@@ -1,6 +1,6 @@
-import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardType } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { SB_RFI_CEV, BB_VS_SB_LIMP_CEV, S3_FLOP_K72, S3_FLOP_A42, S3_FLOP_KQ8, S3_FLOP_JJ3 } from '@poker/design-system/src/data/ranges'
+import { SB_RFI_CEV, BB_VS_SB_LIMP_CEV } from '@poker/design-system/src/data/ranges'
 
 export function S3Page() {
   return (
@@ -85,51 +85,7 @@ export function S3Page() {
       <Callout>SB has a folding range; BB does not. 2x/3x favor BB. BB checking = capped (no AK/AQ/overpairs). SB has advantage on Broadway boards; BB on low boards.</Callout>
       <p>1bb stab into ~3.7bb pot.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <p>The system applied — pick a board on the left (70bb limped pot: SB limps, BB checks). The SB's stab varies with the board — 1.5bb (50% pot) usually, a big 3.9bb (130% pot) on KQ8 — and so does its frequency.</p>
-
-      <ExampleBrowser>
-      <BoardExample
-        board="Ks7s2h"
-        spot="K72 two-tone (high card)"
-        action="Defend (high card)"
-        actionVariant="call"
-        solve={S3_FLOP_K72}
-      >
-        Key card = K (paired 7 is unusable). High card defending: defend all ace highs, then queen highs. 32o is a fold.
-      </BoardExample>
-
-      <BoardExample
-        board="Ah4h2s"
-        spot="A42 two-tone (gut shots)"
-        action="Defend (gut shots)"
-        actionVariant="call"
-        solve={S3_FLOP_A42}
-      >
-        Key card = 4. All 3x and 5x are pure calls (gut shots). Worst hands contain a 7 (97, T7). J9 with a heart is pure play.
-      </BoardExample>
-
-      <BoardExample
-        board="KcQh8d"
-        spot="KQ8 rainbow (double-unders fold)"
-        action="Fold double-unders"
-        actionVariant="fold"
-        solve={S3_FLOP_KQ8}
-      >
-        Key card = 8. Double-unders (65, 54, 53) = pure folds. 97 with three-to-straight = pure play. All BDFDs playable (scarce).
-      </BoardExample>
-
-      <BoardExample
-        board="JsJh3c"
-        spot="JJ3 two-tone (straights)"
-        action="Defend (straights)"
-        actionVariant="call"
-        solve={S3_FLOP_JJ3}
-      >
-        Key card = 3 (very low). Anything with a deuce = death sentence. T9 with three-to-straight = pure play.
-      </BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

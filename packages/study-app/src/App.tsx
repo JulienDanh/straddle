@@ -29,6 +29,7 @@ import { BM10Page } from './pages/BM10'
 import { BM11Page } from './pages/BM11'
 import { LiveEqualPage, LiveAsymPage, LivePkoPage } from './pages/LiveBbz'
 import { SolverTreesPage } from './pages/SolverTrees'
+import { ExamplesPage } from './pages/Examples'
 
 const navTitles: Record<string, { course: string; title: string }> = {
   primer: { course: 'No-Limit Systems', title: 'Preflop Primer' },
@@ -46,6 +47,7 @@ const navTitles: Record<string, { course: string; title: string }> = {
   s12: { course: 'No-Limit Systems', title: 'System 12 · Defending 3-Bets OOP' },
   conclusion: { course: 'No-Limit Systems', title: 'Cross-System Principles' },
   sizing: { course: 'No-Limit Systems', title: 'Sizing — The Bet-Size Tree' },
+  examples: { course: 'No-Limit Systems', title: 'Examples — Every System' },
   bmprimer: { course: 'Bubble Mastery', title: 'ICM & FGS Foundations' },
   bm1: { course: 'Bubble Mastery', title: 'ICM vs ChipEV Preflop' },
   bm2: { course: 'Bubble Mastery', title: 'BM2 · Open vs Bigger Stacks (Covered)' },
@@ -68,6 +70,7 @@ const PAGES = {
   primer: PrimerPage, s1: S1Page, s2: S2Page, s3: S3Page, s4: S4Page,
   s5: S5Page, s6: S6Page, s7: S7Page, s8: S8Page, s9: S9Page,
   s10: S10Page, s11: S11Page, s12: S12Page, conclusion: ConclusionPage, sizing: SizingPage,
+  examples: ExamplesPage,
   bmprimer: BMPrimerPage, bm1: BM1Page, bm2: BM2Page, bm3: BM3Page, bm4: BM4Page,
   bm5: BM5Page, bm6: BM6Page, bm7: BM7Page, bm8: BM8Page, bm9: BM9Page, bm10: BM10Page, bm11: BM11Page,
   live: LiveEqualPage, liveasym: LiveAsymPage, livepko: LivePkoPage, solvertrees: SolverTreesPage,
@@ -80,7 +83,7 @@ const VALID_PAGES = new Set(Object.keys(PAGES))
 // reading flow for prev/next navigation and arrow keys (tools excluded)
 const READING_ORDER: PageId[] = [
   'primer', 's1', 's2', 's3', 's4', 's5', 's6', 's7', 's8',
-  's9', 's10', 's11', 's12', 'conclusion', 'sizing',
+  's9', 's10', 's11', 's12', 'conclusion', 'sizing', 'examples',
   'bmprimer', 'bm1', 'bm2', 'bm3', 'bm4', 'bm5', 'bm6',
   'bm7', 'bm8', 'bm9', 'bm10', 'bm11',
 ]

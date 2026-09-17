@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DataTable, HandExample, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
-import { S10_FLOP_J97T9, S10_FLOP_K7222, S10_FLOP_A72 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DataTable } from '@poker/design-system/src/components/ui'
 
 export function S10Page() {
   return (
@@ -43,32 +42,7 @@ export function S10Page() {
       <Subhead>Sizing</Subhead>
       <p>OOP: small/blocking bets (15–33%). IP: never small bet — pot-sized or over.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<HandExample spot="Set of Js on 957 → 5 turn (EP vs CO, 100bb)" action="Block-bet 1/3" actionVariant="bet">Villain checks back turn = capped. Block-bet small. If you check, villain bets flushes/sets/overpairs (beat you) and checks medium hands (you beat). You lose value.</HandExample>
-        <BoardExample
-          board="Jh9c7dTh9d"
-          spot="AQ on J97 → T → 9 river (EP vs SB, 80bb)"
-          action="Bet pot / overbet"
-          actionVariant="bet"
-          solve={S10_FLOP_J97T9}
-        >Villain checked back turn (no Jx, sets, two pair). River 9 blanks. AQ is near relative nuts. Bet pot or overbet.</BoardExample>
-        <BoardExample
-          board="Kh7c2d2h2s"
-          spot="AK on K72 → 2 → 2 river (EP vs BB, 50bb)"
-          action="Jam"
-          actionVariant="allIn"
-          solve={S10_FLOP_K7222}
-        >Villain just called flop and turn (no raises). AK is near nuts — villain has no KK, 77, 22 (would raise). Pure jam.</BoardExample>
-        <BoardExample
-          board="Ah7c2d2h8d"
-          spot="88 on A72 → 2 → 8 river (EP vs BB, 50bb)"
-          action="Bet large"
-          actionVariant="bet"
-          solve={S10_FLOP_A72}
-        >Villain checks turn and river → capped. 88 is near nuts. Bet big.</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }

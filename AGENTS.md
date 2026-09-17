@@ -76,15 +76,15 @@ The core skill: know your stack vs their stack → adjust open/defend range.
 
 ## Content structure (per system)
 
-Every system page is a single continuous page (no Study/Examples tabs) — study material and worked examples read as one experience.
+Every system page is a single continuous page (no Study/Examples tabs) — study material only. Worked examples live on the dedicated Examples page.
 
 1. **Title + intro paragraph** — system name, one-sentence scenario, short intro. **Always visible.** Immediately followed by the `Leak` panel — the mistakes the system corrects frame the page before the visual does.
 2. **Study content:**
    - Core visual (DecisionTree / Pyramid / StackMatrix / DataTable) — **always visible**
    - 1-2 key callouts — **always visible**
    - Detail sections (heuristics, risk factors, sizing, exceptions) — **visible compact sections**: small `Subhead` + tight prose or a `DataTable`; **no dropdowns**
-3. **`<Subhead>Examples</Subhead>` + `ExampleBrowser`** — the worked examples, master-detail (left list of boards, selected card on the right). Cards are `BoardExample` (side-by-side example/solution columns) or `HandExample` walkthroughs.
-4. **`<Subhead>Ranges</Subhead>` + `Tabs`** (S1/S2 only) — the preflop range browsers behind a small tab switcher. `Tabs` is for reference panels, never for Study/Examples.
+3. **`<Subhead>Ranges</Subhead>` + `Tabs`** (S1/S2 only) — the preflop range browsers behind a small tab switcher. `Tabs` is for reference panels, never for Study/Examples.
+4. **Worked examples live on the dedicated Examples page** (`src/pages/Examples.tsx`, route `#examples`) — one `Tabs` tab per system, each tab holding that system's `ExampleBrowser` (`BoardExample` / `HandExample` cards). System pages never embed examples; add new example cards to the Examples page's system tab.
 
 ### Anti-duplication rules
 

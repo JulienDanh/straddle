@@ -53,6 +53,7 @@ const COURSES: Course[] = [
         pages: [
           { id: 'conclusion', label: 'Cross-System Principles', num: '·' },
           { id: 'sizing', label: 'Sizing — The Bet-Size Tree', num: '·' },
+          { id: 'examples', label: 'Examples — Every System', num: '·' },
         ],
       },
     ],

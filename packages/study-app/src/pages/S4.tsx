@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DecisionTree, HandExample, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
-import { S4_FLOP_AK4 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, BoardType } from '@poker/design-system/src/components/ui'
 
 export function S4Page() {
   return (
@@ -96,20 +95,7 @@ export function S4Page() {
         <li>"Don't wait for the perfect blocker — it's not realistic"</li>
       </ul>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<BoardExample
-  board="AhKh4c7d9s"
-  spot="86o on AK4 two-tone (BB vs SB, river)"
-  action="Bluff"
-  actionVariant="bet"
-  solve={S4_FLOP_AK4}
->System 1 — bottom of range, bluff. Avoid clubs and hearts (villain calls with both). Pure bluff.</BoardExample>
-        <HandExample spot="75o with 7♣ on Q106cc → Tc river" action="Bluff (one-club)" actionVariant="bet">One-club bias (System 2). Board 3-flushed — obvious suit to block. Without a club = check.</HandExample>
-        <HandExample spot="J9s on AKQ J T board (EP vs CO)" action="Bluff" actionVariant="bet">Three Broadway — no offsuit air in EP range. Bluffs are scarce. System 1 overrides System 2.</HandExample>
-        <HandExample spot="82s on Q106 → J → A river (BB vs SB)" action="Bluff" actionVariant="bet">2x combos are ideal System 2 bluffs — villain folded 2x preflop, so having a deuce unblocks their folding range.</HandExample>
-      </ExampleBrowser>
     </Section>
   )
 }

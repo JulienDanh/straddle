@@ -1,6 +1,6 @@
-import { Section, Callout, Leak, Action, BoardType, Tabs, Subhead, DataTable, DecisionTree, BoardExample, ExampleBrowser } from '@poker/design-system/src/components/ui'
+import { Section, Callout, Leak, Action, BoardType, Tabs, Subhead, DataTable, DecisionTree } from '@poker/design-system/src/components/ui'
 import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { UTG_RFI_CEV, BB_VS_UTG_CEV, S1_FLOP_K83, S1_FLOP_KK3, S1_FLOP_AK2, S1_FLOP_MONOTONE, S1_FLOP_J66 } from '@poker/design-system/src/data/ranges'
+import { UTG_RFI_CEV, BB_VS_UTG_CEV } from '@poker/design-system/src/data/ranges'
 
 export function S1Page() {
   return (
@@ -8,7 +8,7 @@ export function S1Page() {
       <p>UTG opens, BB calls, BB checks. We decide our flop c-bet.</p>
 
       <Leak items={[
-      ['Betting less when shallow', 'bet more — overpair asymmetry is amplified at shallow depth'],
+      ['Betting less when shallow', 'bet more'],
       ['Checking medium-strength hands', 'the range becomes vulnerable to aggression — pros routinely check back T-high+ clean boards, a systematic error this system corrects'],
       ]} />
 
@@ -73,7 +73,7 @@ export function S1Page() {
         compact
         columns={[{ header: 'Factor' }, { header: 'Response' }]}
         rows={[
-          ['Monotone (ace-high)', 'Bet strong + weak, check medium'],
+          ['Monotone (ace-high)', 'Still 20% — the risk is priced by checking more (the no-heart overpairs check)'],
           ['AKx family — AK2/AK3/AK4', 'Slow down — not 100%'],
           ['High-low-low — paired low under high (T55, J66, K33)', 'Bet trips + weak, check underpairs'],
           ['Straights — 1 straight', 'Bet frequently'],
@@ -99,63 +99,6 @@ export function S1Page() {
         The small size grows with depth: 1.1bb (20%) at 40bb, 1.8bb (33%) at 50bb, ~2bb at 100bb, where the polar branch reaches overbet territory (6.5bb on AK2).
       </p>
 
-      <Subhead>Examples</Subhead>
-
-      <p>The system applied — pick a board on the left. Each card walks the read, then the solver's answer where that board has been solved (40bb single-raised pot).</p>
-
-      <ExampleBrowser>
-      <BoardExample
-        board="Kh8h3c"
-        spot="K83 two-tone (king-high, disconnected, 40bb)"
-        action="C-bet 100%"
-        actionVariant="bet"
-        solve={S1_FLOP_K83}
-      >
-        Solver agrees — at 20% pot it c-bets 100% of the opening range. Player checked, costing EV.
-      </BoardExample>
-
-      <BoardExample
-        board="KhKd3c"
-        spot="KK3 rainbow (high-high-low)"
-        action="C-bet 100%"
-        actionVariant="bet"
-        solve={S1_FLOP_KK3}
-      >
-        KK3 is NOT a risk factor (high-low-low would be K33). Player checked — mistake.
-      </BoardExample>
-
-      <BoardExample
-        board="AsKh2c"
-        spot="AK2 (AKx family)"
-        action="Mix"
-        actionVariant="check"
-        solve={S1_FLOP_AK2}
-      >
-        AKx is a risk factor: BB connects with every Ax/Kx too, so the overpair
-        advantage that powers 100% c-bets on clean boards is gone. Slow down —
-        not 100%. Solved at 73% pot (4bb), the polar size.
-      </BoardExample>
-
-      <BoardExample
-        board="AhJh5h"
-        spot="AJ5 monotone (ace-high monotone)"
-        action="Mix"
-        actionVariant="check"
-        solve={S1_FLOP_MONOTONE}
-      >
-        Risk factor, softened by the small size. Bet sets, heart draws and trash; check the no-heart overpairs (KK most, then 99/TT/QQ).
-      </BoardExample>
-
-      <BoardExample
-        board="Jh6s6d"
-        spot="J66 (high-low-low, paired)"
-        action="Mix"
-        actionVariant="check"
-        solve={S1_FLOP_J66}
-      >
-        Risk factor, softened by the small size. Bet trips (6x), JJ and Ax; check QJo — the middle pairs (TT-88) are near 50/50 splits.
-      </BoardExample>
-      </ExampleBrowser>
 
       <Subhead>Ranges</Subhead>
       <Tabs tabs={[

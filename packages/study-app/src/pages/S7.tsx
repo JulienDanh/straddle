@@ -1,5 +1,4 @@
-import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardExample, ExampleBrowser, BoardType } from '@poker/design-system/src/components/ui'
-import { S7_FLOP_JJ3, S7_FLOP_T33, S7_FLOP_533, S7_FLOP_662 } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, DataTable, BoardType } from '@poker/design-system/src/components/ui'
 
 export function S7Page() {
   return (
@@ -95,38 +94,7 @@ export function S7Page() {
       <Subhead>Sizing</Subhead>
       <p>Depends on villain's CR size. Smaller CR → defend almost everything; larger → fold more.</p>
 
-      <Subhead>Examples</Subhead>
 
-      <ExampleBrowser>
-<BoardExample
-        board="JsJh3c"
-        spot="A5 on JJ3 (BTN, 50bb)"
-        action="Defend (call)"
-        actionVariant="call"
-        solve={S7_FLOP_JJ3}
-      >CR to 4bb. MDF fold = 38%. A5 is way too strong to fold. Only trash folds.</BoardExample>
-      <BoardExample
-        board="TsTh4c"
-        spot="K10 on T33 (BTN, 35bb)"
-        action="Defend (call)"
-        actionVariant="call"
-        solve={S7_FLOP_T33}
-      >Paired board — key card = T. Overcards to T = pure call. Fold double-unders (98o, 87o).</BoardExample>
-      <BoardExample
-        board="5c3h3d"
-        spot="AJ on 533r (BTN, 35bb)"
-        action="Defend (call)"
-        actionVariant="call"
-        solve={S7_FLOP_533}
-      >CR to 7.3bb. AJ is near the nuts (BTN doesn't have 3s). Snap call.</BoardExample>
-      <BoardExample
-        board="6s6h2c"
-        spot="K2s on 662 (BTN, 25bb)"
-        action="Defend (call)"
-        actionVariant="call"
-        solve={S7_FLOP_662}
-      >CR to 2bb (very small). K2s with BDFD is worth 45bb/100 — pure call. Almost nothing folds.</BoardExample>
-      </ExampleBrowser>
     </Section>
   )
 }
