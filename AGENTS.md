@@ -83,8 +83,9 @@ Every system page is a single continuous page (no Study/Examples tabs) — study
    - Core visual (DecisionTree / Pyramid / StackMatrix / DataTable) — **always visible**
    - 1-2 key callouts — **always visible**
    - Detail sections (heuristics, risk factors, sizing, exceptions) — **visible compact sections**: small `Subhead` + tight prose or a `DataTable`; **no dropdowns**
-3. **`<Subhead>Ranges</Subhead>` + `Tabs`** (S1/S2 only) — the preflop range browsers behind a small tab switcher. `Tabs` is for reference panels, never for Study/Examples.
-4. **Worked examples live on the dedicated Examples page** (`src/pages/Examples.tsx`, route `#examples`) — one `Tabs` tab per system, each tab holding that system's `ExampleBrowser` (`BoardExample` / `HandExample` cards). System pages never embed examples; add new example cards to the Examples page's system tab.
+3. **Worked examples live on the dedicated Examples page** (`src/pages/Examples.tsx`, route `#examples`) — one `Tabs` tab per system, each tab holding that system's `ExampleBrowser` (`BoardExample` / `HandExample` cards). System pages never embed examples; add new example cards to the Examples page's system tab.
+
+System pages embed no reference panels at all — no range browsers. `RangeBrowser` stays a design-system component (Storybook) for a future range-library page; the store data itself lives in `packages/ranges/data` untouched.
 
 ### Anti-duplication rules
 

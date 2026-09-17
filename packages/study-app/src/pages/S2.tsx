@@ -1,7 +1,4 @@
-import { Section, Callout, Leak, Action, Tabs, Subhead, DecisionTree, BoardType } from '@poker/design-system/src/components/ui'
-import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { BTN_RFI_CEV, BB_VS_BTN_CEV } from '@poker/design-system/src/data/ranges'
-
+import { Section, Callout, Leak, Action, Subhead, DecisionTree, BoardType } from '@poker/design-system/src/components/ui'
 
 export function S2Page() {
   return (
@@ -103,28 +100,6 @@ export function S2Page() {
         <li>"Miss a 15% check? Costs ~0% EV — just bet range"</li>
       </ul>
 
-
-      <Subhead>Ranges</Subhead>
-      <Tabs tabs={[
-        {
-          label: 'BTN RFI',
-          content: (
-            <>
-              <p>BTN's opening range — the starting point of this system. ChipEV solutions at 15-40bb: the open tightens as stacks shorten (52% → 38%) and the jam mix grows below 20bb. Switch stacks with the selector.</p>
-              <RangeBrowser ranges={BTN_RFI_CEV} />
-            </>
-          ),
-        },
-        {
-          label: 'BB vs BTN',
-          content: (
-            <>
-              <p>BB's defense vs the BTN open — raise, call, and all-in frequencies at 30-40bb. The 3-bet shrinks as stacks shorten (9bb → 7.5bb sizing) and the all-in slice grows (3% → 8%); calls stay ~71% of all hands. Switch stacks with the selector.</p>
-              <RangeBrowser ranges={BB_VS_BTN_CEV} />
-            </>
-          ),
-        },
-      ]} />
     </Section>
   )
 }

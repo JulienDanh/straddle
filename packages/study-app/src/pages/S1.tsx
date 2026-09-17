@@ -1,6 +1,4 @@
-import { Section, Callout, Leak, Action, BoardType, Tabs, Subhead, DataTable, DecisionTree } from '@poker/design-system/src/components/ui'
-import { RangeBrowser } from '@poker/design-system/src/components/RangeBrowser'
-import { UTG_RFI_CEV, BB_VS_UTG_CEV } from '@poker/design-system/src/data/ranges'
+import { Section, Callout, Leak, Action, BoardType, Subhead, DataTable, DecisionTree } from '@poker/design-system/src/components/ui'
 
 export function S1Page() {
   return (
@@ -99,28 +97,6 @@ export function S1Page() {
         The small size grows with depth: 1.1bb (20%) at 40bb, 1.8bb (33%) at 50bb, ~2bb at 100bb, where the polar branch reaches overbet territory (6.5bb on AK2).
       </p>
 
-
-      <Subhead>Ranges</Subhead>
-      <Tabs tabs={[
-        {
-          label: 'UTG RFI',
-          content: (
-            <>
-              <p>UTG's opening range — the starting point of this system. ChipEV solutions at 6-40bb: pure 2bb opens at 20bb+, a raise/jam mix at 10-15bb, all-in below that. Switch stacks with the selector.</p>
-              <RangeBrowser ranges={UTG_RFI_CEV} />
-            </>
-          ),
-        },
-        {
-          label: 'BB vs UTG',
-          content: (
-            <>
-              <p>BB's defense vs the UTG open — raise (3-bet) and call frequencies.</p>
-              <RangeBrowser ranges={BB_VS_UTG_CEV} />
-            </>
-          ),
-        },
-      ]} />
     </Section>
   )
 }
