@@ -91,6 +91,135 @@ const COURSES: Course[] = [
       },
     ],
   },
+  {
+    id: 'ps',
+    label: 'Pressure Systems',
+    groups: [
+      {
+        label: 'Systems',
+        pages: [
+          { id: 'p1', label: 'Preflop Squeezing', num: '1' },
+          { id: 'p2', label: 'Facing Squeezes', num: '2' },
+          { id: 'p3', label: 'Flop Big-Betting vs BB', num: '3' },
+          { id: 'p4', label: 'Flop Check-Raising', num: '4' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'passive',
+    label: 'Passive Poker Systems',
+    groups: [
+      {
+        label: 'Turn',
+        pages: [
+          { id: 'ps1', label: 'BB Turn Probe Betting', num: '1' },
+          { id: 'ps2', label: 'Defending vs Probes', num: '2' },
+        ],
+      },
+      {
+        label: 'River',
+        pages: [
+          { id: 'ps3', label: 'OOP after XC-X', num: '3' },
+          { id: 'ps4', label: 'IP after Cbet-X', num: '4' },
+          { id: 'ps5', label: 'OOP after XR-X', num: '5' },
+          { id: 'ps6', label: 'OOP after XX-XX', num: '6' },
+          { id: 'ps7', label: 'IP after XX-XX', num: '7' },
+        ],
+      },
+      {
+        label: 'Synthesis',
+        pages: [{ id: 'ps8', label: 'Versatility', num: '8' }],
+      },
+    ],
+  },
+  {
+    id: 'bounty',
+    label: 'Bounty MTT',
+    groups: [
+      {
+        label: 'Foundations',
+        pages: [{ id: 'b1', label: 'Bounty Math & Risk Premiums', num: '1' }],
+      },
+      {
+        label: 'Systems',
+        pages: [
+          { id: 'b2', label: 'PKO Preflop Adjustments', num: '2' },
+          { id: 'b3', label: 'PKO Phase Strategy', num: '3' },
+          { id: 'b4', label: 'Mystery Bounty System', num: '4' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'mw',
+    label: 'Multiway Systems',
+    groups: [
+      {
+        label: 'Flop',
+        pages: [
+          { id: 'mw1', label: 'Missed BB Donk Bets', num: '1' },
+          { id: 'mw2', label: 'Missed Flop Bets', num: '2' },
+          { id: 'mw3', label: 'Poor Flop Raises', num: '3' },
+          { id: 'mw4', label: 'Missed Flop Squeezes', num: '4' },
+          { id: 'mw5', label: 'Flop Calls from BB', num: '5' },
+          { id: 'mw6', label: 'Flop Folds from BB', num: '6' },
+        ],
+      },
+      {
+        label: 'Turn & River',
+        pages: [
+          { id: 'mw7', label: 'Missed Turn Probes', num: '7' },
+          { id: 'mw8', label: 'Missed Turn Cbets', num: '8' },
+          { id: 'mw9', label: 'River Bets as OOP', num: '9' },
+          { id: 'mw10', label: 'River Bets as IP', num: '10' },
+          { id: 'mw11', label: 'Missed River Calls', num: '11' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'lp',
+    label: 'SB Mastery · Limped Pots',
+    groups: [
+      {
+        label: 'Preflop & Flop',
+        pages: [
+          { id: 'lp1', label: 'SB Limp Raise or Fold', num: '1' },
+          { id: 'lp2', label: 'SB Flop Betting', num: '2' },
+          { id: 'lp3', label: 'SB Flop Checks', num: '3' },
+          { id: 'lp4', label: 'BB Defense', num: '4' },
+          { id: 'lp5', label: 'Vs the BB Isolation', num: '5' },
+        ],
+      },
+      {
+        label: 'Turn, River & Exploits',
+        pages: [
+          { id: 'lp6', label: 'Turn Barrels · Geometry', num: '6' },
+          { id: 'lp7', label: 'River Value & Bluffing', num: '7' },
+          { id: 'lp8', label: 'Exploiting Errors', num: '8' },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'rs',
+    label: 'River Simplifications',
+    groups: [
+      {
+        label: 'Toy games',
+        pages: [
+          { id: 'rs1', label: 'Symmetric Ranges by SPR', num: '1' },
+          { id: 'rs2', label: 'Condensed IP', num: '2' },
+          { id: 'rs3', label: 'Condensed OOP', num: '3' },
+          { id: 'rs4', label: 'Condensed IP + Traps', num: '4' },
+          { id: 'rs5', label: 'Condensed OOP + Traps', num: '5' },
+          { id: 'rs6', label: 'Small Bets IP', num: '6' },
+          { id: 'rs7', label: 'Polar OOP vs Condensed IP', num: '7' },
+        ],
+      },
+    ],
+  },
 ]
 
 function courseOfPage(pageId: string): string {
@@ -155,6 +284,7 @@ export function Sidebar({ activePage, onNavigate, open }: SidebarProps) {
       <div className="px-2.5 mt-4 border-t border-line pt-3">
         <div className="text-[10px] uppercase tracking-widest text-muted px-2 py-1 mb-1">Tools</div>
         {([
+          { id: 'notes', label: 'Daily Notes' },
           { id: 'live', label: 'Live' },
           { id: 'liveasym', label: 'ICM asym' },
           { id: 'livepko', label: 'PKO' },
