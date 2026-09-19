@@ -25,6 +25,9 @@ export interface DecisionNode {
   hint?: string
   yes?: DecisionNode | DecisionLeaf
   no?: DecisionNode | DecisionLeaf
+  /** override the default YES / NO edge labels (e.g. frequency tags) */
+  yesLabel?: string
+  noLabel?: string
   /** N-way branch; replaces yes/no when present */
   branches?: DecisionBranch[]
 }
@@ -33,6 +36,12 @@ export interface DecisionLeaf {
   action: ReactNode
   actionVariant: 'bet' | 'check' | 'fold' | 'call' | 'raise' | 'allIn'
   reason: string
+  /** sizing chip rendered beside the action, e.g. "20% pot · 1.1bb at 40bb" */
+  size?: string
+  /** compact extra lines carried on the leaf (sizing, factor responses);
+   *  "key → response" renders the key emphasized, the response muted;
+   *  **text** inside a line renders emphasized */
+  detail?: string[]
   boards?: ReactNode[]
 }
 
@@ -42,12 +51,25 @@ const LEAF_COLOR: Record<string, string> = {
 
 // --- Custom nodes ---
 
+/** render **text** spans emphasized */
+function renderEmphasis(text: string, key: string) {
+  return text.split(/\*\*(.+?)\*\*/g).map((part, i) =>
+    i % 2 === 1 ? <strong key={`${key}-${i}`} className="text-txt font-semibold">{part}</strong> : part,
+  )
+}
+
 function QuestionNode({ data }: { data: { question: string; hint?: string; handles: string[] } }) {
   return (
     <div className="bg-panel rounded-lg px-3.5 py-2.5 text-center min-w-[160px] max-w-[220px] shadow-lg" style={{ border: '1.5px solid rgba(255,46,196,0.45)', boxShadow: '0 0 18px rgba(255,46,196,0.15)' }}>
       <Handle type="target" position={Position.Left} style={{ background: '#2a2a44', width: 8, height: 8, border: 'none' }} />
       <span className="text-[13px] font-semibold text-txt">{data.question}</span>
-      {data.hint && <span className="text-[11px] text-muted block mt-1 leading-tight">{data.hint}</span>}
+      {data.hint && (
+        <span className="block mt-1 leading-tight">
+          {data.hint.split('·').map((seg, i) => (
+            <span key={i} className="block text-[11px] text-muted">{renderEmphasis(seg.trim(), `h${i}`)}</span>
+          ))}
+        </span>
+      )}
       {data.handles.map((id, i) => (
         <Handle
           key={id}
@@ -61,7 +83,7 @@ function QuestionNode({ data }: { data: { question: string; hint?: string; handl
   )
 }
 
-function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant: string; boards?: ReactNode[]; leafId: string; onBoards: (id: string) => void; boardsOpen: boolean } }) {
+function LeafNode({ data }: { data: { action: ReactNode; reason: string; size?: string; detail?: string[]; variant: string; boards?: ReactNode[]; leafId: string; onBoards: (id: string) => void; boardsOpen: boolean } }) {
   const color = LEAF_COLOR[data.variant] || '#8080a4'
   return (
     <div
@@ -69,10 +91,28 @@ function LeafNode({ data }: { data: { action: ReactNode; reason: string; variant
       style={{ border: `1px solid ${data.boardsOpen ? 'var(--color-accent)' : '#2a2a44'}`, borderLeft: `3px solid ${color}`, boxShadow: `0 0 14px ${color}29` }}
     >
       <Handle type="target" position={Position.Left} style={{ background: '#2a2a44', width: 8, height: 8, border: 'none' }} />
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-1.5">
         {data.action}
+        {data.size && (
+          <span className="text-[10px] font-semibold text-muted bg-panel2 border border-line rounded px-1.5 py-px whitespace-nowrap">{data.size}</span>
+        )}
       </div>
       <span className="text-[12px] font-medium text-txt leading-snug block mt-0.5">{data.reason}</span>
+      {data.detail && data.detail.length > 0 && (
+        <div className="mt-1">
+          {data.detail.map((d, i) => {
+            const arrow = d.indexOf('→')
+            return arrow === -1 ? (
+              <span key={i} className="block text-[11px] text-muted leading-tight">{renderEmphasis(d, `d${i}`)}</span>
+            ) : (
+              <span key={i} className="block text-[11px] leading-tight">
+                <span className="text-txt font-medium">{renderEmphasis(d.slice(0, arrow).trim(), `d${i}k`)}</span>
+                <span className="text-muted"> → {d.slice(arrow + 1).trim()}</span>
+              </span>
+            )
+          })}
+        </div>
+      )}
       {data.boards && data.boards.length > 0 && (
         // toggling renders the leaf's boards in the strip BELOW the tree —
         // never in a popover, which the scroll-clipped canvas would crop
@@ -114,8 +154,8 @@ function childrenOf(node: DecisionNode): ChildEdge[] {
     }))
   }
   const out: ChildEdge[] = []
-  if (node.yes) out.push({ handle: 'yes', label: 'YES', color: '#39ff88', child: node.yes })
-  if (node.no) out.push({ handle: 'no', label: 'NO', color: '#ff5470', child: node.no })
+  if (node.yes) out.push({ handle: 'yes', label: (node.yesLabel ?? 'YES').toUpperCase(), color: '#39ff88', child: node.yes })
+  if (node.no) out.push({ handle: 'no', label: (node.noLabel ?? 'NO').toUpperCase(), color: '#ff5470', child: node.no })
   return out
 }
 
@@ -150,7 +190,17 @@ function layoutTree(root: DecisionNode, onBoards: (id: string) => void, openLeaf
   // Add nodes with estimated sizes
   for (const f of flat) {
     const w = 220
-    const h = isLeaf(f.node) ? (f.node.boards?.length ? 108 : 62) : (f.node.hint ? 80 : 58)
+    // ~34 chars fit on one small line (11px) in the 220px node
+    const detailLines = isLeaf(f.node)
+      ? (f.node.detail ?? []).reduce((n, d) => n + Math.max(1, Math.ceil(d.length / 34)), 0)
+      : 0
+    // hints render as stacked '·'-separated lines
+    const hintLines = !isLeaf(f.node) && f.node.hint
+      ? f.node.hint.split('·').reduce((n, s) => n + Math.max(1, Math.ceil(s.trim().length / 34)), 0)
+      : 0
+    const h = isLeaf(f.node)
+      ? 62 + detailLines * 15 + (f.node.size ? 20 : 0) + (f.node.boards?.length ? 46 : 0)
+      : 44 + hintLines * 15
     g.setNode(f.id, { width: w, height: h })
   }
 
@@ -178,7 +228,7 @@ function layoutTree(root: DecisionNode, onBoards: (id: string) => void, openLeaf
     const x = isLeaf(f.node)
       ? {
           type: 'leaf' as const,
-          data: { action: f.node.action, reason: f.node.reason, variant: f.node.actionVariant, boards: f.node.boards, leafId: f.id, onBoards, boardsOpen: openLeaf === f.id },
+          data: { action: f.node.action, reason: f.node.reason, size: f.node.size, detail: f.node.detail, variant: f.node.actionVariant, boards: f.node.boards, leafId: f.id, onBoards, boardsOpen: openLeaf === f.id },
         }
       : {
           type: 'question' as const,
